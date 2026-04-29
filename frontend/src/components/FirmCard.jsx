@@ -7,7 +7,7 @@ export default function FirmCard({ firm }) {
     <article className={className}>
       <div className="firm-heading">
         <h3>
-          {firm.firm} <span>({firm.office})</span>
+          {firm.firm} <span>({firm.office}{firm.group ? ` · ${firm.group}` : ''})</span>
         </h3>
         <p className="meta">
           <strong>{firm.classification}</strong> · Confidence: {firm.confidence}

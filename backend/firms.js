@@ -1,27 +1,88 @@
-export const firms = [
-  { name: 'Evercore', office: 'New York', competitiveness: 9.8, tier: 'Elite Boutique' },
-  { name: 'PJT Partners', office: 'New York', competitiveness: 9.7, tier: 'Elite Boutique' },
-  { name: 'Centerview Partners', office: 'New York', competitiveness: 9.7, tier: 'Elite Boutique' },
-  { name: 'Lazard', office: 'New York', competitiveness: 9.5, tier: 'Elite Boutique' },
-  { name: 'Moelis', office: 'New York', competitiveness: 9.4, tier: 'Elite Boutique' },
-  { name: 'Perella Weinberg', office: 'New York', competitiveness: 9.2, tier: 'Elite Boutique' },
-  { name: 'Goldman Sachs', office: 'New York', competitiveness: 9.6, tier: 'Bulge Bracket' },
-  { name: 'Morgan Stanley', office: 'New York', competitiveness: 9.5, tier: 'Bulge Bracket' },
-  { name: 'J.P. Morgan', office: 'New York', competitiveness: 9.3, tier: 'Bulge Bracket' },
-  { name: 'Bank of America', office: 'Charlotte', competitiveness: 8.8, tier: 'Bulge Bracket' },
-  { name: 'Citi', office: 'New York', competitiveness: 8.9, tier: 'Bulge Bracket' },
-  { name: 'Barclays', office: 'New York', competitiveness: 8.7, tier: 'Bulge Bracket' },
-  { name: 'UBS', office: 'New York', competitiveness: 8.5, tier: 'Bulge Bracket' },
-  { name: 'Jefferies', office: 'New York', competitiveness: 8.4, tier: 'Middle Market' },
-  { name: 'Houlihan Lokey', office: 'Los Angeles', competitiveness: 8.3, tier: 'Middle Market' },
-  { name: 'William Blair', office: 'Chicago', competitiveness: 7.9, tier: 'Middle Market' },
-  { name: 'Stifel', office: 'Baltimore', competitiveness: 7.4, tier: 'Middle Market' },
-  { name: 'Piper Sandler', office: 'Minneapolis', competitiveness: 7.2, tier: 'Middle Market' },
-  { name: 'Baird', office: 'Milwaukee', competitiveness: 7.0, tier: 'Middle Market' },
-  { name: 'RBC Capital Markets', office: 'New York', competitiveness: 8.1, tier: 'Middle Market' },
-  { name: 'Lincoln International', office: 'Chicago', competitiveness: 7.6, tier: 'Middle Market' },
-  { name: 'Harris Williams', office: 'Richmond', competitiveness: 7.5, tier: 'Regional Boutique' },
-  { name: 'Raymond James', office: 'Atlanta', competitiveness: 6.8, tier: 'Regional Boutique' },
-  { name: 'D.A. Davidson', office: 'Portland', competitiveness: 6.4, tier: 'Regional Boutique' },
-  { name: 'Stephens', office: 'Little Rock', competitiveness: 6.2, tier: 'Regional Boutique' }
-];
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const officesPath = path.resolve(__dirname, '../data/ibOffices.json');
+
+export const ibOffices = JSON.parse(fs.readFileSync(officesPath, 'utf8'));
+
+const groupAdjustments = {
+  'Restructuring': 0.25,
+  'M&A': 0.15,
+  'Financial Sponsors': 0.1,
+  'Technology': 0.08,
+  'Healthcare': 0.05,
+  'Activism / Strategic Advisory': 0.05,
+  'Financial Institutions': 0,
+  'Industrials': -0.02,
+  'Energy': -0.04,
+  'Consumer & Retail': -0.05,
+  'Business Services': -0.08,
+  'Healthcare Services': -0.08,
+  'Generalist': -0.1
+};
+
+function clamp(value, min = 0, max = 10) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function groupCompetitiveness(office, group) {
+  return clamp(office.competitivenessScore + (groupAdjustments[group] ?? 0));
+}
+
+export const opportunities = ibOffices.flatMap((office) =>
+  office.groups.map((group) => {
+    const competitiveness = groupCompetitiveness(office, group);
+
+    return {
+      id: `${office.id}-${slugify(group)}`,
+      officeId: office.id,
+      firm: office.firm,
+      office: office.officeCity,
+      officeCity: office.officeCity,
+      state: office.state,
+      group,
+      tier: office.type,
+      type: office.type,
+      latitude: office.latitude,
+      longitude: office.longitude,
+      competitiveness: Number(competitiveness.toFixed(2)),
+      competitivenessScore: office.competitivenessScore,
+      prestigeStars: office.prestigeStars,
+      payStars: office.payStars,
+      competitivenessStars: office.competitivenessStars
+    };
+  })
+);
+
+export const firms = opportunities.map((opportunity) => ({
+  name: opportunity.firm,
+  firm: opportunity.firm,
+  office: opportunity.office,
+  officeCity: opportunity.officeCity,
+  state: opportunity.state,
+  group: opportunity.group,
+  tier: opportunity.tier,
+  type: opportunity.type,
+  competitiveness: opportunity.competitiveness
+}));
+
+export const opportunityGroups = [...new Set(opportunities.map((opportunity) => opportunity.group))].sort();
+
+export const opportunitySummary = {
+  count: opportunities.length,
+  officeCount: ibOffices.length,
+  tiers: [...new Set(ibOffices.map((office) => office.type))].sort(),
+  offices: [...new Set(ibOffices.map((office) => office.officeCity))].sort(),
+  groups: opportunityGroups
+};

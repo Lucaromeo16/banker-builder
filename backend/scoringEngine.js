@@ -1,4 +1,4 @@
-import { firms } from './firms.js';
+import { opportunities, opportunityGroups } from './firms.js';
 
 const prestigeLookup = {
   'wharton': 10,
@@ -25,12 +25,11 @@ const prestigeLookup = {
 };
 
 const internshipBrandScores = {
-  IB: 10,
-  PE: 9,
-  finance: 7,
-  consulting: 7.2,
-  corporate: 6,
-  none: 2.5
+  'bulge bracket / elite boutique IB': 10,
+  'middle-market IB': 8.6,
+  'small regional boutique IB': 7.1,
+  'search fund / unpaid boutique IB': 5.7,
+  none: 1.5
 };
 
 const exposureScores = {
@@ -38,6 +37,20 @@ const exposureScores = {
   moderate: 7,
   low: 4,
   none: 1
+};
+
+const workTypeScores = {
+  'Investment banking internship': 10,
+  'Private equity internship': 8.8,
+  'Search fund internship': 8.2,
+  'Corporate finance internship': 6.4,
+  'Accounting / audit internship': 6.1,
+  'Wealth management internship': 5.8,
+  'Other finance internship': 6,
+  'Other internship': 4.4,
+  'Part-time job': 3.6,
+  'Campus job': 3.3,
+  None: 1.2
 };
 
 const contactSeniorityMultiplier = {
@@ -52,18 +65,73 @@ const connectionMultiplier = {
   'close connection': 1.45
 };
 
-const clubScores = {
-  'IB club': 9,
-  'business org': 7,
-  'non-business org': 4.5,
-  none: 1
+const activityTypeScores = {
+  'Selective IB club': 9.4,
+  'Investment fund / student-run fund': 9,
+  'Business fraternity': 8.2,
+  'Social fraternity / sorority executive board': 8,
+  'Finance/business club': 6.5,
+  'Consulting club': 5.8,
+  'Entrepreneurship club': 5.8,
+  'Non-business leadership organization': 5.2,
+  Other: 3.5
 };
 
 const leadershipScores = {
   president: 10,
-  VP: 8,
-  member: 5,
+  vp: 9,
+  VP: 9,
+  treasurer: 9,
+  'finance chair': 9,
+  'committee lead': 7,
+  member: 3.2,
+  none: 0
+};
+
+const selectivityScores = {
+  'highly selective': 10,
+  selective: 8,
+  moderate: 5.5,
+  'open enrollment': 2.5
+};
+
+const relevanceScores = {
+  high: 10,
+  moderate: 6.5,
+  low: 3.5,
   none: 1
+};
+
+export const groupOptions = opportunityGroups;
+
+const profileWeights = {
+  'Summer Analyst': {
+    academic: 0.28,
+    experience: 0.22,
+    networking: 0.36,
+    extracurricular: 0.14,
+    baseDifficultyAdjustment: 0
+  },
+  'Lateral Hire': {
+    academic: 0.16,
+    experience: 0.42,
+    networking: 0.34,
+    extracurricular: 0.08,
+    baseDifficultyAdjustment: 0.15
+  },
+  'MBA Associate': {
+    academic: 0.34,
+    experience: 0.34,
+    networking: 0.24,
+    extracurricular: 0.08,
+    baseDifficultyAdjustment: 0.25
+  }
+};
+
+const resumeProfileWeights = {
+  academic: 0.4,
+  experience: 0.36,
+  extracurricular: 0.24
 };
 
 function clamp(value, min = 0, max = 10) {
@@ -116,6 +184,40 @@ function experienceScore(internshipType, exposureLevel) {
   return clamp(brand * 0.6 + exposure * 0.4);
 }
 
+function workTypeScore(workType) {
+  return clamp(workTypeScores[workType] ?? workTypeScores['Other internship']);
+}
+
+function normalizeWorkExperiences(profile) {
+  if (Array.isArray(profile.workExperiences)) {
+    return profile.workExperiences
+      .map((experience) => experience?.workType)
+      .filter(Boolean);
+  }
+
+  if (profile.workType) {
+    return [profile.workType];
+  }
+
+  return ['None'];
+}
+
+function resumeExperienceScore(profile) {
+  const ranked = normalizeWorkExperiences(profile)
+    .map(workTypeScore)
+    .sort((a, b) => b - a);
+
+  if (!ranked.length) return workTypeScore('None');
+
+  const primary = ranked[0];
+  const incremental = ranked.slice(1).reduce((sum, score, index) => {
+    const weight = index === 0 ? 0.35 : index === 1 ? 0.2 : 0.1;
+    return sum + score * weight;
+  }, 0);
+
+  return clamp(primary + incremental, 0, 10);
+}
+
 function networkingScore(networking) {
   const points =
     networking.initialChats * 1 +
@@ -130,10 +232,60 @@ function networkingScore(networking) {
   return clamp((adjusted / 120) * 10);
 }
 
-function extracurricularScore(clubType, leadershipLevel) {
-  const club = clubScores[clubType] ?? 2;
-  const leadership = leadershipScores[leadershipLevel] ?? 1;
-  return clamp(club * 0.55 + leadership * 0.45);
+function normalizeActivities(profile) {
+  if (Array.isArray(profile.activities)) {
+    return profile.activities;
+  }
+
+  if (profile.clubType || profile.leadershipLevel) {
+    return [
+      {
+        activityType:
+          profile.clubType === 'IB club'
+            ? 'Selective IB club'
+            : profile.clubType === 'business org'
+              ? 'Finance/business club'
+              : profile.clubType === 'non-business org'
+                ? 'Non-business leadership organization'
+                : 'Other',
+        selectivity: profile.clubType === 'none' ? 'open enrollment' : 'moderate',
+        leadershipLevel: profile.leadershipLevel || 'none',
+        businessRelevance: profile.clubType === 'non-business org' ? 'low' : 'moderate'
+      }
+    ];
+  }
+
+  return [];
+}
+
+function activityScore(activity) {
+  const type = activityTypeScores[activity.activityType] ?? activityTypeScores.Other;
+  const selectivity = selectivityScores[activity.selectivity] ?? 4;
+  const leadership = leadershipScores[activity.leadershipLevel] ?? 0;
+  const relevance = relevanceScores[activity.businessRelevance] ?? relevanceScores.moderate;
+
+  const base = type * 0.33 + selectivity * 0.2 + leadership * 0.32 + relevance * 0.15;
+  const openEnrollmentMemberPenalty =
+    activity.selectivity === 'open enrollment' &&
+    (!activity.leadershipLevel || ['member', 'none'].includes(activity.leadershipLevel))
+      ? 1.6
+      : 0;
+
+  return clamp(base - openEnrollmentMemberPenalty);
+}
+
+function extracurricularScore(profile) {
+  const activities = normalizeActivities(profile).filter(Boolean);
+  if (!activities.length) return 0;
+
+  const ranked = activities.map(activityScore).sort((a, b) => b - a);
+  const primary = ranked[0] ?? 0;
+  const secondary = ranked.slice(1).reduce((sum, score, index) => {
+    const weight = index === 0 ? 0.45 : 0.25;
+    return sum + score * weight;
+  }, 0);
+
+  return clamp(primary + secondary, 0, 10);
 }
 
 function confidenceFromDelta(delta) {
@@ -180,7 +332,7 @@ function buildStrengths(scoreBreakdown, profile) {
   if (scoreBreakdown.networking >= 7) strengths.push('Strong networking engine with meaningful touchpoints and relationship depth.');
   if (scoreBreakdown.experience >= 7) strengths.push('Experience profile signals credible deal-readiness and relevant exposure.');
   if (scoreBreakdown.academic >= 7) strengths.push('Academic profile clears most resume screens for IB analyst recruiting.');
-  if (scoreBreakdown.extracurricular >= 7) strengths.push('Leadership and campus involvement support your narrative and fit.');
+  if (scoreBreakdown.extracurricular >= 7) strengths.push('Activities & Leadership show credible operating responsibility and campus signal.');
   if (profile.preferredLocations?.length) strengths.push(`Clear office preference (${profile.preferredLocations.join(', ')}) helps focus outreach.`);
   return strengths.slice(0, 3);
 }
@@ -190,10 +342,11 @@ function buildGaps(scoreBreakdown, gateReasons) {
   if (scoreBreakdown.networking < 6) gaps.push('Networking volume and referral depth should be built further.');
   if (scoreBreakdown.experience < 6) gaps.push('Experience quality needs stronger transaction or valuation exposure.');
   if (scoreBreakdown.academic < 6) gaps.push('Academic profile is below average for top investment banking pipelines.');
+  if (scoreBreakdown.extracurricular < 5) gaps.push('Activities & Leadership signal is light; selective finance groups or real operating roles would help.');
   return [...new Set(gaps)].slice(0, 3);
 }
 
-function buildActionSteps(scoreBreakdown, profile) {
+function buildActionSteps(scoreBreakdown, profile, { includeFinanceChair = true } = {}) {
   const steps = [];
   if (scoreBreakdown.networking < 7) {
     steps.push('Run a 6-week networking sprint: 8-10 new chats/week with 48-hour follow-ups and weekly relationship tracking.');
@@ -204,49 +357,142 @@ function buildActionSteps(scoreBreakdown, profile) {
   if (scoreBreakdown.experience < 7) {
     steps.push('Add transaction-relevant reps (LBO comps, CIM teardown, valuation case writeups) and highlight them on your resume.');
   }
+  if (scoreBreakdown.extracurricular < 6) {
+    steps.push(
+      includeFinanceChair
+        ? 'Pursue a selective finance activity or a President, VP, Treasurer, or Finance Chair role with measurable responsibility.'
+        : 'Pursue a selective finance activity or a President, VP, or Treasurer role with measurable responsibility.'
+    );
+  }
   if (steps.length < 2) {
     steps.push('Target analysts/alumni in preferred offices for referral-oriented outreach with tailored firm-specific pitches.');
   }
   return steps.slice(0, 3);
 }
 
-export function scoreProfile(profile) {
+function buildResumeActionSteps(scoreBreakdown, profile) {
+  const steps = [];
+  if (profile.gpa < 3.7) {
+    steps.push('Raise academic signal via next-term GPA improvement and technical prep to offset transcript concerns.');
+  }
+  if (scoreBreakdown.experience < 7) {
+    steps.push('Add stronger resume work experience through a finance internship, search fund role, or transaction-relevant project work.');
+  }
+  if (scoreBreakdown.extracurricular < 6) {
+    steps.push('Pursue a selective finance activity or a President, VP, Treasurer, or Finance Chair role with measurable responsibility.');
+  }
+  if (steps.length < 2) {
+    steps.push('Keep building resume proof points that show finance interest, analytical reps, and leadership responsibility.');
+  }
+  return steps.slice(0, 3);
+}
+
+function profileScores(
+  profile,
+  competitiveness = 8,
+  weights = profileWeights['Summer Analyst'],
+  experienceOverride = null
+) {
   const schoolScore = schoolToScore(profile.school || '');
-  const experience = experienceScore(profile.internshipType, profile.exposureLevel);
+  const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
+  const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
+  const experience = experienceOverride ?? experienceScore(profile.internshipType, profile.exposureLevel);
   const networking = networkingScore(profile.networking);
-  const extracurricular = extracurricularScore(profile.clubType, profile.leadershipLevel);
+  const extracurricular = extracurricularScore(profile);
 
-  const results = firms
-    .filter((firm) => {
+  const total = clamp(
+    academic * weights.academic +
+      experience * weights.experience +
+      networking * weights.networking +
+      extracurricular * weights.extracurricular
+  );
+
+  return {
+    schoolScore,
+    gpaScore,
+    academic,
+    experience,
+    networking,
+    extracurricular,
+    total
+  };
+}
+
+function resumeProfileScores(profile, competitiveness = 8) {
+  const schoolScore = schoolToScore(profile.school || '');
+  const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
+  const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
+  const experience = resumeExperienceScore(profile);
+  const extracurricular = extracurricularScore(profile);
+
+  const total = clamp(
+    academic * resumeProfileWeights.academic +
+      experience * resumeProfileWeights.experience +
+      extracurricular * resumeProfileWeights.extracurricular
+  );
+
+  return {
+    schoolScore,
+    gpaScore,
+    academic,
+    experience,
+    extracurricular,
+    total
+  };
+}
+
+function hireTypeDifficultyAdjustment(hireType, profile) {
+  const weights = profileWeights[hireType];
+  const experience = workTypeScore(profile.workType);
+  const schoolScore = schoolToScore(profile.school || '');
+  let adjustment = weights.baseDifficultyAdjustment;
+
+  if (hireType === 'Lateral Hire') {
+    if (experience < 6) adjustment += 0.65;
+    if (experience >= 8) adjustment -= 0.2;
+  }
+
+  if (hireType === 'MBA Associate') {
+    if (schoolScore < 7.5) adjustment += 0.35;
+    if (experience < 5.5) adjustment += 0.25;
+    if (schoolScore >= 8.8 && experience >= 7) adjustment -= 0.2;
+  }
+
+  return adjustment;
+}
+
+export function scoreProfile(profile) {
+  const baseScores = resumeProfileScores(profile);
+
+  const results = opportunities
+    .filter((opportunity) => {
       if (!profile.preferredLocations?.length) return true;
-      return profile.preferredLocations.includes(firm.office);
+      return profile.preferredLocations.includes(opportunity.office);
     })
-    .map((firm) => {
-      const gpaScore = gpaToNonlinearScore(profile.gpa, firm.competitiveness);
-      const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
+    .map((opportunity) => {
+      const {
+        schoolScore,
+        gpaScore,
+        academic,
+        experience,
+        extracurricular,
+        total
+      } = resumeProfileScores(profile, opportunity.competitiveness);
 
-      const total = clamp(
-        academic * 0.28 +
-          experience * 0.22 +
-          networking * 0.36 +
-          extracurricular * 0.14
-      );
-
-      const delta = total - firm.competitiveness;
+      const delta = total - opportunity.competitiveness;
       const initialClass = baseClassification(delta);
       const { classification, gateReasons } = applyGates({
         classification: initialClass,
         gpa: profile.gpa,
-        networking,
+        networking: 10,
         experience,
-        competitiveness: firm.competitiveness,
+        competitiveness: opportunity.competitiveness,
         gpaScore
       });
 
       const scoreBreakdown = {
         academic: Number(academic.toFixed(2)),
         experience: Number(experience.toFixed(2)),
-        networking: Number(networking.toFixed(2)),
         extracurricular: Number(extracurricular.toFixed(2)),
         total: Number(total.toFixed(2)),
         school: Number(schoolScore.toFixed(2)),
@@ -254,28 +500,91 @@ export function scoreProfile(profile) {
       };
 
       return {
-        firm: firm.name,
-        office: firm.office,
-        tier: firm.tier,
-        competitiveness: firm.competitiveness,
+        id: opportunity.id,
+        firm: opportunity.firm,
+        office: opportunity.office,
+        group: opportunity.group,
+        tier: opportunity.tier,
+        competitiveness: opportunity.competitiveness,
         classification,
         confidence: confidenceFromDelta(delta),
         scoreBreakdown,
         strengths: buildStrengths(scoreBreakdown, profile),
         gaps: buildGaps(scoreBreakdown, gateReasons),
-        actionSteps: buildActionSteps(scoreBreakdown, profile),
-        reason: `Your total score (${total.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this office's competitiveness benchmark (${firm.competitiveness.toFixed(1)}).`
+        actionSteps: buildResumeActionSteps(scoreBreakdown, profile),
+        reason: `Your total score (${total.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this opportunity's competitiveness benchmark (${opportunity.competitiveness.toFixed(1)}).`
       };
     })
     .sort((a, b) => b.competitiveness - a.competitiveness);
 
   return {
     profileSummary: {
-      schoolScore: Number(schoolScore.toFixed(2)),
-      experience: Number(experience.toFixed(2)),
-      networking: Number(networking.toFixed(2)),
-      extracurricular: Number(extracurricular.toFixed(2))
+      schoolScore: Number(baseScores.schoolScore.toFixed(2)),
+      experience: Number(baseScores.experience.toFixed(2)),
+      extracurricular: Number(baseScores.extracurricular.toFixed(2))
     },
     results
+  };
+}
+
+export function scoreInterviewOdds({ profile, firmName, office, group, hireType = 'Summer Analyst' }) {
+  const weights = profileWeights[hireType];
+  if (!weights) {
+    throw new Error('Unknown hire type.');
+  }
+
+  const opportunity = opportunities.find(
+    (item) => item.firm === firmName && item.office === office && item.group === group
+  );
+
+  if (!opportunity) {
+    throw new Error('Unknown firm, office, and group combination.');
+  }
+
+  const adjustedCompetitiveness = clamp(
+    opportunity.competitiveness + hireTypeDifficultyAdjustment(hireType, profile)
+  );
+  const scores = profileScores(profile, adjustedCompetitiveness, weights, workTypeScore(profile.workType));
+  const delta = scores.total - adjustedCompetitiveness;
+  const rawLikelihood = 100 / (1 + Math.exp(-1.15 * (delta + 0.1)));
+  const likelihood = Math.round(Math.max(3, Math.min(92, rawLikelihood)));
+  const classification = baseClassification(delta);
+  const gateResult = applyGates({
+    classification,
+    gpa: profile.gpa,
+    networking: scores.networking,
+    experience: scores.experience,
+    competitiveness: adjustedCompetitiveness,
+    gpaScore: scores.gpaScore
+  });
+
+  const scoreBreakdown = {
+    academic: Number(scores.academic.toFixed(2)),
+    experience: Number(scores.experience.toFixed(2)),
+    networking: Number(scores.networking.toFixed(2)),
+    extracurricular: Number(scores.extracurricular.toFixed(2)),
+    total: Number(scores.total.toFixed(2)),
+    school: Number(scores.schoolScore.toFixed(2)),
+    gpa: Number(scores.gpaScore.toFixed(2))
+  };
+
+  return {
+    opportunity: {
+      id: opportunity.id,
+      firm: opportunity.firm,
+      office: opportunity.office,
+      group: opportunity.group,
+      tier: opportunity.tier,
+      competitiveness: Number(adjustedCompetitiveness.toFixed(2))
+    },
+    hireType,
+    likelihood,
+    classification: gateResult.classification,
+    confidence: confidenceFromDelta(delta),
+    scoreBreakdown,
+    strengths: buildStrengths(scoreBreakdown, profile),
+    gaps: buildGaps(scoreBreakdown, gateResult.gateReasons),
+    actionSteps: buildActionSteps(scoreBreakdown, profile, { includeFinanceChair: false }),
+    reason: `Your total score (${scores.total.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).`
   };
 }

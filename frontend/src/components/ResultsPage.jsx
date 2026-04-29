@@ -13,7 +13,7 @@ export default function ResultsPage({ data }) {
 
   return (
     <section className="panel results">
-      <h2>Firm Recommendations</h2>
+      <h2>Target List Results</h2>
       {['Reach', 'Target', 'Safety'].map((category) => (
         <div key={category} className="category-block">
           <h3>
@@ -21,7 +21,7 @@ export default function ResultsPage({ data }) {
           </h3>
           <div className="stack">
             {groups[category].length ? (
-              groups[category].map((firm) => <FirmCard key={`${firm.firm}-${firm.office}`} firm={firm} />)
+              groups[category].map((firm) => <FirmCard key={firm.id || `${firm.firm}-${firm.office}-${firm.group}`} firm={firm} />)
             ) : (
               <p className="muted">No firms in this category for this profile.</p>
             )}

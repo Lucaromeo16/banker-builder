@@ -23,7 +23,6 @@ const leadershipOptions = [
   { value: 'president', label: 'President' },
   { value: 'vp', label: 'VP' },
   { value: 'treasurer', label: 'Treasurer' },
-  { value: 'finance chair', label: 'Finance Chair' },
   { value: 'committee lead', label: 'Committee Lead' },
   { value: 'member', label: 'Member' },
   { value: 'none', label: 'None' }
@@ -50,15 +49,18 @@ const createActivity = () => ({
   leadershipLevel: 'member'
 });
 
-const createWorkExperience = () => ({
-  id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`,
-  workType: 'None'
-});
-
 const defaultForm = {
   school: '',
   gpa: 3.7,
-  workExperiences: [createWorkExperience()],
+  workType: 'None',
+  networking: {
+    initialChats: 8,
+    followUps: 5,
+    strongRelationships: 2,
+    referrals: 1,
+    strongestContactSeniority: 'associate',
+    connectionType: 'alumni'
+  },
   activities: [createActivity()]
 };
 
@@ -78,14 +80,18 @@ function NumberField({ label, value, onChange, step = 1, min = 0, max = 100 }) {
   );
 }
 
-export default function InputForm({
-  onSubmit,
-  loading,
-  title = 'Profile Input',
-  submitLabel = 'Build My Bank List',
-  loadingLabel = 'Scoring...'
-}) {
+export default function InterviewProfileForm({ onSubmit, loading }) {
   const [form, setForm] = useState(defaultForm);
+
+  const setNetworking = (key, value) => {
+    setForm((prev) => ({
+      ...prev,
+      networking: {
+        ...prev.networking,
+        [key]: value
+      }
+    }));
+  };
 
   const addActivity = () => {
     setForm((prev) => ({
@@ -110,32 +116,9 @@ export default function InputForm({
     }));
   };
 
-  const addWorkExperience = () => {
-    setForm((prev) => ({
-      ...prev,
-      workExperiences: [...prev.workExperiences, createWorkExperience()]
-    }));
-  };
-
-  const updateWorkExperience = (id, value) => {
-    setForm((prev) => ({
-      ...prev,
-      workExperiences: prev.workExperiences.map((experience) =>
-        experience.id === id ? { ...experience, workType: value } : experience
-      )
-    }));
-  };
-
-  const removeWorkExperience = (id) => {
-    setForm((prev) => ({
-      ...prev,
-      workExperiences: prev.workExperiences.filter((experience) => experience.id !== id)
-    }));
-  };
-
   return (
     <section className="panel">
-      <h2>{title}</h2>
+      <h2>Profile Input</h2>
       <form
         className="interview-form"
         onSubmit={(e) => {
@@ -168,51 +151,7 @@ export default function InputForm({
 
         <section className="form-section">
           <div className="section-heading">
-            <h3>Prior Work / Internship Experience</h3>
-            <button type="button" className="secondary" onClick={addWorkExperience}>
-              Add Experience
-            </button>
-          </div>
-
-          {form.workExperiences.length ? (
-            <div className="activity-list">
-              {form.workExperiences.map((experience, index) => (
-                <article className="activity-card" key={experience.id}>
-                  <div className="activity-card-heading">
-                    <h4>Experience {index + 1}</h4>
-                    <button
-                      type="button"
-                      className="text-button"
-                      onClick={() => removeWorkExperience(experience.id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-
-                  <label>
-                    <span>Work Type</span>
-                    <select
-                      value={experience.workType}
-                      onChange={(e) => updateWorkExperience(experience.id, e.target.value)}
-                    >
-                      {workTypeOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <p className="muted">No work experiences added.</p>
-          )}
-        </section>
-
-        <section className="form-section">
-          <div className="section-heading">
-            <h3>Leadership / Extracurriculars</h3>
+            <h3>Extracurriculars & Leadership</h3>
             <button type="button" className="secondary" onClick={addActivity}>
               Add Activity
             </button>
@@ -283,8 +222,77 @@ export default function InputForm({
           )}
         </section>
 
+        <section className="form-section">
+          <h3>Prior Work / Internship Experience</h3>
+          <div className="grid">
+            <label>
+              <span>Work Type</span>
+              <select
+                value={form.workType}
+                onChange={(e) => setForm({ ...form, workType: e.target.value })}
+              >
+                {workTypeOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section className="form-section">
+          <h3>Networking Inputs</h3>
+          <div className="grid">
+            <NumberField
+              label="Initial chats"
+              value={form.networking.initialChats}
+              onChange={(value) => setNetworking('initialChats', value)}
+            />
+            <NumberField
+              label="Follow-ups"
+              value={form.networking.followUps}
+              onChange={(value) => setNetworking('followUps', value)}
+            />
+            <NumberField
+              label="Strong relationships"
+              value={form.networking.strongRelationships}
+              onChange={(value) => setNetworking('strongRelationships', value)}
+            />
+            <NumberField
+              label="Referrals"
+              value={form.networking.referrals}
+              onChange={(value) => setNetworking('referrals', value)}
+            />
+
+            <label>
+              <span>Strongest Contact Seniority</span>
+              <select
+                value={form.networking.strongestContactSeniority}
+                onChange={(e) => setNetworking('strongestContactSeniority', e.target.value)}
+              >
+                <option value="analyst">Analyst</option>
+                <option value="associate">Associate</option>
+                <option value="vp+">VP+</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Connection Type</span>
+              <select
+                value={form.networking.connectionType}
+                onChange={(e) => setNetworking('connectionType', e.target.value)}
+              >
+                <option value="cold">Cold</option>
+                <option value="alumni">Alumni</option>
+                <option value="close connection">Close connection</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
         <button disabled={loading} className="primary" type="submit">
-          {loading ? loadingLabel : submitLabel}
+          {loading ? 'Calculating...' : 'Calculate Interview Odds'}
         </button>
       </form>
     </section>
