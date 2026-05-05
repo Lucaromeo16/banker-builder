@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+
 const questionBanks = {
   technical: {
     title: 'Technical Questions',
@@ -346,6 +348,8 @@ export default function InterviewPrepPage({ onBack }) {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState(null);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackError, setFeedbackError] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [speechMessage, setSpeechMessage] = useState('');
@@ -369,6 +373,7 @@ export default function InterviewPrepPage({ onBack }) {
     setCurrentQuestion(pickQuestion(categoryId));
     setAnswer('');
     setFeedback(null);
+    setFeedbackError('');
     setSpeechMessage('');
   };
 
@@ -380,13 +385,56 @@ export default function InterviewPrepPage({ onBack }) {
     setCurrentQuestion(null);
     setAnswer('');
     setFeedback(null);
+    setFeedbackLoading(false);
+    setFeedbackError('');
     setIsRecording(false);
     setSpeechMessage('');
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setFeedback(evaluateAnswer(answer, currentQuestion));
+    setFeedback(null);
+    setFeedbackError('');
+    setFeedbackLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/interview-feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category: currentQuestion.categoryTitle,
+          question: currentQuestion.prompt,
+          userAnswer: answer
+        })
+      });
+
+      if (!response.ok) {
+        let details = '';
+        try {
+          const errorPayload = await response.json();
+          details = [errorPayload.error, errorPayload.details].filter(Boolean).join(' ');
+        } catch {
+          details = await response.text();
+        }
+        throw new Error(details || `Feedback request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      setFeedback({
+        score: data.scoreOutOf10,
+        whatWentWell: data.whatWentWell,
+        whatWasMissing: data.whatWasMissing,
+        suggestedStructure: data.improvedAnswerStructure,
+        exampleResponse: data.tenOutOfTenExampleResponse,
+        followUpQuestion: data.followUpQuestion
+      });
+    } catch (error) {
+      console.log('[interview-feedback] Feedback request failed', error);
+      const baseMessage = 'Feedback could not be generated. Please try again.';
+      setFeedbackError(import.meta.env.DEV && error.message ? `${baseMessage} ${error.message}` : baseMessage);
+    } finally {
+      setFeedbackLoading(false);
+    }
   };
 
   const handleNextQuestion = () => {
@@ -396,6 +444,8 @@ export default function InterviewPrepPage({ onBack }) {
     setCurrentQuestion(pickQuestion(selectedCategoryId, currentQuestion.prompt));
     setAnswer('');
     setFeedback(null);
+    setFeedbackLoading(false);
+    setFeedbackError('');
     setIsRecording(false);
     setSpeechMessage('');
   };
@@ -406,6 +456,8 @@ export default function InterviewPrepPage({ onBack }) {
     }
     setAnswer('');
     setFeedback(null);
+    setFeedbackLoading(false);
+    setFeedbackError('');
     setIsRecording(false);
     setSpeechMessage('');
   };
@@ -530,8 +582,8 @@ export default function InterviewPrepPage({ onBack }) {
               />
             </label>
             <div className="practice-actions">
-              <button type="submit" className="primary" disabled={!answer.trim()}>
-                Submit Answer
+              <button type="submit" className="primary" disabled={!answer.trim() || feedbackLoading}>
+                {feedbackLoading ? 'Analyzing...' : 'Submit Answer'}
               </button>
               <button type="button" className="secondary" onClick={handleTryAgain}>
                 Try Again
@@ -541,6 +593,9 @@ export default function InterviewPrepPage({ onBack }) {
               </button>
             </div>
           </form>
+
+          {feedbackLoading ? <p className="muted">Analyzing your answer...</p> : null}
+          {feedbackError ? <p className="error">{feedbackError}</p> : null}
 
           {feedback ? (
             <section className="feedback-card" aria-live="polite">

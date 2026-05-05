@@ -7,7 +7,15 @@
     "latitude": 40.7145,
     "longitude": -74.0141,
     "type": "BB",
-    "groups": ["M&A", "Financial Sponsors", "Technology", "Healthcare", "Industrials", "Consumer & Retail", "Financial Institutions"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Technology",
+      "Healthcare",
+      "Industrials",
+      "Consumer & Retail",
+      "Financial Institutions"
+    ],
     "officeHistory": "Flagship U.S. investment banking office with broad product and coverage depth across large-cap corporate and sponsor clients.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 5,
@@ -15,7 +23,8 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.6,
     "internshipOpportunities": "Large summer analyst class with highly competitive placement across coverage and product groups.",
-    "notes": "One of the deepest U.S. analyst platforms."
+    "notes": "One of the deepest U.S. analyst platforms.",
+    "logo": "/logos/goldman-sachs.png"
   },
   {
     "id": "goldman-sachs-san-francisco",
@@ -25,7 +34,12 @@
     "latitude": 37.7891,
     "longitude": -122.3972,
     "type": "BB",
-    "groups": ["Technology", "M&A", "Healthcare", "Financial Sponsors"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Healthcare",
+      "Financial Sponsors"
+    ],
     "officeHistory": "West Coast office known for technology and growth-company coverage, with frequent exposure to software and internet transactions.",
     "estimatedHeadcount": "150-250 bankers",
     "prestigeStars": 5,
@@ -33,7 +47,8 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.4,
     "internshipOpportunities": "Selective summer analyst seats focused heavily on technology and adjacent growth sectors.",
-    "notes": "Strong fit for candidates with tech banking interest."
+    "notes": "Strong fit for candidates with tech banking interest.",
+    "logo": "/logos/goldman-sachs.png"
   },
   {
     "id": "morgan-stanley-new-york",
@@ -43,7 +58,15 @@
     "latitude": 40.7602,
     "longitude": -73.9718,
     "type": "BB",
-    "groups": ["M&A", "Financial Sponsors", "Technology", "Healthcare", "Industrials", "Consumer & Retail", "Financial Institutions"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Technology",
+      "Healthcare",
+      "Industrials",
+      "Consumer & Retail",
+      "Financial Institutions"
+    ],
     "officeHistory": "Major global investment banking hub with broad advisory, capital markets, and sponsor coverage capabilities.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 5,
@@ -51,7 +74,8 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.45,
     "internshipOpportunities": "Large but extremely competitive summer analyst program across major groups.",
-    "notes": "Core office for many of the firm's U.S. investment banking teams."
+    "notes": "Core office for many of the firm's U.S. investment banking teams.",
+    "logo": "/logos/morgan-stanley.png"
   },
   {
     "id": "morgan-stanley-menlo-park",
@@ -61,14 +85,19 @@
     "latitude": 37.4519,
     "longitude": -122.1826,
     "type": "BB",
-    "groups": ["Technology", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Silicon Valley banking office with strong technology franchise exposure and proximity to venture-backed and public tech clients.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.25,
-    "internshipOpportunities": "Small, selective summer analyst intake with technology-heavy deal exposure."
+    "internshipOpportunities": "Small, selective summer analyst intake with technology-heavy deal exposure.",
+    "logo": "/logos/morgan-stanley.png"
   },
   {
     "id": "jpmorgan-new-york",
@@ -78,14 +107,23 @@
     "latitude": 40.7557,
     "longitude": -73.9754,
     "type": "BB",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Industrials", "Consumer & Retail", "Financial Institutions", "Technology"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Industrials",
+      "Consumer & Retail",
+      "Financial Institutions",
+      "Technology"
+    ],
     "officeHistory": "Large investment banking platform with extensive corporate relationships and capital markets integration.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.25,
-    "internshipOpportunities": "Large analyst program with many group placements, still highly competitive."
+    "internshipOpportunities": "Large analyst program with many group placements, still highly competitive.",
+    "logo": "/logos/j-p-morgan.png"
   },
   {
     "id": "jpmorgan-chicago",
@@ -95,14 +133,19 @@
     "latitude": 41.8841,
     "longitude": -87.6324,
     "type": "BB",
-    "groups": ["Industrials", "M&A", "Consumer & Retail"],
+    "groups": [
+      "Industrials",
+      "M&A",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Midwest office with meaningful industrials and regional corporate coverage responsibilities.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 4,
     "competitivenessScore": 8.65,
-    "internshipOpportunities": "Selective regional summer analyst seats with strong Midwest client exposure."
+    "internshipOpportunities": "Selective regional summer analyst seats with strong Midwest client exposure.",
+    "logo": "/logos/j-p-morgan.png"
   },
   {
     "id": "bank-of-america-charlotte",
@@ -112,14 +155,20 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "BB",
-    "groups": ["Financial Institutions", "Industrials", "M&A", "Consumer & Retail"],
+    "groups": [
+      "Financial Institutions",
+      "Industrials",
+      "M&A",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Important banking office tied to the firm's Carolinas presence and broad corporate banking relationships.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 8.55,
-    "internshipOpportunities": "Regular summer analyst opportunities, often appealing to candidates targeting Southeast banking."
+    "internshipOpportunities": "Regular summer analyst opportunities, often appealing to candidates targeting Southeast banking.",
+    "logo": "/logos/bank-of-america.png"
   },
   {
     "id": "citi-houston",
@@ -129,14 +178,19 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "BB",
-    "groups": ["Energy", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Energy",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Energy-focused office serving upstream, midstream, downstream, and energy transition clients.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 8.35,
-    "internshipOpportunities": "Selective energy banking analyst seats with deal exposure tied to commodity and capital markets cycles."
+    "internshipOpportunities": "Selective energy banking analyst seats with deal exposure tied to commodity and capital markets cycles.",
+    "logo": "/logos/citi.png"
   },
   {
     "id": "evercore-new-york",
@@ -146,14 +200,21 @@
     "latitude": 40.7614,
     "longitude": -73.9776,
     "type": "EB",
-    "groups": ["M&A", "Restructuring", "Financial Sponsors", "Activism / Strategic Advisory", "Healthcare"],
+    "groups": [
+      "M&A",
+      "Restructuring",
+      "Financial Sponsors",
+      "Activism / Strategic Advisory",
+      "Healthcare"
+    ],
     "officeHistory": "Flagship advisory office with a reputation for high-profile M&A, restructuring, and strategic advisory assignments.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.7,
-    "internshipOpportunities": "Highly selective summer analyst program with strong advisory training."
+    "internshipOpportunities": "Highly selective summer analyst program with strong advisory training.",
+    "logo": "/logos/evercore.png"
   },
   {
     "id": "evercore-san-francisco",
@@ -163,14 +224,19 @@
     "latitude": 37.7936,
     "longitude": -122.4006,
     "type": "EB",
-    "groups": ["Technology", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "West Coast advisory office with a strong technology banking orientation and senior-client advisory focus.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.35,
-    "internshipOpportunities": "Very competitive summer seats, typically requiring strong technical preparation and networking."
+    "internshipOpportunities": "Very competitive summer seats, typically requiring strong technical preparation and networking.",
+    "logo": "/logos/evercore.png"
   },
   {
     "id": "centerview-new-york",
@@ -180,14 +246,20 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "EB",
-    "groups": ["M&A", "Healthcare", "Consumer & Retail", "Activism / Strategic Advisory"],
+    "groups": [
+      "M&A",
+      "Healthcare",
+      "Consumer & Retail",
+      "Activism / Strategic Advisory"
+    ],
     "officeHistory": "Highly regarded advisory boutique known for senior attention, major strategic transactions, and a lean staffing model.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.65,
-    "internshipOpportunities": "Very small and highly selective internship program."
+    "internshipOpportunities": "Very small and highly selective internship program.",
+    "logo": "/logos/centerview-partners.png"
   },
   {
     "id": "pjt-partners-new-york",
@@ -197,14 +269,19 @@
     "latitude": 40.7549,
     "longitude": -73.984,
     "type": "EB",
-    "groups": ["Restructuring", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Restructuring",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Advisory office with a leading restructuring franchise and a strong strategic advisory platform.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.55,
-    "internshipOpportunities": "Highly selective analyst hiring, especially for restructuring-oriented candidates."
+    "internshipOpportunities": "Highly selective analyst hiring, especially for restructuring-oriented candidates.",
+    "logo": "/logos/pjt-partners.png"
   },
   {
     "id": "qatalyst-san-francisco",
@@ -214,14 +291,18 @@
     "latitude": 37.7909,
     "longitude": -122.4017,
     "type": "EB",
-    "groups": ["Technology", "M&A"],
+    "groups": [
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Technology-focused advisory boutique with a history of high-profile software, internet, and strategic tech M&A mandates.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
     "competitivenessScore": 9.5,
-    "internshipOpportunities": "Very limited and highly competitive analyst opportunities."
+    "internshipOpportunities": "Very limited and highly competitive analyst opportunities.",
+    "logo": "/logos/qatalyst-partners.png"
   },
   {
     "id": "lazard-chicago",
@@ -231,14 +312,19 @@
     "latitude": 41.8789,
     "longitude": -87.6359,
     "type": "EB",
-    "groups": ["Industrials", "M&A", "Consumer & Retail"],
+    "groups": [
+      "Industrials",
+      "M&A",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Regional advisory office serving Midwest corporate clients while connecting into Lazard's global advisory platform.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 4,
     "competitivenessScore": 8.85,
-    "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure."
+    "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure.",
+    "logo": "/logos/lazard.png"
   },
   {
     "id": "jefferies-new-york",
@@ -248,14 +334,22 @@
     "latitude": 40.7567,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Industrials", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Industrials",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Large middle-market and growth-company investment banking platform with broad coverage and sponsor activity.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 8.25,
-    "internshipOpportunities": "Meaningful summer analyst class with strong deal exposure across coverage groups."
+    "internshipOpportunities": "Meaningful summer analyst class with strong deal exposure across coverage groups.",
+    "logo": "/logos/jefferies.png"
   },
   {
     "id": "jefferies-houston",
@@ -265,14 +359,19 @@
     "latitude": 29.7597,
     "longitude": -95.3658,
     "type": "MM",
-    "groups": ["Energy", "M&A", "Industrials"],
+    "groups": [
+      "Energy",
+      "M&A",
+      "Industrials"
+    ],
     "officeHistory": "Energy and industrials-oriented office serving public and private companies across the energy value chain.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 7.95,
-    "internshipOpportunities": "Competitive energy banking seats with a preference for candidates who understand the sector."
+    "internshipOpportunities": "Competitive energy banking seats with a preference for candidates who understand the sector.",
+    "logo": "/logos/jefferies.png"
   },
   {
     "id": "houlihan-lokey-los-angeles",
@@ -282,14 +381,20 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM",
-    "groups": ["Restructuring", "M&A", "Financial Sponsors", "Consumer & Retail"],
+    "groups": [
+      "Restructuring",
+      "M&A",
+      "Financial Sponsors",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Major West Coast office with strong financial restructuring and middle-market advisory heritage.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 8.2,
-    "internshipOpportunities": "Regular analyst recruiting with strong technical expectations."
+    "internshipOpportunities": "Regular analyst recruiting with strong technical expectations.",
+    "logo": "/logos/houlihan-lokey.png"
   },
   {
     "id": "william-blair-chicago",
@@ -299,14 +404,22 @@
     "latitude": 41.8827,
     "longitude": -87.6233,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Technology", "Healthcare", "Industrials", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Technology",
+      "Healthcare",
+      "Industrials",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Chicago-based middle-market investment banking platform known for growth-company and sponsor advisory work.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 7.85,
-    "internshipOpportunities": "Consistent analyst hiring with strong Midwest and growth-company appeal."
+    "internshipOpportunities": "Consistent analyst hiring with strong Midwest and growth-company appeal.",
+    "logo": "/logos/william-blair.png"
   },
   {
     "id": "piper-sandler-minneapolis",
@@ -316,14 +429,20 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM",
-    "groups": ["M&A", "Healthcare", "Financial Institutions", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Healthcare",
+      "Financial Institutions",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Long-standing Minneapolis platform with strong sector coverage roots and middle-market advisory activity.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
     "competitivenessScore": 7.2,
-    "internshipOpportunities": "Good analyst opportunities for candidates targeting middle-market banking."
+    "internshipOpportunities": "Good analyst opportunities for candidates targeting middle-market banking.",
+    "logo": "/logos/piper-sandler.png"
   },
   {
     "id": "baird-milwaukee",
@@ -333,14 +452,20 @@
     "latitude": 43.0389,
     "longitude": -87.9065,
     "type": "MM",
-    "groups": ["M&A", "Industrials", "Consumer & Retail", "Healthcare"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Consumer & Retail",
+      "Healthcare"
+    ],
     "officeHistory": "Headquarters investment banking office with strong Midwest middle-market relationships and sponsor coverage.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
     "competitivenessScore": 7.05,
-    "internshipOpportunities": "Regular summer analyst seats, often attractive to Midwest candidates."
+    "internshipOpportunities": "Regular summer analyst seats, often attractive to Midwest candidates.",
+    "logo": "/logos/baird.png"
   },
   {
     "id": "harris-williams-richmond",
@@ -350,14 +475,21 @@
     "latitude": 37.5407,
     "longitude": -77.436,
     "type": "LMM Boutique",
-    "groups": ["M&A", "Business Services", "Consumer & Retail", "Healthcare Services", "Industrials"],
+    "groups": [
+      "M&A",
+      "Business Services",
+      "Consumer & Retail",
+      "Healthcare Services",
+      "Industrials"
+    ],
     "officeHistory": "Middle-market advisory office with a long-standing sell-side M&A focus and private equity client base.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 7.4,
-    "internshipOpportunities": "Selective analyst seats with strong exposure to sponsor-backed sell-side mandates."
+    "internshipOpportunities": "Selective analyst seats with strong exposure to sponsor-backed sell-side mandates.",
+    "logo": "/logos/harris-williams.png"
   },
   {
     "id": "lincoln-international-chicago",
@@ -367,14 +499,21 @@
     "latitude": 41.8836,
     "longitude": -87.6287,
     "type": "LMM Boutique",
-    "groups": ["M&A", "Financial Sponsors", "Industrials", "Business Services", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Industrials",
+      "Business Services",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Important Chicago advisory office focused on sponsor-backed and privately held middle-market companies.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
     "competitivenessScore": 7.55,
-    "internshipOpportunities": "Competitive middle-market internship opportunities with heavy M&A exposure."
+    "internshipOpportunities": "Competitive middle-market internship opportunities with heavy M&A exposure.",
+    "logo": "/logos/lincoln-international.png"
   },
   {
     "id": "stifel-baltimore",
@@ -384,14 +523,20 @@
     "latitude": 39.2904,
     "longitude": -76.6122,
     "type": "MM",
-    "groups": ["M&A", "Healthcare", "Technology", "Industrials"],
+    "groups": [
+      "M&A",
+      "Healthcare",
+      "Technology",
+      "Industrials"
+    ],
     "officeHistory": "Regional banking office connected to a broad middle-market advisory and capital markets platform.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
     "competitivenessScore": 7.35,
-    "internshipOpportunities": "Moderately selective internships with exposure to sector coverage and execution."
+    "internshipOpportunities": "Moderately selective internships with exposure to sector coverage and execution.",
+    "logo": "/logos/stifel.png"
   },
   {
     "id": "brown-gibbons-lang-cleveland",
@@ -401,14 +546,20 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "LMM Boutique",
-    "groups": ["M&A", "Industrials", "Business Services", "Healthcare Services"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Business Services",
+      "Healthcare Services"
+    ],
     "officeHistory": "Regional lower-middle-market advisory boutique with sell-side M&A and private capital advisory activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 3,
     "competitivenessScore": 6.6,
-    "internshipOpportunities": "Smaller internship classes with strong fit for candidates seeking hands-on regional M&A experience."
+    "internshipOpportunities": "Smaller internship classes with strong fit for candidates seeking hands-on regional M&A experience.",
+    "logo": "/logos/brown-gibbons-lang.png"
   },
   {
     "id": "da-davidson-denver",
@@ -418,14 +569,20 @@
     "latitude": 39.7392,
     "longitude": -104.9903,
     "type": "Boutique",
-    "groups": ["M&A", "Technology", "Business Services", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Technology",
+      "Business Services",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Regional advisory office serving growth and middle-market clients across the Mountain West.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 3,
     "competitivenessScore": 6.25,
-    "internshipOpportunities": "Smaller analyst opportunities; networking and regional interest can matter."
+    "internshipOpportunities": "Smaller analyst opportunities; networking and regional interest can matter.",
+    "logo": "/logos/d-a-davidson.png"
   },
   {
     "id": "stephens-little-rock",
@@ -435,13 +592,19 @@
     "latitude": 34.7465,
     "longitude": -92.2896,
     "type": "Boutique",
-    "groups": ["M&A", "Consumer & Retail", "Industrials", "Financial Institutions"],
+    "groups": [
+      "M&A",
+      "Consumer & Retail",
+      "Industrials",
+      "Financial Institutions"
+    ],
     "officeHistory": "Regional investment bank office with a long history advising private and public middle-market clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 3,
     "competitivenessScore": 6.15,
-    "internshipOpportunities": "Selective but relationship-driven analyst opportunities."
+    "internshipOpportunities": "Selective but relationship-driven analyst opportunities.",
+    "logo": "/logos/stephens.png"
   }
 ]

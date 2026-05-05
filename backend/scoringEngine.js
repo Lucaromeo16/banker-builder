@@ -1,28 +1,5 @@
+import schools from '../data/schools.json' with { type: 'json' };
 import { opportunities, opportunityGroups } from './firms.js';
-
-const prestigeLookup = {
-  'wharton': 10,
-  'harvard': 10,
-  'stanford': 10,
-  'mit': 9.8,
-  'princeton': 9.7,
-  'yale': 9.5,
-  'columbia': 9.5,
-  'upenn': 9.4,
-  'nyu': 8.8,
-  'cornell': 8.7,
-  'duke': 8.7,
-  'northwestern': 8.6,
-  'umich': 8.2,
-  'berkeley': 8.5,
-  'ucla': 8.0,
-  'texas': 7.8,
-  'georgetown': 8.0,
-  'usc': 7.7,
-  'vanderbilt': 7.5,
-  'state school': 6.2,
-  'regional school': 5.2
-};
 
 const internshipBrandScores = {
   'bulge bracket / elite boutique IB': 10,
@@ -142,12 +119,8 @@ function schoolToScore(school) {
   const normalized = school.trim().toLowerCase();
   if (!normalized) return 5;
 
-  const matched = Object.entries(prestigeLookup).find(([key]) => normalized.includes(key));
-  if (matched) return matched[1];
-
-  if (normalized.includes('ivy')) return 9;
-  if (normalized.includes('state')) return 6.2;
-  return 6.8;
+  const matched = schools.find((entry) => entry.schoolName.toLowerCase() === normalized);
+  return matched?.prestigeScore ?? 5;
 }
 
 function dynamicSoftCutoff(baseCutoff, competitiveness) {
@@ -505,7 +478,11 @@ export function scoreProfile(profile) {
         office: opportunity.office,
         group: opportunity.group,
         tier: opportunity.tier,
+        type: opportunity.type,
         competitiveness: opportunity.competitiveness,
+        prestigeStars: opportunity.prestigeStars,
+        payStars: opportunity.payStars,
+        competitivenessStars: opportunity.competitivenessStars,
         classification,
         confidence: confidenceFromDelta(delta),
         scoreBreakdown,
@@ -575,6 +552,10 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
       office: opportunity.office,
       group: opportunity.group,
       tier: opportunity.tier,
+      type: opportunity.type,
+      prestigeStars: opportunity.prestigeStars,
+      payStars: opportunity.payStars,
+      competitivenessStars: opportunity.competitivenessStars,
       competitiveness: Number(adjustedCompetitiveness.toFixed(2))
     },
     hireType,
