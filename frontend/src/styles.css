@@ -1073,6 +1073,13 @@ textarea {
   background: #F97316;
 }
 
+.office-marker-specialized,
+.legend-dot-specialized {
+  --marker-color: #A855F7;
+  --marker-glow: rgba(168, 85, 247, 0.24);
+  background: #A855F7;
+}
+
 .office-marker-lmm,
 .legend-dot-lmm {
   --marker-color: #3B82F6;
@@ -1185,6 +1192,10 @@ textarea {
 
 .map-type-pill-mm {
   --marker-color: #F97316;
+}
+
+.map-type-pill-specialized {
+  --marker-color: #A855F7;
 }
 
 .map-type-pill-lmm {

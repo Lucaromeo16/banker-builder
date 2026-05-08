@@ -290,7 +290,7 @@
     "state": "CA",
     "latitude": 37.7909,
     "longitude": -122.4017,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "M&A"
@@ -477,7 +477,7 @@
     "state": "VA",
     "latitude": 37.5407,
     "longitude": -77.436,
-    "type": "LMM Boutique",
+    "type": "MM",
     "groups": [
       "M&A",
       "Business Services",
@@ -502,7 +502,7 @@
     "state": "IL",
     "latitude": 41.8836,
     "longitude": -87.6287,
-    "type": "LMM Boutique",
+    "type": "MM",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -551,7 +551,7 @@
     "state": "OH",
     "latitude": 41.4993,
     "longitude": -81.6944,
-    "type": "LMM Boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -575,7 +575,7 @@
     "state": "CO",
     "latitude": 39.7392,
     "longitude": -104.9903,
-    "type": "Boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Technology",
@@ -598,7 +598,7 @@
     "state": "AR",
     "latitude": 34.7465,
     "longitude": -92.2896,
-    "type": "Boutique",
+    "type": "MM",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -694,7 +694,7 @@
     "state": "NY",
     "latitude": 40.7651,
     "longitude": -73.9799,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "M&A",
       "Special Situations",
@@ -717,7 +717,7 @@
     "state": "NY",
     "latitude": 40.7628,
     "longitude": -73.9746,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Media",
       "Technology",
@@ -741,7 +741,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "M&A",
       "Strategic Advisory",
@@ -1226,7 +1226,7 @@
     "state": "NY",
     "latitude": 40.7638,
     "longitude": -73.973,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Media",
       "Technology",
@@ -1251,7 +1251,7 @@
     "state": "CA",
     "latitude": 37.7897,
     "longitude": -122.3972,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "Media",
@@ -1616,7 +1616,7 @@
     "state": "NY",
     "latitude": 40.7564,
     "longitude": -73.989,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Restructuring",
       "M&A",
@@ -1640,7 +1640,7 @@
     "state": "CA",
     "latitude": 34.0595,
     "longitude": -118.4135,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Restructuring",
       "M&A",
@@ -1664,7 +1664,7 @@
     "state": "CA",
     "latitude": 37.7898,
     "longitude": -122.4021,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "Restructuring",
@@ -1688,7 +1688,7 @@
     "state": "CT",
     "latitude": 41.0389,
     "longitude": -73.5414,
-    "type": "EB",
+    "type": "Specialized Boutique",
     "groups": [
       "Restructuring",
       "Liability Management",
@@ -2958,7 +2958,7 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8,
     "internshipOpportunities": "Competitive analyst program with strongest U.S. visibility in New York.",
-    "notes": "Core U.S. hub for Scotiabank's Canadian BB platform.",
+    "notes": "Core U.S. hub for Scotiabank's Canadian platform.",
     "logo": "/logos/scotiabank.png"
   },
   {
@@ -2982,7 +2982,7 @@
     "competitivenessStars": 4,
     "competitivenessScore": 7.6,
     "internshipOpportunities": "Selective energy banking and capital markets seats.",
-    "notes": "Strong fit for candidates targeting energy within a Canadian BB platform.",
+    "notes": "Strong fit for candidates targeting energy within a Canadian platform.",
     "logo": "/logos/scotiabank.png"
   },
   {
@@ -3765,7 +3765,7 @@
     "state": "MA",
     "latitude": 42.3584,
     "longitude": -71.0568,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare",
       "Biopharma",
@@ -3790,7 +3790,7 @@
     "state": "NY",
     "latitude": 40.7606,
     "longitude": -73.9826,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare",
       "M&A",
@@ -3814,7 +3814,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Biopharma",
       "MedTech",
@@ -3838,7 +3838,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Healthcare Technology",
@@ -3862,7 +3862,7 @@
     "state": "CA",
     "latitude": 34.0259,
     "longitude": -118.473,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Technology",
       "MedTech",
@@ -3886,7 +3886,7 @@
     "state": "FL",
     "latitude": 25.7617,
     "longitude": -80.1918,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Healthcare Technology",
@@ -3910,7 +3910,7 @@
     "state": "TN",
     "latitude": 36.1627,
     "longitude": -86.7816,
-    "type": "EB / Healthcare-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Provider Services",
@@ -3934,7 +3934,7 @@
     "state": "GA",
     "latitude": 33.8484,
     "longitude": -84.3738,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Financial Sponsors",
@@ -3958,7 +3958,7 @@
     "state": "MA",
     "latitude": 42.3555,
     "longitude": -71.0556,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Healthcare",
       "Technology",
@@ -3982,7 +3982,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Financial Institutions",
       "Debt Capital Markets",
@@ -4006,7 +4006,7 @@
     "state": "IL",
     "latitude": 41.8841,
     "longitude": -87.6359,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Consumer & Retail",
@@ -4030,7 +4030,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Energy",
       "Industrials",
@@ -4054,7 +4054,7 @@
     "state": "TN",
     "latitude": 36.1627,
     "longitude": -86.7816,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Healthcare Services",
       "Consumer & Retail",
@@ -4078,7 +4078,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "M&A",
       "Technology",
@@ -4103,7 +4103,7 @@
     "state": "DC",
     "latitude": 38.8951,
     "longitude": -77.0364,
-    "type": "MM / Regional MM",
+    "type": "MM",
     "groups": [
       "Government Services",
       "Technology",
@@ -4127,7 +4127,7 @@
     "state": "NY",
     "latitude": 40.7608,
     "longitude": -73.9726,
-    "type": "Boutique / Media-Tech",
+    "type": "Specialized Boutique",
     "groups": [
       "Media",
       "Technology",
@@ -4152,7 +4152,7 @@
     "state": "CA",
     "latitude": 37.8036,
     "longitude": -122.4035,
-    "type": "Boutique / Media-Tech",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "Digital Media",
@@ -4176,7 +4176,7 @@
     "state": "CA",
     "latitude": 34.0195,
     "longitude": -118.4912,
-    "type": "Boutique / Media-Tech",
+    "type": "Specialized Boutique",
     "groups": [
       "Media",
       "Entertainment",
@@ -4201,7 +4201,7 @@
     "state": "CA",
     "latitude": 37.7955,
     "longitude": -122.3996,
-    "type": "Boutique / Tech-focused",
+    "type": "Specialized Boutique",
     "groups": [
       "Software",
       "Technology",
@@ -4226,7 +4226,7 @@
     "state": "NY",
     "latitude": 40.7621,
     "longitude": -73.9785,
-    "type": "Boutique / Tech-focused",
+    "type": "Specialized Boutique",
     "groups": [
       "Software",
       "Technology",
@@ -4712,7 +4712,7 @@
     "state": "NY",
     "latitude": 40.7549,
     "longitude": -73.9773,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -4737,7 +4737,7 @@
     "state": "TX",
     "latitude": 29.7589,
     "longitude": -95.3677,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -4761,7 +4761,7 @@
     "state": "CA",
     "latitude": 37.4215,
     "longitude": -122.2068,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Growth",
@@ -4785,7 +4785,7 @@
     "state": "IL",
     "latitude": 41.8768,
     "longitude": -87.6318,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Commodities",
@@ -4809,7 +4809,7 @@
     "state": "NY",
     "latitude": 40.7553,
     "longitude": -73.9743,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "M&A",
       "Project Finance",
@@ -4834,7 +4834,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -4858,7 +4858,7 @@
     "state": "CA",
     "latitude": 34.0505,
     "longitude": -118.2551,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Media",
       "Consumer & Retail",
@@ -4882,7 +4882,7 @@
     "state": "CA",
     "latitude": 37.7929,
     "longitude": -122.3971,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Growth",
@@ -4906,7 +4906,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Leveraged Finance",
       "Project Finance",
@@ -4930,7 +4930,7 @@
     "state": "NY",
     "latitude": 40.7616,
     "longitude": -73.9868,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -4955,7 +4955,7 @@
     "state": "MA",
     "latitude": 42.3555,
     "longitude": -71.0556,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Healthcare",
       "Technology",
@@ -4979,7 +4979,7 @@
     "state": "IL",
     "latitude": 41.8786,
     "longitude": -87.6382,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Capital Markets",
@@ -5003,7 +5003,7 @@
     "state": "CA",
     "latitude": 37.7943,
     "longitude": -122.3988,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -5027,7 +5027,7 @@
     "state": "NY",
     "latitude": 40.7604,
     "longitude": -73.9806,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -5052,7 +5052,7 @@
     "state": "TX",
     "latitude": 29.756,
     "longitude": -95.3645,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -5076,7 +5076,7 @@
     "state": "CA",
     "latitude": 37.7929,
     "longitude": -122.4038,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -5100,7 +5100,7 @@
     "state": "IL",
     "latitude": 41.8841,
     "longitude": -87.6359,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Capital Markets",
@@ -5124,7 +5124,7 @@
     "state": "MA",
     "latitude": 42.3555,
     "longitude": -71.0556,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Healthcare",
       "Life Sciences",
@@ -5148,7 +5148,7 @@
     "state": "CA",
     "latitude": 34.051,
     "longitude": -118.2551,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Media",
       "Consumer & Retail",
@@ -5172,7 +5172,7 @@
     "state": "VA",
     "latitude": 38.9339,
     "longitude": -77.1773,
-    "type": "MM / specialty platform",
+    "type": "MM",
     "groups": [
       "Financial Institutions",
       "Technology",
@@ -5196,7 +5196,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / specialty platform",
+    "type": "MM",
     "groups": [
       "Financial Institutions",
       "Consumer Finance",
@@ -5220,7 +5220,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / specialty platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Consumer Finance",
@@ -5244,7 +5244,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "MM / specialty platform",
+    "type": "MM",
     "groups": [
       "Energy",
       "Debt Capital Markets",
@@ -5268,7 +5268,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "MM / specialty platform",
+    "type": "MM",
     "groups": [
       "Technology",
       "FinTech",
@@ -5292,7 +5292,7 @@
     "state": "MA",
     "latitude": 42.3572,
     "longitude": -71.0552,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Capital Advisory",
@@ -5317,7 +5317,7 @@
     "state": "CO",
     "latitude": 39.7508,
     "longitude": -104.9955,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Energy",
       "Infrastructure",
@@ -5341,7 +5341,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Industrials",
       "Business Services",
@@ -5365,7 +5365,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Capital Advisory",
@@ -5390,7 +5390,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Business Services",
       "Energy",
@@ -5414,7 +5414,7 @@
     "state": "FL",
     "latitude": 27.9506,
     "longitude": -82.4572,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Consumer & Retail",
       "Healthcare",
@@ -5438,7 +5438,7 @@
     "state": "CA",
     "latitude": 33.6846,
     "longitude": -117.8265,
-    "type": "MM / LMM-focused advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Technology",
       "Consumer & Retail",
@@ -5462,7 +5462,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / international MM",
+    "type": "MM",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -5487,7 +5487,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / international MM",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -5511,7 +5511,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "MM / international MM",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -5535,7 +5535,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "Boutique / EB-style technology boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "Software",
@@ -5550,7 +5550,7 @@
     "competitivenessStars": 5,
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Very small and highly selective analyst pipeline.",
-    "notes": "EB-style technology boutique with highly concentrated U.S. recruiting.",
+    "notes": "Specialized technology boutique with highly concentrated U.S. recruiting.",
     "logo": "/logos/tidal-partners.png"
   },
   {
@@ -5560,7 +5560,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Boutique / EB-style technology boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Technology",
       "Software",
@@ -5585,7 +5585,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Industrials",
       "Infrastructure",
@@ -5609,7 +5609,7 @@
     "state": "MA",
     "latitude": 42.3584,
     "longitude": -71.0568,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Healthcare & Life Sciences",
       "Technology",
@@ -5633,7 +5633,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Consumer",
       "Technology",
@@ -5657,7 +5657,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -5778,7 +5778,7 @@
     "state": "NY",
     "latitude": 40.7606,
     "longitude": -73.9826,
-    "type": "MM / sector-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -5803,7 +5803,7 @@
     "state": "IL",
     "latitude": 41.8819,
     "longitude": -87.6376,
-    "type": "MM / sector-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Industrials",
       "Consumer & Retail",
@@ -5827,7 +5827,7 @@
     "state": "FL",
     "latitude": 25.7281,
     "longitude": -80.2407,
-    "type": "MM / sector-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Consumer & Retail",
       "Restaurants",
@@ -5851,7 +5851,7 @@
     "state": "FL",
     "latitude": 27.9506,
     "longitude": -82.4572,
-    "type": "MM / sector-focused boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare",
       "Consumer & Retail",
@@ -5875,7 +5875,7 @@
     "state": "WA",
     "latitude": 47.6062,
     "longitude": -122.3321,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Technology",
       "Software",
@@ -5900,7 +5900,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Consumer",
       "Media",
@@ -5924,7 +5924,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Industrials",
       "Consumer",
@@ -5948,7 +5948,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Technology",
@@ -5972,7 +5972,7 @@
     "state": "MA",
     "latitude": 42.3505,
     "longitude": -71.0744,
-    "type": "Boutique / LMM technology advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Software",
       "SaaS",
@@ -5997,7 +5997,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.4007,
-    "type": "Boutique / LMM technology advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Software",
       "SaaS",
@@ -6022,7 +6022,7 @@
     "state": "CA",
     "latitude": 34.0614,
     "longitude": -118.4145,
-    "type": "Boutique / LMM technology advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Software",
       "SaaS",
@@ -6047,7 +6047,7 @@
     "state": "IL",
     "latitude": 41.8792,
     "longitude": -87.6317,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -6061,7 +6061,7 @@
     "competitivenessStars": 3,
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Competitive but smaller U.S. analyst presence than major U.S. BBs.",
-    "notes": "Canadian BB platform, but U.S. IB presence is closer to MM scale.",
+    "notes": "Canadian platform, but U.S. IB presence is closer to MM scale.",
     "logo": "/logos/cibc-capital-markets.png"
   },
   {
@@ -6071,7 +6071,7 @@
     "state": "NY",
     "latitude": 40.7527,
     "longitude": -73.979,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -6086,7 +6086,7 @@
     "competitivenessStars": 4,
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Selective U.S. analyst seats with stronger New York visibility.",
-    "notes": "Canadian BB platform with a more selective/niche U.S. IB footprint.",
+    "notes": "Canadian platform with a more selective/niche U.S. IB footprint.",
     "logo": "/logos/cibc-capital-markets.png"
   },
   {
@@ -6096,7 +6096,7 @@
     "state": "WI",
     "latitude": 43.039,
     "longitude": -87.909,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Middle Market M&A",
       "Industrials",
@@ -6120,7 +6120,7 @@
     "state": "CA",
     "latitude": 37.7868,
     "longitude": -122.399,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -6144,7 +6144,7 @@
     "state": "MA",
     "latitude": 42.3555,
     "longitude": -71.0556,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Healthcare",
       "Technology",
@@ -6168,7 +6168,7 @@
     "state": "CO",
     "latitude": 39.753,
     "longitude": -105.0002,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Infrastructure",
@@ -6192,7 +6192,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "Canadian BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Business Services",
@@ -6216,7 +6216,7 @@
     "state": "NY",
     "latitude": 40.7606,
     "longitude": -73.9826,
-    "type": "BB / International BB",
+    "type": "BB",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -6232,7 +6232,7 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9,
     "internshipOpportunities": "Large but highly competitive summer analyst program across major groups.",
-    "notes": "International BB with a significant U.S. investment banking platform.",
+    "notes": "International platform with a significant U.S. investment banking platform.",
     "logo": "/logos/ubs.png"
   },
   {
@@ -6242,7 +6242,7 @@
     "state": "CA",
     "latitude": 37.7929,
     "longitude": -122.3971,
-    "type": "BB / International BB",
+    "type": "BB",
     "groups": [
       "Technology",
       "Software",
@@ -6267,7 +6267,7 @@
     "state": "TX",
     "latitude": 29.7378,
     "longitude": -95.4523,
-    "type": "BB / International BB",
+    "type": "BB",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -6291,7 +6291,7 @@
     "state": "IL",
     "latitude": 41.882,
     "longitude": -87.6368,
-    "type": "BB / International BB",
+    "type": "BB",
     "groups": [
       "Industrials",
       "Consumer & Retail",
@@ -6316,7 +6316,7 @@
     "state": "CA",
     "latitude": 34.0595,
     "longitude": -118.4135,
-    "type": "BB / International BB",
+    "type": "BB",
     "groups": [
       "Media",
       "Entertainment",
@@ -6341,7 +6341,7 @@
     "state": "CA",
     "latitude": 37.7939,
     "longitude": -122.3988,
-    "type": "EB-style fintech boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "FinTech",
       "Payments",
@@ -6367,7 +6367,7 @@
     "state": "NY",
     "latitude": 40.7517,
     "longitude": -73.9787,
-    "type": "EB-style fintech boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "FinTech",
       "Payments",
@@ -6392,7 +6392,7 @@
     "state": "FL",
     "latitude": 25.7617,
     "longitude": -80.1918,
-    "type": "EB-style fintech boutique",
+    "type": "Specialized Boutique",
     "groups": [
       "FinTech",
       "Payments",
@@ -6417,7 +6417,7 @@
     "state": "MI",
     "latitude": 42.4734,
     "longitude": -83.2219,
-    "type": "LMM Boutique / advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6442,7 +6442,7 @@
     "state": "IL",
     "latitude": 41.8819,
     "longitude": -87.6389,
-    "type": "LMM Boutique / advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6467,7 +6467,7 @@
     "state": "OH",
     "latitude": 41.5052,
     "longitude": -81.6906,
-    "type": "LMM Boutique / advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6492,7 +6492,7 @@
     "state": "MI",
     "latitude": 42.9634,
     "longitude": -85.6681,
-    "type": "LMM Boutique / advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Family-Owned Businesses",
@@ -6516,7 +6516,7 @@
     "state": "NY",
     "latitude": 40.7604,
     "longitude": -73.9806,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Capital Markets",
       "Structured Finance",
@@ -6541,7 +6541,7 @@
     "state": "TX",
     "latitude": 29.7589,
     "longitude": -95.3677,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -6565,7 +6565,7 @@
     "state": "IL",
     "latitude": 41.8807,
     "longitude": -87.6348,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Agribusiness",
@@ -6589,7 +6589,7 @@
     "state": "CA",
     "latitude": 37.4215,
     "longitude": -122.2068,
-    "type": "International BB / MM in U.S. IB context",
+    "type": "MM",
     "groups": [
       "Technology",
       "Growth",
@@ -6613,7 +6613,7 @@
     "state": "NY",
     "latitude": 40.7606,
     "longitude": -73.9826,
-    "type": "International BB / niche U.S. presence",
+    "type": "MM",
     "groups": [
       "Capital Markets",
       "Financial Institutions",
@@ -6637,7 +6637,7 @@
     "state": "NY",
     "latitude": 40.753,
     "longitude": -73.997,
-    "type": "International BB / niche U.S. presence",
+    "type": "MM",
     "groups": [
       "Capital Markets",
       "Corporate Banking",
@@ -6651,7 +6651,7 @@
     "competitivenessStars": 3,
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited U.S. IB-specific analyst visibility.",
-    "notes": "International BB platform with more niche U.S. investment banking recruiting.",
+    "notes": "International platform with more niche U.S. investment banking recruiting.",
     "logo": "/logos/bbva.png"
   },
   {
@@ -6661,7 +6661,7 @@
     "state": "TX",
     "latitude": 29.7456,
     "longitude": -95.4613,
-    "type": "International BB / niche U.S. presence",
+    "type": "MM",
     "groups": [
       "Energy",
       "Cleantech",
@@ -6686,7 +6686,7 @@
     "state": "PA",
     "latitude": 40.4417,
     "longitude": -80.0004,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Industrials",
@@ -6711,7 +6711,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Financial Sponsors",
@@ -6736,7 +6736,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -6760,7 +6760,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Leveraged Finance",
       "Financial Sponsors",
@@ -6784,7 +6784,7 @@
     "state": "GA",
     "latitude": 33.7488,
     "longitude": -84.3877,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Healthcare",
@@ -6808,7 +6808,7 @@
     "state": "MD",
     "latitude": 39.2904,
     "longitude": -76.6122,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Public Finance",
@@ -6832,7 +6832,7 @@
     "state": "NY",
     "latitude": 42.8864,
     "longitude": -78.8784,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Industrials",
@@ -6856,7 +6856,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Financial Sponsors",
@@ -6880,7 +6880,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Leveraged Finance",
       "Financial Sponsors",
@@ -6905,7 +6905,7 @@
     "state": "GA",
     "latitude": 33.7488,
     "longitude": -84.3877,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -6930,7 +6930,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -6955,7 +6955,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -6979,7 +6979,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -7003,7 +7003,7 @@
     "state": "OH",
     "latitude": 39.9612,
     "longitude": -82.9988,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Industrials",
@@ -7027,7 +7027,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -7051,7 +7051,7 @@
     "state": "OH",
     "latitude": 41.4993,
     "longitude": -81.6944,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Healthcare",
@@ -7075,7 +7075,7 @@
     "state": "MI",
     "latitude": 42.3314,
     "longitude": -83.0458,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Automotive",
       "Industrials",
@@ -7099,7 +7099,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Agribusiness",
@@ -7123,7 +7123,7 @@
     "state": "PA",
     "latitude": 40.4417,
     "longitude": -80.0004,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Industrials",
@@ -7147,7 +7147,7 @@
     "state": "OH",
     "latitude": 41.4993,
     "longitude": -81.6944,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -7171,7 +7171,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "MM / regional bank platform",
+    "type": "MM",
     "groups": [
       "Debt Capital Markets",
       "Financial Sponsors",
@@ -7195,7 +7195,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "LMM Boutique / accounting-adjacent advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Transaction Advisory",
@@ -7220,7 +7220,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "LMM Boutique / accounting-adjacent advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Transaction Advisory",
@@ -7245,7 +7245,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "LMM Boutique / accounting-adjacent advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -7270,7 +7270,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "LMM Boutique / accounting-adjacent advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Business Services",
@@ -7294,7 +7294,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / advisory and valuation platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Valuation",
@@ -7319,7 +7319,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / advisory and valuation platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Transaction Advisory",
@@ -7343,7 +7343,7 @@
     "state": "MI",
     "latitude": 42.3314,
     "longitude": -83.0458,
-    "type": "MM / advisory and valuation platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Automotive",
@@ -7368,7 +7368,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "MM / advisory and valuation platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Energy",
@@ -7392,7 +7392,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "MM / advisory and valuation platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Media",
@@ -7417,7 +7417,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Restructuring",
@@ -7442,7 +7442,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Valuation",
@@ -7467,7 +7467,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "M&A Advisory",
       "Valuation",
@@ -7492,7 +7492,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "Technology",
       "Valuation",
@@ -7516,7 +7516,7 @@
     "state": "MA",
     "latitude": 42.3555,
     "longitude": -71.0556,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "Healthcare",
       "Life Sciences",
@@ -7541,7 +7541,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "MM / advisory platform",
+    "type": "MM",
     "groups": [
       "Energy",
       "Business Services",
@@ -7566,7 +7566,7 @@
     "state": "NY",
     "latitude": 40.7069,
     "longitude": -74.0113,
-    "type": "International BB / niche U.S. IB presence",
+    "type": "MM",
     "groups": [
       "Capital Markets",
       "Financial Institutions",
@@ -7591,7 +7591,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "International BB / niche U.S. IB presence",
+    "type": "MM",
     "groups": [
       "Energy",
       "Infrastructure",
@@ -7615,7 +7615,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "International BB / niche U.S. IB presence",
+    "type": "MM",
     "groups": [
       "Technology",
       "FinTech",
@@ -7639,7 +7639,7 @@
     "state": "CA",
     "latitude": 34.0614,
     "longitude": -118.4145,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -7664,7 +7664,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -7688,7 +7688,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -7713,7 +7713,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Consumer",
@@ -7737,7 +7737,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / LMM boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -7761,7 +7761,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "LMM Boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Ownership Advisory",
       "ESOP Advisory",
@@ -7786,7 +7786,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "LMM Boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Ownership Advisory",
       "M&A",
@@ -7810,7 +7810,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "LMM Boutique",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Ownership Advisory",
       "M&A",
@@ -7834,7 +7834,7 @@
     "state": "OH",
     "latitude": 41.4993,
     "longitude": -81.6944,
-    "type": "LMM Boutique / insurance and financial services advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Insurance Distribution",
       "Financial Services",
@@ -7859,7 +7859,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "LMM Boutique / insurance and financial services advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Insurance Distribution",
       "Financial Services",
@@ -7883,7 +7883,7 @@
     "state": "MI",
     "latitude": 42.9634,
     "longitude": -85.6681,
-    "type": "LMM Boutique / insurance and financial services advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Insurance Distribution",
       "M&A",
@@ -7907,7 +7907,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Boutique / advisory platform",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Strategic Advisory",
       "Private Capital",
@@ -7931,7 +7931,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "Boutique / advisory platform",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Technology",
       "Private Capital",
@@ -7955,7 +7955,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Boutique / advisory platform",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "Private Capital",
       "Family-Owned Businesses",
@@ -7979,7 +7979,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "M&A",
       "Restructuring",
@@ -8004,7 +8004,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Business Services",
@@ -8029,7 +8029,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -8054,7 +8054,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Business Services",
       "Industrials",
@@ -8079,7 +8079,7 @@
     "state": "GA",
     "latitude": 33.7488,
     "longitude": -84.3877,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Business Services",
       "Healthcare",
@@ -8104,7 +8104,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Technology",
       "Software",
@@ -8129,7 +8129,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "MM / strong global advisory platform",
+    "type": "MM",
     "groups": [
       "Industrials",
       "Consumer & Retail",
@@ -8154,7 +8154,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8179,7 +8179,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Industrials",
@@ -8204,7 +8204,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8229,7 +8229,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Consumer & Retail",
@@ -8254,7 +8254,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8279,7 +8279,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Industrials",
@@ -8304,7 +8304,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -8329,7 +8329,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "Technology",
       "Software",
@@ -8354,7 +8354,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8379,7 +8379,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Industrials",
@@ -8404,7 +8404,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Media",
@@ -8429,7 +8429,7 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "Energy",
       "Power & Utilities",
@@ -8454,7 +8454,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8479,7 +8479,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Industrials",
@@ -8504,7 +8504,7 @@
     "state": "NC",
     "latitude": 35.2271,
     "longitude": -80.8431,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Capital Advisory",
@@ -8529,7 +8529,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "Big 4 Corporate Finance / MM advisory",
+    "type": "Big 4 Corporate Finance",
     "groups": [
       "M&A Advisory",
       "Energy",
@@ -8554,7 +8554,7 @@
     "state": "MD",
     "latitude": 39.2904,
     "longitude": -76.6122,
-    "type": "LMM Boutique / regional advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Family-Owned Businesses",
@@ -8579,7 +8579,7 @@
     "state": "DC",
     "latitude": 38.8951,
     "longitude": -77.0364,
-    "type": "LMM Boutique / regional advisory",
+    "type": "Regional / LMM Boutique",
     "groups": [
       "M&A",
       "Government Services",
@@ -8603,7 +8603,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Healthcare-focused boutique / MM healthcare advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Healthcare IT",
@@ -8628,7 +8628,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Healthcare-focused boutique / MM healthcare advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Provider Services",
@@ -8652,7 +8652,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "Healthcare-focused boutique / MM healthcare advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare IT",
       "MedTech",
@@ -8676,7 +8676,7 @@
     "state": "TN",
     "latitude": 36.1627,
     "longitude": -86.7816,
-    "type": "Healthcare-focused boutique / MM healthcare advisory",
+    "type": "Specialized Boutique",
     "groups": [
       "Healthcare Services",
       "Provider Services",
@@ -8692,5 +8692,158 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Healthcare-focused advisory platform with strong provider services relevance.",
     "logo": "/logos/cain-brothers.png"
+  },
+  {
+    "id": "perella-weinberg-partners-new-york",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "New York",
+    "state": "NY",
+    "latitude": 40.7638,
+    "longitude": -73.9727,
+    "type": "EB",
+    "groups": [
+      "M&A",
+      "Restructuring",
+      "Financial Sponsors",
+      "Healthcare",
+      "Energy",
+      "Strategic Advisory",
+      "Capital Markets Advisory"
+    ],
+    "officeHistory": "Flagship U.S. office for an independent advisory platform founded in 2006 with broad strategic, M&A, restructuring, and sponsor advisory capabilities.",
+    "estimatedHeadcount": "250-400 bankers/advisors",
+    "prestigeStars": 5,
+    "payStars": 5,
+    "competitivenessStars": 5,
+    "competitivenessScore": 9.25,
+    "internshipOpportunities": "Highly selective summer analyst opportunities with strong advisory exposure.",
+    "notes": "Strong elite boutique platform with competitive analyst recruiting.",
+    "logo": "/logos/perella-weinberg-partners.png"
+  },
+  {
+    "id": "perella-weinberg-partners-houston",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "Houston",
+    "state": "TX",
+    "latitude": 29.7596,
+    "longitude": -95.3711,
+    "type": "EB",
+    "groups": [
+      "Energy",
+      "Power",
+      "Infrastructure",
+      "M&A",
+      "Restructuring",
+      "Capital Markets Advisory"
+    ],
+    "officeHistory": "Houston advisory office strengthened by the Tudor, Pickering, Holt energy platform, supporting energy and power clients.",
+    "estimatedHeadcount": "100-200 bankers/advisors",
+    "prestigeStars": 5,
+    "payStars": 5,
+    "competitivenessStars": 5,
+    "competitivenessScore": 9,
+    "internshipOpportunities": "Highly selective energy-focused analyst visibility.",
+    "notes": "Premier energy advisory presence within an elite boutique platform.",
+    "logo": "/logos/perella-weinberg-partners.png"
+  },
+  {
+    "id": "perella-weinberg-partners-san-francisco",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "San Francisco",
+    "state": "CA",
+    "latitude": 37.793,
+    "longitude": -122.3971,
+    "type": "EB",
+    "groups": [
+      "Technology",
+      "Growth",
+      "Software",
+      "M&A",
+      "Financial Sponsors"
+    ],
+    "officeHistory": "Bay Area advisory office supporting technology, software, growth-company, and sponsor-related transaction activity.",
+    "estimatedHeadcount": "25-75 bankers/advisors",
+    "prestigeStars": 5,
+    "payStars": 5,
+    "competitivenessStars": 4,
+    "competitivenessScore": 8.55,
+    "internshipOpportunities": "Very selective regional analyst visibility focused on technology advisory.",
+    "notes": "West Coast office with technology and growth advisory relevance.",
+    "logo": "/logos/perella-weinberg-partners.png"
+  },
+  {
+    "id": "perella-weinberg-partners-los-angeles",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "Los Angeles",
+    "state": "CA",
+    "latitude": 34.0584,
+    "longitude": -118.4146,
+    "type": "EB",
+    "groups": [
+      "M&A",
+      "Consumer & Retail",
+      "Media & Entertainment",
+      "Financial Sponsors",
+      "Strategic Advisory"
+    ],
+    "officeHistory": "Los Angeles advisory office supporting West Coast corporate and sponsor clients across strategic advisory and M&A.",
+    "estimatedHeadcount": "25-75 bankers/advisors",
+    "prestigeStars": 5,
+    "payStars": 5,
+    "competitivenessStars": 4,
+    "competitivenessScore": 8.45,
+    "internshipOpportunities": "Very selective regional analyst visibility.",
+    "notes": "West Coast advisory office with sponsor, consumer, and media relevance.",
+    "logo": "/logos/perella-weinberg-partners.png"
+  },
+  {
+    "id": "perella-weinberg-partners-chicago",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "Chicago",
+    "state": "IL",
+    "latitude": 41.8846,
+    "longitude": -87.6386,
+    "type": "EB",
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Business Services",
+      "Financial Sponsors",
+      "Strategic Advisory"
+    ],
+    "officeHistory": "Chicago advisory office supporting Midwest corporate and sponsor clients across M&A and strategic advisory.",
+    "estimatedHeadcount": "25-75 bankers/advisors",
+    "prestigeStars": 5,
+    "payStars": 5,
+    "competitivenessStars": 4,
+    "competitivenessScore": 8.35,
+    "internshipOpportunities": "Very selective regional analyst visibility.",
+    "notes": "Midwest advisory office with industrials and sponsor relevance.",
+    "logo": "/logos/perella-weinberg-partners.png"
+  },
+  {
+    "id": "perella-weinberg-partners-denver",
+    "firm": "Perella Weinberg Partners",
+    "officeCity": "Denver",
+    "state": "CO",
+    "latitude": 39.7511,
+    "longitude": -104.9974,
+    "type": "EB",
+    "groups": [
+      "Energy",
+      "Infrastructure",
+      "M&A",
+      "Strategic Advisory",
+      "Capital Markets Advisory"
+    ],
+    "officeHistory": "Denver office supporting advisory activity with relevance to energy, infrastructure, and regional corporate clients.",
+    "estimatedHeadcount": "10-50 bankers/advisors",
+    "prestigeStars": 4,
+    "payStars": 5,
+    "competitivenessStars": 4,
+    "competitivenessScore": 8,
+    "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
+    "notes": "Smaller regional advisory office within a strong elite boutique platform.",
+    "logo": "/logos/perella-weinberg-partners.png"
   }
 ]

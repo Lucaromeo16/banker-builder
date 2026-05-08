@@ -10,7 +10,8 @@ const BANK_TYPE_OPTIONS = [
   'BB',
   'EB',
   'MM',
-  'LMM / Regional Boutique',
+  'Specialized Boutique',
+  'Regional / LMM Boutique',
   'Big 4 Corporate Finance'
 ];
 
@@ -44,7 +45,8 @@ const TYPE_LABELS = [
   'BB',
   'EB',
   'MM',
-  'LMM / Regional Boutique',
+  'Specialized Boutique',
+  'Regional / LMM Boutique',
   'Big 4 Corporate Finance'
 ];
 
@@ -52,7 +54,8 @@ const TYPE_CLASS_NAMES = {
   BB: 'bb',
   EB: 'eb',
   MM: 'mm',
-  'LMM / Regional Boutique': 'lmm',
+  'Specialized Boutique': 'specialized',
+  'Regional / LMM Boutique': 'lmm',
   'Big 4 Corporate Finance': 'big-4',
   Unknown: 'unknown'
 };
@@ -101,13 +104,10 @@ function initialsForFirm(firm) {
 function bankTypeForOffice(office) {
   const type = String(office.type || '').toLowerCase();
   const firm = String(office.firm || '').toLowerCase();
-  const notes = String(office.notes || '').toLowerCase();
 
   if (type.includes('big 4')) return 'Big 4 Corporate Finance';
-  if (type.includes('lmm') || type.includes('regional boutique') || type.includes('regional advisory')) return 'LMM / Regional Boutique';
-  if (type.includes('international bb') || type.includes('canadian bb')) {
-    return notes.includes('mm') || notes.includes('middle-market') || notes.includes('niche') || type.includes('/ mm') ? 'MM' : 'BB';
-  }
+  if (type.includes('specialized boutique')) return 'Specialized Boutique';
+  if (type.includes('regional') || type.includes('lmm')) return 'Regional / LMM Boutique';
   if (
     type === 'eb' ||
     type.startsWith('eb ') ||
@@ -120,19 +120,26 @@ function bankTypeForOffice(office) {
   if (type === 'bb' || type.startsWith('bb ')) return 'BB';
   if (type.includes('mm')) return 'MM';
   if (type.includes('boutique')) {
-    return firm.includes('centerview') ||
-      firm.includes('allen') ||
-      firm.includes('gordon dyal') ||
-      firm.includes('m. klein') ||
-      firm.includes('liontree') ||
+    return firm.includes('aeris') ||
+      firm.includes('ft partners') ||
       firm.includes('raine') ||
+      firm.includes('union square') ||
+      firm.includes('liontree') ||
+      firm.includes('solomon') ||
       firm.includes('tidal') ||
-      firm.includes('leerink')
-      ? 'EB'
-      : 'LMM / Regional Boutique';
+      firm.includes('ducera') ||
+      firm.includes('qatalyst') ||
+      firm.includes('cain brothers') ||
+      firm.includes('leerink') ||
+      firm.includes('allen') ||
+      firm.includes('m. klein') ||
+      firm.includes('gordon dyal') ||
+      firm.includes('marshberry')
+      ? 'Specialized Boutique'
+      : 'Regional / LMM Boutique';
   }
 
-  return 'LMM / Regional Boutique';
+  return 'Regional / LMM Boutique';
 }
 
 function groupMatches(office, groupFilter) {
