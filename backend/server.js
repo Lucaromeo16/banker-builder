@@ -98,6 +98,20 @@ const feedbackSchema = {
   }
 };
 
+const outreachDraftSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['subjectLine', 'draft'],
+  properties: {
+    subjectLine: {
+      type: 'string'
+    },
+    draft: {
+      type: 'string'
+    }
+  }
+};
+
 function extractResponseText(responseData) {
   if (responseData.output_text) return responseData.output_text;
 
@@ -108,14 +122,85 @@ function extractResponseText(responseData) {
     .join('\n');
 }
 
+app.post('/api/networking-outreach', async (req, res) => {
+  try {
+    const { outreachType, firm, office, group, bankerSeniority, tone } = req.body;
+
+    if (!outreachType || !firm || !bankerSeniority || !tone) {
+      return res.status(400).json({ error: 'Invalid payload: outreachType, firm, bankerSeniority, and tone are required.' });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+    }
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        instructions:
+          'You draft concise, professional investment banking networking outreach for a strong undergraduate candidate. Keep the message credible, specific, respectful of the banker’s time, and not overly flattering. For LinkedIn messages, keep it short and return an empty subjectLine. For emails, include a useful subject line.',
+        input: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_text',
+                text: JSON.stringify({
+                  outreachType,
+                  firm,
+                  office: office || '',
+                  group: group || '',
+                  bankerSeniority,
+                  tone
+                })
+              }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'networking_outreach_draft',
+            strict: true,
+            schema: outreachDraftSchema
+          }
+        },
+        max_output_tokens: 800
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      return res.status(502).json({ error: 'OpenAI outreach request failed.', details });
+    }
+
+    const data = await response.json();
+    const outputText = extractResponseText(data);
+    if (!outputText) {
+      return res.status(502).json({ error: 'OpenAI outreach response was empty.' });
+    }
+
+    return res.json(JSON.parse(outputText));
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to generate outreach draft.', details: error.message });
+  }
+});
+
 app.post('/api/interview-feedback', async (req, res) => {
   try {
     const { category, question, userAnswer } = req.body;
     console.log('[interview-feedback] Request received', {
+      route: 'POST /api/interview-feedback',
       category,
       questionPreview: typeof question === 'string' ? question.slice(0, 90) : undefined,
       answerLength: typeof userAnswer === 'string' ? userAnswer.length : 0,
-      hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY)
+      hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
+      model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
 
     if (!category || !question || !userAnswer) {
@@ -170,6 +255,7 @@ app.post('/api/interview-feedback', async (req, res) => {
       console.error('[interview-feedback] OpenAI request failed', {
         status: response.status,
         statusText: response.statusText,
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         details
       });
       return res.status(502).json({ error: 'OpenAI feedback request failed.', details });
@@ -183,7 +269,16 @@ app.post('/api/interview-feedback', async (req, res) => {
       return res.status(502).json({ error: 'OpenAI feedback response was empty.' });
     }
 
-    const feedback = JSON.parse(outputText);
+    let feedback;
+    try {
+      feedback = JSON.parse(outputText);
+    } catch (parseError) {
+      console.error('[interview-feedback] Failed to parse OpenAI JSON output', {
+        parseError,
+        outputPreview: outputText.slice(0, 500)
+      });
+      return res.status(502).json({ error: 'OpenAI feedback response was not valid JSON.' });
+    }
     console.log('[interview-feedback] Feedback generated', {
       scoreOutOf10: feedback.scoreOutOf10,
       followUpQuestionPreview: feedback.followUpQuestion?.slice(0, 90)

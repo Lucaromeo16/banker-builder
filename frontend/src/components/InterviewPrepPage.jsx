@@ -260,89 +260,6 @@ function pickQuestion(categoryId, previousPrompt = '') {
   return availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
 }
 
-function countMatches(answer, terms) {
-  return terms.reduce((total, term) => {
-    const normalizedTerm = term.toLowerCase();
-    return answer.includes(normalizedTerm) ? total + 1 : total;
-  }, 0);
-}
-
-function evaluateAnswer(answer, question) {
-  const normalizedAnswer = answer.toLowerCase();
-  const words = normalizedAnswer.match(/\b[\w'-]+\b/g) || [];
-  const wordCount = words.length;
-  const keywordMatches = countMatches(normalizedAnswer, question.keywords);
-  const conceptMatches = countMatches(normalizedAnswer, question.concepts);
-  const hasStructure =
-    /\b(first|second|third|finally|because|therefore|for example|in summary|the result|ultimately)\b/.test(normalizedAnswer) ||
-    answer.includes('\n');
-  const hasEvidence =
-    /\b(example|result|impact|deal|company|team|client|model|valuation|learned|improved)\b/.test(normalizedAnswer);
-
-  const lengthScore = wordCount >= 120 ? 3 : wordCount >= 80 ? 2.4 : wordCount >= 45 ? 1.8 : wordCount >= 20 ? 1 : 0.3;
-  const keywordScore = Math.min(3, keywordMatches * 0.75);
-  const structureScore = hasStructure ? 1.5 : 0.4;
-  const evidenceScore = hasEvidence ? 1 : 0.3;
-  const completenessScore = Math.min(1.5, conceptMatches * 0.4 + (keywordMatches >= 3 ? 0.5 : 0));
-  const score = Math.max(1, Math.min(10, Math.round(lengthScore + keywordScore + structureScore + evidenceScore + completenessScore)));
-
-  const wentWell = [];
-  if (wordCount >= 80) {
-    wentWell.push('You gave the answer enough substance to evaluate.');
-  } else if (wordCount >= 35) {
-    wentWell.push('You made a real start and avoided a one-line answer.');
-  }
-
-  if (keywordMatches >= 3) {
-    wentWell.push('You included several concepts interviewers would expect for this prompt.');
-  }
-
-  if (hasStructure) {
-    wentWell.push('Your answer showed some structure instead of sounding like a loose list.');
-  }
-
-  if (hasEvidence) {
-    wentWell.push('You included evidence, examples, or banking-relevant language.');
-  }
-
-  if (!wentWell.length) {
-    wentWell.push('You addressed the prompt, but the answer needs more detail before it would feel interview-ready.');
-  }
-
-  const missing = [];
-  if (wordCount < 80) {
-    missing.push('Add more depth. Strong interview answers usually need a concise setup, specific support, and a clear ending.');
-  }
-
-  if (keywordMatches < 3) {
-    const missingKeywords = question.keywords.filter((keyword) => !normalizedAnswer.includes(keyword.toLowerCase())).slice(0, 4);
-    missing.push(`Work in more core concepts, such as ${missingKeywords.join(', ')}.`);
-  }
-
-  if (!hasStructure) {
-    missing.push('Use a cleaner structure so the interviewer can follow your logic.');
-  }
-
-  if (!hasEvidence) {
-    missing.push('Add a concrete example, implication, or result to make the answer more credible.');
-  }
-
-  if (!missing.length) {
-    missing.push('No major gaps for this simple rule-based check. The next improvement would be making the answer more concise and interviewer-ready.');
-  }
-
-  const followUpIndex = (wordCount + keywordMatches + conceptMatches) % question.followUps.length;
-
-  return {
-    score,
-    whatWentWell: wentWell,
-    whatWasMissing: missing,
-    suggestedStructure: question.structureHint,
-    exampleResponse: exampleResponses[question.prompt],
-    followUpQuestion: question.followUps[followUpIndex]
-  };
-}
-
 export default function InterviewPrepPage({ onBack }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -397,15 +314,25 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
     setFeedbackLoading(true);
 
+    const feedbackEndpoint = `${API_BASE_URL}/api/interview-feedback`;
+    const payload = {
+      category: currentQuestion.categoryTitle,
+      question: currentQuestion.prompt,
+      userAnswer: answer
+    };
+
     try {
-      const response = await fetch(`${API_BASE_URL}/api/interview-feedback`, {
+      console.log('[interview-feedback] Submitting answer for AI feedback', {
+        endpoint: feedbackEndpoint,
+        category: payload.category,
+        questionPreview: payload.question.slice(0, 90),
+        answerLength: payload.userAnswer.length
+      });
+
+      const response = await fetch(feedbackEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          category: currentQuestion.categoryTitle,
-          question: currentQuestion.prompt,
-          userAnswer: answer
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -420,6 +347,19 @@ export default function InterviewPrepPage({ onBack }) {
       }
 
       const data = await response.json();
+      const requiredFields = [
+        'scoreOutOf10',
+        'whatWentWell',
+        'whatWasMissing',
+        'improvedAnswerStructure',
+        'tenOutOfTenExampleResponse',
+        'followUpQuestion'
+      ];
+      const missingFields = requiredFields.filter((field) => data[field] === undefined);
+      if (missingFields.length) {
+        throw new Error(`AI feedback response was missing: ${missingFields.join(', ')}`);
+      }
+
       setFeedback({
         score: data.scoreOutOf10,
         whatWentWell: data.whatWentWell,
@@ -429,9 +369,16 @@ export default function InterviewPrepPage({ onBack }) {
         followUpQuestion: data.followUpQuestion
       });
     } catch (error) {
-      console.log('[interview-feedback] Feedback request failed', error);
-      const baseMessage = 'Feedback could not be generated. Please try again.';
-      setFeedbackError(import.meta.env.DEV && error.message ? `${baseMessage} ${error.message}` : baseMessage);
+      console.error('[interview-feedback] Feedback request failed', {
+        endpoint: feedbackEndpoint,
+        payload,
+        error
+      });
+      const isNetworkFailure = error instanceof TypeError || /load failed|failed to fetch|networkerror/i.test(error.message || '');
+      const baseMessage = isNetworkFailure
+        ? 'AI backend is not reachable. Start the backend server and try again.'
+        : 'AI feedback could not be generated. Please try again.';
+      setFeedbackError(import.meta.env.DEV && error.message && !isNetworkFailure ? `${baseMessage} ${error.message}` : baseMessage);
     } finally {
       setFeedbackLoading(false);
     }

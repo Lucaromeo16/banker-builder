@@ -47,6 +47,7 @@ const activityTypeScores = {
   'Investment fund / student-run fund': 9,
   'Business fraternity': 8.2,
   'Social fraternity / sorority executive board': 8,
+  'Scholars Group': 6.8,
   'Finance/business club': 6.5,
   'Consulting club': 5.8,
   'Entrepreneurship club': 5.8,
@@ -113,6 +114,18 @@ const resumeProfileWeights = {
 
 function clamp(value, min = 0, max = 10) {
   return Math.max(min, Math.min(max, value));
+}
+
+function comparableLocation(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/,\s*[a-z]{2}$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function locationsMatch(office, preference) {
+  return comparableLocation(office) === comparableLocation(preference);
 }
 
 function schoolToScore(school) {
@@ -440,7 +453,7 @@ export function scoreProfile(profile) {
   const results = opportunities
     .filter((opportunity) => {
       if (!profile.preferredLocations?.length) return true;
-      return profile.preferredLocations.includes(opportunity.office);
+      return profile.preferredLocations.some((location) => locationsMatch(opportunity.office, location));
     })
     .map((opportunity) => {
       const {

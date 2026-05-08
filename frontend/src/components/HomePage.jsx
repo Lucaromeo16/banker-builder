@@ -54,6 +54,20 @@ const features = [
         <path d="M15 6v14" />
       </svg>
     )
+  },
+  {
+    mode: 'networking-hub',
+    eyebrow: 'Recruiting CRM',
+    title: 'Networking Hub',
+    description: 'Track coffee chats, manage banker relationships, and generate AI-powered networking outreach.',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0z" />
+        <path d="M5 21a7 7 0 0 1 14 0" />
+        <path d="M17 11h4" />
+        <path d="M19 9v4" />
+      </svg>
+    )
   }
 ];
 
@@ -65,6 +79,30 @@ export default function HomePage({ onSelectMode }) {
         <h1>Banker Builder</h1>
         <p>Your complete platform for investment banking recruiting</p>
       </div>
+
+      <section className="home-about" aria-labelledby="home-about-title">
+        <div>
+          <h2 id="home-about-title">What is Banker Builder?</h2>
+          <p>
+            Banker Builder is a one-stop platform for investment banking recruiting. It helps students research firms, estimate
+            interview odds, build smarter target lists, and practice interview questions with AI-powered feedback.
+          </p>
+        </div>
+        <div className="home-about-grid">
+          <article>
+            <span>Research</span>
+            <p>Research banks by office, group, prestige, pay, and competitiveness</p>
+          </article>
+          <article>
+            <span>Target</span>
+            <p>Build a target list based on your resume, interests, and location preferences</p>
+          </article>
+          <article>
+            <span>Practice</span>
+            <p>Practice technical, behavioral, fit, and market questions with feedback</p>
+          </article>
+        </div>
+      </section>
 
       <div className="home-grid">
         {features.map((feature) => (

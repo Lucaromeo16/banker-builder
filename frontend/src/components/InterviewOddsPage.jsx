@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import ScoreBreakdown from './ScoreBreakdown';
+import ibOffices from '../../../data/ibOffices.json';
 import schools from '../../../data/schools.json';
 
 const fallbackGroups = [
@@ -18,6 +19,7 @@ const activityTypeOptions = [
   'Selective IB club',
   'Investment fund / student-run fund',
   'Business fraternity',
+  'Scholars Group',
   'Social fraternity / sorority executive board',
   'Finance/business club',
   'Consulting club',
@@ -41,6 +43,110 @@ const leadershipOptions = [
   { value: 'member', label: 'Member' },
   { value: 'none', label: 'None' }
 ];
+
+const groupAdjustments = {
+  Restructuring: 0.25,
+  'M&A': 0.15,
+  'Financial Sponsors': 0.1,
+  Technology: 0.08,
+  Healthcare: 0.05,
+  'Activism / Strategic Advisory': 0.05,
+  'Financial Institutions': 0,
+  Industrials: -0.02,
+  Energy: -0.04,
+  'Consumer & Retail': -0.05,
+  'Business Services': -0.08,
+  'Healthcare Services': -0.08,
+  Generalist: -0.1
+};
+
+const workTypeScores = {
+  'Investment banking internship': 10,
+  'Private equity internship': 8.8,
+  'Search fund internship': 8.2,
+  'Corporate finance internship': 6.4,
+  'Accounting / audit internship': 6.1,
+  'Wealth management internship': 5.8,
+  'Other finance internship': 6,
+  'Other internship': 4.4,
+  'Part-time job': 3.6,
+  'Campus job': 3.3,
+  None: 1.2
+};
+
+const activityTypeScores = {
+  'Selective IB club': 9.4,
+  'Investment fund / student-run fund': 9,
+  'Business fraternity': 8.2,
+  'Social fraternity / sorority executive board': 8,
+  'Scholars Group': 6.8,
+  'Finance/business club': 6.5,
+  'Consulting club': 5.8,
+  'Entrepreneurship club': 5.8,
+  'Non-business leadership organization': 5.2,
+  Other: 3.5
+};
+
+const selectivityScores = {
+  'highly selective': 10,
+  selective: 8,
+  moderate: 5.5,
+  'open enrollment': 2.5
+};
+
+const leadershipScores = {
+  president: 10,
+  vp: 9,
+  VP: 9,
+  treasurer: 9,
+  'finance chair': 9,
+  'committee lead': 7,
+  member: 3.2,
+  none: 0
+};
+
+const relevanceScores = {
+  high: 10,
+  moderate: 6.5,
+  low: 3.5,
+  none: 1
+};
+
+const contactSeniorityMultiplier = {
+  analyst: 1,
+  associate: 1.15,
+  'vp+': 1.35
+};
+
+const connectionMultiplier = {
+  cold: 1,
+  alumni: 1.2,
+  'close connection': 1.45
+};
+
+const profileWeights = {
+  'Summer Analyst': {
+    academic: 0.28,
+    experience: 0.22,
+    networking: 0.36,
+    extracurricular: 0.14,
+    baseDifficultyAdjustment: 0
+  },
+  'Lateral Hire': {
+    academic: 0.16,
+    experience: 0.42,
+    networking: 0.34,
+    extracurricular: 0.08,
+    baseDifficultyAdjustment: 0.15
+  },
+  'MBA Associate': {
+    academic: 0.34,
+    experience: 0.34,
+    networking: 0.24,
+    extracurricular: 0.08,
+    baseDifficultyAdjustment: 0.25
+  }
+};
 
 const workTypeOptions = [
   'None',
@@ -102,14 +208,461 @@ const defaultProfile = {
   workExperiences: [createWorkExperience()],
   activities: [createActivity()],
   networking: {
-    initialChats: 8,
-    followUps: 5,
-    strongRelationships: 2,
-    referrals: 1,
-    strongestContactSeniority: 'associate',
-    connectionType: 'alumni'
+    initialChats: 0,
+    followUps: 0,
+    strongRelationships: 0,
+    referrals: 0,
+    strongestContactSeniority: 'analyst',
+    connectionType: 'cold outreach'
   }
 };
+
+function createOpportunitiesFromOffices(offices = []) {
+  return offices.flatMap((office) =>
+    (office.groups || []).map((group) => {
+      const competitiveness = clamp(office.competitivenessScore + (groupAdjustments[group] ?? 0));
+
+      return {
+        id: `${office.id}-${group}`,
+        officeId: office.id,
+        firm: office.firm,
+        name: office.firm,
+        office: office.officeCity,
+        officeCity: office.officeCity,
+        state: office.state,
+        group,
+        tier: office.type,
+        type: office.type,
+        competitiveness: Number(competitiveness.toFixed(2)),
+        competitivenessScore: office.competitivenessScore,
+        prestigeStars: office.prestigeStars,
+        payStars: office.payStars,
+        competitivenessStars: office.competitivenessStars
+      };
+    })
+  );
+}
+
+function normalizeOpportunityData(data) {
+  const sourceOpportunities = Array.isArray(data?.opportunities)
+    ? data.opportunities
+    : Array.isArray(data?.firms)
+      ? data.firms
+      : [];
+  const opportunities = sourceOpportunities.length
+    ? sourceOpportunities.map((opportunity) => ({
+        ...opportunity,
+        office: opportunity.office || opportunity.officeCity,
+        competitiveness:
+          typeof opportunity.competitiveness === 'number'
+            ? opportunity.competitiveness
+            : Number(clamp((opportunity.competitivenessScore || 0) + (groupAdjustments[opportunity.group] ?? 0)).toFixed(2))
+      }))
+    : createOpportunitiesFromOffices(data?.offices);
+  const groups = Array.isArray(data?.groups) && data.groups.length
+    ? data.groups
+    : [...new Set(opportunities.map((opportunity) => opportunity.group).filter(Boolean))].sort();
+
+  if (!opportunities.length) {
+    throw new Error('No firm office opportunities were available.');
+  }
+
+  return {
+    ...data,
+    opportunities,
+    firms: opportunities,
+    groups: groups.length ? groups : fallbackGroups
+  };
+}
+
+function firstSelectionFromOpportunities(data) {
+  const firstOpportunity = data.firms[0];
+
+  return {
+    hireType: 'Summer Analyst',
+    firm: firstOpportunity?.firm || firstOpportunity?.name || '',
+    office: firstOpportunity?.office || firstOpportunity?.officeCity || '',
+    group: firstOpportunity?.group || data.groups[0] || 'Generalist'
+  };
+}
+
+function clamp(value, min = 0, max = 10) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function schoolToScore(school) {
+  const normalized = school.trim().toLowerCase();
+  if (!normalized) return 5;
+
+  const matched = schools.find((entry) => entry.schoolName.toLowerCase() === normalized);
+  return matched?.prestigeScore ?? 5;
+}
+
+function dynamicSoftCutoff(baseCutoff, competitiveness) {
+  return clamp(baseCutoff + (competitiveness - 7.5) * 0.08, 3.45, 3.9);
+}
+
+function gpaToNonlinearScore(gpa, competitiveness) {
+  const cutoff = dynamicSoftCutoff(3.7, competitiveness);
+
+  if (gpa < 2.7) return 0.5;
+
+  if (gpa < 3.5) {
+    const severeBand = (gpa - 2.7) / 0.8;
+    return clamp(1 + Math.pow(severeBand, 1.8) * 3.8);
+  }
+
+  const belowCutoffRange = Math.max(cutoff - 3.5, 0.1);
+  if (gpa <= cutoff) {
+    const normalized = (gpa - 3.5) / belowCutoffRange;
+    return clamp(5 + Math.pow(normalized, 1.25) * 3.2);
+  }
+
+  const aboveRange = 4 - cutoff;
+  const normalizedAbove = (gpa - cutoff) / Math.max(aboveRange, 0.05);
+  const diminishingBonus = Math.log1p(normalizedAbove * 3) / Math.log(4);
+  return clamp(8.2 + diminishingBonus * 1.8);
+}
+
+function workTypeScore(workType) {
+  return clamp(workTypeScores[workType] ?? workTypeScores['Other internship']);
+}
+
+function normalizeNetworkingForScoring(networking = {}) {
+  const seniority = ['vp', 'director', 'md'].includes(networking.strongestContactSeniority)
+    ? 'vp+'
+    : networking.strongestContactSeniority;
+  const connectionType =
+    networking.connectionType === 'cold outreach'
+      ? 'cold'
+      : ['employee referral', 'family/friend'].includes(networking.connectionType)
+        ? 'close connection'
+        : networking.connectionType;
+
+  return {
+    ...networking,
+    strongestContactSeniority: seniority || 'associate',
+    connectionType: connectionType || 'alumni'
+  };
+}
+
+function normalizeProfileForScoring(profile) {
+  return {
+    ...profile,
+    networking: normalizeNetworkingForScoring(profile.networking)
+  };
+}
+
+function networkingScore(networking) {
+  const points =
+    networking.initialChats * 1 +
+    networking.followUps * 1.5 +
+    networking.strongRelationships * 5 +
+    networking.referrals * 7;
+
+  const seniority = contactSeniorityMultiplier[networking.strongestContactSeniority] ?? 1;
+  const connection = connectionMultiplier[networking.connectionType] ?? 1;
+
+  return clamp(((points * seniority * connection) / 120) * 10);
+}
+
+function activityScore(activity) {
+  const type = activityTypeScores[activity.activityType] ?? activityTypeScores.Other;
+  const selectivity = selectivityScores[activity.selectivity] ?? 4;
+  const leadership = leadershipScores[activity.leadershipLevel] ?? 0;
+  const relevance = relevanceScores[activity.businessRelevance] ?? relevanceScores.moderate;
+  const openEnrollmentMemberPenalty =
+    activity.selectivity === 'open enrollment' &&
+    (!activity.leadershipLevel || ['member', 'none'].includes(activity.leadershipLevel))
+      ? 1.6
+      : 0;
+
+  return clamp(type * 0.33 + selectivity * 0.2 + leadership * 0.32 + relevance * 0.15 - openEnrollmentMemberPenalty);
+}
+
+function extracurricularScore(profile) {
+  const ranked = (profile.activities || []).map(activityScore).sort((a, b) => b - a);
+  const primary = ranked[0] ?? 0;
+  const secondary = ranked.slice(1).reduce((sum, score, index) => sum + score * (index === 0 ? 0.45 : 0.25), 0);
+  return clamp(primary + secondary, 0, 10);
+}
+
+function confidenceFromDelta(delta) {
+  if (Math.abs(delta) >= 1.3) return 'high';
+  if (Math.abs(delta) >= 0.6) return 'medium';
+  return 'low';
+}
+
+function baseClassification(delta) {
+  if (delta >= 0.8) return 'Safety';
+  if (delta >= -0.6) return 'Target';
+  return 'Reach';
+}
+
+function applyGates({ classification, gpa, networking, experience, competitiveness, gpaScore }) {
+  let updated = classification;
+  const gateReasons = [];
+
+  if (gpa < 3.5) {
+    updated = 'Reach';
+    gateReasons.push('GPA below 3.5 creates a strong screening risk for many IB processes.');
+  }
+
+  if (networking < 3.2 && competitiveness > 8.0 && updated !== 'Reach') {
+    updated = 'Reach';
+    gateReasons.push('Low networking activity reduces interview conversion at competitive firms.');
+  }
+
+  if (experience < 4.5 && competitiveness >= 8.5 && updated === 'Safety') {
+    updated = 'Target';
+    gateReasons.push('Limited deal-relevant experience caps upside for top-tier roles.');
+  }
+
+  if (gpaScore < 4.5 && competitiveness >= 8.8 && updated !== 'Reach') {
+    updated = 'Reach';
+    gateReasons.push("GPA profile is below this office's adjusted soft cutoff.");
+  }
+
+  return { classification: updated, gateReasons };
+}
+
+function buildStrengths(scoreBreakdown) {
+  const strengths = [];
+  if (scoreBreakdown.networking >= 7) strengths.push('Strong networking engine with meaningful touchpoints and relationship depth.');
+  if (scoreBreakdown.experience >= 7) strengths.push('Experience profile signals credible deal-readiness and relevant exposure.');
+  if (scoreBreakdown.academic >= 7) strengths.push('Academic profile clears most resume screens for IB analyst recruiting.');
+  if (scoreBreakdown.extracurricular >= 7) strengths.push('Activities & Leadership show credible operating responsibility and campus signal.');
+  return strengths.slice(0, 3);
+}
+
+function buildGaps(scoreBreakdown, gateReasons) {
+  const gaps = [...gateReasons];
+  if (scoreBreakdown.networking < 6) gaps.push('Networking volume and referral depth should be built further.');
+  if (scoreBreakdown.experience < 6) gaps.push('Experience quality needs stronger transaction or valuation exposure.');
+  if (scoreBreakdown.academic < 6) gaps.push('Academic profile is below average for top investment banking pipelines.');
+  if (scoreBreakdown.extracurricular < 5) gaps.push('Activities & Leadership signal is light; selective finance groups or real operating roles would help.');
+  return [...new Set(gaps)].slice(0, 3);
+}
+
+function buildActionSteps(scoreBreakdown, profile) {
+  const steps = [];
+  if (scoreBreakdown.networking < 7) {
+    steps.push('Run a 6-week networking sprint: 8-10 new chats/week with 48-hour follow-ups and weekly relationship tracking.');
+  }
+  if (profile.gpa < 3.7) {
+    steps.push('Raise academic signal via next-term GPA improvement and technical prep to offset transcript concerns.');
+  }
+  if (scoreBreakdown.experience < 7) {
+    steps.push('Add transaction-relevant reps (LBO comps, CIM teardown, valuation case writeups) and highlight them on your resume.');
+  }
+  if (scoreBreakdown.extracurricular < 6) {
+    steps.push('Pursue a selective finance activity or a President, VP, or Treasurer role with measurable responsibility.');
+  }
+  if (steps.length < 2) {
+    steps.push('Target analysts/alumni in preferred offices for referral-oriented outreach with tailored firm-specific pitches.');
+  }
+  return steps.slice(0, 3);
+}
+
+function profileScores(profile, competitiveness, weights, experienceOverride) {
+  const schoolScore = schoolToScore(profile.school || '');
+  const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
+  const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
+  const experience = experienceOverride ?? workTypeScore(profile.workType);
+  const networking = networkingScore(profile.networking);
+  const extracurricular = extracurricularScore(profile);
+  const total = clamp(
+    academic * weights.academic +
+      experience * weights.experience +
+      networking * weights.networking +
+      extracurricular * weights.extracurricular
+  );
+
+  return { schoolScore, gpaScore, academic, experience, networking, extracurricular, total };
+}
+
+function hireTypeDifficultyAdjustment(hireType, profile) {
+  const weights = profileWeights[hireType];
+  const experience = workTypeScore(profile.workType);
+  const schoolScore = schoolToScore(profile.school || '');
+  let adjustment = weights.baseDifficultyAdjustment;
+
+  if (hireType === 'Lateral Hire') {
+    if (experience < 6) adjustment += 0.65;
+    if (experience >= 8) adjustment -= 0.2;
+  }
+
+  if (hireType === 'MBA Associate') {
+    if (schoolScore < 7.5) adjustment += 0.35;
+    if (experience < 5.5) adjustment += 0.25;
+    if (schoolScore >= 8.8 && experience >= 7) adjustment -= 0.2;
+  }
+
+  return adjustment;
+}
+
+function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType = 'Summer Analyst' }, opportunities) {
+  const weights = profileWeights[hireType];
+  if (!weights) throw new Error('Unknown hire type.');
+
+  const opportunity = opportunities.find(
+    (item) => item.firm === firmName && item.office === office && item.group === group
+  );
+  if (!opportunity) throw new Error('Unknown firm, office, and group combination.');
+
+  const adjustedCompetitiveness = clamp(
+    opportunity.competitiveness + hireTypeDifficultyAdjustment(hireType, profile)
+  );
+  const scores = profileScores(profile, adjustedCompetitiveness, weights, workTypeScore(profile.workType));
+  const delta = scores.total - adjustedCompetitiveness;
+  const rawLikelihood = 100 / (1 + Math.exp(-1.15 * (delta + 0.1)));
+  const likelihood = Math.round(Math.max(3, Math.min(92, rawLikelihood)));
+  const gateResult = applyGates({
+    classification: baseClassification(delta),
+    gpa: profile.gpa,
+    networking: scores.networking,
+    experience: scores.experience,
+    competitiveness: adjustedCompetitiveness,
+    gpaScore: scores.gpaScore
+  });
+  const scoreBreakdown = {
+    academic: Number(scores.academic.toFixed(2)),
+    experience: Number(scores.experience.toFixed(2)),
+    networking: Number(scores.networking.toFixed(2)),
+    extracurricular: Number(scores.extracurricular.toFixed(2)),
+    total: Number(scores.total.toFixed(2)),
+    school: Number(scores.schoolScore.toFixed(2)),
+    gpa: Number(scores.gpaScore.toFixed(2))
+  };
+
+  return {
+    opportunity: {
+      id: opportunity.id,
+      firm: opportunity.firm,
+      office: opportunity.office,
+      group: opportunity.group,
+      tier: opportunity.tier,
+      type: opportunity.type,
+      prestigeStars: opportunity.prestigeStars,
+      payStars: opportunity.payStars,
+      competitivenessStars: opportunity.competitivenessStars,
+      competitiveness: Number(adjustedCompetitiveness.toFixed(2))
+    },
+    hireType,
+    likelihood,
+    classification: gateResult.classification,
+    confidence: confidenceFromDelta(delta),
+    scoreBreakdown,
+    strengths: buildStrengths(scoreBreakdown, profile),
+    gaps: buildGaps(scoreBreakdown, gateResult.gateReasons),
+    actionSteps: buildActionSteps(scoreBreakdown, profile),
+    reason: `Your total score (${scores.total.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).`
+  };
+}
+
+function cloneProfile(profile) {
+  return {
+    ...profile,
+    networking: { ...profile.networking },
+    activities: (profile.activities || []).map((activity) => ({ ...activity })),
+    workExperiences: (profile.workExperiences || []).map((experience) => ({ ...experience }))
+  };
+}
+
+function bestWorkScore(profile) {
+  const scores = (profile.workExperiences || [])
+    .map((experience) => workTypeScore(experience.workType))
+    .concat(workTypeScore(profile.workType))
+    .filter(Number.isFinite);
+
+  return scores.length ? Math.max(...scores) : workTypeScore('None');
+}
+
+function buildNeedleProjection(scoringPayload, opportunities, currentResult) {
+  const currentOdds = currentResult.likelihood;
+  const baseProfile = scoringPayload.profile;
+  const scenarios = [];
+
+  const addScenario = (title, updateProfile) => {
+    const profile = updateProfile(cloneProfile(baseProfile));
+
+    try {
+      const projected = scoreInterviewOddsLocally({ ...scoringPayload, profile }, opportunities);
+      const improvement = projected.likelihood - currentOdds;
+      if (improvement > 0) {
+        scenarios.push({
+          title,
+          projectedOdds: projected.likelihood,
+          improvement
+        });
+      }
+    } catch (err) {
+      console.error('Failed to project improvement scenario.', err);
+    }
+  };
+
+  if ((baseProfile.networking?.initialChats || 0) < 8 || (baseProfile.networking?.followUps || 0) < 6) {
+    addScenario('Secure 2 additional meaningful conversations with this office', (profile) => {
+      profile.networking.initialChats = (profile.networking.initialChats || 0) + 2;
+      profile.networking.followUps = (profile.networking.followUps || 0) + 2;
+      return profile;
+    });
+  }
+
+  if ((baseProfile.networking?.referrals || 0) < 1) {
+    addScenario('Convert one contact into a referral', (profile) => {
+      profile.networking.referrals = 1;
+      profile.networking.strongRelationships = Math.max(profile.networking.strongRelationships || 0, 1);
+      profile.networking.connectionType = 'close connection';
+      return profile;
+    });
+  }
+
+  if (bestWorkScore(baseProfile) < 7.5) {
+    addScenario('Add a stronger finance/investing internship', (profile) => {
+      const upgradedWorkType = bestWorkScore(profile) < 5.5 ? 'Corporate finance internship' : 'Investment banking internship';
+      profile.workType = upgradedWorkType;
+      profile.workExperiences = profile.workExperiences.length
+        ? [{ ...profile.workExperiences[0], workType: upgradedWorkType }, ...profile.workExperiences.slice(1)]
+        : [{ id: 'projected-work', workType: upgradedWorkType }];
+      return profile;
+    });
+  }
+
+  if (baseProfile.gpa < 3.7) {
+    addScenario(baseProfile.gpa < 3.5 ? 'Raise GPA to the 3.5 screening threshold' : 'Raise GPA closer to a 3.7 recruiting screen', (profile) => {
+      profile.gpa = baseProfile.gpa < 3.5 ? 3.5 : 3.7;
+      return profile;
+    });
+  }
+
+  if (extracurricularScore(baseProfile) < 6.5) {
+    addScenario('Add selective leadership in a finance or Scholars Group activity', (profile) => {
+      profile.activities = [
+        {
+          id: 'projected-activity',
+          activityType: 'Scholars Group',
+          selectivity: 'selective',
+          leadershipLevel: 'committee lead',
+          businessRelevance: 'moderate'
+        },
+        ...profile.activities
+      ];
+      return profile;
+    });
+  }
+
+  return {
+    currentOdds,
+    gpaConstraintNote:
+      baseProfile.gpa < 3.5
+        ? 'GPA below 3.5 creates material screening risk, so upside may remain capped until the academic screen improves.'
+        : '',
+    scenarios: scenarios
+      .sort((a, b) => b.improvement - a.improvement)
+      .slice(0, 3)
+  };
+}
 
 function oddsStatus(likelihood) {
   if (likelihood >= 55) return { label: 'Strong', className: 'strong' };
@@ -130,6 +683,8 @@ export default function InterviewOddsPage({ onBack }) {
   const [showIntro, setShowIntro] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [opportunities, setOpportunities] = useState({ firms: [], groups: fallbackGroups });
+  const [firmSearch, setFirmSearch] = useState('');
+  const [isFirmSelectorOpen, setIsFirmSelectorOpen] = useState(false);
   const [selection, setSelection] = useState({
     hireType: 'Summer Analyst',
     firm: '',
@@ -148,19 +703,30 @@ export default function InterviewOddsPage({ onBack }) {
       try {
         const response = await fetch('http://localhost:4000/api/opportunities');
         if (!response.ok) throw new Error('Failed to load opportunities');
-        const data = await response.json();
+        const data = normalizeOpportunityData(await response.json());
         if (ignore) return;
 
-        const firstFirm = data.opportunities?.[0] || data.firms[0];
         setOpportunities(data);
-        setSelection({
-          hireType: 'Summer Analyst',
-          firm: firstFirm?.firm || firstFirm?.name || '',
-          office: firstFirm?.office || '',
-          group: firstFirm?.group || data.groups[0] || 'Generalist'
-        });
+        const initialSelection = firstSelectionFromOpportunities(data);
+        setSelection(initialSelection);
+        setFirmSearch(initialSelection.firm);
+        setError('');
       } catch (err) {
-        if (!ignore) setError(err.message || 'Could not load opportunities');
+        console.error('Failed to load opportunities from API. Falling back to local office dataset.', err);
+
+        try {
+          const fallbackData = normalizeOpportunityData({ offices: ibOffices });
+          if (ignore) return;
+
+          setOpportunities(fallbackData);
+          const initialSelection = firstSelectionFromOpportunities(fallbackData);
+          setSelection(initialSelection);
+          setFirmSearch(initialSelection.firm);
+          setError('');
+        } catch (fallbackErr) {
+          console.error('Failed to load local office dataset fallback.', fallbackErr);
+          if (!ignore) setError('Could not load firm and office options.');
+        }
       }
     }
 
@@ -172,9 +738,16 @@ export default function InterviewOddsPage({ onBack }) {
   }, []);
 
   const firmOptions = useMemo(
-    () => [...new Set(opportunities.firms.map((opportunity) => opportunity.firm || opportunity.name))],
+    () => [...new Set(opportunities.firms.map((opportunity) => opportunity.firm || opportunity.name))].filter(Boolean).sort(),
     [opportunities.firms]
   );
+
+  const matchingFirmOptions = useMemo(() => {
+    const query = firmSearch.trim().toLowerCase();
+    if (!query) return [];
+
+    return firmOptions.filter((firm) => firm.toLowerCase().includes(query)).slice(0, 8);
+  }, [firmOptions, firmSearch]);
 
   const officeOptions = useMemo(
     () =>
@@ -218,6 +791,9 @@ export default function InterviewOddsPage({ onBack }) {
       office: nextOffice,
       group: nextGroup || prev.group
     }));
+    setFirmSearch(firmName);
+    setIsFirmSelectorOpen(false);
+    setError('');
     setResult(null);
   };
 
@@ -278,6 +854,11 @@ export default function InterviewOddsPage({ onBack }) {
 
   const goNext = () => {
     setError('');
+    if (currentStep === 0 && !firmOptions.includes(selection.firm)) {
+      setError('Select a bank from the search results before continuing.');
+      return;
+    }
+
     setCurrentStep((step) => Math.min(step + 1, stepTitles.length - 1));
   };
 
@@ -293,6 +874,22 @@ export default function InterviewOddsPage({ onBack }) {
     setResult(null);
     setLoading(false);
     setError('');
+    setIsFirmSelectorOpen(false);
+  };
+
+  const handleFirmSearchChange = (value) => {
+    setFirmSearch(value);
+    setResult(null);
+    setIsFirmSelectorOpen(true);
+
+    if (!value.trim() || value !== selection.firm) {
+      setSelection((prev) => ({
+        ...prev,
+        firm: '',
+        office: '',
+        group: 'Generalist'
+      }));
+    }
   };
 
   const handleCalculate = async () => {
@@ -301,11 +898,18 @@ export default function InterviewOddsPage({ onBack }) {
     setResult(null);
 
     const profilePayload = {
-      ...profile,
+      ...normalizeProfileForScoring(profile),
       workType:
         profile.workExperiences.find((experience) => experience.workType !== 'None')?.workType ||
         profile.workExperiences[0]?.workType ||
         'None'
+    };
+    const scoringPayload = {
+      firmName: selection.firm,
+      office: selection.office,
+      group: selection.group,
+      hireType: selection.hireType,
+      profile: profilePayload
     };
 
     try {
@@ -313,25 +917,36 @@ export default function InterviewOddsPage({ onBack }) {
         fetch('http://localhost:4000/api/interview-odds', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            firmName: selection.firm,
-            office: selection.office,
-            group: selection.group,
-            hireType: selection.hireType,
-            profile: profilePayload
-          })
+          body: JSON.stringify(scoringPayload)
         }),
         new Promise((resolve) => setTimeout(resolve, 1200))
       ]);
 
       if (!response.ok) {
-        throw new Error('Failed to calculate interview odds');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.details || errorData?.error || `Failed to calculate interview odds (${response.status})`);
       }
 
       const data = await response.json();
-      setResult(data);
+      setResult({
+        ...data,
+        movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, data)
+      });
     } catch (err) {
-      setError(err.message || 'Something went wrong');
+      console.error('Backend interview odds calculation failed. Falling back to local scoring.', err);
+
+      try {
+        const fallbackResult = scoreInterviewOddsLocally(scoringPayload, opportunities.firms);
+        setResult({
+          ...fallbackResult,
+          movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, fallbackResult)
+        });
+        setError('');
+      } catch (fallbackErr) {
+        console.error('Local interview odds calculation failed.', fallbackErr);
+        const message = fallbackErr.message || err.message || 'Could not calculate interview odds.';
+        setError(`Could not calculate interview odds: ${message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -343,19 +958,36 @@ export default function InterviewOddsPage({ onBack }) {
         <>
           <h2>Which bank and office are you targeting?</h2>
           <div className="grid">
-            <label>
+            <label className="firm-search-field">
               <span>Firm</span>
-              <select value={selection.firm} onChange={(e) => handleFirmChange(e.target.value)}>
-                {firmOptions.map((firm) => (
-                  <option key={firm} value={firm}>
-                    {firm}
-                  </option>
-                ))}
-              </select>
+              <div className="firm-autocomplete">
+                <input
+                  type="search"
+                  value={firmSearch}
+                  placeholder="Search for a bank..."
+                  autoComplete="off"
+                  onChange={(e) => handleFirmSearchChange(e.target.value)}
+                  onFocus={() => setIsFirmSelectorOpen(Boolean(firmSearch.trim()))}
+                  onBlur={() => setTimeout(() => setIsFirmSelectorOpen(false), 120)}
+                />
+                {isFirmSelectorOpen && firmSearch.trim() ? (
+                  <div className="firm-autocomplete-menu">
+                    {matchingFirmOptions.length ? (
+                      matchingFirmOptions.map((firm) => (
+                        <button type="button" key={firm} onMouseDown={(event) => event.preventDefault()} onClick={() => handleFirmChange(firm)}>
+                          {firm}
+                        </button>
+                      ))
+                    ) : (
+                      <p>No matching banks found.</p>
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </label>
             <label>
               <span>Office</span>
-              <select value={selection.office} onChange={(e) => handleOfficeChange(e.target.value)}>
+              <select value={selection.office} onChange={(e) => handleOfficeChange(e.target.value)} disabled={!selection.firm}>
                 {officeOptions.map((office) => (
                   <option key={office} value={office}>
                     {office}
@@ -707,6 +1339,35 @@ export default function InterviewOddsPage({ onBack }) {
               </ul>
             </section>
           </div>
+
+          {result.movesNeedle ? (
+            <section className="needle-section">
+              <div className="section-heading">
+                <div>
+                  <h3>What Moves the Needle</h3>
+                  <p>Current odds: {result.movesNeedle.currentOdds}%</p>
+                </div>
+              </div>
+
+              {result.movesNeedle.gpaConstraintNote ? <p className="needle-note">{result.movesNeedle.gpaConstraintNote}</p> : null}
+
+              <ol className="needle-list">
+                {result.movesNeedle.scenarios.length ? (
+                  result.movesNeedle.scenarios.map((scenario) => (
+                    <li key={scenario.title}>
+                      <span>{scenario.title}</span>
+                      <strong>Projected odds: {scenario.projectedOdds}%</strong>
+                    </li>
+                  ))
+                ) : (
+                  <li>
+                    <span>Your current profile has fewer obvious single-step improvements. Keep executing the action steps above.</span>
+                    <strong>Projected odds: {result.movesNeedle.currentOdds}%</strong>
+                  </li>
+                )}
+              </ol>
+            </section>
+          ) : null}
         </section>
       </>
     );

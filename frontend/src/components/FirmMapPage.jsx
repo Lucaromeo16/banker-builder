@@ -162,6 +162,45 @@ function officeMatchesFilters(office, filters) {
   );
 }
 
+function officeMatchesBankSearch(office, searchTerm) {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  if (!normalizedSearch) return true;
+
+  return String(office.firm || '').toLowerCase().includes(normalizedSearch);
+}
+
+function firmSummariesForOffices(offices) {
+  const firms = new Map();
+
+  offices.forEach((office) => {
+    const existing = firms.get(office.firm) || {
+      firm: office.firm,
+      type: bankTypeForOffice(office),
+      offices: [],
+      groups: new Set(),
+      maxPrestige: 0,
+      maxPay: 0,
+      maxCompetitiveness: 0
+    };
+
+    existing.offices.push(office);
+    office.groups.forEach((group) => existing.groups.add(group));
+    existing.maxPrestige = Math.max(existing.maxPrestige, office.prestigeStars);
+    existing.maxPay = Math.max(existing.maxPay, office.payStars);
+    existing.maxCompetitiveness = Math.max(existing.maxCompetitiveness, office.competitivenessStars);
+
+    firms.set(office.firm, existing);
+  });
+
+  return Array.from(firms.values())
+    .map((firm) => ({
+      ...firm,
+      groups: Array.from(firm.groups).sort(),
+      summary: firm.offices[0]?.officeHistory || ''
+    }))
+    .sort((a, b) => a.firm.localeCompare(b.firm));
+}
+
 function popupHtml(office) {
   return `
     <div class="office-popup">
@@ -190,6 +229,7 @@ function popupHtml(office) {
           <dd>${renderStars(office.competitivenessStars)} stars</dd>
         </div>
       </dl>
+      <button type="button" class="office-popup-add-contact">Add Contact</button>
     </div>
   `;
 }
@@ -223,7 +263,7 @@ function clusterIcon(cluster) {
   });
 }
 
-function ClusteredOfficeMarkers({ offices }) {
+function ClusteredOfficeMarkers({ offices, onAddContact }) {
   const map = useMap();
 
   useEffect(() => {
@@ -241,6 +281,11 @@ function ClusteredOfficeMarkers({ offices }) {
         className: 'banker-popup',
         maxWidth: 320
       });
+      marker.on('popupopen', () => {
+        const popupElement = marker.getPopup()?.getElement();
+        const button = popupElement?.querySelector('.office-popup-add-contact');
+        button?.addEventListener('click', () => onAddContact?.(office), { once: true });
+      });
       clusterLayer.addLayer(marker);
     });
 
@@ -249,13 +294,15 @@ function ClusteredOfficeMarkers({ offices }) {
     return () => {
       map.removeLayer(clusterLayer);
     };
-  }, [map, offices]);
+  }, [map, offices, onAddContact]);
 
   return null;
 }
 
-export default function FirmMapPage({ onBack }) {
+export default function FirmMapPage({ onBack, onAddContact }) {
   const [viewMode, setViewMode] = useState('map');
+  const [expandedFirm, setExpandedFirm] = useState(null);
+  const [bankSearch, setBankSearch] = useState('');
   const [filters, setFilters] = useState({
     bankType: 'All',
     group: 'All',
@@ -265,13 +312,29 @@ export default function FirmMapPage({ onBack }) {
   });
 
   const filteredOffices = useMemo(
-    () => ibOffices.filter((office) => officeMatchesFilters(office, filters)),
-    [filters]
+    () => ibOffices.filter((office) => officeMatchesBankSearch(office, bankSearch) && officeMatchesFilters(office, filters)),
+    [bankSearch, filters]
   );
+
+  const firmSummaries = useMemo(() => firmSummariesForOffices(filteredOffices), [filteredOffices]);
 
   const updateFilter = (key, value) => {
     setFilters((current) => ({ ...current, [key]: value }));
+    setExpandedFirm(null);
   };
+
+  const updateBankSearch = (value) => {
+    setBankSearch(value);
+    setExpandedFirm(null);
+  };
+
+  const toggleFirm = (firm) => {
+    setExpandedFirm((current) => (current === firm ? null : firm));
+  };
+
+  const hasBankSearch = bankSearch.trim().length > 0;
+  const emptyMapMessage = hasBankSearch ? 'No banks match your search and filters.' : 'No offices match the selected filters.';
+  const emptyListMessage = hasBankSearch ? 'No banks match your search and filters.' : 'No firms match the selected filters.';
 
   return (
     <>
@@ -289,6 +352,23 @@ export default function FirmMapPage({ onBack }) {
         </div>
 
         <div className="map-controls" aria-label="Firm map filters">
+          <label className="map-search-control">
+            Bank Search
+            <span className="map-search-input-wrap">
+              <input
+                type="search"
+                value={bankSearch}
+                onChange={(event) => updateBankSearch(event.target.value)}
+                placeholder="Search bank name..."
+              />
+              {hasBankSearch ? (
+                <button type="button" aria-label="Clear bank search" onClick={() => updateBankSearch('')}>
+                  x
+                </button>
+              ) : null}
+            </span>
+          </label>
+
           <label>
             Bank Type
             <select value={filters.bankType} onChange={(event) => updateFilter('bankType', event.target.value)}>
@@ -375,7 +455,7 @@ export default function FirmMapPage({ onBack }) {
                 </span>
               ))}
             </div>
-            {filteredOffices.length === 0 ? <div className="map-empty-state">No offices match the selected filters.</div> : null}
+            {filteredOffices.length === 0 ? <div className="map-empty-state">{emptyMapMessage}</div> : null}
             <MapContainer
               center={[39.5, -98.35]}
               zoom={4}
@@ -389,57 +469,94 @@ export default function FirmMapPage({ onBack }) {
                 maxZoom={19}
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <ClusteredOfficeMarkers offices={filteredOffices} />
+              <ClusteredOfficeMarkers offices={filteredOffices} onAddContact={onAddContact} />
             </MapContainer>
           </div>
         ) : (
           <section className="map-list-view" aria-live="polite">
             <div className="map-list-heading">
-              <h3>Showing {filteredOffices.length} matching offices</h3>
+              <h3>Showing {firmSummaries.length} firms across {filteredOffices.length} matching offices</h3>
             </div>
 
             {filteredOffices.length === 0 ? (
-              <div className="map-list-empty">No offices match the selected filters.</div>
+              <div className="map-list-empty">{emptyListMessage}</div>
             ) : (
               <div className="map-list-grid">
-                {filteredOffices.map((office) => (
-                  <article className="map-office-card" key={office.id}>
+                {firmSummaries.map((firm) => (
+                  <article className="map-office-card map-firm-card" key={firm.firm}>
                     <div className="map-office-card-heading">
                       <div>
-                        <h3>{office.firm}</h3>
-                        <p>{office.officeCity}, {office.state}</p>
+                        <h3>{firm.firm}</h3>
+                        <p>{firm.offices.length} matching {firm.offices.length === 1 ? 'office' : 'offices'}</p>
                       </div>
-                      <span className={`map-type-pill map-type-pill-${TYPE_CLASS_NAMES[bankTypeForOffice(office)] || TYPE_CLASS_NAMES.Unknown}`}>
-                        {bankTypeForOffice(office)}
+                      <span className={`map-type-pill map-type-pill-${TYPE_CLASS_NAMES[firm.type] || TYPE_CLASS_NAMES.Unknown}`}>
+                        {firm.type}
                       </span>
                     </div>
-                    <p className="map-office-history">{office.officeHistory}</p>
+                    <p className="map-office-history">{firm.summary}</p>
                     <dl>
                       <div>
-                        <dt>Groups</dt>
-                        <dd>{office.groups.join(', ')}</dd>
+                        <dt>Groups represented</dt>
+                        <dd>{firm.groups.join(', ')}</dd>
                       </div>
                       <div>
-                        <dt>Prestige</dt>
-                        <dd>{renderStars(office.prestigeStars)} stars</dd>
+                        <dt>Highest prestige</dt>
+                        <dd>{renderStars(firm.maxPrestige)} stars</dd>
                       </div>
                       <div>
-                        <dt>Pay</dt>
-                        <dd>{renderStars(office.payStars)} stars</dd>
+                        <dt>Highest pay</dt>
+                        <dd>{renderStars(firm.maxPay)} stars</dd>
                       </div>
                       <div>
-                        <dt>Competitiveness</dt>
-                        <dd>{renderStars(office.competitivenessStars)} stars</dd>
-                      </div>
-                      <div>
-                        <dt>Estimated headcount</dt>
-                        <dd>{office.estimatedHeadcount}</dd>
-                      </div>
-                      <div>
-                        <dt>Original type</dt>
-                        <dd>{office.type}</dd>
+                        <dt>Highest competitiveness</dt>
+                        <dd>{renderStars(firm.maxCompetitiveness)} stars</dd>
                       </div>
                     </dl>
+                    <button type="button" className="map-office-toggle" onClick={() => toggleFirm(firm.firm)}>
+                      {expandedFirm === firm.firm ? 'Hide Offices' : 'View Offices'}
+                    </button>
+
+                    {expandedFirm === firm.firm ? (
+                      <div className="map-firm-office-list">
+                        {firm.offices.map((office) => (
+                          <section className="map-firm-office" key={office.id}>
+                            <div className="map-firm-office-heading">
+                              <h4>{office.officeCity}, {office.state}</h4>
+                              <span>{office.estimatedHeadcount}</span>
+                            </div>
+                            <p>{office.officeHistory}</p>
+                            <dl>
+                              <div>
+                                <dt>Groups</dt>
+                                <dd>{office.groups.join(', ')}</dd>
+                              </div>
+                              <div>
+                                <dt>Prestige</dt>
+                                <dd>{renderStars(office.prestigeStars)} stars</dd>
+                              </div>
+                              <div>
+                                <dt>Pay</dt>
+                                <dd>{renderStars(office.payStars)} stars</dd>
+                              </div>
+                              <div>
+                                <dt>Competitiveness</dt>
+                                <dd>{renderStars(office.competitivenessStars)} stars</dd>
+                              </div>
+                              <div>
+                                <dt>Internship opportunities</dt>
+                                <dd>{office.internshipOpportunities}</dd>
+                              </div>
+                              {office.notes ? (
+                                <div>
+                                  <dt>Notes</dt>
+                                  <dd>{office.notes}</dd>
+                                </div>
+                              ) : null}
+                            </dl>
+                          </section>
+                        ))}
+                      </div>
+                    ) : null}
                   </article>
                 ))}
               </div>

@@ -1239,7 +1239,7 @@
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
-    "competitivenessScore": 9.0,
+    "competitivenessScore": 9,
     "internshipOpportunities": "Small and highly competitive analyst program with TMT-focused recruiting.",
     "notes": "Known for media, telecom, and digital economy advisory work.",
     "logo": "/logos/liontree.png"
@@ -1544,7 +1544,13 @@
     "latitude": 40.759,
     "longitude": -73.9817,
     "type": "EB",
-    "groups": ["M&A", "Restructuring", "Financial Sponsors", "Consumer & Retail", "Industrials"],
+    "groups": [
+      "M&A",
+      "Restructuring",
+      "Financial Sponsors",
+      "Consumer & Retail",
+      "Industrials"
+    ],
     "officeHistory": "Primary U.S. Global Advisory office with broad M&A and restructuring execution capabilities.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 5,
@@ -1563,7 +1569,12 @@
     "latitude": 42.3493,
     "longitude": -71.081,
     "type": "EB",
-    "groups": ["Healthcare", "Technology", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Global Advisory office serving healthcare, technology, and sponsor clients in the Northeast.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -1582,7 +1593,12 @@
     "latitude": 34.0195,
     "longitude": -118.4912,
     "type": "EB",
-    "groups": ["Consumer & Retail", "Media", "Technology", "M&A"],
+    "groups": [
+      "Consumer & Retail",
+      "Media",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "West Coast Global Advisory office serving Southern California corporate and sponsor clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -1601,13 +1617,18 @@
     "latitude": 40.7564,
     "longitude": -73.989,
     "type": "EB",
-    "groups": ["Restructuring", "M&A", "Liability Management", "Special Situations"],
+    "groups": [
+      "Restructuring",
+      "M&A",
+      "Liability Management",
+      "Special Situations"
+    ],
     "officeHistory": "Headquarters office for a senior-led advisory boutique focused on complex situations and restructuring.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
-    "competitivenessScore": 9.0,
+    "competitivenessScore": 9,
     "internshipOpportunities": "Very small and highly selective analyst pipeline.",
     "notes": "Best known for restructuring, liability management, and complex advisory mandates.",
     "logo": "/logos/ducera-partners.png"
@@ -1620,7 +1641,12 @@
     "latitude": 34.0595,
     "longitude": -118.4135,
     "type": "EB",
-    "groups": ["Restructuring", "M&A", "Media", "Consumer & Retail"],
+    "groups": [
+      "Restructuring",
+      "M&A",
+      "Media",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Southern California advisory office supporting restructuring and strategic advisory clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 5,
@@ -1639,7 +1665,12 @@
     "latitude": 37.7898,
     "longitude": -122.4021,
     "type": "EB",
-    "groups": ["Technology", "Restructuring", "M&A", "Special Situations"],
+    "groups": [
+      "Technology",
+      "Restructuring",
+      "M&A",
+      "Special Situations"
+    ],
     "officeHistory": "Bay Area office supporting technology and special situations advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 5,
@@ -1658,7 +1689,11 @@
     "latitude": 41.0389,
     "longitude": -73.5414,
     "type": "EB",
-    "groups": ["Restructuring", "Liability Management", "Special Situations"],
+    "groups": [
+      "Restructuring",
+      "Liability Management",
+      "Special Situations"
+    ],
     "officeHistory": "Connecticut office supporting the firm's restructuring and special situations platform.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -1677,7 +1712,13 @@
     "latitude": 40.7562,
     "longitude": -73.9821,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Major investment banking office supporting sponsor, healthcare, technology, and growth-company advisory.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
@@ -1696,7 +1737,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Northeast banking office with healthcare, technology, and sponsor coverage exposure.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -1715,7 +1761,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM",
-    "groups": ["Leveraged Finance", "Financial Sponsors", "Business Services", "Industrials"],
+    "groups": [
+      "Leveraged Finance",
+      "Financial Sponsors",
+      "Business Services",
+      "Industrials"
+    ],
     "officeHistory": "Southeast office supporting leveraged finance, sponsor, and regional middle-market coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1734,7 +1785,12 @@
     "latitude": 33.8386,
     "longitude": -84.3797,
     "type": "MM",
-    "groups": ["Business Services", "Consumer & Retail", "Industrials", "M&A"],
+    "groups": [
+      "Business Services",
+      "Consumer & Retail",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Southeast advisory office serving regional corporate and sponsor-backed clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1753,7 +1809,12 @@
     "latitude": 34.0595,
     "longitude": -118.4135,
     "type": "MM",
-    "groups": ["Technology", "Consumer & Retail", "Media", "M&A"],
+    "groups": [
+      "Technology",
+      "Consumer & Retail",
+      "Media",
+      "M&A"
+    ],
     "officeHistory": "West Coast office supporting technology, consumer, and media-oriented advisory work.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1772,7 +1833,12 @@
     "latitude": 37.7932,
     "longitude": -122.4014,
     "type": "MM",
-    "groups": ["Technology", "Tech-Enabled Services", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Technology",
+      "Tech-Enabled Services",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Bay Area office focused on technology and growth-company advisory.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -1791,7 +1857,13 @@
     "latitude": 40.713,
     "longitude": -74.0155,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Primary U.S. Capital Markets office with broad advisory, coverage, and financing capabilities.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -1810,7 +1882,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "M&A", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Energy-focused office serving upstream, midstream, power, and transition-related clients.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -1829,7 +1906,12 @@
     "latitude": 37.7953,
     "longitude": -122.3973,
     "type": "MM",
-    "groups": ["Technology", "M&A", "Growth Equity", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Growth Equity",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology, growth-company, and capital markets clients.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -1848,7 +1930,12 @@
     "latitude": 41.8807,
     "longitude": -87.6365,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "M&A", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting industrials, consumer, and regional corporate coverage.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -1867,7 +1954,12 @@
     "latitude": 34.0595,
     "longitude": -118.4135,
     "type": "MM",
-    "groups": ["Media", "Consumer & Retail", "Technology", "M&A"],
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Southern California office serving media, consumer, and West Coast corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1886,7 +1978,12 @@
     "latitude": 42.3562,
     "longitude": -71.0545,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "M&A", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Boston office supporting healthcare, technology, and regional institutional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1905,7 +2002,12 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "Financial Sponsors", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Financial Sponsors",
+      "Capital Markets"
+    ],
     "officeHistory": "Large Midwest presence supporting regional corporate clients and capital markets activity.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -1924,7 +2026,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM",
-    "groups": ["Financial Institutions", "Leveraged Finance", "Capital Markets", "Industrials"],
+    "groups": [
+      "Financial Institutions",
+      "Leveraged Finance",
+      "Capital Markets",
+      "Industrials"
+    ],
     "officeHistory": "Charlotte office supporting financial institutions, leveraged finance, and regional corporate coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -1943,7 +2050,13 @@
     "latitude": 40.7557,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Major East Coast office supporting middle-market advisory and sponsor coverage.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -1962,7 +2075,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Midwest office supporting industrials, business services, and regional sponsor-backed clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -1981,7 +2099,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "Business Services", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and services clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2000,7 +2123,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM",
-    "groups": ["Financial Sponsors", "Business Services", "Industrials", "M&A"],
+    "groups": [
+      "Financial Sponsors",
+      "Business Services",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Southeast office supporting sponsor-backed and regional middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2019,7 +2147,12 @@
     "latitude": 39.7392,
     "longitude": -104.9903,
     "type": "MM",
-    "groups": ["Technology", "Business Services", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Technology",
+      "Business Services",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Mountain West office supporting growth and middle-market advisory assignments.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2038,7 +2171,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "Industrials", "M&A"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Houston office supporting energy, infrastructure, and industrial advisory work.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2057,7 +2195,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "M&A", "Financial Sponsors", "Business Services"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Financial Sponsors",
+      "Business Services"
+    ],
     "officeHistory": "Bay Area office supporting technology and growth-company advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2076,7 +2219,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM",
-    "groups": ["Business Services", "Consumer & Retail", "Industrials", "M&A"],
+    "groups": [
+      "Business Services",
+      "Consumer & Retail",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Texas office supporting regional corporate and sponsor-backed middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2095,7 +2243,12 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "MM",
-    "groups": ["Industrials", "Business Services", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Regional office supporting industrial and services middle-market advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2114,7 +2267,13 @@
     "latitude": 40.7557,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Capital Markets", "Financial Sponsors", "Financial Institutions", "Industrials"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors",
+      "Financial Institutions",
+      "Industrials"
+    ],
     "officeHistory": "Primary U.S. CIB office with advisory, financing, and global markets connectivity.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -2133,7 +2292,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "M&A", "Capital Markets", "Sustainable Finance"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Capital Markets",
+      "Sustainable Finance"
+    ],
     "officeHistory": "West Coast office supporting technology, growth, and financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2152,13 +2316,18 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Agribusiness", "Capital Markets", "M&A"],
+    "groups": [
+      "Industrials",
+      "Agribusiness",
+      "Capital Markets",
+      "M&A"
+    ],
     "officeHistory": "Midwest CIB office supporting industrial, agribusiness, and corporate financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Smaller regional analyst presence.",
     "notes": "Regional office with stronger financing and corporate coverage orientation.",
     "logo": "/logos/bnp-paribas.png"
@@ -2171,7 +2340,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM",
-    "groups": ["Energy", "Industrials", "Capital Markets", "Infrastructure"],
+    "groups": [
+      "Energy",
+      "Industrials",
+      "Capital Markets",
+      "Infrastructure"
+    ],
     "officeHistory": "Texas office supporting energy, infrastructure, and regional corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2190,7 +2364,12 @@
     "latitude": 38.8951,
     "longitude": -77.0364,
     "type": "MM",
-    "groups": ["Infrastructure", "Government Services", "Sustainable Finance", "Capital Markets"],
+    "groups": [
+      "Infrastructure",
+      "Government Services",
+      "Sustainable Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Washington presence supporting public-sector-adjacent and infrastructure-related corporate clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -2209,7 +2388,13 @@
     "latitude": 40.7557,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Healthcare", "Technology", "Financial Sponsors", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Healthcare",
+      "Technology",
+      "Financial Sponsors",
+      "Capital Markets"
+    ],
     "officeHistory": "Major investment banking office with sector coverage and capital markets connectivity.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -2228,7 +2413,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "Healthcare", "M&A", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Healthcare",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "West Coast office supporting technology, healthcare, and growth-company clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -2247,7 +2437,12 @@
     "latitude": 35.1495,
     "longitude": -90.049,
     "type": "MM",
-    "groups": ["Transportation & Logistics", "Industrials", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Transportation & Logistics",
+      "Industrials",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Regional institutional office supporting coverage in transportation, logistics, and industrial sectors.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2266,7 +2461,13 @@
     "latitude": 40.7608,
     "longitude": -73.9754,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Primary U.S. office for investment banking, advisory, and capital markets activity.",
     "estimatedHeadcount": "200-350 bankers",
     "prestigeStars": 4,
@@ -2285,7 +2486,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Capital Markets"
+    ],
     "officeHistory": "Energy-focused office supporting advisory and financing across the energy value chain.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2304,7 +2510,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "M&A", "Growth Equity", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Growth Equity",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and growth-company advisory and financing.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2323,7 +2534,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Biopharma", "Technology", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Biopharma",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Boston office supporting healthcare, life sciences, and technology advisory.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2342,7 +2558,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting industrial and regional corporate coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2361,13 +2582,18 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM",
-    "groups": ["Leveraged Finance", "Financial Institutions", "Capital Markets", "Business Services"],
+    "groups": [
+      "Leveraged Finance",
+      "Financial Institutions",
+      "Capital Markets",
+      "Business Services"
+    ],
     "officeHistory": "Charlotte office supporting financing, leveraged finance, and commercial bank-adjacent coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited but plausible regional analyst opportunities.",
     "notes": "Good fit for candidates targeting Charlotte banking and financing roles.",
     "logo": "/logos/td-securities.png"
@@ -2380,7 +2606,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM",
-    "groups": ["Technology", "Business Services", "Energy", "M&A"],
+    "groups": [
+      "Technology",
+      "Business Services",
+      "Energy",
+      "M&A"
+    ],
     "officeHistory": "Texas office supporting regional corporate, technology, services, and energy clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2399,7 +2630,12 @@
     "latitude": 41.8837,
     "longitude": -87.6324,
     "type": "MM",
-    "groups": ["Industrials", "Business Services", "Consumer & Retail", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Consumer & Retail",
+      "Capital Markets"
+    ],
     "officeHistory": "Large U.S. office tied to BMO's Midwest corporate and capital markets platform.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
@@ -2418,7 +2654,13 @@
     "latitude": 40.7557,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Major U.S. capital markets and investment banking office with broad product access.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
@@ -2437,7 +2679,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Capital Markets"
+    ],
     "officeHistory": "Energy-oriented office supporting advisory and financing for energy and infrastructure clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2456,7 +2703,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "M&A", "Growth Equity", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "M&A",
+      "Growth Equity",
+      "Capital Markets"
+    ],
     "officeHistory": "West Coast office supporting technology and growth-company clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2475,7 +2727,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "M&A", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and institutional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2494,7 +2751,12 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM",
-    "groups": ["Industrials", "Agribusiness", "Consumer & Retail", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Agribusiness",
+      "Consumer & Retail",
+      "Capital Markets"
+    ],
     "officeHistory": "Upper Midwest office supporting regional corporate and capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2513,7 +2775,12 @@
     "latitude": 39.7392,
     "longitude": -104.9903,
     "type": "MM",
-    "groups": ["Energy", "Infrastructure", "Business Services", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Infrastructure",
+      "Business Services",
+      "Capital Markets"
+    ],
     "officeHistory": "Mountain West office supporting regional corporate, infrastructure, and financing clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -2532,7 +2799,13 @@
     "latitude": 40.7586,
     "longitude": -73.9754,
     "type": "MM",
-    "groups": ["M&A", "Debt Capital Markets", "Financial Sponsors", "Financial Institutions", "Structured Finance"],
+    "groups": [
+      "M&A",
+      "Debt Capital Markets",
+      "Financial Sponsors",
+      "Financial Institutions",
+      "Structured Finance"
+    ],
     "officeHistory": "U.S. CIB headquarters supporting advisory, capital markets, and cross-border corporate clients.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
@@ -2551,7 +2824,12 @@
     "latitude": 34.0595,
     "longitude": -118.4135,
     "type": "MM",
-    "groups": ["Media", "Technology", "Consumer & Retail", "Debt Capital Markets"],
+    "groups": [
+      "Media",
+      "Technology",
+      "Consumer & Retail",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "West Coast CIB office supporting corporate and sponsor clients in Southern California.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2570,7 +2848,12 @@
     "latitude": 37.7929,
     "longitude": -122.3971,
     "type": "MM",
-    "groups": ["Technology", "Growth", "M&A", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Growth",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and growth-company clients across CIB products.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2589,7 +2872,12 @@
     "latitude": 42.3584,
     "longitude": -71.0568,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "Debt Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Debt Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Northeast CIB office supporting regional corporate, healthcare, and technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2608,7 +2896,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Debt Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Texas CIB office supporting energy, power, and infrastructure-related clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -2627,7 +2920,12 @@
     "latitude": 41.8787,
     "longitude": -87.6403,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "Debt Capital Markets", "Structured Finance"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Debt Capital Markets",
+      "Structured Finance"
+    ],
     "officeHistory": "Midwest CIB office supporting regional corporate and institutional clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -2645,14 +2943,20 @@
     "state": "NY",
     "latitude": 40.714,
     "longitude": -74.0154,
-    "type": "BB / Canadian BB",
-    "groups": ["M&A", "Capital Markets", "Financial Sponsors", "Financial Institutions", "Industrials"],
+    "type": "MM",
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors",
+      "Financial Institutions",
+      "Industrials"
+    ],
     "officeHistory": "U.S. head office for Global Banking and Markets with broad corporate and institutional coverage.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 4,
-    "competitivenessScore": 8.0,
+    "competitivenessScore": 8,
     "internshipOpportunities": "Competitive analyst program with strongest U.S. visibility in New York.",
     "notes": "Core U.S. hub for Scotiabank's Canadian BB platform.",
     "logo": "/logos/scotiabank.png"
@@ -2664,8 +2968,13 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "BB / Canadian BB",
-    "groups": ["Energy", "Power & Utilities", "M&A", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Energy-focused Global Banking and Markets office serving U.S. and cross-border clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2683,8 +2992,13 @@
     "state": "CA",
     "latitude": 37.7897,
     "longitude": -122.3969,
-    "type": "BB / Canadian BB",
-    "groups": ["Technology", "Growth", "M&A", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Technology",
+      "Growth",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area Global Banking and Markets office supporting technology and growth-company clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2702,8 +3016,13 @@
     "state": "MA",
     "latitude": 42.3584,
     "longitude": -71.0568,
-    "type": "BB / Canadian BB",
-    "groups": ["Healthcare", "Technology", "Capital Markets", "Financial Sponsors"],
+    "type": "MM",
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Northeast office supporting corporate and institutional clients in healthcare and technology-heavy markets.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2721,8 +3040,14 @@
     "state": "NY",
     "latitude": 40.7601,
     "longitude": -73.9763,
-    "type": "BB / International BB",
-    "groups": ["Infrastructure", "M&A", "Private Capital", "Technology", "Energy Transition"],
+    "type": "MM",
+    "groups": [
+      "Infrastructure",
+      "M&A",
+      "Private Capital",
+      "Technology",
+      "Energy Transition"
+    ],
     "officeHistory": "Primary U.S. Macquarie Capital office with advisory, principal investing, and infrastructure expertise.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -2740,8 +3065,13 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "BB / International BB",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Energy Transition"],
+    "type": "MM",
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Energy Transition"
+    ],
     "officeHistory": "Energy and infrastructure office supporting advisory and principal capital work.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -2759,8 +3089,13 @@
     "state": "IL",
     "latitude": 41.882,
     "longitude": -87.6368,
-    "type": "BB / International BB",
-    "groups": ["Industrials", "Infrastructure", "Agribusiness", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Industrials",
+      "Infrastructure",
+      "Agribusiness",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting industrial, infrastructure, and commodity-linked clients.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -2778,8 +3113,13 @@
     "state": "CA",
     "latitude": 34.0595,
     "longitude": -118.4135,
-    "type": "BB / International BB",
-    "groups": ["Media", "Technology", "Infrastructure", "M&A"],
+    "type": "MM",
+    "groups": [
+      "Media",
+      "Technology",
+      "Infrastructure",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting advisory and principal activity across technology, media, and infrastructure.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2797,8 +3137,14 @@
     "state": "NY",
     "latitude": 40.7547,
     "longitude": -74.0002,
-    "type": "BB / International BB",
-    "groups": ["M&A", "Capital Markets", "Financial Institutions", "Industrials", "Sustainable Finance"],
+    "type": "MM",
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Institutions",
+      "Industrials",
+      "Sustainable Finance"
+    ],
     "officeHistory": "U.S. headquarters and primary wholesale banking office with broad global banking and markets capabilities.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 4,
@@ -2816,8 +3162,13 @@
     "state": "CA",
     "latitude": 37.7953,
     "longitude": -122.3973,
-    "type": "BB / International BB",
-    "groups": ["Technology", "Growth", "M&A", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Technology",
+      "Growth",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "West Coast wholesale office supporting technology and international corporate clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2835,8 +3186,13 @@
     "state": "CA",
     "latitude": 34.0696,
     "longitude": -118.4053,
-    "type": "BB / International BB",
-    "groups": ["Media", "Consumer & Retail", "Technology", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California wholesale office supporting international corporate and sponsor clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2854,8 +3210,13 @@
     "state": "DC",
     "latitude": 38.8951,
     "longitude": -77.0364,
-    "type": "BB / International BB",
-    "groups": ["Government Services", "Infrastructure", "Sustainable Finance", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Government Services",
+      "Infrastructure",
+      "Sustainable Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Washington wholesale banking office supporting government-adjacent and infrastructure clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2873,14 +3234,19 @@
     "state": "FL",
     "latitude": 25.7617,
     "longitude": -80.1918,
-    "type": "BB / International BB",
-    "groups": ["Latin America", "Financial Institutions", "Capital Markets", "Consumer & Retail"],
+    "type": "MM",
+    "groups": [
+      "Latin America",
+      "Financial Institutions",
+      "Capital Markets",
+      "Consumer & Retail"
+    ],
     "officeHistory": "Miami wholesale office supporting Latin America-linked corporate and institutional relationships.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Most relevant for candidates interested in cross-border Latin America coverage.",
     "logo": "/logos/hsbc.png"
@@ -2892,8 +3258,13 @@
     "state": "TX",
     "latitude": 29.7604,
     "longitude": -95.3698,
-    "type": "BB / International BB",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Capital Markets"
+    ],
     "officeHistory": "Texas wholesale office supporting energy, power, and international corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -2911,8 +3282,14 @@
     "state": "NY",
     "latitude": 40.759,
     "longitude": -73.982,
-    "type": "BB / International BB",
-    "groups": ["Capital Markets", "M&A", "Financial Sponsors", "Project Finance", "Financial Institutions"],
+    "type": "MM",
+    "groups": [
+      "Capital Markets",
+      "M&A",
+      "Financial Sponsors",
+      "Project Finance",
+      "Financial Institutions"
+    ],
     "officeHistory": "Headquarters for MUFG Securities Americas and a primary U.S. hub for capital markets and banking.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -2930,8 +3307,13 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "BB / International BB",
-    "groups": ["Technology", "Project Finance", "Capital Markets", "Growth"],
+    "type": "MM",
+    "groups": [
+      "Technology",
+      "Project Finance",
+      "Capital Markets",
+      "Growth"
+    ],
     "officeHistory": "West Coast branch supporting technology, project finance, and capital markets clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2949,8 +3331,13 @@
     "state": "CA",
     "latitude": 34.051,
     "longitude": -118.256,
-    "type": "BB / International BB",
-    "groups": ["Media", "Consumer & Retail", "Project Finance", "Capital Markets"],
+    "type": "MM",
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Project Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California branch supporting corporate, media, and financing clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2968,8 +3355,13 @@
     "state": "IL",
     "latitude": 41.879,
     "longitude": -87.636,
-    "type": "BB / International BB",
-    "groups": ["Industrials", "Capital Markets", "Project Finance", "Agribusiness"],
+    "type": "MM",
+    "groups": [
+      "Industrials",
+      "Capital Markets",
+      "Project Finance",
+      "Agribusiness"
+    ],
     "officeHistory": "Midwest branch supporting industrial, agribusiness, and financing clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -2988,7 +3380,12 @@
     "latitude": 33.756,
     "longitude": -84.364,
     "type": "MM",
-    "groups": ["Business Services", "Consumer & Retail", "Industrials", "M&A"],
+    "groups": [
+      "Business Services",
+      "Consumer & Retail",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Southeast office serving middle-market companies and private equity clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3007,7 +3404,12 @@
     "latitude": 42.3537,
     "longitude": -71.057,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "Business Services", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and sponsor-backed clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3026,7 +3428,12 @@
     "latitude": 32.7867,
     "longitude": -96.799,
     "type": "MM",
-    "groups": ["Business Services", "Industrials", "Energy", "M&A"],
+    "groups": [
+      "Business Services",
+      "Industrials",
+      "Energy",
+      "M&A"
+    ],
     "officeHistory": "Texas office serving regional middle-market companies and financial sponsors.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3045,7 +3452,12 @@
     "latitude": 34.0505,
     "longitude": -118.2551,
     "type": "MM",
-    "groups": ["Consumer & Retail", "Media", "Technology", "Financial Sponsors"],
+    "groups": [
+      "Consumer & Retail",
+      "Media",
+      "Technology",
+      "Financial Sponsors"
+    ],
     "officeHistory": "West Coast office serving Southern California private equity and corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3064,7 +3476,13 @@
     "latitude": 40.7552,
     "longitude": -73.9743,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Business Services"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Business Services"
+    ],
     "officeHistory": "Major East Coast office with broad middle-market advisory and sponsor coverage.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
@@ -3083,7 +3501,12 @@
     "latitude": 37.5407,
     "longitude": -77.436,
     "type": "MM",
-    "groups": ["Business Services", "Industrials", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Business Services",
+      "Industrials",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Regional office serving middle-market companies and sponsors across the Mid-Atlantic.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -3102,7 +3525,12 @@
     "latitude": 37.7955,
     "longitude": -122.3996,
     "type": "MM",
-    "groups": ["Technology", "Software", "Growth", "Financial Sponsors"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Bay Area office focused on technology, software, and growth-company advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3121,7 +3549,12 @@
     "latitude": 38.923,
     "longitude": -77.228,
     "type": "MM",
-    "groups": ["Aerospace & Defense", "Government Services", "Technology", "M&A"],
+    "groups": [
+      "Aerospace & Defense",
+      "Government Services",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Washington-area office supporting government services, defense, and technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3140,7 +3573,12 @@
     "latitude": 42.3601,
     "longitude": -71.0589,
     "type": "MM",
-    "groups": ["Healthcare Services", "Technology", "Business Services", "M&A"],
+    "groups": [
+      "Healthcare Services",
+      "Technology",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and sponsor-backed middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3159,7 +3597,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM",
-    "groups": ["Financial Sponsors", "Business Services", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Financial Sponsors",
+      "Business Services",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Southeast office serving sponsor-backed and founder-owned middle-market companies.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3178,7 +3621,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Business Services", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Midwest office with industrials, business services, and sponsor coverage strengths.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3197,7 +3645,12 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "MM",
-    "groups": ["Industrials", "Business Services", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Regional office supporting industrial and business services middle-market advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3216,13 +3669,18 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Upper Midwest office serving regional middle-market and sponsor-backed clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with Midwest private equity and corporate coverage.",
     "logo": "/logos/harris-williams.png"
@@ -3235,7 +3693,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare Services", "Technology", "Consumer & Retail"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare Services",
+      "Technology",
+      "Consumer & Retail"
+    ],
     "officeHistory": "New York office supporting national sponsor coverage and middle-market M&A execution.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -3254,7 +3718,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "Software", "Business Services", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Bay Area office supporting technology, software, and services clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3273,7 +3742,12 @@
     "latitude": 38.8951,
     "longitude": -77.0364,
     "type": "MM",
-    "groups": ["Government Services", "Aerospace & Defense", "Business Services", "M&A"],
+    "groups": [
+      "Government Services",
+      "Aerospace & Defense",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Washington office focused on government services, defense, and related business services advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -3292,13 +3766,19 @@
     "latitude": 42.3584,
     "longitude": -71.0568,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare", "Biopharma", "MedTech", "Healthcare Services", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Biopharma",
+      "MedTech",
+      "Healthcare Services",
+      "Capital Markets"
+    ],
     "officeHistory": "Headquarters office for a healthcare-focused investment bank with broad advisory and capital markets capabilities.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
-    "competitivenessScore": 9.0,
+    "competitivenessScore": 9,
     "internshipOpportunities": "Highly competitive healthcare-focused analyst program.",
     "notes": "Core office for biopharma, healthcare services, and medtech coverage.",
     "logo": "/logos/leerink-partners.png"
@@ -3311,7 +3791,12 @@
     "latitude": 40.7606,
     "longitude": -73.9826,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare", "M&A", "Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "Healthcare",
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "New York office supporting healthcare advisory, sponsor coverage, and capital markets.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
@@ -3330,7 +3815,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Biopharma", "MedTech", "Healthcare Technology", "Capital Markets"],
+    "groups": [
+      "Biopharma",
+      "MedTech",
+      "Healthcare Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting life sciences, medtech, and healthcare technology clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 5,
@@ -3349,13 +3839,18 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare Services", "Healthcare Technology", "Capital Markets", "M&A"],
+    "groups": [
+      "Healthcare Services",
+      "Healthcare Technology",
+      "Capital Markets",
+      "M&A"
+    ],
     "officeHistory": "Southeast office supporting healthcare services and health technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 5,
     "competitivenessStars": 4,
-    "competitivenessScore": 8.0,
+    "competitivenessScore": 8,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized healthcare office with services and technology relevance.",
     "logo": "/logos/leerink-partners.png"
@@ -3368,7 +3863,12 @@
     "latitude": 34.0259,
     "longitude": -118.473,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare Technology", "MedTech", "Healthcare Services", "M&A"],
+    "groups": [
+      "Healthcare Technology",
+      "MedTech",
+      "Healthcare Services",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting healthcare technology, medtech, and services clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -3387,7 +3887,12 @@
     "latitude": 25.7617,
     "longitude": -80.1918,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare Services", "Healthcare Technology", "M&A", "Capital Markets"],
+    "groups": [
+      "Healthcare Services",
+      "Healthcare Technology",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Florida office supporting healthcare services and technology clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -3406,7 +3911,12 @@
     "latitude": 36.1627,
     "longitude": -86.7816,
     "type": "EB / Healthcare-focused boutique",
-    "groups": ["Healthcare Services", "Provider Services", "Healthcare Technology", "M&A"],
+    "groups": [
+      "Healthcare Services",
+      "Provider Services",
+      "Healthcare Technology",
+      "M&A"
+    ],
     "officeHistory": "Nashville office supporting healthcare services and provider-focused advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -3425,7 +3935,12 @@
     "latitude": 33.8484,
     "longitude": -84.3738,
     "type": "MM / Regional MM",
-    "groups": ["Debt Capital Markets", "Financial Sponsors", "Consumer & Retail", "Industrials"],
+    "groups": [
+      "Debt Capital Markets",
+      "Financial Sponsors",
+      "Consumer & Retail",
+      "Industrials"
+    ],
     "officeHistory": "Southeast office supporting investment banking, capital markets, and sponsor relationships.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3444,7 +3959,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM / Regional MM",
-    "groups": ["Healthcare", "Technology", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and middle-market advisory clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3463,7 +3983,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM / Regional MM",
-    "groups": ["Financial Institutions", "Debt Capital Markets", "Industrials", "M&A"],
+    "groups": [
+      "Financial Institutions",
+      "Debt Capital Markets",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Charlotte office supporting financing, regional coverage, and middle-market advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3482,7 +4007,12 @@
     "latitude": 41.8841,
     "longitude": -87.6359,
     "type": "MM / Regional MM",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Midwest office supporting industrial and regional middle-market clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -3501,7 +4031,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM / Regional MM",
-    "groups": ["Energy", "Industrials", "Infrastructure", "M&A"],
+    "groups": [
+      "Energy",
+      "Industrials",
+      "Infrastructure",
+      "M&A"
+    ],
     "officeHistory": "Texas office with energy, industrials, and infrastructure-related advisory coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3520,7 +4055,12 @@
     "latitude": 36.1627,
     "longitude": -86.7816,
     "type": "MM / Regional MM",
-    "groups": ["Healthcare Services", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Healthcare Services",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Tennessee office supporting regional healthcare services and business services clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -3539,7 +4079,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / Regional MM",
-    "groups": ["M&A", "Technology", "Healthcare", "Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Technology",
+      "Healthcare",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "New York office supporting sector coverage, capital markets, and sponsor relationships.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -3558,7 +4104,12 @@
     "latitude": 38.8951,
     "longitude": -77.0364,
     "type": "MM / Regional MM",
-    "groups": ["Government Services", "Technology", "Aerospace & Defense", "M&A"],
+    "groups": [
+      "Government Services",
+      "Technology",
+      "Aerospace & Defense",
+      "M&A"
+    ],
     "officeHistory": "Washington office supporting government services and defense-related advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -3577,7 +4128,13 @@
     "latitude": 40.7608,
     "longitude": -73.9726,
     "type": "Boutique / Media-Tech",
-    "groups": ["Media", "Technology", "Sports", "M&A", "Growth Equity"],
+    "groups": [
+      "Media",
+      "Technology",
+      "Sports",
+      "M&A",
+      "Growth Equity"
+    ],
     "officeHistory": "Headquarters office for a media, sports, and technology-focused advisory and investment platform.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
@@ -3596,7 +4153,12 @@
     "latitude": 37.8036,
     "longitude": -122.4035,
     "type": "Boutique / Media-Tech",
-    "groups": ["Technology", "Digital Media", "Gaming", "Growth Equity"],
+    "groups": [
+      "Technology",
+      "Digital Media",
+      "Gaming",
+      "Growth Equity"
+    ],
     "officeHistory": "Bay Area office supporting digital media, technology, gaming, and growth investing activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -3615,7 +4177,13 @@
     "latitude": 34.0195,
     "longitude": -118.4912,
     "type": "Boutique / Media-Tech",
-    "groups": ["Media", "Entertainment", "Sports", "Technology", "M&A"],
+    "groups": [
+      "Media",
+      "Entertainment",
+      "Sports",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting entertainment, sports, and technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -3634,13 +4202,19 @@
     "latitude": 37.7955,
     "longitude": -122.3996,
     "type": "Boutique / Tech-focused",
-    "groups": ["Software", "Technology", "Cybersecurity", "AI / ML", "M&A"],
+    "groups": [
+      "Software",
+      "Technology",
+      "Cybersecurity",
+      "AI / ML",
+      "M&A"
+    ],
     "officeHistory": "Headquarters office for a technology-focused boutique advising software and growth technology companies.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 5,
     "competitivenessStars": 4,
-    "competitivenessScore": 8.0,
+    "competitivenessScore": 8,
     "internshipOpportunities": "Small and selective analyst opportunities with technology fit expectations.",
     "notes": "Strong fit for candidates targeting software and strategic technology M&A.",
     "logo": "/logos/union-square-advisors.png"
@@ -3653,7 +4227,13 @@
     "latitude": 40.7621,
     "longitude": -73.9785,
     "type": "Boutique / Tech-focused",
-    "groups": ["Software", "Technology", "HealthTech", "Private Capital", "M&A"],
+    "groups": [
+      "Software",
+      "Technology",
+      "HealthTech",
+      "Private Capital",
+      "M&A"
+    ],
     "officeHistory": "New York office supporting East Coast technology clients and private capital advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -3672,7 +4252,13 @@
     "latitude": 27.7676,
     "longitude": -82.6403,
     "type": "MM",
-    "groups": ["M&A", "Financial Services", "Industrials", "Healthcare", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Services",
+      "Industrials",
+      "Healthcare",
+      "Capital Markets"
+    ],
     "officeHistory": "Headquarters investment banking office with broad middle-market sector and capital markets capabilities.",
     "estimatedHeadcount": "200-350 bankers",
     "prestigeStars": 3,
@@ -3691,7 +4277,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM",
-    "groups": ["M&A", "Financial Services", "Capital Structure Advisory", "Healthcare", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Services",
+      "Capital Structure Advisory",
+      "Healthcare",
+      "Capital Markets"
+    ],
     "officeHistory": "Major East Coast office supporting advisory, capital markets, and financial services coverage.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -3710,7 +4302,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Industrials", "Technology", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Industrials",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Boston office supporting healthcare, industrials, and middle-market advisory clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -3729,7 +4326,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Financial Services", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Industrials",
+      "Financial Services",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Midwest office supporting industrials, financial services, and regional middle-market clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -3748,7 +4350,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "Financial Services", "M&A", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Financial Services",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and financial services clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3767,7 +4374,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM",
-    "groups": ["Energy", "Power & Utilities", "Industrials", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Industrials",
+      "Capital Markets"
+    ],
     "officeHistory": "Houston office supporting energy and industrial middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3786,7 +4398,12 @@
     "latitude": 33.7488,
     "longitude": -84.3877,
     "type": "MM",
-    "groups": ["Consumer & Retail", "Business Services", "Healthcare", "M&A"],
+    "groups": [
+      "Consumer & Retail",
+      "Business Services",
+      "Healthcare",
+      "M&A"
+    ],
     "officeHistory": "Southeast office supporting middle-market investment banking and sector coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3805,7 +4422,12 @@
     "latitude": 35.1495,
     "longitude": -90.049,
     "type": "MM",
-    "groups": ["Industrials", "Transportation & Logistics", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Transportation & Logistics",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Regional office with industrials and transportation coverage relevance.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3824,7 +4446,13 @@
     "latitude": 40.7567,
     "longitude": -73.9863,
     "type": "MM",
-    "groups": ["M&A", "Healthcare", "Technology", "Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Healthcare",
+      "Technology",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters investment banking office with broad middle-market advisory and capital markets capabilities.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 3,
@@ -3843,7 +4471,12 @@
     "latitude": 42.3584,
     "longitude": -71.0568,
     "type": "MM",
-    "groups": ["Healthcare", "Life Sciences", "Technology", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Life Sciences",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Boston office supporting healthcare, life sciences, technology, and institutional capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3862,13 +4495,18 @@
     "latitude": 37.7929,
     "longitude": -122.4038,
     "type": "MM",
-    "groups": ["Technology", "Software", "Internet", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Internet",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office with investment bankers and research analysts serving technology and growth companies.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Selective regional seats with technology exposure.",
     "notes": "Good fit for candidates targeting technology and growth-company coverage.",
     "logo": "/logos/oppenheimer.png"
@@ -3881,7 +4519,12 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM",
-    "groups": ["Media", "Consumer & Retail", "Technology", "Capital Markets"],
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California office supporting media, consumer, technology, and institutional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3900,7 +4543,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Business Services", "Consumer & Retail", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Consumer & Retail",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting regional companies and institutional capital markets activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -3919,7 +4567,13 @@
     "latitude": 41.5013,
     "longitude": -81.6944,
     "type": "MM",
-    "groups": ["Industrials", "Healthcare", "Real Estate", "Public Finance", "Debt Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Healthcare",
+      "Real Estate",
+      "Public Finance",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Headquarters-adjacent capital markets hub with strong middle-market, public finance, and sector coverage.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 3,
@@ -3938,7 +4592,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM",
-    "groups": ["M&A", "Technology", "Healthcare", "Financial Sponsors", "Debt Capital Markets"],
+    "groups": [
+      "M&A",
+      "Technology",
+      "Healthcare",
+      "Financial Sponsors",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Major capital markets office supporting sector coverage, sponsors, and institutional distribution.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -3957,13 +4617,18 @@
     "latitude": 42.3584,
     "longitude": -71.0568,
     "type": "MM",
-    "groups": ["Healthcare", "Technology", "Life Sciences", "Debt Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Life Sciences",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Northeast office supporting healthcare, technology, and institutional capital markets clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Relevant for healthcare and technology middle-market coverage.",
     "logo": "/logos/keybanc-capital-markets.png"
@@ -3976,7 +4641,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM",
-    "groups": ["Industrials", "Public Finance", "Real Estate", "Debt Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Public Finance",
+      "Real Estate",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting public finance, industrials, and capital markets execution.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -3995,7 +4665,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "Software", "Growth", "Debt Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Bay Area capital markets office supporting technology and growth-company clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4014,7 +4689,12 @@
     "latitude": 33.7488,
     "longitude": -84.3877,
     "type": "MM",
-    "groups": ["Public Finance", "Healthcare", "Business Services", "Debt Capital Markets"],
+    "groups": [
+      "Public Finance",
+      "Healthcare",
+      "Business Services",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Southeast office supporting public finance, healthcare, and regional capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4033,7 +4713,13 @@
     "latitude": 40.7549,
     "longitude": -73.9773,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["M&A", "Capital Markets", "Financial Institutions", "Infrastructure", "Structured Finance"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Institutions",
+      "Infrastructure",
+      "Structured Finance"
+    ],
     "officeHistory": "North America head office for SG Americas Securities and the firm's U.S. CIB platform.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -4052,7 +4738,12 @@
     "latitude": 29.7589,
     "longitude": -95.3677,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Structured Finance"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Structured Finance"
+    ],
     "officeHistory": "Houston office supporting energy, infrastructure, and structured finance clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4071,7 +4762,12 @@
     "latitude": 37.4215,
     "longitude": -122.2068,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Technology", "Growth", "Venture-Backed Companies", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Growth",
+      "Venture-Backed Companies",
+      "Capital Markets"
+    ],
     "officeHistory": "Silicon Valley office supporting technology clients and cross-border financing activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4090,7 +4786,12 @@
     "latitude": 41.8768,
     "longitude": -87.6318,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Industrials", "Commodities", "Capital Markets", "Structured Finance"],
+    "groups": [
+      "Industrials",
+      "Commodities",
+      "Capital Markets",
+      "Structured Finance"
+    ],
     "officeHistory": "Chicago office supporting Midwest corporate, commodities, and financing clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4109,7 +4810,13 @@
     "latitude": 40.7553,
     "longitude": -73.9743,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["M&A", "Project Finance", "Leveraged Finance", "Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Project Finance",
+      "Leveraged Finance",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Americas headquarters and primary U.S. platform for advisory, financing, and institutional banking.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -4128,7 +4835,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Energy", "Power & Utilities", "Project Finance", "Infrastructure"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Project Finance",
+      "Infrastructure"
+    ],
     "officeHistory": "Houston office supporting energy, infrastructure, and project finance clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4147,7 +4859,12 @@
     "latitude": 34.0505,
     "longitude": -118.2551,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Media", "Consumer & Retail", "Project Finance", "Capital Markets"],
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Project Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California office supporting corporate, sponsor, and infrastructure-related clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4166,7 +4883,12 @@
     "latitude": 37.7929,
     "longitude": -122.3971,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Technology", "Growth", "Project Finance", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Growth",
+      "Project Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology, growth, and financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4185,7 +4907,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Leveraged Finance", "Project Finance", "Financial Institutions", "Capital Markets"],
+    "groups": [
+      "Leveraged Finance",
+      "Project Finance",
+      "Financial Institutions",
+      "Capital Markets"
+    ],
     "officeHistory": "Charlotte office supporting financing, leveraged finance, and institutional banking clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4204,7 +4931,13 @@
     "latitude": 40.7616,
     "longitude": -73.9868,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["M&A", "Capital Markets", "Financial Sponsors", "Financial Institutions", "Technology"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors",
+      "Financial Institutions",
+      "Technology"
+    ],
     "officeHistory": "Americas headquarters for Nomura's securities and investment banking platform.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -4223,7 +4956,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Healthcare", "Technology", "Capital Markets", "Asset Management"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Capital Markets",
+      "Asset Management"
+    ],
     "officeHistory": "Boston office supporting institutional clients and selective healthcare and technology coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4242,7 +4980,12 @@
     "latitude": 41.8786,
     "longitude": -87.6382,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Industrials", "Capital Markets", "Financial Sponsors", "M&A"],
+    "groups": [
+      "Industrials",
+      "Capital Markets",
+      "Financial Sponsors",
+      "M&A"
+    ],
     "officeHistory": "Chicago office supporting Midwest institutional and corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4261,7 +5004,12 @@
     "latitude": 37.7943,
     "longitude": -122.3988,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Technology", "Software", "Growth", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and institutional client activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4280,7 +5028,13 @@
     "latitude": 40.7604,
     "longitude": -73.9806,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["M&A", "Capital Markets", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "Primary U.S. securities and banking hub with advisory, financing, and Greenhill-related capabilities.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 4,
@@ -4299,7 +5053,12 @@
     "latitude": 29.756,
     "longitude": -95.3645,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Energy", "Power & Utilities", "M&A", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Houston office supporting energy, power, and financing clients.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -4318,7 +5077,12 @@
     "latitude": 37.7929,
     "longitude": -122.4038,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Technology", "Software", "Growth", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "M&A"
+    ],
     "officeHistory": "Bay Area office supporting technology and growth-company clients across securities and advisory teams.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 4,
@@ -4337,7 +5101,12 @@
     "latitude": 41.8841,
     "longitude": -87.6359,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Industrials", "Capital Markets", "Agribusiness", "M&A"],
+    "groups": [
+      "Industrials",
+      "Capital Markets",
+      "Agribusiness",
+      "M&A"
+    ],
     "officeHistory": "Midwest office supporting industrial and regional corporate clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4356,7 +5125,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Healthcare", "Life Sciences", "Technology", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Life Sciences",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Boston securities office supporting healthcare, life sciences, and institutional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4375,7 +5149,12 @@
     "latitude": 34.051,
     "longitude": -118.2551,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Media", "Consumer & Retail", "Technology", "Capital Markets"],
+    "groups": [
+      "Media",
+      "Consumer & Retail",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California office supporting corporate, media, and financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4394,7 +5173,12 @@
     "latitude": 38.9339,
     "longitude": -77.1773,
     "type": "MM / specialty platform",
-    "groups": ["Financial Institutions", "Technology", "Consumer Finance", "Debt Capital Markets"],
+    "groups": [
+      "Financial Institutions",
+      "Technology",
+      "Consumer Finance",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Headquarters-adjacent corporate and capital markets hub supporting specialty finance and technology-adjacent clients.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -4413,7 +5197,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / specialty platform",
-    "groups": ["Financial Institutions", "Consumer Finance", "Debt Capital Markets", "Technology"],
+    "groups": [
+      "Financial Institutions",
+      "Consumer Finance",
+      "Debt Capital Markets",
+      "Technology"
+    ],
     "officeHistory": "New York office supporting institutional, financial services, and capital markets client activity.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -4432,7 +5221,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / specialty platform",
-    "groups": ["Industrials", "Consumer Finance", "Debt Capital Markets", "Commercial Banking"],
+    "groups": [
+      "Industrials",
+      "Consumer Finance",
+      "Debt Capital Markets",
+      "Commercial Banking"
+    ],
     "officeHistory": "Midwest office supporting commercial and institutional clients with capital markets adjacency.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4451,7 +5245,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM / specialty platform",
-    "groups": ["Energy", "Debt Capital Markets", "Commercial Banking", "Infrastructure"],
+    "groups": [
+      "Energy",
+      "Debt Capital Markets",
+      "Commercial Banking",
+      "Infrastructure"
+    ],
     "officeHistory": "Texas office supporting energy and commercial clients with financing and capital markets activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4470,7 +5269,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM / specialty platform",
-    "groups": ["Technology", "FinTech", "Consumer Finance", "Debt Capital Markets"],
+    "groups": [
+      "Technology",
+      "FinTech",
+      "Consumer Finance",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and fintech-adjacent institutional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4489,7 +5293,13 @@
     "latitude": 42.3572,
     "longitude": -71.0552,
     "type": "MM / LMM-focused advisory",
-    "groups": ["M&A", "Capital Advisory", "Healthcare", "Technology", "Business Services"],
+    "groups": [
+      "M&A",
+      "Capital Advisory",
+      "Healthcare",
+      "Technology",
+      "Business Services"
+    ],
     "officeHistory": "Headquarters office for a middle-market investment bank focused on M&A and capital advisory.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -4508,7 +5318,12 @@
     "latitude": 39.7508,
     "longitude": -104.9955,
     "type": "MM / LMM-focused advisory",
-    "groups": ["Energy", "Infrastructure", "Industrial Technology", "Capital Advisory"],
+    "groups": [
+      "Energy",
+      "Infrastructure",
+      "Industrial Technology",
+      "Capital Advisory"
+    ],
     "officeHistory": "Mountain West office supporting energy, infrastructure, and industrial technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4527,7 +5342,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / LMM-focused advisory",
-    "groups": ["Industrials", "Business Services", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Midwest office serving lower-middle-market and middle-market companies.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4546,7 +5366,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / LMM-focused advisory",
-    "groups": ["M&A", "Capital Advisory", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "New York office supporting sponsor-backed and middle-market advisory clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4565,7 +5391,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM / LMM-focused advisory",
-    "groups": ["Business Services", "Energy", "Consumer & Retail", "M&A"],
+    "groups": [
+      "Business Services",
+      "Energy",
+      "Consumer & Retail",
+      "M&A"
+    ],
     "officeHistory": "Texas office supporting founder-owned and sponsor-backed middle-market companies.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -4584,7 +5415,12 @@
     "latitude": 27.9506,
     "longitude": -82.4572,
     "type": "MM / LMM-focused advisory",
-    "groups": ["Consumer & Retail", "Healthcare", "Business Services", "M&A"],
+    "groups": [
+      "Consumer & Retail",
+      "Healthcare",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Florida office supporting Southeast middle-market and founder-owned businesses.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -4603,7 +5439,12 @@
     "latitude": 33.6846,
     "longitude": -117.8265,
     "type": "MM / LMM-focused advisory",
-    "groups": ["Technology", "Consumer & Retail", "Healthcare", "M&A"],
+    "groups": [
+      "Technology",
+      "Consumer & Retail",
+      "Healthcare",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting technology, consumer, and healthcare middle-market clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -4622,7 +5463,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / international MM",
-    "groups": ["M&A", "Financial Sponsors", "Business Services", "Technology", "Healthcare"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Business Services",
+      "Technology",
+      "Healthcare"
+    ],
     "officeHistory": "U.S. office for an international middle-market advisory platform with strong sponsor connectivity.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -4641,7 +5488,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / international MM",
-    "groups": ["Industrials", "Business Services", "Financial Sponsors", "M&A"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Financial Sponsors",
+      "M&A"
+    ],
     "officeHistory": "Midwest office supporting sponsor-backed and industrial middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4660,7 +5512,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM / international MM",
-    "groups": ["Technology", "Software", "Growth", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "M&A"
+    ],
     "officeHistory": "Bay Area office supporting technology and growth-company middle-market advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4679,7 +5536,13 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "Boutique / EB-style technology boutique",
-    "groups": ["Technology", "Software", "AI / ML", "Internet", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "AI / ML",
+      "Internet",
+      "M&A"
+    ],
     "officeHistory": "Technology advisory boutique with senior-led strategic M&A and capital markets advice.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -4698,7 +5561,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Boutique / EB-style technology boutique",
-    "groups": ["Technology", "Software", "AI / ML", "Strategic Advisory", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "AI / ML",
+      "Strategic Advisory",
+      "M&A"
+    ],
     "officeHistory": "New York presence supporting East Coast strategic technology advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 5,
@@ -4717,7 +5586,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / LMM boutique",
-    "groups": ["Industrials", "Infrastructure", "Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Infrastructure",
+      "Services",
+      "M&A"
+    ],
     "officeHistory": "Large investment banking office supporting middle-market sector coverage and execution.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -4736,7 +5610,12 @@
     "latitude": 42.3584,
     "longitude": -71.0568,
     "type": "MM / LMM boutique",
-    "groups": ["Healthcare & Life Sciences", "Technology", "Services", "M&A"],
+    "groups": [
+      "Healthcare & Life Sciences",
+      "Technology",
+      "Services",
+      "M&A"
+    ],
     "officeHistory": "Boston investment banking office supporting healthcare, life sciences, and technology clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4755,7 +5634,12 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM / LMM boutique",
-    "groups": ["Consumer", "Technology", "Real Estate", "M&A"],
+    "groups": [
+      "Consumer",
+      "Technology",
+      "Real Estate",
+      "M&A"
+    ],
     "officeHistory": "West Coast office supporting middle-market advisory across consumer, technology, and real estate-related sectors.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4774,7 +5658,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Capital Markets", "Financial Restructuring", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Restructuring",
+      "Financial Sponsors"
+    ],
     "officeHistory": "New York office supporting middle-market advisory, sponsors, and capital markets.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4793,7 +5682,13 @@
     "latitude": 40.759,
     "longitude": -73.9855,
     "type": "MM",
-    "groups": ["M&A", "Capital Markets", "Healthcare", "Technology", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Healthcare",
+      "Technology",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters office supporting investment banking, capital markets, and institutional brokerage businesses.",
     "estimatedHeadcount": "200-350 bankers",
     "prestigeStars": 3,
@@ -4812,7 +5707,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM",
-    "groups": ["Technology", "Software", "Industrial Technology", "Private Placements"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Industrial Technology",
+      "Private Placements"
+    ],
     "officeHistory": "Bay Area office supporting technology investment banking and private placement activity.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -4831,7 +5731,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM",
-    "groups": ["Healthcare", "Biotech", "Life Sciences", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Biotech",
+      "Life Sciences",
+      "Capital Markets"
+    ],
     "officeHistory": "Boston office supporting healthcare, biotech, and institutional capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4850,7 +5755,12 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM",
-    "groups": ["Media", "Technology", "Consumer & Retail", "Capital Markets"],
+    "groups": [
+      "Media",
+      "Technology",
+      "Consumer & Retail",
+      "Capital Markets"
+    ],
     "officeHistory": "Southern California office supporting sector coverage and institutional capital markets activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -4869,13 +5779,19 @@
     "latitude": 40.7606,
     "longitude": -73.9826,
     "type": "MM / sector-focused boutique",
-    "groups": ["M&A", "Consumer & Retail", "Healthcare", "Media & Technology", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Consumer & Retail",
+      "Healthcare",
+      "Media & Technology",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters office for an independent sector-focused advisory firm affiliated with Natixis.",
     "estimatedHeadcount": "200-350 bankers",
     "prestigeStars": 4,
     "payStars": 5,
     "competitivenessStars": 4,
-    "competitivenessScore": 8.0,
+    "competitivenessScore": 8,
     "internshipOpportunities": "Competitive analyst program with sector-specialist advisory exposure.",
     "notes": "Sector-focused boutique with strong New York advisory presence.",
     "logo": "/logos/solomon-partners.png"
@@ -4888,7 +5804,12 @@
     "latitude": 41.8819,
     "longitude": -87.6376,
     "type": "MM / sector-focused boutique",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Chicago office supporting Midwest clients and sector advisory coverage.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -4907,7 +5828,12 @@
     "latitude": 25.7281,
     "longitude": -80.2407,
     "type": "MM / sector-focused boutique",
-    "groups": ["Consumer & Retail", "Restaurants", "Healthcare", "M&A"],
+    "groups": [
+      "Consumer & Retail",
+      "Restaurants",
+      "Healthcare",
+      "M&A"
+    ],
     "officeHistory": "Florida office supporting sector advisory and Southeast client coverage.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -4926,7 +5852,12 @@
     "latitude": 27.9506,
     "longitude": -82.4572,
     "type": "MM / sector-focused boutique",
-    "groups": ["Healthcare", "Consumer & Retail", "Business Services", "M&A"],
+    "groups": [
+      "Healthcare",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Tampa office supporting sector advisory and Southeast regional coverage.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -4945,7 +5876,13 @@
     "latitude": 47.6062,
     "longitude": -122.3321,
     "type": "MM / LMM boutique",
-    "groups": ["Technology", "Software", "Consumer", "Industrials", "M&A"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Consumer",
+      "Industrials",
+      "M&A"
+    ],
     "officeHistory": "Headquarters office for a Seattle-based middle-market advisory firm serving growth and founder-owned companies.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -4964,7 +5901,12 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM / LMM boutique",
-    "groups": ["Consumer", "Media", "Technology", "M&A"],
+    "groups": [
+      "Consumer",
+      "Media",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting consumer, media, and technology advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -4983,7 +5925,12 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM / LMM boutique",
-    "groups": ["Industrials", "Consumer", "Business Services", "M&A"],
+    "groups": [
+      "Industrials",
+      "Consumer",
+      "Business Services",
+      "M&A"
+    ],
     "officeHistory": "Upper Midwest office supporting regional middle-market and family-owned businesses.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5002,7 +5949,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Technology", "Consumer", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Technology",
+      "Consumer",
+      "Financial Sponsors"
+    ],
     "officeHistory": "New York presence supporting East Coast clients and sponsor relationships.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5021,7 +5973,13 @@
     "latitude": 42.3505,
     "longitude": -71.0744,
     "type": "Boutique / LMM technology advisory",
-    "groups": ["Software", "SaaS", "Healthcare IT", "FinTech", "M&A"],
+    "groups": [
+      "Software",
+      "SaaS",
+      "Healthcare IT",
+      "FinTech",
+      "M&A"
+    ],
     "officeHistory": "Headquarters office for a software and SaaS-focused M&A advisory boutique.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -5040,7 +5998,13 @@
     "latitude": 37.7932,
     "longitude": -122.4007,
     "type": "Boutique / LMM technology advisory",
-    "groups": ["Software", "SaaS", "Data & Analytics", "Vertical Software", "M&A"],
+    "groups": [
+      "Software",
+      "SaaS",
+      "Data & Analytics",
+      "Vertical Software",
+      "M&A"
+    ],
     "officeHistory": "Bay Area office supporting West Coast software and SaaS clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -5059,7 +6023,13 @@
     "latitude": 34.0614,
     "longitude": -118.4145,
     "type": "Boutique / LMM technology advisory",
-    "groups": ["Software", "SaaS", "Media Technology", "Healthcare IT", "M&A"],
+    "groups": [
+      "Software",
+      "SaaS",
+      "Media Technology",
+      "Healthcare IT",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting software, SaaS, and technology-enabled services clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -5078,7 +6048,12 @@
     "latitude": 41.8792,
     "longitude": -87.6317,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Industrials", "Business Services", "Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "U.S. regional headquarters and major commercial and capital markets hub.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
@@ -5097,7 +6072,13 @@
     "latitude": 40.7527,
     "longitude": -73.979,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["M&A", "Capital Markets", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A",
+      "Capital Markets",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "New York capital markets office supporting advisory, financing, and sponsor relationships.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
@@ -5116,7 +6097,12 @@
     "latitude": 43.039,
     "longitude": -87.909,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Middle Market M&A", "Industrials", "Business Services", "Financial Sponsors"],
+    "groups": [
+      "Middle Market M&A",
+      "Industrials",
+      "Business Services",
+      "Financial Sponsors"
+    ],
     "officeHistory": "U.S. middle-market investment banking office supporting M&A and sponsor-backed clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -5135,13 +6121,18 @@
     "latitude": 37.7868,
     "longitude": -122.399,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Technology", "Software", "Growth", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology, growth, and commercial banking-adjacent capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-relevant office, but U.S. IB recruiting is more niche than U.S. BBs.",
     "logo": "/logos/cibc-capital-markets.png"
@@ -5154,7 +6145,12 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Healthcare", "Technology", "Life Sciences", "Capital Markets"],
+    "groups": [
+      "Healthcare",
+      "Technology",
+      "Life Sciences",
+      "Capital Markets"
+    ],
     "officeHistory": "Boston commercial and capital markets office supporting healthcare and technology-heavy regional clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -5173,7 +6169,12 @@
     "latitude": 39.753,
     "longitude": -105.0002,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Energy", "Infrastructure", "Business Services", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Infrastructure",
+      "Business Services",
+      "Capital Markets"
+    ],
     "officeHistory": "Mountain West office supporting regional corporate and financing clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5192,7 +6193,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "Canadian BB / MM in U.S. IB context",
-    "groups": ["Energy", "Business Services", "Industrials", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Business Services",
+      "Industrials",
+      "Capital Markets"
+    ],
     "officeHistory": "Texas commercial and capital markets office supporting regional corporate clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5211,13 +6217,20 @@
     "latitude": 40.7606,
     "longitude": -73.9826,
     "type": "BB / International BB",
-    "groups": ["M&A", "Financial Sponsors", "Capital Markets", "Healthcare", "Technology", "Financial Institutions"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Capital Markets",
+      "Healthcare",
+      "Technology",
+      "Financial Institutions"
+    ],
     "officeHistory": "Primary U.S. investment banking hub with broad advisory, capital markets, and sponsor coverage.",
     "estimatedHeadcount": "500+ bankers",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
-    "competitivenessScore": 9.0,
+    "competitivenessScore": 9,
     "internshipOpportunities": "Large but highly competitive summer analyst program across major groups.",
     "notes": "International BB with a significant U.S. investment banking platform.",
     "logo": "/logos/ubs.png"
@@ -5230,7 +6243,13 @@
     "latitude": 37.7929,
     "longitude": -122.3971,
     "type": "BB / International BB",
-    "groups": ["Technology", "Software", "Internet", "M&A", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Internet",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology, software, and growth-company clients.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 5,
@@ -5249,7 +6268,12 @@
     "latitude": 29.7378,
     "longitude": -95.4523,
     "type": "BB / International BB",
-    "groups": ["Energy", "Power & Utilities", "M&A", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Energy-focused office providing advisory and access to international capital markets.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
@@ -5268,7 +6292,13 @@
     "latitude": 41.882,
     "longitude": -87.6368,
     "type": "BB / International BB",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting regional corporate and sponsor clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 5,
@@ -5287,7 +6317,13 @@
     "latitude": 34.0595,
     "longitude": -118.4135,
     "type": "BB / International BB",
-    "groups": ["Media", "Entertainment", "Consumer & Retail", "Technology", "M&A"],
+    "groups": [
+      "Media",
+      "Entertainment",
+      "Consumer & Retail",
+      "Technology",
+      "M&A"
+    ],
     "officeHistory": "Southern California office supporting media, entertainment, technology, and consumer clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 5,
@@ -5306,7 +6342,14 @@
     "latitude": 37.7939,
     "longitude": -122.3988,
     "type": "EB-style fintech boutique",
-    "groups": ["FinTech", "Payments", "Software", "Digital Assets", "M&A", "Capital Raising"],
+    "groups": [
+      "FinTech",
+      "Payments",
+      "Software",
+      "Digital Assets",
+      "M&A",
+      "Capital Raising"
+    ],
     "officeHistory": "Headquarters office for a fintech-focused investment bank with deep strategic advisory and financing expertise.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 5,
@@ -5325,7 +6368,13 @@
     "latitude": 40.7517,
     "longitude": -73.9787,
     "type": "EB-style fintech boutique",
-    "groups": ["FinTech", "Payments", "InsurTech", "M&A", "Capital Raising"],
+    "groups": [
+      "FinTech",
+      "Payments",
+      "InsurTech",
+      "M&A",
+      "Capital Raising"
+    ],
     "officeHistory": "New York office supporting East Coast fintech clients, investors, and strategic buyers.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 5,
@@ -5344,7 +6393,13 @@
     "latitude": 25.7617,
     "longitude": -80.1918,
     "type": "EB-style fintech boutique",
-    "groups": ["FinTech", "Payments", "Digital Assets", "Latin America", "Capital Raising"],
+    "groups": [
+      "FinTech",
+      "Payments",
+      "Digital Assets",
+      "Latin America",
+      "Capital Raising"
+    ],
     "officeHistory": "Miami office supporting fintech and cross-border client activity.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 5,
@@ -5363,7 +6418,13 @@
     "latitude": 42.4734,
     "longitude": -83.2219,
     "type": "LMM Boutique / advisory",
-    "groups": ["M&A", "Industrials", "Automotive", "Family-Owned Businesses", "Transaction Advisory"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Automotive",
+      "Family-Owned Businesses",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Detroit-area office tied to Plante Moran's corporate finance and transaction advisory platform.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5382,7 +6443,13 @@
     "latitude": 41.8819,
     "longitude": -87.6389,
     "type": "LMM Boutique / advisory",
-    "groups": ["M&A", "Industrials", "Business Services", "Private Equity", "Transaction Advisory"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Business Services",
+      "Private Equity",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Chicago office supporting middle-market and private equity transaction advisory clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5401,7 +6468,13 @@
     "latitude": 41.5052,
     "longitude": -81.6906,
     "type": "LMM Boutique / advisory",
-    "groups": ["M&A", "Industrials", "Healthcare", "Family-Owned Businesses", "Transaction Advisory"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Healthcare",
+      "Family-Owned Businesses",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Cleveland office supporting Ohio middle-market clients and transaction advisory work.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5420,7 +6493,12 @@
     "latitude": 42.9634,
     "longitude": -85.6681,
     "type": "LMM Boutique / advisory",
-    "groups": ["M&A", "Family-Owned Businesses", "Manufacturing", "Business Services"],
+    "groups": [
+      "M&A",
+      "Family-Owned Businesses",
+      "Manufacturing",
+      "Business Services"
+    ],
     "officeHistory": "West Michigan office supporting family-owned and founder-led middle-market clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -5439,7 +6517,13 @@
     "latitude": 40.7604,
     "longitude": -73.9806,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Capital Markets", "Structured Finance", "Financial Institutions", "Infrastructure", "M&A"],
+    "groups": [
+      "Capital Markets",
+      "Structured Finance",
+      "Financial Institutions",
+      "Infrastructure",
+      "M&A"
+    ],
     "officeHistory": "Primary U.S. CIB office with long-standing corporate, financial institutions, and financing coverage.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -5458,7 +6542,12 @@
     "latitude": 29.7589,
     "longitude": -95.3677,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Project Finance"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Project Finance"
+    ],
     "officeHistory": "Houston CIB office supporting energy, infrastructure, and project finance clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -5477,13 +6566,18 @@
     "latitude": 41.8807,
     "longitude": -87.6348,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Industrials", "Agribusiness", "Structured Finance", "Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Agribusiness",
+      "Structured Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Midwest office supporting industrial, agricultural, and financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional financing and corporate coverage office.",
     "logo": "/logos/credit-agricole.png"
@@ -5496,7 +6590,12 @@
     "latitude": 37.4215,
     "longitude": -122.2068,
     "type": "International BB / MM in U.S. IB context",
-    "groups": ["Technology", "Growth", "Venture-Backed Companies", "Structured Finance"],
+    "groups": [
+      "Technology",
+      "Growth",
+      "Venture-Backed Companies",
+      "Structured Finance"
+    ],
     "officeHistory": "California office supporting technology and cross-border corporate clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 4,
@@ -5515,7 +6614,12 @@
     "latitude": 40.7606,
     "longitude": -73.9826,
     "type": "International BB / niche U.S. presence",
-    "groups": ["Capital Markets", "Financial Institutions", "Corporate Coverage", "Structured Finance"],
+    "groups": [
+      "Capital Markets",
+      "Financial Institutions",
+      "Corporate Coverage",
+      "Structured Finance"
+    ],
     "officeHistory": "U.S. branch supporting European corporate clients, institutional investors, and capital markets activity.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -5534,7 +6638,12 @@
     "latitude": 40.753,
     "longitude": -73.997,
     "type": "International BB / niche U.S. presence",
-    "groups": ["Capital Markets", "Corporate Banking", "Financial Institutions", "Sustainable Finance"],
+    "groups": [
+      "Capital Markets",
+      "Corporate Banking",
+      "Financial Institutions",
+      "Sustainable Finance"
+    ],
     "officeHistory": "U.S. CIB branch supporting corporate and institutional clients with cross-border connectivity.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
@@ -5553,7 +6662,13 @@
     "latitude": 29.7456,
     "longitude": -95.4613,
     "type": "International BB / niche U.S. presence",
-    "groups": ["Energy", "Cleantech", "Infrastructure", "Sustainable Finance", "Capital Markets"],
+    "groups": [
+      "Energy",
+      "Cleantech",
+      "Infrastructure",
+      "Sustainable Finance",
+      "Capital Markets"
+    ],
     "officeHistory": "Houston office focused on energy, cleantech, and Corporate & Investment Banking expansion in the U.S.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -5572,13 +6687,19 @@
     "latitude": 40.4417,
     "longitude": -80.0004,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Industrials", "Business Services", "Public Finance", "Corporate Banking"],
+    "groups": [
+      "Debt Capital Markets",
+      "Industrials",
+      "Business Services",
+      "Public Finance",
+      "Corporate Banking"
+    ],
     "officeHistory": "Headquarters-adjacent capital markets platform supporting middle-market and corporate clients.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Regular analyst opportunities with capital markets and corporate banking adjacency.",
     "notes": "Regional bank platform with middle-market capital markets and advisory exposure.",
     "logo": "/logos/pnc-capital-markets.png"
@@ -5591,7 +6712,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Financial Sponsors", "Healthcare", "Technology", "Capital Markets"],
+    "groups": [
+      "Debt Capital Markets",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "New York office supporting institutional distribution, sponsors, and capital markets activity.",
     "estimatedHeadcount": "75-150 bankers",
     "prestigeStars": 3,
@@ -5610,7 +6737,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Business Services", "Debt Capital Markets", "Public Finance"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Debt Capital Markets",
+      "Public Finance"
+    ],
     "officeHistory": "Midwest office supporting regional middle-market and institutional capital markets clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -5629,7 +6761,12 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM / regional bank platform",
-    "groups": ["Leveraged Finance", "Financial Sponsors", "Debt Capital Markets", "Corporate Banking"],
+    "groups": [
+      "Leveraged Finance",
+      "Financial Sponsors",
+      "Debt Capital Markets",
+      "Corporate Banking"
+    ],
     "officeHistory": "Charlotte office supporting financing, sponsors, and regional corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5648,7 +6785,12 @@
     "latitude": 33.7488,
     "longitude": -84.3877,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Healthcare", "Business Services", "Public Finance"],
+    "groups": [
+      "Debt Capital Markets",
+      "Healthcare",
+      "Business Services",
+      "Public Finance"
+    ],
     "officeHistory": "Southeast office supporting regional corporate and institutional capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5667,7 +6809,12 @@
     "latitude": 39.2904,
     "longitude": -76.6122,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Public Finance", "Healthcare", "Business Services"],
+    "groups": [
+      "Debt Capital Markets",
+      "Public Finance",
+      "Healthcare",
+      "Business Services"
+    ],
     "officeHistory": "Mid-Atlantic capital markets office supporting regional corporate and municipal clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -5686,7 +6833,12 @@
     "latitude": 42.8864,
     "longitude": -78.8784,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Industrials", "Business Services", "Corporate Banking"],
+    "groups": [
+      "Debt Capital Markets",
+      "Industrials",
+      "Business Services",
+      "Corporate Banking"
+    ],
     "officeHistory": "Headquarters-market office supporting regional corporate clients and financing activity.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -5705,7 +6857,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Financial Sponsors", "Capital Markets", "Corporate Banking"],
+    "groups": [
+      "Debt Capital Markets",
+      "Financial Sponsors",
+      "Capital Markets",
+      "Corporate Banking"
+    ],
     "officeHistory": "New York office supporting institutional clients and capital markets execution.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5724,7 +6881,13 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM / regional bank platform",
-    "groups": ["Leveraged Finance", "Financial Sponsors", "Debt Capital Markets", "Industrials", "Financial Institutions"],
+    "groups": [
+      "Leveraged Finance",
+      "Financial Sponsors",
+      "Debt Capital Markets",
+      "Industrials",
+      "Financial Institutions"
+    ],
     "officeHistory": "Major regional bank securities hub supporting financing, sponsors, and sector coverage.",
     "estimatedHeadcount": "200-350 bankers",
     "prestigeStars": 4,
@@ -5743,7 +6906,13 @@
     "latitude": 33.7488,
     "longitude": -84.3877,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Business Services", "Healthcare", "Debt Capital Markets", "M&A"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Healthcare",
+      "Debt Capital Markets",
+      "M&A"
+    ],
     "officeHistory": "Southeast office supporting corporate, sponsor, and capital markets clients.",
     "estimatedHeadcount": "150-300 bankers",
     "prestigeStars": 4,
@@ -5762,7 +6931,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / regional bank platform",
-    "groups": ["M&A", "Financial Sponsors", "Healthcare", "Technology", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology",
+      "Capital Markets"
+    ],
     "officeHistory": "New York office supporting sponsor coverage, advisory, and institutional capital markets.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 4,
@@ -5781,7 +6956,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM / regional bank platform",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Debt Capital Markets"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Energy-focused office supporting advisory and financing for energy clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 4,
@@ -5800,7 +6980,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM / regional bank platform",
-    "groups": ["Technology", "Software", "Growth", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology clients and capital markets execution.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -5819,7 +7004,12 @@
     "latitude": 39.9612,
     "longitude": -82.9988,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Industrials", "Business Services", "Corporate Banking"],
+    "groups": [
+      "Debt Capital Markets",
+      "Industrials",
+      "Business Services",
+      "Corporate Banking"
+    ],
     "officeHistory": "Headquarters-market capital markets office supporting middle-market and corporate clients.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -5838,7 +7028,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Business Services", "Debt Capital Markets", "Financial Sponsors"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Debt Capital Markets",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Midwest office supporting regional corporate and sponsor-backed clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -5857,7 +7052,12 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Healthcare", "Debt Capital Markets", "Business Services"],
+    "groups": [
+      "Industrials",
+      "Healthcare",
+      "Debt Capital Markets",
+      "Business Services"
+    ],
     "officeHistory": "Ohio office supporting regional middle-market companies and capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5876,7 +7076,12 @@
     "latitude": 42.3314,
     "longitude": -83.0458,
     "type": "MM / regional bank platform",
-    "groups": ["Automotive", "Industrials", "Debt Capital Markets", "Business Services"],
+    "groups": [
+      "Automotive",
+      "Industrials",
+      "Debt Capital Markets",
+      "Business Services"
+    ],
     "officeHistory": "Michigan office supporting automotive, industrial, and regional corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5895,7 +7100,12 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Agribusiness", "Consumer & Retail", "Debt Capital Markets"],
+    "groups": [
+      "Industrials",
+      "Agribusiness",
+      "Consumer & Retail",
+      "Debt Capital Markets"
+    ],
     "officeHistory": "Upper Midwest office supporting regional corporate and capital markets clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5914,7 +7124,12 @@
     "latitude": 40.4417,
     "longitude": -80.0004,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Industrials", "Business Services", "Corporate Banking"],
+    "groups": [
+      "Debt Capital Markets",
+      "Industrials",
+      "Business Services",
+      "Corporate Banking"
+    ],
     "officeHistory": "Pittsburgh-area capital markets platform supporting regional corporate clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5933,13 +7148,18 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "MM / regional bank platform",
-    "groups": ["Industrials", "Business Services", "Debt Capital Markets", "Corporate Banking"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "Debt Capital Markets",
+      "Corporate Banking"
+    ],
     "officeHistory": "Regional capital markets office supporting Ohio middle-market clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 2,
-    "competitivenessScore": 6.0,
+    "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Small regional bank capital markets platform.",
     "logo": "/logos/f-n-b-capital-markets.png"
@@ -5952,13 +7172,18 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "MM / regional bank platform",
-    "groups": ["Debt Capital Markets", "Financial Sponsors", "Corporate Banking", "Business Services"],
+    "groups": [
+      "Debt Capital Markets",
+      "Financial Sponsors",
+      "Corporate Banking",
+      "Business Services"
+    ],
     "officeHistory": "Southeast office supporting regional financing and corporate banking clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 2,
-    "competitivenessScore": 6.0,
+    "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional bank platform with financing exposure rather than broad IB coverage.",
     "logo": "/logos/f-n-b-capital-markets.png"
@@ -5971,7 +7196,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "LMM Boutique / accounting-adjacent advisory",
-    "groups": ["M&A", "Transaction Advisory", "Industrials", "Business Services", "Private Equity"],
+    "groups": [
+      "M&A",
+      "Transaction Advisory",
+      "Industrials",
+      "Business Services",
+      "Private Equity"
+    ],
     "officeHistory": "Accounting-adjacent advisory office supporting lower-middle-market M&A and transaction advisory.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -5990,7 +7221,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "LMM Boutique / accounting-adjacent advisory",
-    "groups": ["M&A", "Transaction Advisory", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A",
+      "Transaction Advisory",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "New York advisory office supporting middle-market transactions and private equity clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -6009,7 +7246,13 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "LMM Boutique / accounting-adjacent advisory",
-    "groups": ["M&A", "Consumer & Retail", "Media", "Business Services", "Transaction Advisory"],
+    "groups": [
+      "M&A",
+      "Consumer & Retail",
+      "Media",
+      "Business Services",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Southern California office supporting transaction advisory and middle-market M&A.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6028,7 +7271,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "LMM Boutique / accounting-adjacent advisory",
-    "groups": ["M&A", "Business Services", "Industrials", "Transaction Advisory"],
+    "groups": [
+      "M&A",
+      "Business Services",
+      "Industrials",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Texas office supporting regional transaction advisory and lower-middle-market M&A.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6047,7 +7295,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / advisory and valuation platform",
-    "groups": ["M&A Advisory", "Valuation", "Transaction Advisory", "Industrials", "Business Services"],
+    "groups": [
+      "M&A Advisory",
+      "Valuation",
+      "Transaction Advisory",
+      "Industrials",
+      "Business Services"
+    ],
     "officeHistory": "Major advisory office supporting investment banking, valuation, and transaction advisory work.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -6066,7 +7320,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / advisory and valuation platform",
-    "groups": ["M&A Advisory", "Transaction Advisory", "Financial Sponsors", "Disputes & Investigations"],
+    "groups": [
+      "M&A Advisory",
+      "Transaction Advisory",
+      "Financial Sponsors",
+      "Disputes & Investigations"
+    ],
     "officeHistory": "New York office supporting advisory, valuation, and sponsor-related transaction work.",
     "estimatedHeadcount": "100-200 bankers",
     "prestigeStars": 3,
@@ -6085,7 +7344,13 @@
     "latitude": 42.3314,
     "longitude": -83.0458,
     "type": "MM / advisory and valuation platform",
-    "groups": ["M&A Advisory", "Automotive", "Industrials", "Valuation", "Transaction Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Automotive",
+      "Industrials",
+      "Valuation",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Michigan office supporting automotive, industrial, valuation, and transaction advisory clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -6104,7 +7369,12 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM / advisory and valuation platform",
-    "groups": ["M&A Advisory", "Energy", "Business Services", "Transaction Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Energy",
+      "Business Services",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Texas office supporting advisory, valuation, and middle-market transaction clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
@@ -6123,7 +7393,13 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM / advisory and valuation platform",
-    "groups": ["M&A Advisory", "Media", "Consumer & Retail", "Valuation", "Transaction Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Media",
+      "Consumer & Retail",
+      "Valuation",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Southern California office supporting advisory and valuation for West Coast clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -6142,7 +7418,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / advisory platform",
-    "groups": ["M&A Advisory", "Restructuring", "Valuation", "Transaction Advisory", "Financial Sponsors"],
+    "groups": [
+      "M&A Advisory",
+      "Restructuring",
+      "Valuation",
+      "Transaction Advisory",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Major advisory office supporting investment banking, restructuring, valuation, and transaction advisory services.",
     "estimatedHeadcount": "500+ advisory professionals",
     "prestigeStars": 4,
@@ -6161,7 +7443,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / advisory platform",
-    "groups": ["M&A Advisory", "Valuation", "Transaction Advisory", "Industrials", "Business Services"],
+    "groups": [
+      "M&A Advisory",
+      "Valuation",
+      "Transaction Advisory",
+      "Industrials",
+      "Business Services"
+    ],
     "officeHistory": "Midwest advisory office supporting valuation, transaction advisory, and middle-market clients.",
     "estimatedHeadcount": "200-350 advisory professionals",
     "prestigeStars": 4,
@@ -6180,7 +7468,13 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM / advisory platform",
-    "groups": ["M&A Advisory", "Valuation", "Media", "Consumer & Retail", "Transaction Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Valuation",
+      "Media",
+      "Consumer & Retail",
+      "Transaction Advisory"
+    ],
     "officeHistory": "Southern California advisory office supporting transaction, valuation, and sector-focused clients.",
     "estimatedHeadcount": "100-200 advisory professionals",
     "prestigeStars": 4,
@@ -6199,7 +7493,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM / advisory platform",
-    "groups": ["Technology", "Valuation", "Transaction Advisory", "M&A Advisory"],
+    "groups": [
+      "Technology",
+      "Valuation",
+      "Transaction Advisory",
+      "M&A Advisory"
+    ],
     "officeHistory": "Bay Area advisory office supporting technology clients and valuation work.",
     "estimatedHeadcount": "75-150 advisory professionals",
     "prestigeStars": 4,
@@ -6218,7 +7517,13 @@
     "latitude": 42.3555,
     "longitude": -71.0556,
     "type": "MM / advisory platform",
-    "groups": ["Healthcare", "Life Sciences", "Valuation", "Transaction Advisory", "M&A Advisory"],
+    "groups": [
+      "Healthcare",
+      "Life Sciences",
+      "Valuation",
+      "Transaction Advisory",
+      "M&A Advisory"
+    ],
     "officeHistory": "Boston advisory office supporting healthcare, life sciences, and valuation clients.",
     "estimatedHeadcount": "75-150 advisory professionals",
     "prestigeStars": 4,
@@ -6237,7 +7542,13 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM / advisory platform",
-    "groups": ["Energy", "Business Services", "Valuation", "Transaction Advisory", "M&A Advisory"],
+    "groups": [
+      "Energy",
+      "Business Services",
+      "Valuation",
+      "Transaction Advisory",
+      "M&A Advisory"
+    ],
     "officeHistory": "Texas advisory office supporting valuation, transaction advisory, and regional corporate clients.",
     "estimatedHeadcount": "75-150 advisory professionals",
     "prestigeStars": 4,
@@ -6256,7 +7567,13 @@
     "latitude": 40.7069,
     "longitude": -74.0113,
     "type": "International BB / niche U.S. IB presence",
-    "groups": ["Capital Markets", "Financial Institutions", "Infrastructure", "Sustainable Finance", "Corporate Coverage"],
+    "groups": [
+      "Capital Markets",
+      "Financial Institutions",
+      "Infrastructure",
+      "Sustainable Finance",
+      "Corporate Coverage"
+    ],
     "officeHistory": "Primary U.S. office supporting corporate and institutional clients with emerging markets connectivity.",
     "estimatedHeadcount": "300-500 bankers",
     "prestigeStars": 4,
@@ -6275,7 +7592,12 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "International BB / niche U.S. IB presence",
-    "groups": ["Energy", "Infrastructure", "Project Finance", "Sustainable Finance"],
+    "groups": [
+      "Energy",
+      "Infrastructure",
+      "Project Finance",
+      "Sustainable Finance"
+    ],
     "officeHistory": "Houston office supporting energy, infrastructure, and cross-border financing clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
@@ -6294,13 +7616,18 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "International BB / niche U.S. IB presence",
-    "groups": ["Technology", "FinTech", "Growth", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "FinTech",
+      "Growth",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology and venture-backed clients with global market access.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-adjacent office with niche U.S. IB recruiting.",
     "logo": "/logos/standard-chartered.png"
@@ -6313,13 +7640,19 @@
     "latitude": 34.0614,
     "longitude": -118.4145,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Consumer & Retail", "Business Services", "Healthcare", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Consumer & Retail",
+      "Business Services",
+      "Healthcare",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters office for a middle-market advisory boutique serving entrepreneurs and private equity clients.",
     "estimatedHeadcount": "50-100 bankers",
     "prestigeStars": 3,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Selective analyst seats with hands-on M&A exposure.",
     "notes": "Strong Southern California LMM and MM advisory platform.",
     "logo": "/logos/intrepid-investment-bankers.png"
@@ -6332,7 +7665,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Financial Sponsors", "Consumer & Retail", "Business Services"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Consumer & Retail",
+      "Business Services"
+    ],
     "officeHistory": "East Coast office supporting sponsor and founder-owned middle-market advisory work.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6351,7 +7689,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Industrials", "Business Services", "Consumer", "Financial Sponsors"],
+    "groups": [
+      "M&A",
+      "Industrials",
+      "Business Services",
+      "Consumer",
+      "Financial Sponsors"
+    ],
     "officeHistory": "U.S. office for an international middle-market M&A advisory firm.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -6370,7 +7714,12 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Consumer", "Media", "Business Services"],
+    "groups": [
+      "M&A",
+      "Consumer",
+      "Media",
+      "Business Services"
+    ],
     "officeHistory": "West Coast advisory office supporting middle-market consumer and services clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6389,7 +7738,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / LMM boutique",
-    "groups": ["M&A", "Financial Sponsors", "Business Services", "Healthcare"],
+    "groups": [
+      "M&A",
+      "Financial Sponsors",
+      "Business Services",
+      "Healthcare"
+    ],
     "officeHistory": "East Coast office supporting private equity and middle-market advisory clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6408,7 +7762,13 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "LMM Boutique",
-    "groups": ["Ownership Advisory", "ESOP Advisory", "M&A", "Business Services", "Industrials"],
+    "groups": [
+      "Ownership Advisory",
+      "ESOP Advisory",
+      "M&A",
+      "Business Services",
+      "Industrials"
+    ],
     "officeHistory": "Headquarters office for a transaction advisory boutique focused on ownership transition and middle-market clients.",
     "estimatedHeadcount": "25-75 bankers",
     "prestigeStars": 3,
@@ -6427,7 +7787,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "LMM Boutique",
-    "groups": ["Ownership Advisory", "M&A", "Industrials", "Business Services"],
+    "groups": [
+      "Ownership Advisory",
+      "M&A",
+      "Industrials",
+      "Business Services"
+    ],
     "officeHistory": "Chicago office supporting middle-market ownership transition and transaction advisory.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
@@ -6446,13 +7811,18 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "LMM Boutique",
-    "groups": ["Ownership Advisory", "M&A", "Business Services", "Industrials"],
+    "groups": [
+      "Ownership Advisory",
+      "M&A",
+      "Business Services",
+      "Industrials"
+    ],
     "officeHistory": "Texas office supporting ownership advisory and middle-market transaction clients.",
     "estimatedHeadcount": "10-50 bankers",
     "prestigeStars": 3,
     "payStars": 3,
     "competitivenessStars": 2,
-    "competitivenessScore": 6.0,
+    "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Specialized LMM advisory office.",
     "logo": "/logos/chartwell.png"
@@ -6465,7 +7835,13 @@
     "latitude": 41.4993,
     "longitude": -81.6944,
     "type": "LMM Boutique / insurance and financial services advisory",
-    "groups": ["Insurance Distribution", "Financial Services", "M&A", "Valuation", "Strategic Advisory"],
+    "groups": [
+      "Insurance Distribution",
+      "Financial Services",
+      "M&A",
+      "Valuation",
+      "Strategic Advisory"
+    ],
     "officeHistory": "Headquarters-market office focused on insurance distribution and financial services advisory.",
     "estimatedHeadcount": "75-150 bankers/advisors",
     "prestigeStars": 3,
@@ -6484,7 +7860,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "LMM Boutique / insurance and financial services advisory",
-    "groups": ["Insurance Distribution", "Financial Services", "M&A", "Private Capital"],
+    "groups": [
+      "Insurance Distribution",
+      "Financial Services",
+      "M&A",
+      "Private Capital"
+    ],
     "officeHistory": "New York office supporting insurance, financial services, and private capital advisory clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6503,7 +7884,12 @@
     "latitude": 42.9634,
     "longitude": -85.6681,
     "type": "LMM Boutique / insurance and financial services advisory",
-    "groups": ["Insurance Distribution", "M&A", "Valuation", "Strategic Advisory"],
+    "groups": [
+      "Insurance Distribution",
+      "M&A",
+      "Valuation",
+      "Strategic Advisory"
+    ],
     "officeHistory": "Regional office supporting insurance distribution advisory and valuation work.",
     "estimatedHeadcount": "10-50 bankers/advisors",
     "prestigeStars": 3,
@@ -6522,7 +7908,12 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Boutique / advisory platform",
-    "groups": ["Strategic Advisory", "Private Capital", "Family-Owned Businesses", "Financial Sponsors"],
+    "groups": [
+      "Strategic Advisory",
+      "Private Capital",
+      "Family-Owned Businesses",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters advisory platform serving wealthy families, entrepreneurs, and institutional relationships.",
     "estimatedHeadcount": "100-200 advisory professionals",
     "prestigeStars": 4,
@@ -6541,7 +7932,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "Boutique / advisory platform",
-    "groups": ["Technology", "Private Capital", "Entrepreneurs", "Strategic Advisory"],
+    "groups": [
+      "Technology",
+      "Private Capital",
+      "Entrepreneurs",
+      "Strategic Advisory"
+    ],
     "officeHistory": "Bay Area office serving technology entrepreneurs and private capital relationships.",
     "estimatedHeadcount": "25-75 advisory professionals",
     "prestigeStars": 4,
@@ -6560,7 +7956,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Boutique / advisory platform",
-    "groups": ["Private Capital", "Family-Owned Businesses", "Industrials", "Strategic Advisory"],
+    "groups": [
+      "Private Capital",
+      "Family-Owned Businesses",
+      "Industrials",
+      "Strategic Advisory"
+    ],
     "officeHistory": "Midwest advisory office serving entrepreneurs, families, and private capital relationships.",
     "estimatedHeadcount": "25-75 advisory professionals",
     "prestigeStars": 4,
@@ -6579,13 +7980,19 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "MM / strong global advisory platform",
-    "groups": ["M&A", "Restructuring", "Financial Sponsors", "Valuation Advisory", "Capital Markets"],
+    "groups": [
+      "M&A",
+      "Restructuring",
+      "Financial Sponsors",
+      "Valuation Advisory",
+      "Capital Markets"
+    ],
     "officeHistory": "Major advisory office with strong M&A, restructuring, financial sponsors, and valuation-adjacent capabilities.",
     "estimatedHeadcount": "300-500 bankers/advisors",
     "prestigeStars": 5,
     "payStars": 5,
     "competitivenessStars": 5,
-    "competitivenessScore": 9.0,
+    "competitivenessScore": 9,
     "internshipOpportunities": "Highly competitive analyst program across advisory, restructuring, and financial valuation teams.",
     "notes": "Strong global advisory platform; elite in restructuring and valuation-adjacent advisory.",
     "logo": "/logos/houlihan-lokey.png"
@@ -6598,7 +8005,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "MM / strong global advisory platform",
-    "groups": ["Industrials", "Business Services", "M&A", "Restructuring", "Financial Sponsors"],
+    "groups": [
+      "Industrials",
+      "Business Services",
+      "M&A",
+      "Restructuring",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Midwest office supporting industrial, services, sponsor, and restructuring advisory clients.",
     "estimatedHeadcount": "100-200 bankers/advisors",
     "prestigeStars": 4,
@@ -6617,7 +8030,13 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "MM / strong global advisory platform",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "Restructuring", "M&A"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "Restructuring",
+      "M&A"
+    ],
     "officeHistory": "Energy and infrastructure-focused advisory office with restructuring and transaction exposure.",
     "estimatedHeadcount": "75-150 bankers/advisors",
     "prestigeStars": 4,
@@ -6636,13 +8055,19 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "MM / strong global advisory platform",
-    "groups": ["Business Services", "Industrials", "Healthcare", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Business Services",
+      "Industrials",
+      "Healthcare",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Texas office supporting middle-market M&A and financial sponsor clients.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 4,
     "payStars": 5,
     "competitivenessStars": 4,
-    "competitivenessScore": 8.0,
+    "competitivenessScore": 8,
     "internshipOpportunities": "Selective regional analyst seats with sponsor-backed M&A exposure.",
     "notes": "Important Texas office for middle-market advisory.",
     "logo": "/logos/houlihan-lokey.png"
@@ -6655,7 +8080,13 @@
     "latitude": 33.7488,
     "longitude": -84.3877,
     "type": "MM / strong global advisory platform",
-    "groups": ["Business Services", "Healthcare", "Consumer & Retail", "M&A", "Financial Sponsors"],
+    "groups": [
+      "Business Services",
+      "Healthcare",
+      "Consumer & Retail",
+      "M&A",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Southeast advisory office supporting corporate, sponsor, and middle-market M&A clients.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 4,
@@ -6674,7 +8105,13 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "MM / strong global advisory platform",
-    "groups": ["Technology", "Software", "Growth", "M&A", "Capital Markets"],
+    "groups": [
+      "Technology",
+      "Software",
+      "Growth",
+      "M&A",
+      "Capital Markets"
+    ],
     "officeHistory": "Bay Area office supporting technology, software, and growth-company advisory.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 4,
@@ -6693,7 +8130,13 @@
     "latitude": 44.9778,
     "longitude": -93.265,
     "type": "MM / strong global advisory platform",
-    "groups": ["Industrials", "Consumer & Retail", "Business Services", "M&A", "Valuation Advisory"],
+    "groups": [
+      "Industrials",
+      "Consumer & Retail",
+      "Business Services",
+      "M&A",
+      "Valuation Advisory"
+    ],
     "officeHistory": "Upper Midwest advisory office supporting middle-market transaction and valuation clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 4,
@@ -6712,7 +8155,13 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Financial Sponsors", "Business Services", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Business Services",
+      "Transaction Services"
+    ],
     "officeHistory": "Core U.S. corporate finance office supporting middle-market M&A and capital advisory engagements.",
     "estimatedHeadcount": "75-150 bankers/advisors",
     "prestigeStars": 3,
@@ -6731,7 +8180,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Industrials", "Business Services", "Capital Advisory", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Industrials",
+      "Business Services",
+      "Capital Advisory",
+      "Transaction Services"
+    ],
     "officeHistory": "Midwest corporate finance office supporting middle-market M&A and transaction advisory work.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 3,
@@ -6750,7 +8205,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "New York corporate finance office supporting M&A advisory and capital advisory engagements.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 3,
@@ -6769,7 +8230,13 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Consumer & Retail", "Media", "Business Services", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Consumer & Retail",
+      "Media",
+      "Business Services",
+      "Transaction Services"
+    ],
     "officeHistory": "West Coast corporate finance office supporting transaction advisory and M&A work.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6788,7 +8255,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Financial Sponsors", "Healthcare", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Healthcare",
+      "Transaction Services"
+    ],
     "officeHistory": "New York corporate finance and deals office supporting middle-market advisory and transaction work.",
     "estimatedHeadcount": "75-150 bankers/advisors",
     "prestigeStars": 3,
@@ -6807,7 +8280,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Industrials", "Business Services", "Transaction Services", "Capital Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Industrials",
+      "Business Services",
+      "Transaction Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Midwest corporate finance office supporting transaction advisory and middle-market M&A.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 3,
@@ -6826,7 +8305,13 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "M&A Advisory", "Transaction Services"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "M&A Advisory",
+      "Transaction Services"
+    ],
     "officeHistory": "Houston deals office supporting energy, infrastructure, and transaction advisory clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6845,7 +8330,13 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["Technology", "Software", "M&A Advisory", "Transaction Services", "Capital Advisory"],
+    "groups": [
+      "Technology",
+      "Software",
+      "M&A Advisory",
+      "Transaction Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Bay Area deals office supporting technology transaction advisory and corporate finance work.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6864,7 +8355,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Financial Sponsors", "Healthcare", "Technology"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Healthcare",
+      "Technology"
+    ],
     "officeHistory": "New York corporate finance office supporting M&A, capital advisory, and EY transactions engagements.",
     "estimatedHeadcount": "75-150 bankers/advisors",
     "prestigeStars": 3,
@@ -6883,7 +8380,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Industrials", "Business Services", "Transaction Services", "Capital Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Industrials",
+      "Business Services",
+      "Transaction Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Midwest corporate finance office supporting middle-market M&A and transaction advisory.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 3,
@@ -6902,7 +8405,13 @@
     "latitude": 34.0522,
     "longitude": -118.2437,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Media", "Consumer & Retail", "Technology", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Media",
+      "Consumer & Retail",
+      "Technology",
+      "Transaction Services"
+    ],
     "officeHistory": "Southern California corporate finance office supporting M&A and transaction advisory work.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6921,7 +8430,13 @@
     "latitude": 29.7604,
     "longitude": -95.3698,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["Energy", "Power & Utilities", "Infrastructure", "M&A Advisory", "Capital Advisory"],
+    "groups": [
+      "Energy",
+      "Power & Utilities",
+      "Infrastructure",
+      "M&A Advisory",
+      "Capital Advisory"
+    ],
     "officeHistory": "Houston corporate finance and transactions office supporting energy and infrastructure clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6940,7 +8455,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Financial Sponsors", "Transaction Services", "Healthcare"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Financial Sponsors",
+      "Transaction Services",
+      "Healthcare"
+    ],
     "officeHistory": "New York corporate finance office supporting M&A, capital advisory, and transaction advisory engagements.",
     "estimatedHeadcount": "50-100 bankers/advisors",
     "prestigeStars": 3,
@@ -6959,7 +8480,13 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Industrials", "Business Services", "Transaction Services", "Capital Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Industrials",
+      "Business Services",
+      "Transaction Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Chicago office supporting middle-market M&A and transaction advisory work.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6978,7 +8505,13 @@
     "latitude": 35.2271,
     "longitude": -80.8431,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Capital Advisory", "Business Services", "Financial Sponsors", "Transaction Services"],
+    "groups": [
+      "M&A Advisory",
+      "Capital Advisory",
+      "Business Services",
+      "Financial Sponsors",
+      "Transaction Services"
+    ],
     "officeHistory": "Charlotte office supporting corporate finance and transaction advisory clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -6997,7 +8530,13 @@
     "latitude": 32.7767,
     "longitude": -96.797,
     "type": "Big 4 Corporate Finance / MM advisory",
-    "groups": ["M&A Advisory", "Energy", "Business Services", "Transaction Services", "Capital Advisory"],
+    "groups": [
+      "M&A Advisory",
+      "Energy",
+      "Business Services",
+      "Transaction Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Texas corporate finance office supporting transaction advisory and capital advisory clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 3,
@@ -7016,7 +8555,13 @@
     "latitude": 39.2904,
     "longitude": -76.6122,
     "type": "LMM Boutique / regional advisory",
-    "groups": ["M&A", "Family-Owned Businesses", "Business Services", "Industrials", "Healthcare Services"],
+    "groups": [
+      "M&A",
+      "Family-Owned Businesses",
+      "Business Services",
+      "Industrials",
+      "Healthcare Services"
+    ],
     "officeHistory": "Mid-Atlantic lower-middle-market advisory office serving founder-owned and family-owned businesses.",
     "estimatedHeadcount": "10-50 bankers/advisors",
     "prestigeStars": 3,
@@ -7035,7 +8580,12 @@
     "latitude": 38.8951,
     "longitude": -77.0364,
     "type": "LMM Boutique / regional advisory",
-    "groups": ["M&A", "Government Services", "Business Services", "Healthcare Services"],
+    "groups": [
+      "M&A",
+      "Government Services",
+      "Business Services",
+      "Healthcare Services"
+    ],
     "officeHistory": "Washington-area advisory office supporting lower-middle-market and regional business owners.",
     "estimatedHeadcount": "10-50 bankers/advisors",
     "prestigeStars": 3,
@@ -7054,7 +8604,13 @@
     "latitude": 40.758,
     "longitude": -73.9855,
     "type": "Healthcare-focused boutique / MM healthcare advisory",
-    "groups": ["Healthcare Services", "Healthcare IT", "Healthcare M&A", "Capital Advisory", "Financial Sponsors"],
+    "groups": [
+      "Healthcare Services",
+      "Healthcare IT",
+      "Healthcare M&A",
+      "Capital Advisory",
+      "Financial Sponsors"
+    ],
     "officeHistory": "Headquarters office for a healthcare-focused advisory platform with M&A and capital advisory capabilities.",
     "estimatedHeadcount": "100-200 bankers/advisors",
     "prestigeStars": 4,
@@ -7073,7 +8629,12 @@
     "latitude": 41.8781,
     "longitude": -87.6298,
     "type": "Healthcare-focused boutique / MM healthcare advisory",
-    "groups": ["Healthcare Services", "Provider Services", "Healthcare IT", "M&A"],
+    "groups": [
+      "Healthcare Services",
+      "Provider Services",
+      "Healthcare IT",
+      "M&A"
+    ],
     "officeHistory": "Midwest healthcare advisory office supporting provider services and healthcare technology clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 4,
@@ -7092,7 +8653,12 @@
     "latitude": 37.7932,
     "longitude": -122.3977,
     "type": "Healthcare-focused boutique / MM healthcare advisory",
-    "groups": ["Healthcare IT", "MedTech", "Healthcare Services", "Capital Advisory"],
+    "groups": [
+      "Healthcare IT",
+      "MedTech",
+      "Healthcare Services",
+      "Capital Advisory"
+    ],
     "officeHistory": "Bay Area healthcare advisory office supporting health technology, medtech, and healthcare services clients.",
     "estimatedHeadcount": "25-75 bankers/advisors",
     "prestigeStars": 4,
@@ -7111,13 +8677,18 @@
     "latitude": 36.1627,
     "longitude": -86.7816,
     "type": "Healthcare-focused boutique / MM healthcare advisory",
-    "groups": ["Healthcare Services", "Provider Services", "Healthcare M&A", "Capital Advisory"],
+    "groups": [
+      "Healthcare Services",
+      "Provider Services",
+      "Healthcare M&A",
+      "Capital Advisory"
+    ],
     "officeHistory": "Nashville office supporting healthcare services, provider, and capital advisory clients.",
     "estimatedHeadcount": "10-50 bankers/advisors",
     "prestigeStars": 4,
     "payStars": 4,
     "competitivenessStars": 3,
-    "competitivenessScore": 7.0,
+    "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Healthcare-focused advisory platform with strong provider services relevance.",
     "logo": "/logos/cain-brothers.png"
