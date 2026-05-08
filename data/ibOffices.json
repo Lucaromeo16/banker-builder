@@ -4,7 +4,7 @@
     "firm": "Goldman Sachs",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7145,
+    "latitude": 40.7147,
     "longitude": -74.0141,
     "type": "BB",
     "groups": [
@@ -25,18 +25,18 @@
     "internshipOpportunities": "Large summer analyst class with highly competitive placement across coverage and product groups.",
     "notes": "One of the deepest U.S. analyst platforms.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 West Street",
+    "zip": "10282",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "goldman-sachs-san-francisco",
     "firm": "Goldman Sachs",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7891,
-    "longitude": -122.3972,
+    "latitude": 37.792,
+    "longitude": -122.4037,
     "type": "BB",
     "groups": [
       "Technology",
@@ -53,18 +53,18 @@
     "internshipOpportunities": "Selective summer analyst seats focused heavily on technology and adjacent growth sectors.",
     "notes": "Strong fit for candidates with tech banking interest.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 California Street, 45th Floor",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-new-york",
     "firm": "Morgan Stanley",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7602,
-    "longitude": -73.9718,
+    "latitude": 40.7594,
+    "longitude": -73.9851,
     "type": "BB",
     "groups": [
       "M&A",
@@ -84,18 +84,18 @@
     "internshipOpportunities": "Large but extremely competitive summer analyst program across major groups.",
     "notes": "Core office for many of the firm's U.S. investment banking teams.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1585 Broadway",
+    "zip": "10036",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-menlo-park",
     "firm": "Morgan Stanley",
     "officeCity": "Menlo Park",
     "state": "CA",
-    "latitude": 37.4519,
-    "longitude": -122.1826,
+    "latitude": 37.4212,
+    "longitude": -122.2099,
     "type": "BB",
     "groups": [
       "Technology",
@@ -112,10 +112,10 @@
     "competitivenessScore": 9.25,
     "internshipOpportunities": "Small, selective summer analyst intake with technology-heavy deal exposure.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "2725 Sand Hill Road, Suite 200",
+    "zip": "94025",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": "Distinct Silicon Valley office focused on growth and technology."
   },
   {
@@ -181,8 +181,8 @@
     "firm": "Bank of America",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2273,
+    "longitude": -80.8428,
     "type": "BB",
     "groups": [
       "Financial Institutions",
@@ -198,10 +198,10 @@
     "competitivenessScore": 8.55,
     "internshipOpportunities": "Regular summer analyst opportunities, often appealing to candidates targeting Southeast banking.",
     "logo": "/logos/bank-of-america.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "100 North Tryon Street",
+    "zip": "28255",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -373,8 +373,8 @@
     "firm": "Lazard",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8789,
-    "longitude": -87.6359,
+    "latitude": 41.888,
+    "longitude": -87.6322,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -389,10 +389,10 @@
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "300 North LaSalle Street, Suite 2300",
+    "zip": "60654",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -880,8 +880,8 @@
     "firm": "Moelis & Company",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7592,
-    "longitude": -73.9726,
+    "latitude": 40.7597,
+    "longitude": -73.9717,
     "type": "EB",
     "groups": [
       "M&A",
@@ -899,18 +899,18 @@
     "internshipOpportunities": "Highly competitive summer analyst program with strong advisory and restructuring exposure.",
     "notes": "Core office for the firm's U.S. execution platform.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "399 Park Avenue, 4th Floor",
+    "zip": "10022",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-los-angeles",
     "firm": "Moelis & Company",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0614,
-    "longitude": -118.4145,
+    "latitude": 34.0616,
+    "longitude": -118.4175,
     "type": "EB",
     "groups": [
       "M&A",
@@ -927,17 +927,17 @@
     "internshipOpportunities": "Selective summer analyst seats with strong West Coast client exposure.",
     "notes": "Important office for candidates targeting Southern California advisory roles.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10100 Santa Monica Boulevard, Suite 1600",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-san-francisco",
     "firm": "Moelis & Company",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7952,
+    "latitude": 37.7955,
     "longitude": -122.3992,
     "type": "EB",
     "groups": [
@@ -955,18 +955,18 @@
     "internshipOpportunities": "Selective technology-focused analyst opportunities with lean class sizes.",
     "notes": "Good fit for candidates focused on technology and growth advisory.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Maritime Plaza, Suite 2500",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-chicago",
     "firm": "Moelis & Company",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8864,
-    "longitude": -87.6393,
+    "latitude": 41.886,
+    "longitude": -87.6397,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -983,18 +983,18 @@
     "internshipOpportunities": "Selective regional summer analyst seats with strong M&A execution exposure.",
     "notes": "Regional advisory office with meaningful Midwest corporate coverage.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "444 West Lake Street, Suite 1950",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-houston",
     "firm": "Moelis & Company",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7597,
-    "longitude": -95.3658,
+    "latitude": 29.7606,
+    "longitude": -95.3608,
     "type": "EB",
     "groups": [
       "Energy",
@@ -1011,18 +1011,18 @@
     "internshipOpportunities": "Selective energy banking analyst seats with strong sector expectations.",
     "notes": "Relevant for candidates with energy, infrastructure, or restructuring interest.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "Texas Tower, 845 Texas Avenue, 22nd Floor",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-boston",
     "firm": "Moelis & Company",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3588,
-    "longitude": -71.0568,
+    "latitude": 42.3589,
+    "longitude": -71.0575,
     "type": "EB",
     "groups": [
       "Healthcare",
@@ -1039,18 +1039,18 @@
     "internshipOpportunities": "Small regional analyst intake with competitive recruiting.",
     "notes": "Strong location for healthcare and growth-company coverage exposure.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "53 State Street, Suite 3803",
+    "zip": "02109",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "moelis-company-washington-dc",
     "firm": "Moelis & Company",
     "officeCity": "Washington",
     "state": "DC",
-    "latitude": 38.8951,
-    "longitude": -77.0364,
+    "latitude": 38.8936,
+    "longitude": -77.023,
     "type": "EB",
     "groups": [
       "Aerospace & Defense",
@@ -1067,10 +1067,10 @@
     "internshipOpportunities": "Limited internship visibility compared with larger Moelis offices.",
     "notes": "Best fit for candidates interested in government services and defense advisory.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "801 Pennsylvania Avenue NW, Suite 940",
+    "zip": "20004",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "guggenheim-securities-new-york",
@@ -9905,8 +9905,8 @@
     "firm": "Bank of America",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7128,
-    "longitude": -74.006,
+    "latitude": 40.7556,
+    "longitude": -73.9849,
     "type": "BB",
     "groups": [
       "M&A",
@@ -9927,18 +9927,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Flagship U.S. investment banking hub.",
     "logo": "/logos/bank-of-america.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Bryant Park",
+    "zip": "10036",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bank-of-america-chicago",
     "firm": "Bank of America",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8797,
+    "longitude": -87.6324,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -9956,18 +9956,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/bank-of-america.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "135 S. LaSalle Street",
+    "zip": "60603",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bank-of-america-san-francisco",
     "firm": "Bank of America",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.793,
+    "longitude": -122.4026,
     "type": "BB",
     "groups": [
       "Technology",
@@ -9985,18 +9985,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/bank-of-america.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "315 Montgomery Street",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bank-of-america-miami",
     "firm": "Bank of America",
     "officeCity": "Miami",
     "state": "FL",
-    "latitude": 25.7617,
-    "longitude": -80.1918,
+    "latitude": 25.7663,
+    "longitude": -80.1902,
     "type": "BB",
     "groups": [
       "LATAM",
@@ -10014,10 +10014,10 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Relevant for LATAM and cross-border coverage alongside Southeast client activity.",
     "logo": "/logos/bank-of-america.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "701 Brickell Avenue",
+    "zip": "33131",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-boston",
@@ -11074,8 +11074,8 @@
     "firm": "Goldman Sachs",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7605,
+    "longitude": -95.3639,
     "type": "BB",
     "groups": [
       "Energy",
@@ -11094,18 +11094,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Energy is the core local banking strength.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "609 Main Street, Suite 2100",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "goldman-sachs-chicago",
     "firm": "Goldman Sachs",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8807,
+    "longitude": -87.6363,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -11123,18 +11123,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Industrials and sponsors are key Chicago strengths.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "71 South Wacker Drive, Suite 1200",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "goldman-sachs-los-angeles",
     "firm": "Goldman Sachs",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0616,
+    "longitude": -118.4175,
     "type": "BB",
     "groups": [
       "Consumer/Retail",
@@ -11152,18 +11152,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10100 Santa Monica Boulevard, Suite 2600",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "goldman-sachs-dallas",
     "firm": "Goldman Sachs",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.7851,
+    "longitude": -96.7987,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -11181,10 +11181,10 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Important office, but secondary to New York, San Francisco, and Houston for core IB positioning.",
     "logo": "/logos/goldman-sachs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "717 North Harwood Street, Suite 1300",
+    "zip": "75201",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-baltimore",
@@ -11484,8 +11484,8 @@
     "firm": "Lazard",
     "officeCity": "Austin",
     "state": "TX",
-    "latitude": 30.2672,
-    "longitude": -97.7431,
+    "latitude": 30.2684,
+    "longitude": -97.7456,
     "type": "EB",
     "groups": [
       "Technology",
@@ -11503,18 +11503,18 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 W 6th Street, Suite 1650",
+    "zip": "78701",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-boston",
     "firm": "Lazard",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3506,
+    "longitude": -71.073,
     "type": "EB",
     "groups": [
       "Healthcare",
@@ -11532,18 +11532,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "222 Berkeley Street, Suite 1100-A",
+    "zip": "02116",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-charlotte",
     "firm": "Lazard",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2285,
+    "longitude": -80.8451,
     "type": "EB",
     "groups": [
       "Leveraged Finance",
@@ -11561,18 +11561,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Capital markets, sponsor, or corporate banking-adjacent exposure may be more prominent than traditional BB-style advisory.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "227 West Trade Street, Suite 1900",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-houston",
     "firm": "Lazard",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7606,
+    "longitude": -95.3634,
     "type": "EB",
     "groups": [
       "Energy",
@@ -11590,18 +11590,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Energy is the primary local sector strength.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "600 Travis Street, 33rd Floor",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-los-angeles",
     "firm": "Lazard",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0599,
+    "longitude": -118.4185,
     "type": "EB",
     "groups": [
       "Consumer/Retail",
@@ -11619,18 +11619,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10250 Constellation Boulevard, Suite 2650",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-minneapolis",
     "firm": "Lazard",
     "officeCity": "Minneapolis",
     "state": "MN",
-    "latitude": 44.9778,
-    "longitude": -93.265,
+    "latitude": 44.9768,
+    "longitude": -93.2708,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -11648,18 +11648,18 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Secondary office relative to Lazard’s major U.S. advisory hubs.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "80 South 8th Street, Suite 2700",
+    "zip": "55402",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-new-york",
     "firm": "Lazard",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7128,
-    "longitude": -74.006,
+    "latitude": 40.7587,
+    "longitude": -73.9792,
     "type": "EB",
     "groups": [
       "M&A",
@@ -11680,18 +11680,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Flagship U.S. office and core advisory recruiting hub.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "30 Rockefeller Plaza",
+    "zip": "10112",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lazard-san-francisco",
     "firm": "Lazard",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.7952,
+    "longitude": -122.3964,
     "type": "EB",
     "groups": [
       "Technology",
@@ -11709,10 +11709,10 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/lazard.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "4 Embarcadero Center, 24th Floor",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "marshberry-dana-point",
@@ -11806,8 +11806,8 @@
     "firm": "Moelis & Company",
     "officeCity": "West Palm Beach",
     "state": "FL",
-    "latitude": 26.7153,
-    "longitude": -80.0534,
+    "latitude": 26.7189,
+    "longitude": -80.0501,
     "type": "EB",
     "groups": [
       "Consumer/Retail",
@@ -11825,18 +11825,18 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Secondary relationship-driven and private-client-adjacent office.",
     "logo": "/logos/moelis-company.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "515 North Flagler Drive, Suite 2030",
+    "zip": "33401",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-san-francisco",
     "firm": "Morgan Stanley",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.792,
+    "longitude": -122.4037,
     "type": "BB",
     "groups": [
       "Technology",
@@ -11854,18 +11854,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 California Street",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-houston",
     "firm": "Morgan Stanley",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7606,
+    "longitude": -95.3634,
     "type": "BB",
     "groups": [
       "Energy",
@@ -11883,18 +11883,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "600 Travis Street, Suite 3700",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-chicago",
     "firm": "Morgan Stanley",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8789,
+    "longitude": -87.6361,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -11912,18 +11912,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "233 South Wacker Drive, Suite 9200",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-los-angeles",
     "firm": "Morgan Stanley",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.059,
+    "longitude": -118.4165,
     "type": "BB",
     "groups": [
       "Consumer/Retail",
@@ -11941,10 +11941,10 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/morgan-stanley.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1999 Avenue of the Stars, Suite 2400",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "morgan-stanley-charlotte",
