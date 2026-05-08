@@ -154,8 +154,8 @@
     "firm": "J.P. Morgan",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8841,
-    "longitude": -87.6324,
+    "latitude": 41.8816,
+    "longitude": -87.6296,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -170,10 +170,10 @@
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Selective regional summer analyst seats with strong Midwest client exposure.",
     "logo": "/logos/j-p-morgan.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "10 South Dearborn Street",
+    "zip": "60603",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -236,8 +236,8 @@
     "firm": "Evercore",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7614,
-    "longitude": -73.9776,
+    "latitude": 40.7594,
+    "longitude": -73.9739,
     "type": "EB",
     "groups": [
       "M&A",
@@ -254,10 +254,10 @@
     "competitivenessScore": 9.7,
     "internshipOpportunities": "Highly selective summer analyst program with strong advisory training.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "55 East 52nd Street",
+    "zip": "10055",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": "Flagship U.S. office and core recruiting hub."
   },
   {
@@ -265,8 +265,8 @@
     "firm": "Evercore",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7936,
-    "longitude": -122.4006,
+    "latitude": 37.7944,
+    "longitude": -122.3973,
     "type": "EB",
     "groups": [
       "Technology",
@@ -281,10 +281,10 @@
     "competitivenessScore": 9.35,
     "internshipOpportunities": "Very competitive summer seats, typically requiring strong technical preparation and networking.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "Three Embarcadero Center, Suite 1450",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -292,8 +292,8 @@
     "firm": "Centerview Partners",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.758,
-    "longitude": -73.9855,
+    "latitude": 40.7606,
+    "longitude": -73.9785,
     "type": "EB",
     "groups": [
       "M&A",
@@ -309,10 +309,10 @@
     "competitivenessScore": 9.65,
     "internshipOpportunities": "Very small and highly selective internship program.",
     "logo": "/logos/centerview-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "31 West 52nd Street, 22nd Floor",
+    "zip": "10019",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -320,8 +320,8 @@
     "firm": "PJT Partners",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7549,
-    "longitude": -73.984,
+    "latitude": 40.7569,
+    "longitude": -73.975,
     "type": "EB",
     "groups": [
       "Restructuring",
@@ -336,10 +336,10 @@
     "competitivenessScore": 9.55,
     "internshipOpportunities": "Highly selective analyst hiring, especially for restructuring-oriented candidates.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "280 Park Avenue",
+    "zip": "10017",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -400,8 +400,8 @@
     "firm": "Jefferies",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7567,
-    "longitude": -73.9863,
+    "latitude": 40.7603,
+    "longitude": -73.9734,
     "type": "MM",
     "groups": [
       "M&A",
@@ -419,10 +419,10 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Meaningful summer analyst class with strong deal exposure across coverage groups.",
     "logo": "/logos/jefferies.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "520 Madison Avenue",
+    "zip": "10022",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -457,8 +457,8 @@
     "firm": "Houlihan Lokey",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0599,
+    "longitude": -118.4185,
     "type": "MM",
     "groups": [
       "Restructuring",
@@ -475,10 +475,10 @@
     "internshipOpportunities": "Regular analyst recruiting with strong technical expectations.",
     "notes": "Headquarters office for a strong global advisory platform with M&A, restructuring, and valuation-adjacent expertise.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10250 Constellation Boulevard, 5th Floor",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-chicago",
@@ -741,8 +741,8 @@
     "firm": "Centerview Partners",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.792,
+    "longitude": -122.4037,
     "type": "EB",
     "groups": [
       "Technology",
@@ -759,18 +759,18 @@
     "internshipOpportunities": "Very limited summer analyst seats with heavy emphasis on technical strength and networking.",
     "notes": "Strong fit for candidates targeting high-touch advisory work with West Coast clients.",
     "logo": "/logos/centerview-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 California Street, Suite 4300",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "centerview-partners-menlo-park",
     "firm": "Centerview Partners",
     "officeCity": "Menlo Park",
     "state": "CA",
-    "latitude": 37.4519,
-    "longitude": -122.1826,
+    "latitude": 37.4549,
+    "longitude": -122.1817,
     "type": "EB",
     "groups": [
       "Technology",
@@ -787,10 +787,10 @@
     "internshipOpportunities": "Small and highly selective analyst opportunities, typically focused on West Coast coverage.",
     "notes": "Lean office with strong exposure to technology clients and senior bankers.",
     "logo": "/logos/centerview-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1302 El Camino Real, Suite 350",
+    "zip": "94025",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "gordon-dyal-co-new-york",
@@ -1077,8 +1077,8 @@
     "firm": "Guggenheim Securities",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.758,
-    "longitude": -73.9855,
+    "latitude": 40.7527,
+    "longitude": -73.9789,
     "type": "EB",
     "groups": [
       "Healthcare",
@@ -1096,18 +1096,18 @@
     "internshipOpportunities": "Competitive summer analyst class with strong healthcare and advisory exposure.",
     "notes": "Known for healthcare strength and growing sector coverage breadth.",
     "logo": "/logos/guggenheim-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "330 Madison Avenue",
+    "zip": "10017",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "guggenheim-securities-chicago",
     "firm": "Guggenheim Securities",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8807,
+    "longitude": -87.6347,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -1124,18 +1124,18 @@
     "internshipOpportunities": "Selective regional analyst seats with meaningful execution exposure.",
     "notes": "Relevant for Midwest candidates targeting an advisory-oriented platform.",
     "logo": "/logos/guggenheim-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "227 West Monroe Street",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "guggenheim-securities-san-francisco",
     "firm": "Guggenheim Securities",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.794,
+    "longitude": -122.3971,
     "type": "EB",
     "groups": [
       "Technology",
@@ -1152,10 +1152,10 @@
     "internshipOpportunities": "Small and selective analyst opportunities with sector-heavy coverage.",
     "notes": "Good fit for candidates interested in technology, healthcare, or energy transition clients.",
     "logo": "/logos/guggenheim-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "50 California Street",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "guggenheim-securities-houston",
@@ -1218,8 +1218,8 @@
     "firm": "Barclays",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7606,
-    "longitude": -73.9845,
+    "latitude": 40.7608,
+    "longitude": -73.9836,
     "type": "BB",
     "groups": [
       "M&A",
@@ -1239,18 +1239,18 @@
     "internshipOpportunities": "Large but competitive summer analyst class across coverage and product groups.",
     "notes": "Core U.S. office for Barclays' global investment banking platform.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "745 7th Avenue",
+    "zip": "10019",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-houston",
     "firm": "Barclays",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7554,
+    "longitude": -95.362,
     "type": "BB",
     "groups": [
       "Energy",
@@ -1267,18 +1267,18 @@
     "internshipOpportunities": "Selective energy banking analyst seats with strong sector focus.",
     "notes": "Relevant for candidates interested in energy, infrastructure, and financing assignments.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "Fulbright Tower, 1301 McKinney Street, Suite 400",
+    "zip": "77010",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-san-francisco",
     "firm": "Barclays",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7955,
-    "longitude": -122.3969,
+    "latitude": 37.792,
+    "longitude": -122.4037,
     "type": "BB",
     "groups": [
       "Technology",
@@ -1295,18 +1295,18 @@
     "internshipOpportunities": "Selective technology-focused summer analyst opportunities.",
     "notes": "Good fit for candidates targeting technology banking within a bulge bracket platform.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 California Street",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-menlo-park",
     "firm": "Barclays",
     "officeCity": "Menlo Park",
     "state": "CA",
-    "latitude": 37.4519,
-    "longitude": -122.1826,
+    "latitude": 37.4534,
+    "longitude": -122.1812,
     "type": "BB",
     "groups": [
       "Technology",
@@ -1323,18 +1323,18 @@
     "internshipOpportunities": "Limited regional analyst seats with technology-heavy exposure.",
     "notes": "Complements the San Francisco office for Bay Area technology coverage.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "155 Linfield Drive",
+    "zip": "94025",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-chicago",
     "firm": "Barclays",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8796,
-    "longitude": -87.6324,
+    "latitude": 41.8794,
+    "longitude": -87.633,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -1351,18 +1351,18 @@
     "internshipOpportunities": "Selective regional analyst opportunities with Midwest coverage exposure.",
     "notes": "Useful target for candidates seeking bulge bracket banking outside New York.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "190 S LaSalle Street",
+    "zip": "60603",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-los-angeles",
     "firm": "Barclays",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0599,
+    "longitude": -118.4185,
     "type": "BB",
     "groups": [
       "Media",
@@ -1379,18 +1379,18 @@
     "internshipOpportunities": "Limited regional summer seats with sector-focused recruiting.",
     "notes": "Strong fit for candidates interested in media and entertainment banking.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10250 Constellation Boulevard, 24th Floor",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-atlanta",
     "firm": "Barclays",
     "officeCity": "Atlanta",
     "state": "GA",
-    "latitude": 33.7488,
-    "longitude": -84.3877,
+    "latitude": 33.8478,
+    "longitude": -84.3696,
     "type": "BB",
     "groups": [
       "Financial Institutions",
@@ -1407,10 +1407,10 @@
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Regional coverage office rather than a broad national analyst hub.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3344 Peachtree Road NE, Suite 950",
+    "zip": "30326",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "liontree-new-york",
@@ -1645,7 +1645,7 @@
     "officeCity": "New York",
     "state": "NY",
     "latitude": 40.7686,
-    "longitude": -73.983,
+    "longitude": -73.9822,
     "type": "BB",
     "groups": [
       "M&A",
@@ -1664,18 +1664,18 @@
     "internshipOpportunities": "Competitive summer analyst class across coverage and product teams.",
     "notes": "Core U.S. hub for Deutsche Bank's investment banking franchise.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Columbus Circle",
+    "zip": "10019",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deutsche-bank-san-francisco",
     "firm": "Deutsche Bank",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7929,
-    "longitude": -122.3971,
+    "latitude": 37.7932,
+    "longitude": -122.3973,
     "type": "BB",
     "groups": [
       "Technology",
@@ -1692,18 +1692,18 @@
     "internshipOpportunities": "Selective regional analyst seats with technology and capital markets exposure.",
     "notes": "Relevant for candidates targeting technology banking at a global bank.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "101 California Street",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deutsche-bank-los-angeles",
     "firm": "Deutsche Bank",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.059,
+    "longitude": -118.4165,
     "type": "BB",
     "groups": [
       "Media",
@@ -1720,10 +1720,10 @@
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Sector-oriented office rather than a broad national analyst hub.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1999 Avenue of the Stars",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deutsche-bank-chicago",
@@ -1731,7 +1731,7 @@
     "officeCity": "Chicago",
     "state": "IL",
     "latitude": 41.8786,
-    "longitude": -87.6382,
+    "longitude": -87.6388,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -1748,18 +1748,18 @@
     "internshipOpportunities": "Limited regional analyst opportunities compared with New York.",
     "notes": "Relevant for candidates seeking Midwest coverage at a global bank.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "222 South Riverside Plaza",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deutsche-bank-boston",
     "firm": "Deutsche Bank",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3539,
+    "longitude": -71.0578,
     "type": "BB",
     "groups": [
       "Healthcare",
@@ -1776,10 +1776,10 @@
     "internshipOpportunities": "Smaller regional analyst presence with selective hiring.",
     "notes": "Most relevant for healthcare and technology coverage exposure.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "100 Summer Street, 8th Floor",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rothschild-co-new-york",
@@ -6866,8 +6866,8 @@
     "firm": "UBS",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7606,
-    "longitude": -73.9826,
+    "latitude": 40.7601,
+    "longitude": -73.9808,
     "type": "BB",
     "groups": [
       "M&A",
@@ -6886,10 +6886,10 @@
     "internshipOpportunities": "Large but highly competitive summer analyst program across major groups.",
     "notes": "International platform with a significant U.S. investment banking platform.",
     "logo": "/logos/ubs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1285 Avenue of the Americas",
+    "zip": "10019",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "ubs-san-francisco",
@@ -6953,8 +6953,8 @@
     "firm": "UBS",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.882,
-    "longitude": -87.6368,
+    "latitude": 41.8823,
+    "longitude": -87.6369,
     "type": "BB",
     "groups": [
       "Industrials",
@@ -6972,10 +6972,10 @@
     "internshipOpportunities": "Selective regional analyst seats with Midwest coverage exposure.",
     "notes": "Regional office for candidates seeking BB banking outside New York.",
     "logo": "/logos/ubs.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One North Wacker Drive",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "ubs-los-angeles",
@@ -8748,8 +8748,8 @@
     "firm": "Houlihan Lokey",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.758,
-    "longitude": -73.9855,
+    "latitude": 40.754,
+    "longitude": -73.9752,
     "type": "MM",
     "groups": [
       "M&A",
@@ -8767,18 +8767,18 @@
     "internshipOpportunities": "Highly competitive analyst program across advisory, restructuring, and financial valuation teams.",
     "notes": "Strong global advisory platform; elite in restructuring and valuation-adjacent advisory.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "245 Park Avenue, 20th Floor",
+    "zip": "10167",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-chicago",
     "firm": "Houlihan Lokey",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.88,
+    "longitude": -87.6366,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -8796,18 +8796,18 @@
     "internshipOpportunities": "Competitive regional analyst seats with strong middle-market advisory exposure.",
     "notes": "Strong Chicago option for middle-market M&A and restructuring.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "111 South Wacker Drive, 37th Floor",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-houston",
     "firm": "Houlihan Lokey",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7581,
+    "longitude": -95.3634,
     "type": "MM",
     "groups": [
       "Energy",
@@ -8825,18 +8825,18 @@
     "internshipOpportunities": "Selective energy and restructuring-oriented analyst opportunities.",
     "notes": "Energy-focused office within a top advisory and restructuring platform.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "811 Main Street, Suite 1900",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-dallas",
     "firm": "Houlihan Lokey",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.7945,
+    "longitude": -96.8039,
     "type": "MM",
     "groups": [
       "Business Services",
@@ -8854,18 +8854,18 @@
     "internshipOpportunities": "Selective regional analyst seats with sponsor-backed M&A exposure.",
     "notes": "Important Texas office for middle-market advisory.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2601 Olive Street, Suite 2500",
+    "zip": "75201",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-atlanta",
     "firm": "Houlihan Lokey",
     "officeCity": "Atlanta",
     "state": "GA",
-    "latitude": 33.7488,
-    "longitude": -84.3877,
+    "latitude": 33.8386,
+    "longitude": -84.3797,
     "type": "MM",
     "groups": [
       "Business Services",
@@ -8883,18 +8883,18 @@
     "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure.",
     "notes": "Southeast office with sponsor and middle-market M&A relevance.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3060 Peachtree Road NW, Suite 1500",
+    "zip": "30305",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-san-francisco",
     "firm": "Houlihan Lokey",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.7907,
+    "longitude": -122.4032,
     "type": "MM",
     "groups": [
       "Technology",
@@ -8912,18 +8912,18 @@
     "internshipOpportunities": "Selective technology-focused analyst seats.",
     "notes": "Technology-focused office within a broad advisory platform.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "333 Bush Street, 31st Floor",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-minneapolis",
     "firm": "Houlihan Lokey",
     "officeCity": "Minneapolis",
     "state": "MN",
-    "latitude": 44.9778,
-    "longitude": -93.265,
+    "latitude": 44.9762,
+    "longitude": -93.2671,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -8941,10 +8941,10 @@
     "internshipOpportunities": "Limited but selective regional analyst opportunities.",
     "notes": "Regional office with middle-market and valuation-adjacent relevance.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "225 South Sixth Street, Suite 4950",
+    "zip": "55402",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deloitte-corporate-finance-charlotte",
@@ -9471,7 +9471,7 @@
     "officeCity": "New York",
     "state": "NY",
     "latitude": 40.7638,
-    "longitude": -73.9727,
+    "longitude": -73.9731,
     "type": "EB",
     "groups": [
       "M&A",
@@ -9491,18 +9491,18 @@
     "internshipOpportunities": "Highly selective summer analyst opportunities with strong advisory exposure.",
     "notes": "Strong elite boutique platform with competitive analyst recruiting.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "767 Fifth Avenue",
+    "zip": "10153",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "perella-weinberg-partners-houston",
     "firm": "Perella Weinberg Partners",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7596,
-    "longitude": -95.3711,
+    "latitude": 29.7593,
+    "longitude": -95.3701,
     "type": "EB",
     "groups": [
       "Energy",
@@ -9521,18 +9521,18 @@
     "internshipOpportunities": "Highly selective energy-focused analyst visibility.",
     "notes": "Premier energy advisory presence within an elite boutique platform.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1111 Bagby Street, Suite 4900",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "perella-weinberg-partners-san-francisco",
     "firm": "Perella Weinberg Partners",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.793,
-    "longitude": -122.3971,
+    "latitude": 37.7938,
+    "longitude": -122.3976,
     "type": "EB",
     "groups": [
       "Technology",
@@ -9550,18 +9550,18 @@
     "internshipOpportunities": "Very selective regional analyst visibility focused on technology advisory.",
     "notes": "West Coast office with technology and growth advisory relevance.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One California Street, Suite 2250",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "perella-weinberg-partners-los-angeles",
     "firm": "Perella Weinberg Partners",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0584,
-    "longitude": -118.4146,
+    "latitude": 34.0594,
+    "longitude": -118.4138,
     "type": "EB",
     "groups": [
       "M&A",
@@ -9579,10 +9579,10 @@
     "internshipOpportunities": "Very selective regional analyst visibility.",
     "notes": "West Coast advisory office with sponsor, consumer, and media relevance.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2029 Century Park East, Suite 3100",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "perella-weinberg-partners-chicago",
@@ -9590,7 +9590,7 @@
     "officeCity": "Chicago",
     "state": "IL",
     "latitude": 41.8846,
-    "longitude": -87.6386,
+    "longitude": -87.6389,
     "type": "EB",
     "groups": [
       "M&A",
@@ -9608,18 +9608,18 @@
     "internshipOpportunities": "Very selective regional analyst visibility.",
     "notes": "Midwest advisory office with industrials and sponsor relevance.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "150 N. Riverside Plaza, Suite 3880",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "perella-weinberg-partners-denver",
     "firm": "Perella Weinberg Partners",
     "officeCity": "Denver",
     "state": "CO",
-    "latitude": 39.7511,
-    "longitude": -104.9974,
+    "latitude": 39.7502,
+    "longitude": -104.9997,
     "type": "EB",
     "groups": [
       "Energy",
@@ -9637,10 +9637,10 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Smaller regional advisory office within a strong elite boutique platform.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1623 Blake Street, Suite 200",
+    "zip": "80202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "citizens-new-york",
@@ -10024,8 +10024,8 @@
     "firm": "Barclays",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3556,
+    "longitude": -71.0533,
     "type": "BB",
     "groups": [
       "Healthcare",
@@ -10043,18 +10043,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "125 High Street, 16th Floor",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-washington",
     "firm": "Barclays",
     "officeCity": "Washington",
     "state": "DC",
-    "latitude": 38.9072,
-    "longitude": -77.0369,
+    "latitude": 38.9022,
+    "longitude": -77.0455,
     "type": "BB",
     "groups": [
       "Government Services",
@@ -10072,18 +10072,18 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Secondary office with government, infrastructure, and policy adjacency.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2001 K Street NW",
+    "zip": "20005",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "barclays-seattle",
     "firm": "Barclays",
     "officeCity": "Seattle",
     "state": "WA",
-    "latitude": 47.6062,
-    "longitude": -122.3321,
+    "latitude": 47.6047,
+    "longitude": -122.3308,
     "type": "BB",
     "groups": [
       "Technology",
@@ -10101,10 +10101,10 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Secondary office with technology coverage adjacency.",
     "logo": "/logos/barclays.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "701 Fifth Avenue, Suite 7101",
+    "zip": "98104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bdo-capital-advisors-boston",
@@ -10488,8 +10488,8 @@
     "firm": "Citi",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7128,
-    "longitude": -74.006,
+    "latitude": 40.7209,
+    "longitude": -74.0119,
     "type": "BB",
     "groups": [
       "M&A",
@@ -10510,10 +10510,10 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Major platform office with broad recruiting relevance.",
     "logo": "/logos/citi.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "388 Greenwich Street",
+    "zip": "10013",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "citi-san-francisco",
@@ -10784,8 +10784,8 @@
     "firm": "Deutsche Bank",
     "officeCity": "Washington",
     "state": "DC",
-    "latitude": 38.9072,
-    "longitude": -77.0369,
+    "latitude": 38.9008,
+    "longitude": -77.0395,
     "type": "BB",
     "groups": [
       "Government Services",
@@ -10803,10 +10803,10 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Secondary specialized office rather than a flagship U.S. advisory hub.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "801 17th Street NW",
+    "zip": "20006",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "deutsche-bank-houston",
@@ -10842,8 +10842,8 @@
     "firm": "Deutsche Bank",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2262,
+    "longitude": -80.8441,
     "type": "BB",
     "groups": [
       "Leveraged Finance",
@@ -10861,18 +10861,18 @@
     "internshipOpportunities": "Competitive summer analyst visibility across major banking groups.",
     "notes": "Capital markets and LevFin adjacency are more prominent than flagship advisory coverage.",
     "logo": "/logos/deutsche-bank.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 South Tryon Street",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-boston",
     "firm": "Evercore",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3568,
+    "longitude": -71.0527,
     "type": "EB",
     "groups": [
       "Healthcare",
@@ -10890,18 +10890,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One International Place, Suite 1830",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-chicago",
     "firm": "Evercore",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8823,
+    "longitude": -87.6369,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -10919,18 +10919,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One North Wacker Drive, Suite 3550",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-dallas",
     "firm": "Evercore",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.8142,
+    "longitude": -96.8113,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -10948,18 +10948,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "4143 Maple Avenue, Suite 150",
+    "zip": "75219",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-houston",
     "firm": "Evercore",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7564,
+    "longitude": -95.3638,
     "type": "EB",
     "groups": [
       "Energy",
@@ -10977,18 +10977,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2 Houston Center, 909 Fannin Street, Suite 1800",
+    "zip": "77010",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-los-angeles",
     "firm": "Evercore",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0479,
+    "longitude": -118.4459,
     "type": "EB",
     "groups": [
       "Consumer/Retail",
@@ -11006,18 +11006,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "11111 Santa Monica Boulevard, Suite 650",
+    "zip": "90025",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-menlo-park",
     "firm": "Evercore",
     "officeCity": "Menlo Park",
     "state": "CA",
-    "latitude": 37.453,
-    "longitude": -122.1817,
+    "latitude": 37.4201,
+    "longitude": -122.2057,
     "type": "EB",
     "groups": [
       "Technology",
@@ -11035,18 +11035,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Technology M&A is the primary local strength.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2460 Sand Hill Road, Suite 200",
+    "zip": "94025",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "evercore-richmond",
     "firm": "Evercore",
     "officeCity": "Richmond",
     "state": "VA",
-    "latitude": 37.5407,
-    "longitude": -77.436,
+    "latitude": 37.6026,
+    "longitude": -77.5433,
     "type": "EB",
     "groups": [
       "Government Services",
@@ -11064,10 +11064,10 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Secondary office with more limited recruiting visibility than major Evercore hubs.",
     "logo": "/logos/evercore.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "8001 Franklin Farms Drive, Suite 206",
+    "zip": "23229",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "goldman-sachs-houston",
@@ -11191,8 +11191,8 @@
     "firm": "Houlihan Lokey",
     "officeCity": "Baltimore",
     "state": "MD",
-    "latitude": 39.2904,
-    "longitude": -76.6122,
+    "latitude": 39.4192,
+    "longitude": -76.6657,
     "type": "MM",
     "groups": [
       "Valuation Advisory",
@@ -11210,18 +11210,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Valuation, restructuring, and government contractor adjacency are the core local angles.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2330 W. Joppa Road, Suite 300",
+    "zip": "21093",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-boston",
     "firm": "Houlihan Lokey",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3564,
+    "longitude": -71.0566,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -11239,18 +11239,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Post Office Square, Suite 2300",
+    "zip": "02109",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-charlotte",
     "firm": "Houlihan Lokey",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2315,
+    "longitude": -80.8467,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -11268,18 +11268,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Capital markets, sponsor, or corporate banking-adjacent exposure may be more prominent than traditional BB-style advisory.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "508 West 5th Street, Suite 225",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-miami",
     "firm": "Houlihan Lokey",
     "officeCity": "Miami",
     "state": "FL",
-    "latitude": 25.7617,
-    "longitude": -80.1918,
+    "latitude": 25.7289,
+    "longitude": -80.2405,
     "type": "MM",
     "groups": [
       "Consumer/Retail",
@@ -11297,10 +11297,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/houlihan-lokey.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3390 Mary Street, Suite 116",
+    "zip": "33133",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "houlihan-lokey-washington",
@@ -12067,8 +12067,8 @@
     "firm": "Perella Weinberg Partners",
     "officeCity": "Greenwich",
     "state": "CT",
-    "latitude": 41.0262,
-    "longitude": -73.6282,
+    "latitude": 41.0265,
+    "longitude": -73.6269,
     "type": "EB",
     "groups": [
       "Financial Sponsors",
@@ -12085,10 +12085,10 @@
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Secondary relationship-driven office with limited analyst visibility.",
     "logo": "/logos/perella-weinberg-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3 Pickwick Plaza, Suite 102",
+    "zip": "06830",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-new-york",
@@ -12272,8 +12272,8 @@
     "firm": "PJT Partners",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3589,
+    "longitude": -71.0575,
     "type": "EB",
     "groups": [
       "Strategic Advisory",
@@ -12291,18 +12291,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Strategic advisory and restructuring are key Boston angles.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "53 State Street, 37th Floor, Suite 3703",
+    "zip": "02109",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "pjt-partners-chicago",
     "firm": "PJT Partners",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8819,
+    "longitude": -87.634,
     "type": "EB",
     "groups": [
       "Industrials",
@@ -12320,18 +12320,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 West Madison Street, 38th Floor, Suite 3800",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "pjt-partners-houston",
     "firm": "PJT Partners",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7606,
+    "longitude": -95.3634,
     "type": "EB",
     "groups": [
       "Restructuring",
@@ -12349,18 +12349,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Restructuring and energy adjacency are key local strengths.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "600 Travis Street, 49th Floor, Suite 4900",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "pjt-partners-los-angeles",
     "firm": "PJT Partners",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0171,
+    "longitude": -118.5009,
     "type": "EB",
     "groups": [
       "Consumer/Retail",
@@ -12378,18 +12378,18 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "100 Wilshire Boulevard, 12th Floor, Suite 1230",
+    "zip": "90401",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "pjt-partners-san-francisco",
     "firm": "PJT Partners",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.7943,
+    "longitude": -122.3948,
     "type": "EB",
     "groups": [
       "Technology",
@@ -12407,10 +12407,10 @@
     "internshipOpportunities": "Highly selective analyst visibility with advisory-focused exposure.",
     "notes": "Advisory-focused office with selective recruiting visibility.",
     "logo": "/logos/pjt-partners.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1 Market Plaza, 27th Floor, Steuart Tower",
+    "zip": "94105",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-charlotte",
