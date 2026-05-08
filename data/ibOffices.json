@@ -551,7 +551,7 @@
     "state": "OH",
     "latitude": 41.4993,
     "longitude": -81.6944,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -575,7 +575,7 @@
     "state": "CO",
     "latitude": 39.7392,
     "longitude": -104.9903,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Technology",
@@ -5292,7 +5292,7 @@
     "state": "MA",
     "latitude": 42.3572,
     "longitude": -71.0552,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Capital Advisory",
@@ -5317,7 +5317,7 @@
     "state": "CO",
     "latitude": 39.7508,
     "longitude": -104.9955,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Energy",
       "Infrastructure",
@@ -5341,7 +5341,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Industrials",
       "Business Services",
@@ -5365,7 +5365,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Capital Advisory",
@@ -5390,7 +5390,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Business Services",
       "Energy",
@@ -5414,7 +5414,7 @@
     "state": "FL",
     "latitude": 27.9506,
     "longitude": -82.4572,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Consumer & Retail",
       "Healthcare",
@@ -5438,7 +5438,7 @@
     "state": "CA",
     "latitude": 33.6846,
     "longitude": -117.8265,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Technology",
       "Consumer & Retail",
@@ -5585,7 +5585,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Industrials",
       "Infrastructure",
@@ -5609,7 +5609,7 @@
     "state": "MA",
     "latitude": 42.3584,
     "longitude": -71.0568,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Healthcare & Life Sciences",
       "Technology",
@@ -5633,7 +5633,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Consumer",
       "Technology",
@@ -5657,7 +5657,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Capital Markets",
@@ -5875,7 +5875,7 @@
     "state": "WA",
     "latitude": 47.6062,
     "longitude": -122.3321,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Technology",
       "Software",
@@ -5900,7 +5900,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Consumer",
       "Media",
@@ -5924,7 +5924,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "Industrials",
       "Consumer",
@@ -5948,7 +5948,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Technology",
@@ -6417,7 +6417,7 @@
     "state": "MI",
     "latitude": 42.4734,
     "longitude": -83.2219,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6442,7 +6442,7 @@
     "state": "IL",
     "latitude": 41.8819,
     "longitude": -87.6389,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6467,7 +6467,7 @@
     "state": "OH",
     "latitude": 41.5052,
     "longitude": -81.6906,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -6492,7 +6492,7 @@
     "state": "MI",
     "latitude": 42.9634,
     "longitude": -85.6681,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Family-Owned Businesses",
@@ -7195,7 +7195,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Transaction Advisory",
@@ -7220,7 +7220,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Transaction Advisory",
@@ -7245,7 +7245,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -7270,7 +7270,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Business Services",
@@ -7639,7 +7639,7 @@
     "state": "CA",
     "latitude": 34.0614,
     "longitude": -118.4145,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Consumer & Retail",
@@ -7664,7 +7664,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -7688,7 +7688,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Industrials",
@@ -7713,7 +7713,7 @@
     "state": "CA",
     "latitude": 34.0522,
     "longitude": -118.2437,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Consumer",
@@ -7737,7 +7737,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "National LMM Boutique",
     "groups": [
       "M&A",
       "Financial Sponsors",
@@ -7761,7 +7761,7 @@
     "state": "MN",
     "latitude": 44.9778,
     "longitude": -93.265,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Ownership Advisory",
       "ESOP Advisory",
@@ -7786,7 +7786,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Ownership Advisory",
       "M&A",
@@ -7810,7 +7810,7 @@
     "state": "TX",
     "latitude": 32.7767,
     "longitude": -96.797,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Ownership Advisory",
       "M&A",
@@ -7907,7 +7907,7 @@
     "state": "NY",
     "latitude": 40.758,
     "longitude": -73.9855,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Strategic Advisory",
       "Private Capital",
@@ -7931,7 +7931,7 @@
     "state": "CA",
     "latitude": 37.7932,
     "longitude": -122.3977,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Technology",
       "Private Capital",
@@ -7955,7 +7955,7 @@
     "state": "IL",
     "latitude": 41.8781,
     "longitude": -87.6298,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "Private Capital",
       "Family-Owned Businesses",
@@ -8554,7 +8554,7 @@
     "state": "MD",
     "latitude": 39.2904,
     "longitude": -76.6122,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "M&A",
       "Family-Owned Businesses",
@@ -8579,7 +8579,7 @@
     "state": "DC",
     "latitude": 38.8951,
     "longitude": -77.0364,
-    "type": "Regional / LMM Boutique",
+    "type": "Regional Boutique",
     "groups": [
       "M&A",
       "Government Services",

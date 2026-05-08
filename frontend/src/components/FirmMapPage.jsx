@@ -11,7 +11,8 @@ const BANK_TYPE_OPTIONS = [
   'EB',
   'MM',
   'Specialized Boutique',
-  'Regional / LMM Boutique',
+  'National LMM Boutique',
+  'Regional Boutique',
   'Big 4 Corporate Finance'
 ];
 
@@ -46,7 +47,8 @@ const TYPE_LABELS = [
   'EB',
   'MM',
   'Specialized Boutique',
-  'Regional / LMM Boutique',
+  'National LMM Boutique',
+  'Regional Boutique',
   'Big 4 Corporate Finance'
 ];
 
@@ -55,7 +57,8 @@ const TYPE_CLASS_NAMES = {
   EB: 'eb',
   MM: 'mm',
   'Specialized Boutique': 'specialized',
-  'Regional / LMM Boutique': 'lmm',
+  'National LMM Boutique': 'national-lmm',
+  'Regional Boutique': 'regional',
   'Big 4 Corporate Finance': 'big-4',
   Unknown: 'unknown'
 };
@@ -107,7 +110,8 @@ function bankTypeForOffice(office) {
 
   if (type.includes('big 4')) return 'Big 4 Corporate Finance';
   if (type.includes('specialized boutique')) return 'Specialized Boutique';
-  if (type.includes('regional') || type.includes('lmm')) return 'Regional / LMM Boutique';
+  if (type.includes('national lmm')) return 'National LMM Boutique';
+  if (type.includes('regional') || type.includes('lmm')) return 'Regional Boutique';
   if (
     type === 'eb' ||
     type.startsWith('eb ') ||
@@ -136,10 +140,10 @@ function bankTypeForOffice(office) {
       firm.includes('gordon dyal') ||
       firm.includes('marshberry')
       ? 'Specialized Boutique'
-      : 'Regional / LMM Boutique';
+      : 'Regional Boutique';
   }
 
-  return 'Regional / LMM Boutique';
+  return 'Regional Boutique';
 }
 
 function groupMatches(office, groupFilter) {

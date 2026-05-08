@@ -1080,8 +1080,15 @@ textarea {
   background: #A855F7;
 }
 
-.office-marker-lmm,
-.legend-dot-lmm {
+.office-marker-national-lmm,
+.legend-dot-national-lmm {
+  --marker-color: #06B6D4;
+  --marker-glow: rgba(6, 182, 212, 0.24);
+  background: #06B6D4;
+}
+
+.office-marker-regional,
+.legend-dot-regional {
   --marker-color: #3B82F6;
   --marker-glow: rgba(59, 130, 246, 0.24);
   background: #3B82F6;
@@ -1198,7 +1205,11 @@ textarea {
   --marker-color: #A855F7;
 }
 
-.map-type-pill-lmm {
+.map-type-pill-national-lmm {
+  --marker-color: #06B6D4;
+}
+
+.map-type-pill-regional {
   --marker-color: #3B82F6;
 }
 
