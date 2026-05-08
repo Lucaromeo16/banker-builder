@@ -212,13 +212,35 @@ function firmSummariesForOffices(offices) {
     .sort((a, b) => a.firm.localeCompare(b.firm));
 }
 
+function formattedAddress(office) {
+  return [office.address, office.zip].filter(Boolean).join(' ');
+}
+
+function addressNeedsVerification(office) {
+  return office.addressConfidence !== 'verified';
+}
+
 function popupHtml(office) {
+  const address = formattedAddress(office);
+  const addressHtml = address
+    ? `
+        <div>
+          <dt>Address</dt>
+          <dd>${escapeHtml(address)}</dd>
+        </div>
+      `
+    : '';
+  const verificationHtml = addressNeedsVerification(office)
+    ? '<p class="address-verification-note">Address needs verification.</p>'
+    : '';
+
   return `
     <div class="office-popup">
       <h3>${escapeHtml(office.firm)} · ${escapeHtml(office.officeCity)}, ${escapeHtml(office.state)}</h3>
       <p class="office-popup-type">${escapeHtml(office.type)}</p>
       <p>${escapeHtml(office.officeHistory)}</p>
       <dl>
+        ${addressHtml}
         <div>
           <dt>Groups</dt>
           <dd>${escapeHtml(office.groups.join(', '))}</dd>
@@ -240,6 +262,7 @@ function popupHtml(office) {
           <dd>${renderStars(office.competitivenessStars)} stars</dd>
         </div>
       </dl>
+      ${verificationHtml}
       <button type="button" class="office-popup-add-contact">Add Contact</button>
     </div>
   `;
@@ -537,6 +560,12 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                             </div>
                             <p>{office.officeHistory}</p>
                             <dl>
+                              {formattedAddress(office) ? (
+                                <div>
+                                  <dt>Address</dt>
+                                  <dd>{formattedAddress(office)}</dd>
+                                </div>
+                              ) : null}
                               <div>
                                 <dt>Groups</dt>
                                 <dd>{office.groups.join(', ')}</dd>
@@ -564,6 +593,9 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                                 </div>
                               ) : null}
                             </dl>
+                            {addressNeedsVerification(office) ? (
+                              <p className="address-verification-note">Address needs verification.</p>
+                            ) : null}
                           </section>
                         ))}
                       </div>

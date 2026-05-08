@@ -24,7 +24,11 @@
     "competitivenessScore": 9.6,
     "internshipOpportunities": "Large summer analyst class with highly competitive placement across coverage and product groups.",
     "notes": "One of the deepest U.S. analyst platforms.",
-    "logo": "/logos/goldman-sachs.png"
+    "logo": "/logos/goldman-sachs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "goldman-sachs-san-francisco",
@@ -48,7 +52,11 @@
     "competitivenessScore": 9.4,
     "internshipOpportunities": "Selective summer analyst seats focused heavily on technology and adjacent growth sectors.",
     "notes": "Strong fit for candidates with tech banking interest.",
-    "logo": "/logos/goldman-sachs.png"
+    "logo": "/logos/goldman-sachs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "morgan-stanley-new-york",
@@ -75,7 +83,11 @@
     "competitivenessScore": 9.45,
     "internshipOpportunities": "Large but extremely competitive summer analyst program across major groups.",
     "notes": "Core office for many of the firm's U.S. investment banking teams.",
-    "logo": "/logos/morgan-stanley.png"
+    "logo": "/logos/morgan-stanley.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "morgan-stanley-menlo-park",
@@ -97,7 +109,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.25,
     "internshipOpportunities": "Small, selective summer analyst intake with technology-heavy deal exposure.",
-    "logo": "/logos/morgan-stanley.png"
+    "logo": "/logos/morgan-stanley.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "jpmorgan-new-york",
@@ -123,7 +139,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.25,
     "internshipOpportunities": "Large analyst program with many group placements, still highly competitive.",
-    "logo": "/logos/j-p-morgan.png"
+    "logo": "/logos/j-p-morgan.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "jpmorgan-chicago",
@@ -145,7 +165,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Selective regional summer analyst seats with strong Midwest client exposure.",
-    "logo": "/logos/j-p-morgan.png"
+    "logo": "/logos/j-p-morgan.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bank-of-america-charlotte",
@@ -168,7 +192,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8.55,
     "internshipOpportunities": "Regular summer analyst opportunities, often appealing to candidates targeting Southeast banking.",
-    "logo": "/logos/bank-of-america.png"
+    "logo": "/logos/bank-of-america.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citi-houston",
@@ -190,7 +218,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Selective energy banking analyst seats with deal exposure tied to commodity and capital markets cycles.",
-    "logo": "/logos/citi.png"
+    "logo": "/logos/citi.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "evercore-new-york",
@@ -214,7 +246,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.7,
     "internshipOpportunities": "Highly selective summer analyst program with strong advisory training.",
-    "logo": "/logos/evercore.png"
+    "logo": "/logos/evercore.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "evercore-san-francisco",
@@ -236,7 +272,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.35,
     "internshipOpportunities": "Very competitive summer seats, typically requiring strong technical preparation and networking.",
-    "logo": "/logos/evercore.png"
+    "logo": "/logos/evercore.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "centerview-new-york",
@@ -259,7 +299,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.65,
     "internshipOpportunities": "Very small and highly selective internship program.",
-    "logo": "/logos/centerview-partners.png"
+    "logo": "/logos/centerview-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pjt-partners-new-york",
@@ -281,7 +325,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.55,
     "internshipOpportunities": "Highly selective analyst hiring, especially for restructuring-oriented candidates.",
-    "logo": "/logos/pjt-partners.png"
+    "logo": "/logos/pjt-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "qatalyst-san-francisco",
@@ -302,7 +350,11 @@
     "competitivenessStars": 5,
     "competitivenessScore": 9.5,
     "internshipOpportunities": "Very limited and highly competitive analyst opportunities.",
-    "logo": "/logos/qatalyst-partners.png"
+    "logo": "/logos/qatalyst-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lazard-chicago",
@@ -324,7 +376,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure.",
-    "logo": "/logos/lazard.png"
+    "logo": "/logos/lazard.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "jefferies-new-york",
@@ -349,7 +405,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Meaningful summer analyst class with strong deal exposure across coverage groups.",
-    "logo": "/logos/jefferies.png"
+    "logo": "/logos/jefferies.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "jefferies-houston",
@@ -371,7 +431,11 @@
     "competitivenessStars": 4,
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Competitive energy banking seats with a preference for candidates who understand the sector.",
-    "logo": "/logos/jefferies.png"
+    "logo": "/logos/jefferies.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-los-angeles",
@@ -395,7 +459,11 @@
     "competitivenessScore": 8.2,
     "internshipOpportunities": "Regular analyst recruiting with strong technical expectations.",
     "notes": "Headquarters office for a strong global advisory platform with M&A, restructuring, and valuation-adjacent expertise.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-chicago",
@@ -421,7 +489,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Consistent analyst hiring with strong Midwest and growth-company appeal.",
     "notes": "Flagship office with broad middle-market advisory and growth-company coverage.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "piper-sandler-minneapolis",
@@ -444,7 +516,11 @@
     "competitivenessStars": 3,
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Good analyst opportunities for candidates targeting middle-market banking.",
-    "logo": "/logos/piper-sandler.png"
+    "logo": "/logos/piper-sandler.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-milwaukee",
@@ -468,7 +544,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Regular summer analyst seats, often attractive to Midwest candidates.",
     "notes": "Headquarters office with strong industrials and sponsor-backed middle-market coverage.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-richmond",
@@ -493,7 +573,11 @@
     "competitivenessScore": 7.4,
     "internshipOpportunities": "Selective analyst seats with strong exposure to sponsor-backed sell-side mandates.",
     "notes": "Flagship office for sponsor-backed middle-market M&A advisory.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-chicago",
@@ -518,7 +602,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Competitive middle-market internship opportunities with heavy M&A exposure.",
     "notes": "Headquarters office with broad middle-market advisory and sponsor coverage.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stifel-baltimore",
@@ -542,7 +630,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Moderately selective internships with exposure to sector coverage and execution.",
     "notes": "Legacy advisory office connected to Stifel's broader middle-market investment banking platform.",
-    "logo": "/logos/stifel.png"
+    "logo": "/logos/stifel.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "brown-gibbons-lang-cleveland",
@@ -566,7 +658,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Smaller internship classes with strong fit for candidates seeking hands-on regional M&A experience.",
     "notes": "BGL headquarters office for middle-market advisory, capital markets, and restructuring work.",
-    "logo": "/logos/brown-gibbons-lang.png"
+    "logo": "/logos/brown-gibbons-lang.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "da-davidson-denver",
@@ -589,7 +685,11 @@
     "competitivenessStars": 3,
     "competitivenessScore": 6.25,
     "internshipOpportunities": "Smaller analyst opportunities; networking and regional interest can matter.",
-    "logo": "/logos/d-a-davidson.png"
+    "logo": "/logos/d-a-davidson.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-little-rock",
@@ -613,7 +713,11 @@
     "competitivenessScore": 6.15,
     "internshipOpportunities": "Selective but relationship-driven analyst opportunities.",
     "notes": "Headquarters office with long-standing regional investment banking heritage.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "centerview-partners-san-francisco",
@@ -637,7 +741,11 @@
     "competitivenessScore": 9.35,
     "internshipOpportunities": "Very limited summer analyst seats with heavy emphasis on technical strength and networking.",
     "notes": "Strong fit for candidates targeting high-touch advisory work with West Coast clients.",
-    "logo": "/logos/centerview-partners.png"
+    "logo": "/logos/centerview-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "centerview-partners-menlo-park",
@@ -661,7 +769,11 @@
     "competitivenessScore": 9.2,
     "internshipOpportunities": "Small and highly selective analyst opportunities, typically focused on West Coast coverage.",
     "notes": "Lean office with strong exposure to technology clients and senior bankers.",
-    "logo": "/logos/centerview-partners.png"
+    "logo": "/logos/centerview-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "centerview-partners-los-angeles",
@@ -685,7 +797,11 @@
     "competitivenessScore": 9.1,
     "internshipOpportunities": "Limited internship visibility with highly selective relationship-driven recruiting.",
     "notes": "Best suited to candidates seeking elite boutique advisory exposure in Southern California.",
-    "logo": "/logos/centerview-partners.png"
+    "logo": "/logos/centerview-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "gordon-dyal-co-new-york",
@@ -708,7 +824,11 @@
     "competitivenessScore": 9.15,
     "internshipOpportunities": "Very small analyst pipeline; recruiting is highly selective and relationship-oriented.",
     "notes": "Known for discreet advisory work on complex strategic transactions.",
-    "logo": "/logos/gordon-dyal-co.png"
+    "logo": "/logos/gordon-dyal-co.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "allen-company-new-york",
@@ -732,7 +852,11 @@
     "competitivenessScore": 9.1,
     "internshipOpportunities": "Very limited formal internship visibility and highly relationship-driven hiring.",
     "notes": "Distinctive franchise tied to senior relationships and marquee media and technology advisory work.",
-    "logo": "/logos/allen-company.png"
+    "logo": "/logos/allen-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "m-klein-company-new-york",
@@ -756,7 +880,11 @@
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Very limited analyst and internship visibility due to the firm's small advisory footprint.",
     "notes": "Lean advisory platform with significant senior-client exposure.",
-    "logo": "/logos/m-klein-company.png"
+    "logo": "/logos/m-klein-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-new-york",
@@ -781,7 +909,11 @@
     "competitivenessScore": 9.4,
     "internshipOpportunities": "Highly competitive summer analyst program with strong advisory and restructuring exposure.",
     "notes": "Core office for the firm's U.S. execution platform.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-los-angeles",
@@ -805,7 +937,11 @@
     "competitivenessScore": 9.15,
     "internshipOpportunities": "Selective summer analyst seats with strong West Coast client exposure.",
     "notes": "Important office for candidates targeting Southern California advisory roles.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-san-francisco",
@@ -829,7 +965,11 @@
     "competitivenessScore": 8.95,
     "internshipOpportunities": "Selective technology-focused analyst opportunities with lean class sizes.",
     "notes": "Good fit for candidates focused on technology and growth advisory.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-chicago",
@@ -853,7 +993,11 @@
     "competitivenessScore": 8.75,
     "internshipOpportunities": "Selective regional summer analyst seats with strong M&A execution exposure.",
     "notes": "Regional advisory office with meaningful Midwest corporate coverage.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-houston",
@@ -877,7 +1021,11 @@
     "competitivenessScore": 8.7,
     "internshipOpportunities": "Selective energy banking analyst seats with strong sector expectations.",
     "notes": "Relevant for candidates with energy, infrastructure, or restructuring interest.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-boston",
@@ -901,7 +1049,11 @@
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Small regional analyst intake with competitive recruiting.",
     "notes": "Strong location for healthcare and growth-company coverage exposure.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "moelis-company-washington-dc",
@@ -925,7 +1077,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Limited internship visibility compared with larger Moelis offices.",
     "notes": "Best fit for candidates interested in government services and defense advisory.",
-    "logo": "/logos/moelis-company.png"
+    "logo": "/logos/moelis-company.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "guggenheim-securities-new-york",
@@ -950,7 +1106,11 @@
     "competitivenessScore": 8.75,
     "internshipOpportunities": "Competitive summer analyst class with strong healthcare and advisory exposure.",
     "notes": "Known for healthcare strength and growing sector coverage breadth.",
-    "logo": "/logos/guggenheim-securities.png"
+    "logo": "/logos/guggenheim-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "guggenheim-securities-chicago",
@@ -974,7 +1134,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Selective regional analyst seats with meaningful execution exposure.",
     "notes": "Relevant for Midwest candidates targeting an advisory-oriented platform.",
-    "logo": "/logos/guggenheim-securities.png"
+    "logo": "/logos/guggenheim-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "guggenheim-securities-san-francisco",
@@ -998,7 +1162,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Small and selective analyst opportunities with sector-heavy coverage.",
     "notes": "Good fit for candidates interested in technology, healthcare, or energy transition clients.",
-    "logo": "/logos/guggenheim-securities.png"
+    "logo": "/logos/guggenheim-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "guggenheim-securities-houston",
@@ -1022,7 +1190,11 @@
     "competitivenessScore": 8.1,
     "internshipOpportunities": "Limited but competitive energy banking internship opportunities.",
     "notes": "Sector-focused office with exposure to energy and infrastructure clients.",
-    "logo": "/logos/guggenheim-securities.png"
+    "logo": "/logos/guggenheim-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "guggenheim-securities-boston",
@@ -1046,7 +1218,11 @@
     "competitivenessScore": 8.15,
     "internshipOpportunities": "Small regional analyst presence with competitive healthcare-focused recruiting.",
     "notes": "Strong fit for candidates interested in healthcare and biopharma advisory.",
-    "logo": "/logos/guggenheim-securities.png"
+    "logo": "/logos/guggenheim-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-new-york",
@@ -1073,7 +1249,11 @@
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Large but competitive summer analyst class across coverage and product groups.",
     "notes": "Core U.S. office for Barclays' global investment banking platform.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-houston",
@@ -1097,7 +1277,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Selective energy banking analyst seats with strong sector focus.",
     "notes": "Relevant for candidates interested in energy, infrastructure, and financing assignments.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-san-francisco",
@@ -1121,7 +1305,11 @@
     "competitivenessScore": 8.2,
     "internshipOpportunities": "Selective technology-focused summer analyst opportunities.",
     "notes": "Good fit for candidates targeting technology banking within a bulge bracket platform.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-menlo-park",
@@ -1145,7 +1333,11 @@
     "competitivenessScore": 8.1,
     "internshipOpportunities": "Limited regional analyst seats with technology-heavy exposure.",
     "notes": "Complements the San Francisco office for Bay Area technology coverage.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-chicago",
@@ -1169,7 +1361,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Selective regional analyst opportunities with Midwest coverage exposure.",
     "notes": "Useful target for candidates seeking bulge bracket banking outside New York.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-los-angeles",
@@ -1193,7 +1389,11 @@
     "competitivenessScore": 7.9,
     "internshipOpportunities": "Limited regional summer seats with sector-focused recruiting.",
     "notes": "Strong fit for candidates interested in media and entertainment banking.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "barclays-atlanta",
@@ -1217,7 +1417,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Regional coverage office rather than a broad national analyst hub.",
-    "logo": "/logos/barclays.png"
+    "logo": "/logos/barclays.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "liontree-new-york",
@@ -1242,7 +1446,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Small and highly competitive analyst program with TMT-focused recruiting.",
     "notes": "Known for media, telecom, and digital economy advisory work.",
-    "logo": "/logos/liontree.png"
+    "logo": "/logos/liontree.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "liontree-san-francisco",
@@ -1266,7 +1474,11 @@
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Small summer analyst presence with TMT-focused opportunities.",
     "notes": "Best fit for candidates targeting technology and media advisory in the Bay Area.",
-    "logo": "/logos/liontree.png"
+    "logo": "/logos/liontree.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-new-york",
@@ -1292,7 +1504,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Large analyst program with competitive placement across banking and capital markets teams.",
     "notes": "Core office for national coverage and execution teams.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-charlotte",
@@ -1316,7 +1532,11 @@
     "competitivenessScore": 8.15,
     "internshipOpportunities": "Regular analyst class with strong visibility for candidates targeting Charlotte banking.",
     "notes": "One of the firm's most important U.S. banking hubs outside New York.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-houston",
@@ -1340,7 +1560,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Competitive energy banking seats with sector-specific recruiting.",
     "notes": "Strong option for candidates interested in energy banking within a large bank platform.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-chicago",
@@ -1364,7 +1588,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Selective regional analyst seats with Midwest coverage exposure.",
     "notes": "Practical target for candidates seeking Chicago bulge bracket banking.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-san-francisco",
@@ -1388,7 +1616,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Selective regional analyst opportunities with technology and capital markets exposure.",
     "notes": "Plausible fit for candidates seeking West Coast banking within Wells Fargo CIB.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "wells-fargo-washington-dc",
@@ -1412,7 +1644,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Limited regional analyst visibility compared with New York and Charlotte.",
     "notes": "Most relevant for candidates interested in government services, defense, and public sector clients.",
-    "logo": "/logos/wells-fargo.png"
+    "logo": "/logos/wells-fargo.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deutsche-bank-new-york",
@@ -1438,7 +1674,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Competitive summer analyst class across coverage and product teams.",
     "notes": "Core U.S. hub for Deutsche Bank's investment banking franchise.",
-    "logo": "/logos/deutsche-bank.png"
+    "logo": "/logos/deutsche-bank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deutsche-bank-san-francisco",
@@ -1462,7 +1702,11 @@
     "competitivenessScore": 7.75,
     "internshipOpportunities": "Selective regional analyst seats with technology and capital markets exposure.",
     "notes": "Relevant for candidates targeting technology banking at a global bank.",
-    "logo": "/logos/deutsche-bank.png"
+    "logo": "/logos/deutsche-bank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deutsche-bank-los-angeles",
@@ -1486,7 +1730,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Sector-oriented office rather than a broad national analyst hub.",
-    "logo": "/logos/deutsche-bank.png"
+    "logo": "/logos/deutsche-bank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deutsche-bank-chicago",
@@ -1510,7 +1758,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Limited regional analyst opportunities compared with New York.",
     "notes": "Relevant for candidates seeking Midwest coverage at a global bank.",
-    "logo": "/logos/deutsche-bank.png"
+    "logo": "/logos/deutsche-bank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deutsche-bank-boston",
@@ -1534,7 +1786,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Smaller regional analyst presence with selective hiring.",
     "notes": "Most relevant for healthcare and technology coverage exposure.",
-    "logo": "/logos/deutsche-bank.png"
+    "logo": "/logos/deutsche-bank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rothschild-co-new-york",
@@ -1559,7 +1815,11 @@
     "competitivenessScore": 9.15,
     "internshipOpportunities": "Highly selective summer analyst seats with strong advisory training.",
     "notes": "Core U.S. hub for Rothschild's advisory franchise.",
-    "logo": "/logos/rothschild-co.png"
+    "logo": "/logos/rothschild-co.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rothschild-co-boston",
@@ -1583,7 +1843,11 @@
     "competitivenessScore": 8.55,
     "internshipOpportunities": "Small and selective regional analyst opportunities.",
     "notes": "Good fit for candidates interested in healthcare and growth-company advisory.",
-    "logo": "/logos/rothschild-co.png"
+    "logo": "/logos/rothschild-co.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rothschild-co-los-angeles",
@@ -1607,7 +1871,11 @@
     "competitivenessScore": 8.5,
     "internshipOpportunities": "Limited summer analyst visibility with relationship-driven recruiting.",
     "notes": "Relevant for candidates targeting West Coast elite boutique advisory.",
-    "logo": "/logos/rothschild-co.png"
+    "logo": "/logos/rothschild-co.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ducera-partners-new-york",
@@ -1631,7 +1899,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Very small and highly selective analyst pipeline.",
     "notes": "Best known for restructuring, liability management, and complex advisory mandates.",
-    "logo": "/logos/ducera-partners.png"
+    "logo": "/logos/ducera-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ducera-partners-los-angeles",
@@ -1655,7 +1927,11 @@
     "competitivenessScore": 8.45,
     "internshipOpportunities": "Limited regional internship visibility with highly selective hiring.",
     "notes": "Lean office with meaningful exposure to complex advisory work.",
-    "logo": "/logos/ducera-partners.png"
+    "logo": "/logos/ducera-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ducera-partners-san-francisco",
@@ -1679,7 +1955,11 @@
     "competitivenessScore": 8.4,
     "internshipOpportunities": "Small regional analyst presence with selective recruiting.",
     "notes": "Good fit for candidates focused on technology and restructuring advisory.",
-    "logo": "/logos/ducera-partners.png"
+    "logo": "/logos/ducera-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ducera-partners-stamford",
@@ -1702,7 +1982,11 @@
     "competitivenessScore": 8.1,
     "internshipOpportunities": "Very limited analyst visibility relative to New York.",
     "notes": "Specialized office for candidates interested in restructuring and creditor advisory.",
-    "logo": "/logos/ducera-partners.png"
+    "logo": "/logos/ducera-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-new-york",
@@ -1727,7 +2011,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Competitive summer analyst seats across several coverage groups.",
     "notes": "Important East Coast office for William Blair's middle-market banking platform.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-boston",
@@ -1751,7 +2039,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Regular but selective summer analyst opportunities.",
     "notes": "Strong office for candidates interested in healthcare and technology growth companies.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-charlotte",
@@ -1775,7 +2067,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional seats with Charlotte banking appeal.",
     "notes": "Relevant for candidates targeting leveraged finance and sponsor coverage.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-atlanta",
@@ -1799,7 +2095,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Smaller regional analyst intake with selective recruiting.",
     "notes": "Good fit for candidates seeking Southeast middle-market M&A exposure.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-los-angeles",
@@ -1823,7 +2123,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective summer analyst seats with West Coast client exposure.",
     "notes": "Useful target for candidates interested in Southern California growth advisory.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "william-blair-san-francisco",
@@ -1847,7 +2151,11 @@
     "competitivenessScore": 7.7,
     "internshipOpportunities": "Competitive technology-oriented summer analyst seats.",
     "notes": "Strong fit for candidates seeking middle-market technology banking.",
-    "logo": "/logos/william-blair.png"
+    "logo": "/logos/william-blair.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-new-york",
@@ -1872,7 +2180,11 @@
     "competitivenessScore": 8.15,
     "internshipOpportunities": "Large and competitive analyst program across banking and capital markets.",
     "notes": "Core U.S. hub for RBC's investment banking franchise.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-houston",
@@ -1896,7 +2208,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Competitive energy banking seats with sector-specific expectations.",
     "notes": "Strong office for candidates targeting energy and infrastructure banking.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-san-francisco",
@@ -1920,7 +2236,11 @@
     "competitivenessScore": 7.8,
     "internshipOpportunities": "Selective technology banking summer analyst opportunities.",
     "notes": "Good fit for candidates interested in technology and growth advisory.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-chicago",
@@ -1944,7 +2264,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional analyst seats with Midwest coverage exposure.",
     "notes": "Practical target for candidates seeking Chicago banking at a Canadian bank platform.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-los-angeles",
@@ -1968,7 +2292,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Limited regional summer analyst seats with sector-focused recruiting.",
     "notes": "Relevant for candidates targeting media and consumer banking.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-boston",
@@ -1992,7 +2320,11 @@
     "competitivenessScore": 7.3,
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Good fit for healthcare and technology coverage interest.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-minneapolis",
@@ -2016,7 +2348,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional seats with strong Midwest relevance.",
     "notes": "Regional hub with meaningful Upper Midwest client coverage.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rbc-capital-markets-charlotte",
@@ -2040,7 +2376,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "Plausible fit for candidates targeting Charlotte banking and financing roles.",
-    "logo": "/logos/rbc-capital-markets.png"
+    "logo": "/logos/rbc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-new-york",
@@ -2065,7 +2405,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Competitive middle-market analyst opportunities with sector coverage exposure.",
     "notes": "Important office for Baird's national investment banking platform.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-chicago",
@@ -2089,7 +2433,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Regular regional analyst seats with strong Midwest appeal.",
     "notes": "Good fit for candidates seeking Chicago middle-market M&A.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-boston",
@@ -2113,7 +2461,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Relevant for healthcare and technology middle-market advisory.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-charlotte",
@@ -2137,7 +2489,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Smaller regional analyst intake with relationship-driven recruiting.",
     "notes": "Plausible Charlotte option for middle-market advisory candidates.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-denver",
@@ -2161,7 +2517,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Good regional fit for growth-company and services advisory.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-houston",
@@ -2185,7 +2545,11 @@
     "competitivenessScore": 6.8,
     "internshipOpportunities": "Limited but relevant energy banking analyst opportunities.",
     "notes": "Sector-focused office for energy and industrials candidates.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-san-francisco",
@@ -2209,7 +2573,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective regional seats with technology coverage exposure.",
     "notes": "Relevant for candidates targeting technology-focused middle-market banking.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-dallas",
@@ -2233,7 +2601,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Small regional analyst presence.",
     "notes": "Useful target for candidates seeking Texas middle-market advisory outside energy-only roles.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "baird-cleveland",
@@ -2257,7 +2629,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional option for candidates interested in industrial middle-market transactions.",
-    "logo": "/logos/baird.png"
+    "logo": "/logos/baird.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bnp-paribas-new-york",
@@ -2282,7 +2658,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Competitive analyst program with strongest visibility in New York.",
     "notes": "Core U.S. hub for BNP Paribas CIB coverage and execution.",
-    "logo": "/logos/bnp-paribas.png"
+    "logo": "/logos/bnp-paribas.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bnp-paribas-san-francisco",
@@ -2306,7 +2686,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "Best fit for candidates interested in technology coverage within a global European bank.",
-    "logo": "/logos/bnp-paribas.png"
+    "logo": "/logos/bnp-paribas.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bnp-paribas-chicago",
@@ -2330,7 +2714,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Smaller regional analyst presence.",
     "notes": "Regional office with stronger financing and corporate coverage orientation.",
-    "logo": "/logos/bnp-paribas.png"
+    "logo": "/logos/bnp-paribas.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bnp-paribas-dallas",
@@ -2354,7 +2742,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited analyst visibility with sector-specific opportunities.",
     "notes": "Plausible fit for energy and infrastructure financing interest.",
-    "logo": "/logos/bnp-paribas.png"
+    "logo": "/logos/bnp-paribas.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bnp-paribas-washington-dc",
@@ -2378,7 +2770,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "More specialized than a broad investment banking analyst hub.",
-    "logo": "/logos/bnp-paribas.png"
+    "logo": "/logos/bnp-paribas.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stifel-new-york",
@@ -2403,7 +2799,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Competitive middle-market analyst seats across sector teams.",
     "notes": "Important East Coast hub for Stifel's institutional and banking platform.",
-    "logo": "/logos/stifel.png"
+    "logo": "/logos/stifel.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stifel-san-francisco",
@@ -2427,7 +2827,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective regional analyst seats with sector coverage exposure.",
     "notes": "Relevant for candidates targeting technology and healthcare middle-market banking.",
-    "logo": "/logos/stifel.png"
+    "logo": "/logos/stifel.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stifel-memphis",
@@ -2451,7 +2855,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office with sector-specific relevance.",
-    "logo": "/logos/stifel.png"
+    "logo": "/logos/stifel.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-new-york",
@@ -2476,7 +2884,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Competitive analyst opportunities across banking and capital markets teams.",
     "notes": "Core U.S. hub following TD's expanded investment banking platform.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-houston",
@@ -2500,7 +2912,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective energy banking and capital markets seats.",
     "notes": "Strong regional option for candidates targeting energy and power coverage.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-san-francisco",
@@ -2524,7 +2940,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective technology-focused regional analyst opportunities.",
     "notes": "Useful for candidates targeting technology banking within TD's expanded platform.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-boston",
@@ -2548,7 +2968,11 @@
     "competitivenessScore": 7.3,
     "internshipOpportunities": "Selective regional analyst seats with healthcare focus.",
     "notes": "Strong fit for healthcare and biopharma banking interest.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-chicago",
@@ -2572,7 +2996,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with coverage and financing orientation.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-charlotte",
@@ -2596,7 +3024,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited but plausible regional analyst opportunities.",
     "notes": "Good fit for candidates targeting Charlotte banking and financing roles.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "td-securities-dallas",
@@ -2620,7 +3052,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Small regional analyst presence.",
     "notes": "Regional office with broader Texas coverage relevance.",
-    "logo": "/logos/td-securities.png"
+    "logo": "/logos/td-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-chicago",
@@ -2644,7 +3080,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Regular analyst opportunities with strong Chicago and Midwest visibility.",
     "notes": "Important U.S. hub for BMO Capital Markets.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-new-york",
@@ -2669,7 +3109,11 @@
     "competitivenessScore": 7.75,
     "internshipOpportunities": "Competitive analyst class with broad coverage exposure.",
     "notes": "Core East Coast office for BMO's U.S. banking platform.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-houston",
@@ -2693,7 +3137,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective energy and infrastructure analyst opportunities.",
     "notes": "Strong fit for candidates targeting energy banking.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-san-francisco",
@@ -2717,7 +3165,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Limited regional analyst visibility with technology relevance.",
     "notes": "Useful for candidates interested in Bay Area technology banking.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-boston",
@@ -2741,7 +3193,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Smaller regional analyst opportunities.",
     "notes": "Relevant for healthcare and technology coverage exposure.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-minneapolis",
@@ -2765,7 +3221,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with Midwest corporate coverage relevance.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bmo-capital-markets-denver",
@@ -2789,7 +3249,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Very limited analyst visibility compared with larger offices.",
     "notes": "Specialized regional office rather than a broad analyst hub.",
-    "logo": "/logos/bmo-capital-markets.png"
+    "logo": "/logos/bmo-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-new-york",
@@ -2814,7 +3278,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Primary U.S. analyst recruiting office with competitive placement into CIB groups.",
     "notes": "Core U.S. hub for Santander Corporate & Investment Banking.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-los-angeles",
@@ -2838,7 +3306,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective analyst opportunities with West Coast coverage exposure.",
     "notes": "Good fit for candidates targeting cross-border and financing-oriented advisory.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-san-francisco",
@@ -2862,7 +3334,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Selective regional analyst seats with technology coverage relevance.",
     "notes": "Plausible target for candidates seeking tech banking at an international bank.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-boston",
@@ -2886,7 +3362,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "More financing-oriented than a broad advisory analyst hub.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-houston",
@@ -2910,7 +3390,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Limited but relevant energy and financing analyst opportunities.",
     "notes": "Sector-focused office with energy and infrastructure relevance.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "santander-chicago",
@@ -2934,7 +3418,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Very limited regional analyst visibility.",
     "notes": "Regional office with stronger capital markets orientation.",
-    "logo": "/logos/santander.png"
+    "logo": "/logos/santander.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "scotiabank-new-york",
@@ -2959,7 +3447,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Competitive analyst program with strongest U.S. visibility in New York.",
     "notes": "Core U.S. hub for Scotiabank's Canadian platform.",
-    "logo": "/logos/scotiabank.png"
+    "logo": "/logos/scotiabank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "scotiabank-houston",
@@ -2983,7 +3475,11 @@
     "competitivenessScore": 7.6,
     "internshipOpportunities": "Selective energy banking and capital markets seats.",
     "notes": "Strong fit for candidates targeting energy within a Canadian platform.",
-    "logo": "/logos/scotiabank.png"
+    "logo": "/logos/scotiabank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "scotiabank-san-francisco",
@@ -3007,7 +3503,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Limited regional analyst seats with technology coverage exposure.",
     "notes": "Relevant for candidates targeting West Coast technology banking.",
-    "logo": "/logos/scotiabank.png"
+    "logo": "/logos/scotiabank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "scotiabank-boston",
@@ -3031,7 +3531,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited analyst visibility compared with New York.",
     "notes": "Regional office with selective coverage and financing exposure.",
-    "logo": "/logos/scotiabank.png"
+    "logo": "/logos/scotiabank.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "macquarie-new-york",
@@ -3056,7 +3560,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Competitive analyst opportunities across advisory and investing-oriented teams.",
     "notes": "Core U.S. hub for infrastructure, energy transition, and principal advisory work.",
-    "logo": "/logos/macquarie.png"
+    "logo": "/logos/macquarie.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "macquarie-houston",
@@ -3080,7 +3588,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Selective analyst seats for energy and infrastructure-focused candidates.",
     "notes": "Strong office for energy, infrastructure, and transition-related transactions.",
-    "logo": "/logos/macquarie.png"
+    "logo": "/logos/macquarie.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "macquarie-chicago",
@@ -3104,7 +3616,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Selective regional analyst seats with infrastructure and markets exposure.",
     "notes": "Regional office with strong infrastructure and commodities adjacency.",
-    "logo": "/logos/macquarie.png"
+    "logo": "/logos/macquarie.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "macquarie-los-angeles",
@@ -3128,7 +3644,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Useful for candidates interested in infrastructure-adjacent West Coast advisory.",
-    "logo": "/logos/macquarie.png"
+    "logo": "/logos/macquarie.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-new-york",
@@ -3153,7 +3673,11 @@
     "competitivenessScore": 8.1,
     "internshipOpportunities": "Large and competitive analyst opportunities across banking and markets.",
     "notes": "Core U.S. hub for HSBC's international banking platform.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-san-francisco",
@@ -3177,7 +3701,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional analyst visibility with technology coverage exposure.",
     "notes": "Good fit for candidates interested in cross-border technology banking.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-los-angeles",
@@ -3201,7 +3729,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Limited regional analyst opportunities.",
     "notes": "Regional office with media, consumer, and cross-border relevance.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-washington-dc",
@@ -3225,7 +3757,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited analyst visibility compared with New York.",
     "notes": "Specialized regional office rather than a broad analyst hub.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-miami",
@@ -3249,7 +3785,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Most relevant for candidates interested in cross-border Latin America coverage.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "hsbc-houston",
@@ -3273,7 +3813,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility with energy relevance.",
     "notes": "Energy-oriented office with global banking adjacency.",
-    "logo": "/logos/hsbc.png"
+    "logo": "/logos/hsbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mufg-new-york",
@@ -3298,7 +3842,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Competitive analyst opportunities with strong financing and capital markets exposure.",
     "notes": "Core U.S. office for MUFG's international securities and banking platform.",
-    "logo": "/logos/mufg.png"
+    "logo": "/logos/mufg.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mufg-san-francisco",
@@ -3322,7 +3870,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Relevant for candidates targeting technology and project finance exposure.",
-    "logo": "/logos/mufg.png"
+    "logo": "/logos/mufg.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mufg-los-angeles",
@@ -3346,7 +3898,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
-    "logo": "/logos/mufg.png"
+    "logo": "/logos/mufg.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mufg-chicago",
@@ -3370,7 +3926,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "Regional office with stronger financing and corporate banking adjacency.",
-    "logo": "/logos/mufg.png"
+    "logo": "/logos/mufg.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-atlanta",
@@ -3394,7 +3954,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional analyst seats with middle-market M&A exposure.",
     "notes": "Good fit for candidates targeting Southeast sponsor-backed advisory.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-boston",
@@ -3418,7 +3982,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional seats with strong healthcare and technology exposure.",
     "notes": "Relevant for candidates interested in middle-market healthcare and technology M&A.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-dallas",
@@ -3442,7 +4010,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Useful Texas office for sponsor-backed middle-market advisory.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-los-angeles",
@@ -3466,7 +4038,11 @@
     "competitivenessScore": 7.4,
     "internshipOpportunities": "Selective analyst opportunities with West Coast M&A exposure.",
     "notes": "Strong fit for candidates targeting Southern California middle-market advisory.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-new-york",
@@ -3491,7 +4067,11 @@
     "competitivenessScore": 7.75,
     "internshipOpportunities": "Competitive analyst seats across sector and sponsor groups.",
     "notes": "Important national office for Lincoln's U.S. investment banking platform.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-richmond",
@@ -3515,7 +4095,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional middle-market M&A office.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-san-francisco",
@@ -3539,7 +4123,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional seats with technology advisory exposure.",
     "notes": "Good fit for candidates interested in tech-focused middle-market M&A.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "lincoln-international-washington-dc",
@@ -3563,7 +4151,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Relevant for candidates targeting government services and defense advisory.",
-    "logo": "/logos/lincoln-international.png"
+    "logo": "/logos/lincoln-international.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-boston",
@@ -3587,7 +4179,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective regional analyst seats with strong M&A exposure.",
     "notes": "Good fit for healthcare and services sell-side advisory.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-charlotte",
@@ -3611,7 +4207,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Strong regional office for sponsor-backed sell-side mandates.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-chicago",
@@ -3635,7 +4235,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective regional analyst seats with Midwest client exposure.",
     "notes": "Good fit for Chicago middle-market M&A candidates.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-cleveland",
@@ -3659,7 +4263,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional sell-side M&A office with industrials relevance.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-minneapolis",
@@ -3683,7 +4291,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with Midwest private equity and corporate coverage.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-new-york",
@@ -3708,7 +4320,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Competitive analyst seats with heavy M&A exposure.",
     "notes": "Important office for sponsor coverage and East Coast execution.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-san-francisco",
@@ -3732,7 +4348,11 @@
     "competitivenessScore": 7.3,
     "internshipOpportunities": "Selective technology-oriented analyst seats.",
     "notes": "Relevant for candidates targeting technology-focused middle-market M&A.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "harris-williams-washington-dc",
@@ -3756,7 +4376,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Good fit for candidates interested in government services M&A.",
-    "logo": "/logos/harris-williams.png"
+    "logo": "/logos/harris-williams.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-boston",
@@ -3781,7 +4405,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Highly competitive healthcare-focused analyst program.",
     "notes": "Core office for biopharma, healthcare services, and medtech coverage.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-new-york",
@@ -3805,7 +4433,11 @@
     "competitivenessScore": 8.8,
     "internshipOpportunities": "Highly selective healthcare banking analyst seats.",
     "notes": "Strong East Coast office for healthcare advisory and financing.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-san-francisco",
@@ -3829,7 +4461,11 @@
     "competitivenessScore": 8.55,
     "internshipOpportunities": "Selective healthcare-focused regional analyst seats.",
     "notes": "Strong fit for candidates targeting life sciences and medtech banking.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-charlotte",
@@ -3853,7 +4489,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized healthcare office with services and technology relevance.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-los-angeles",
@@ -3877,7 +4517,11 @@
     "competitivenessScore": 7.9,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Relevant for West Coast healthcare technology and medtech exposure.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-miami",
@@ -3901,7 +4545,11 @@
     "competitivenessScore": 7.6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Specialized regional office rather than a broad analyst hub.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "leerink-partners-nashville",
@@ -3925,7 +4573,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Strong regional fit for healthcare services coverage.",
-    "logo": "/logos/leerink-partners.png"
+    "logo": "/logos/leerink-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-atlanta",
@@ -3949,7 +4601,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Regional office with capital markets and sponsor coverage relevance.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-boston",
@@ -3973,7 +4629,11 @@
     "competitivenessScore": 6.7,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Good fit for candidates interested in healthcare and technology middle-market advisory.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-charlotte",
@@ -3997,7 +4657,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Relevant for candidates targeting Charlotte banking and financing roles.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-chicago",
@@ -4021,7 +4685,11 @@
     "competitivenessScore": 6.4,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with industrial and services coverage relevance.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-dallas",
@@ -4045,7 +4713,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Relevant for candidates interested in energy and industrial middle-market banking.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-nashville",
@@ -4069,7 +4741,11 @@
     "competitivenessScore": 6.35,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional fit for healthcare services and founder-owned company advisory.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-new-york",
@@ -4094,7 +4770,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective analyst seats with broader capital markets exposure.",
     "notes": "Important East Coast office for Stephens' national banking platform.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stephens-washington-dc",
@@ -4118,7 +4798,11 @@
     "competitivenessScore": 6.3,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized office for government services and defense coverage.",
-    "logo": "/logos/stephens.png"
+    "logo": "/logos/stephens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "the-raine-group-new-york",
@@ -4143,7 +4827,11 @@
     "competitivenessScore": 8.8,
     "internshipOpportunities": "Very selective analyst seats with strong media-tech fit expectations.",
     "notes": "Known for high-profile media, entertainment, sports, and technology transactions.",
-    "logo": "/logos/the-raine-group.png"
+    "logo": "/logos/the-raine-group.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "the-raine-group-san-francisco",
@@ -4167,7 +4855,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Small and highly selective regional analyst opportunities.",
     "notes": "Strong fit for candidates targeting media-tech and growth advisory.",
-    "logo": "/logos/the-raine-group.png"
+    "logo": "/logos/the-raine-group.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "the-raine-group-los-angeles",
@@ -4192,7 +4884,11 @@
     "competitivenessScore": 8.4,
     "internshipOpportunities": "Small and highly selective analyst opportunities.",
     "notes": "Relevant for candidates targeting entertainment, sports, and media advisory.",
-    "logo": "/logos/the-raine-group.png"
+    "logo": "/logos/the-raine-group.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "union-square-advisors-san-francisco",
@@ -4217,7 +4913,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Small and selective analyst opportunities with technology fit expectations.",
     "notes": "Strong fit for candidates targeting software and strategic technology M&A.",
-    "logo": "/logos/union-square-advisors.png"
+    "logo": "/logos/union-square-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "union-square-advisors-new-york",
@@ -4242,7 +4942,11 @@
     "competitivenessScore": 7.75,
     "internshipOpportunities": "Limited but selective analyst opportunities.",
     "notes": "Relevant for candidates interested in software and growth technology advisory.",
-    "logo": "/logos/union-square-advisors.png"
+    "logo": "/logos/union-square-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-st-petersburg",
@@ -4267,7 +4971,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Regular analyst program with broad middle-market exposure.",
     "notes": "Core office for Raymond James' investment banking leadership and execution platform.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-new-york",
@@ -4292,7 +5000,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Competitive analyst seats with middle-market and capital markets exposure.",
     "notes": "Important office for financial services and capital structure advisory.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-boston",
@@ -4316,7 +5028,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Good fit for healthcare and industrial middle-market coverage.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-chicago",
@@ -4340,7 +5056,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Practical option for Chicago middle-market banking candidates.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-san-francisco",
@@ -4364,7 +5084,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective regional analyst seats with technology exposure.",
     "notes": "Relevant for technology and financial services middle-market advisory.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-houston",
@@ -4388,7 +5112,11 @@
     "competitivenessScore": 6.8,
     "internshipOpportunities": "Selective regional analyst seats with energy relevance.",
     "notes": "Energy-focused office for middle-market candidates.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-atlanta",
@@ -4412,7 +5140,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Regional office with consumer, services, and healthcare relevance.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "raymond-james-memphis",
@@ -4436,7 +5168,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office for industrials and logistics coverage.",
-    "logo": "/logos/raymond-james.png"
+    "logo": "/logos/raymond-james.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "oppenheimer-new-york",
@@ -4461,7 +5197,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Competitive analyst opportunities across sector coverage and capital markets.",
     "notes": "Core office for Oppenheimer's U.S. investment banking platform.",
-    "logo": "/logos/oppenheimer.png"
+    "logo": "/logos/oppenheimer.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "oppenheimer-boston",
@@ -4485,7 +5225,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Relevant for healthcare and life sciences banking interest.",
-    "logo": "/logos/oppenheimer.png"
+    "logo": "/logos/oppenheimer.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "oppenheimer-san-francisco",
@@ -4509,7 +5253,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Selective regional seats with technology exposure.",
     "notes": "Good fit for candidates targeting technology and growth-company coverage.",
-    "logo": "/logos/oppenheimer.png"
+    "logo": "/logos/oppenheimer.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "oppenheimer-los-angeles",
@@ -4533,7 +5281,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with West Coast sector coverage relevance.",
-    "logo": "/logos/oppenheimer.png"
+    "logo": "/logos/oppenheimer.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "oppenheimer-chicago",
@@ -4557,7 +5309,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Practical middle-market option for Midwest coverage.",
-    "logo": "/logos/oppenheimer.png"
+    "logo": "/logos/oppenheimer.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-cleveland",
@@ -4582,7 +5338,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Regular analyst opportunities with strong Cleveland and Midwest visibility.",
     "notes": "Core office for KeyBanc's middle-market and capital markets platform.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-new-york",
@@ -4607,7 +5367,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Competitive analyst seats with sector and capital markets exposure.",
     "notes": "Important East Coast hub for KeyBanc's banking platform.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-boston",
@@ -4631,7 +5395,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Relevant for healthcare and technology middle-market coverage.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-chicago",
@@ -4655,7 +5423,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Good fit for candidates targeting public finance and Midwest middle-market coverage.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-san-francisco",
@@ -4679,7 +5451,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional technology coverage and capital markets presence.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "keybanc-capital-markets-atlanta",
@@ -4703,7 +5479,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with public finance and healthcare relevance.",
-    "logo": "/logos/keybanc-capital-markets.png"
+    "logo": "/logos/keybanc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "societe-generale-new-york",
@@ -4728,7 +5508,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Competitive analyst opportunities with stronger visibility in markets, financing, and select advisory teams.",
     "notes": "Globally large platform, but U.S. IB recruiting presence is more selective/niche than traditional U.S. bulge brackets.",
-    "logo": "/logos/societe-generale.png"
+    "logo": "/logos/societe-generale.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "societe-generale-houston",
@@ -4752,7 +5536,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective regional analyst visibility with energy and infrastructure relevance.",
     "notes": "Sector-focused U.S. office with more niche IB recruiting than U.S. BB platforms.",
-    "logo": "/logos/societe-generale.png"
+    "logo": "/logos/societe-generale.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "societe-generale-menlo-park",
@@ -4776,7 +5564,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Plausible technology coverage office, but U.S. IB recruiting is niche.",
-    "logo": "/logos/societe-generale.png"
+    "logo": "/logos/societe-generale.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "societe-generale-chicago",
@@ -4800,7 +5592,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "More markets and financing-oriented than broad U.S. investment banking.",
-    "logo": "/logos/societe-generale.png"
+    "logo": "/logos/societe-generale.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "smbc-new-york",
@@ -4825,7 +5621,11 @@
     "competitivenessScore": 7.9,
     "internshipOpportunities": "Competitive analyst opportunities, especially in financing and sponsor-oriented teams.",
     "notes": "Globally large platform, but U.S. IB recruiting is more selective/niche than traditional U.S. bulge brackets.",
-    "logo": "/logos/smbc.png"
+    "logo": "/logos/smbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "smbc-houston",
@@ -4849,7 +5649,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective regional analyst visibility with energy and project finance relevance.",
     "notes": "Strong financing platform, with more niche U.S. advisory recruiting.",
-    "logo": "/logos/smbc.png"
+    "logo": "/logos/smbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "smbc-los-angeles",
@@ -4873,7 +5677,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
-    "logo": "/logos/smbc.png"
+    "logo": "/logos/smbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "smbc-san-francisco",
@@ -4897,7 +5705,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-adjacent financing presence with niche U.S. IB recruiting.",
-    "logo": "/logos/smbc.png"
+    "logo": "/logos/smbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "smbc-charlotte",
@@ -4921,7 +5733,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Financing-oriented office rather than a broad U.S. advisory hub.",
-    "logo": "/logos/smbc.png"
+    "logo": "/logos/smbc.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "nomura-new-york",
@@ -4946,7 +5762,11 @@
     "competitivenessScore": 7.85,
     "internshipOpportunities": "Competitive analyst opportunities with selective U.S. IB class sizes.",
     "notes": "Globally large platform, but U.S. IB recruiting presence is closer to an international MM platform.",
-    "logo": "/logos/nomura.png"
+    "logo": "/logos/nomura.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "nomura-boston",
@@ -4970,7 +5790,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "More selective/niche U.S. IB presence than traditional U.S. bulge brackets.",
-    "logo": "/logos/nomura.png"
+    "logo": "/logos/nomura.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "nomura-chicago",
@@ -4994,7 +5818,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with more limited U.S. IB recruiting visibility.",
-    "logo": "/logos/nomura.png"
+    "logo": "/logos/nomura.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "nomura-san-francisco",
@@ -5018,7 +5846,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology coverage presence, but U.S. IB recruiting is comparatively niche.",
-    "logo": "/logos/nomura.png"
+    "logo": "/logos/nomura.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-new-york",
@@ -5043,7 +5875,11 @@
     "competitivenessScore": 8.05,
     "internshipOpportunities": "Competitive analyst opportunities with strongest visibility in New York.",
     "notes": "Globally large Japanese platform; U.S. IB presence is meaningful but more selective than U.S. BB programs.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-houston",
@@ -5067,7 +5903,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Selective energy and capital markets analyst seats.",
     "notes": "Sector-focused office with strong energy and financing relevance.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-san-francisco",
@@ -5091,7 +5931,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Selective technology-focused regional analyst seats.",
     "notes": "Technology office strengthened by Greenhill and Mizuho Securities capabilities.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-chicago",
@@ -5115,7 +5959,11 @@
     "competitivenessScore": 7.3,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and sector coverage relevance.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-boston",
@@ -5139,7 +5987,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Relevant for healthcare and life sciences coverage, with niche U.S. IB recruiting.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "mizuho-los-angeles",
@@ -5163,7 +6015,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
-    "logo": "/logos/mizuho.png"
+    "logo": "/logos/mizuho.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capital-one-mclean",
@@ -5187,7 +6043,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Selective analyst opportunities with stronger financing and specialty platform exposure.",
     "notes": "Specialty platform rather than a traditional broad investment banking analyst program.",
-    "logo": "/logos/capital-one.png"
+    "logo": "/logos/capital-one.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capital-one-new-york",
@@ -5211,7 +6071,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective analyst visibility with financing and financial services focus.",
     "notes": "More specialized than a full-service MM investment bank.",
-    "logo": "/logos/capital-one.png"
+    "logo": "/logos/capital-one.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capital-one-chicago",
@@ -5235,7 +6099,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited investment banking-specific analyst visibility.",
     "notes": "Included for capital markets relevance; not a broad traditional IB office.",
-    "logo": "/logos/capital-one.png"
+    "logo": "/logos/capital-one.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capital-one-houston",
@@ -5259,7 +6127,11 @@
     "competitivenessScore": 6.4,
     "internshipOpportunities": "Limited analyst visibility with energy financing relevance.",
     "notes": "Energy financing-oriented rather than a broad advisory office.",
-    "logo": "/logos/capital-one.png"
+    "logo": "/logos/capital-one.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capital-one-san-francisco",
@@ -5283,7 +6155,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited investment banking-specific analyst visibility.",
     "notes": "Specialty platform with fintech and financing relevance.",
-    "logo": "/logos/capital-one.png"
+    "logo": "/logos/capital-one.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-boston",
@@ -5308,7 +6184,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective analyst seats with hands-on middle-market transaction exposure.",
     "notes": "LMM-focused advisory platform with broad sector coverage.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-denver",
@@ -5332,7 +6212,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional LMM advisory office with energy and industrial technology relevance.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-chicago",
@@ -5356,7 +6240,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Good fit for Chicago LMM and founder-owned company advisory.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-new-york",
@@ -5381,7 +6269,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective analyst opportunities.",
     "notes": "Important East Coast office for Capstone's national advisory platform.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-dallas",
@@ -5405,7 +6297,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional LMM advisory office.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-tampa",
@@ -5429,7 +6325,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with LMM advisory relevance.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "capstone-partners-irvine",
@@ -5453,7 +6353,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional LMM office with Southern California coverage relevance.",
-    "logo": "/logos/capstone-partners.png"
+    "logo": "/logos/capstone-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "dc-advisory-new-york",
@@ -5478,7 +6382,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective analyst seats with international middle-market M&A exposure.",
     "notes": "International MM platform with a smaller but selective U.S. advisory presence.",
-    "logo": "/logos/dc-advisory.png"
+    "logo": "/logos/dc-advisory.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "dc-advisory-chicago",
@@ -5502,7 +6410,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Regional office with international MM advisory connectivity.",
-    "logo": "/logos/dc-advisory.png"
+    "logo": "/logos/dc-advisory.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "dc-advisory-san-francisco",
@@ -5526,7 +6438,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-focused regional office within an international MM platform.",
-    "logo": "/logos/dc-advisory.png"
+    "logo": "/logos/dc-advisory.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "tidal-partners-san-francisco",
@@ -5551,7 +6467,11 @@
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Very small and highly selective analyst pipeline.",
     "notes": "Specialized technology boutique with highly concentrated U.S. recruiting.",
-    "logo": "/logos/tidal-partners.png"
+    "logo": "/logos/tidal-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "tidal-partners-new-york",
@@ -5576,7 +6496,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Highly selective boutique with limited formal recruiting.",
-    "logo": "/logos/tidal-partners.png"
+    "logo": "/logos/tidal-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "brown-gibbons-lang-chicago",
@@ -5600,7 +6524,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective regional analyst seats with hands-on M&A exposure.",
     "notes": "BGL office; same firm as Brown Gibbons Lang & Company.",
-    "logo": "/logos/brown-gibbons-lang.png"
+    "logo": "/logos/brown-gibbons-lang.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "brown-gibbons-lang-boston",
@@ -5624,7 +6552,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "BGL office; same firm as Brown Gibbons Lang & Company.",
-    "logo": "/logos/brown-gibbons-lang.png"
+    "logo": "/logos/brown-gibbons-lang.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "brown-gibbons-lang-los-angeles",
@@ -5648,7 +6580,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "BGL office; same firm as Brown Gibbons Lang & Company.",
-    "logo": "/logos/brown-gibbons-lang.png"
+    "logo": "/logos/brown-gibbons-lang.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "brown-gibbons-lang-new-york",
@@ -5672,7 +6608,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "BGL office; same firm as Brown Gibbons Lang & Company.",
-    "logo": "/logos/brown-gibbons-lang.png"
+    "logo": "/logos/brown-gibbons-lang.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cantor-fitzgerald-new-york",
@@ -5697,7 +6637,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Competitive analyst seats with stronger capital markets and sector coverage exposure.",
     "notes": "Middle-market investment banking presence within a broader global financial services platform.",
-    "logo": "/logos/cantor-fitzgerald.png"
+    "logo": "/logos/cantor-fitzgerald.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cantor-fitzgerald-san-francisco",
@@ -5721,7 +6665,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective regional analyst seats with technology coverage exposure.",
     "notes": "Technology-focused office within Cantor's expanding investment banking platform.",
-    "logo": "/logos/cantor-fitzgerald.png"
+    "logo": "/logos/cantor-fitzgerald.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cantor-fitzgerald-boston",
@@ -5745,7 +6693,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Healthcare and capital markets-oriented office.",
-    "logo": "/logos/cantor-fitzgerald.png"
+    "logo": "/logos/cantor-fitzgerald.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cantor-fitzgerald-los-angeles",
@@ -5769,7 +6721,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with media, technology, and capital markets relevance.",
-    "logo": "/logos/cantor-fitzgerald.png"
+    "logo": "/logos/cantor-fitzgerald.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "solomon-partners-new-york",
@@ -5794,7 +6750,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Competitive analyst program with sector-specialist advisory exposure.",
     "notes": "Sector-focused boutique with strong New York advisory presence.",
-    "logo": "/logos/solomon-partners.png"
+    "logo": "/logos/solomon-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "solomon-partners-chicago",
@@ -5818,7 +6778,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Regional office with sector-focused middle-market advisory exposure.",
-    "logo": "/logos/solomon-partners.png"
+    "logo": "/logos/solomon-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "solomon-partners-miami",
@@ -5842,7 +6806,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office, not a broad analyst hub.",
-    "logo": "/logos/solomon-partners.png"
+    "logo": "/logos/solomon-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "solomon-partners-tampa",
@@ -5866,7 +6834,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Small regional office within a sector-focused boutique platform.",
-    "logo": "/logos/solomon-partners.png"
+    "logo": "/logos/solomon-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cascadia-capital-seattle",
@@ -5891,7 +6863,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective analyst seats with strong Pacific Northwest client exposure.",
     "notes": "Relevant for candidates targeting Seattle technology and middle-market M&A.",
-    "logo": "/logos/cascadia-capital.png"
+    "logo": "/logos/cascadia-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cascadia-capital-los-angeles",
@@ -5915,7 +6891,11 @@
     "competitivenessScore": 6.7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with consumer and media-tech relevance.",
-    "logo": "/logos/cascadia-capital.png"
+    "logo": "/logos/cascadia-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cascadia-capital-minneapolis",
@@ -5939,7 +6919,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with Midwest middle-market relevance.",
-    "logo": "/logos/cascadia-capital.png"
+    "logo": "/logos/cascadia-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cascadia-capital-new-york",
@@ -5963,7 +6947,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "Small East Coast presence for a Seattle-rooted advisory platform.",
-    "logo": "/logos/cascadia-capital.png"
+    "logo": "/logos/cascadia-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "aeris-partners-boston",
@@ -5988,7 +6976,11 @@
     "competitivenessScore": 7.65,
     "internshipOpportunities": "Small and selective analyst opportunities with software sector fit expectations.",
     "notes": "Highly focused technology advisory platform with limited formal recruiting.",
-    "logo": "/logos/aeris-partners.png"
+    "logo": "/logos/aeris-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "aeris-partners-san-francisco",
@@ -6013,7 +7005,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Very limited regional analyst visibility.",
     "notes": "Software-focused boutique with highly targeted recruiting.",
-    "logo": "/logos/aeris-partners.png"
+    "logo": "/logos/aeris-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "aeris-partners-los-angeles",
@@ -6038,7 +7034,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Small regional office within a focused technology M&A boutique.",
-    "logo": "/logos/aeris-partners.png"
+    "logo": "/logos/aeris-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-chicago",
@@ -6062,7 +7062,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Competitive but smaller U.S. analyst presence than major U.S. BBs.",
     "notes": "Canadian platform, but U.S. IB presence is closer to MM scale.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-new-york",
@@ -6087,7 +7091,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Selective U.S. analyst seats with stronger New York visibility.",
     "notes": "Canadian platform with a more selective/niche U.S. IB footprint.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-milwaukee",
@@ -6111,7 +7119,11 @@
     "competitivenessScore": 7.15,
     "internshipOpportunities": "Selective middle-market analyst opportunities.",
     "notes": "Dedicated U.S. middle-market IB presence within CIBC Capital Markets.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-san-francisco",
@@ -6135,7 +7147,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-relevant office, but U.S. IB recruiting is more niche than U.S. BBs.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-boston",
@@ -6159,7 +7175,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with capital markets and sector coverage relevance.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-denver",
@@ -6183,7 +7203,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional financing-oriented office rather than a broad IB hub.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cibc-capital-markets-dallas",
@@ -6207,7 +7231,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional office with financing and sector coverage relevance.",
-    "logo": "/logos/cibc-capital-markets.png"
+    "logo": "/logos/cibc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ubs-new-york",
@@ -6233,7 +7261,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Large but highly competitive summer analyst program across major groups.",
     "notes": "International platform with a significant U.S. investment banking platform.",
-    "logo": "/logos/ubs.png"
+    "logo": "/logos/ubs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ubs-san-francisco",
@@ -6258,7 +7290,11 @@
     "competitivenessScore": 8.65,
     "internshipOpportunities": "Selective technology-focused summer analyst seats.",
     "notes": "Strong fit for candidates targeting technology banking at an international BB.",
-    "logo": "/logos/ubs.png"
+    "logo": "/logos/ubs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ubs-houston",
@@ -6282,7 +7318,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Selective energy banking seats with sector-specific recruiting.",
     "notes": "Energy-oriented U.S. office within a broad global platform.",
-    "logo": "/logos/ubs.png"
+    "logo": "/logos/ubs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ubs-chicago",
@@ -6307,7 +7347,11 @@
     "competitivenessScore": 8.1,
     "internshipOpportunities": "Selective regional analyst seats with Midwest coverage exposure.",
     "notes": "Regional office for candidates seeking BB banking outside New York.",
-    "logo": "/logos/ubs.png"
+    "logo": "/logos/ubs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ubs-los-angeles",
@@ -6332,7 +7376,11 @@
     "competitivenessScore": 8.05,
     "internshipOpportunities": "Limited regional summer analyst visibility with sector-focused recruiting.",
     "notes": "Relevant for media, consumer, and West Coast advisory exposure.",
-    "logo": "/logos/ubs.png"
+    "logo": "/logos/ubs.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ft-partners-san-francisco",
@@ -6358,7 +7406,11 @@
     "competitivenessScore": 9.1,
     "internshipOpportunities": "Highly selective analyst seats with strong fintech fit expectations.",
     "notes": "Elite fintech boutique with intense, specialized recruiting.",
-    "logo": "/logos/ft-partners.png"
+    "logo": "/logos/ft-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ft-partners-new-york",
@@ -6383,7 +7435,11 @@
     "competitivenessScore": 8.85,
     "internshipOpportunities": "Highly selective analyst opportunities focused exclusively on fintech.",
     "notes": "Specialized boutique; recruiting is smaller than broad EB programs.",
-    "logo": "/logos/ft-partners.png"
+    "logo": "/logos/ft-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ft-partners-miami",
@@ -6408,7 +7464,11 @@
     "competitivenessScore": 8.25,
     "internshipOpportunities": "Small and highly selective regional analyst opportunities.",
     "notes": "Regional fintech office with cross-border relevance.",
-    "logo": "/logos/ft-partners.png"
+    "logo": "/logos/ft-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "plante-moran-corporate-finance-southfield",
@@ -6433,7 +7493,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited analyst visibility with hands-on lower-middle-market exposure.",
     "notes": "Accounting/advisory-adjacent platform with corporate finance relevance.",
-    "logo": "/logos/plante-moran-corporate-finance.png"
+    "logo": "/logos/plante-moran-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "plante-moran-corporate-finance-chicago",
@@ -6458,7 +7522,11 @@
     "competitivenessScore": 6.35,
     "internshipOpportunities": "Limited corporate finance analyst visibility.",
     "notes": "Accounting/advisory-adjacent platform with transaction advisory and corporate finance relevance.",
-    "logo": "/logos/plante-moran-corporate-finance.png"
+    "logo": "/logos/plante-moran-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "plante-moran-corporate-finance-cleveland",
@@ -6483,7 +7551,11 @@
     "competitivenessScore": 6.2,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional accounting/advisory-adjacent corporate finance platform.",
-    "logo": "/logos/plante-moran-corporate-finance.png"
+    "logo": "/logos/plante-moran-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "plante-moran-corporate-finance-grand-rapids",
@@ -6507,7 +7579,11 @@
     "competitivenessScore": 6.05,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional advisory platform with lower-middle-market relevance.",
-    "logo": "/logos/plante-moran-corporate-finance.png"
+    "logo": "/logos/plante-moran-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "credit-agricole-new-york",
@@ -6532,7 +7608,11 @@
     "competitivenessScore": 7.8,
     "internshipOpportunities": "Competitive analyst opportunities with strongest visibility in financing and capital markets.",
     "notes": "Globally large bank, but U.S. IB presence is more niche than traditional U.S. bulge brackets.",
-    "logo": "/logos/credit-agricole.png"
+    "logo": "/logos/credit-agricole.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "credit-agricole-houston",
@@ -6556,7 +7636,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Selective analyst visibility with energy and infrastructure relevance.",
     "notes": "Financing-oriented office with niche U.S. advisory recruiting.",
-    "logo": "/logos/credit-agricole.png"
+    "logo": "/logos/credit-agricole.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "credit-agricole-chicago",
@@ -6580,7 +7664,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional financing and corporate coverage office.",
-    "logo": "/logos/credit-agricole.png"
+    "logo": "/logos/credit-agricole.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "credit-agricole-menlo-park",
@@ -6604,7 +7692,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Very limited regional analyst visibility.",
     "notes": "Small technology-adjacent CIB office with niche U.S. IB recruiting.",
-    "logo": "/logos/credit-agricole.png"
+    "logo": "/logos/credit-agricole.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "unicredit-new-york",
@@ -6628,7 +7720,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Very limited U.S. IB analyst visibility.",
     "notes": "Globally large European bank, but U.S. investment banking presence is niche.",
-    "logo": "/logos/unicredit.png"
+    "logo": "/logos/unicredit.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bbva-new-york",
@@ -6652,7 +7748,11 @@
     "competitivenessScore": 7.1,
     "internshipOpportunities": "Limited U.S. IB-specific analyst visibility.",
     "notes": "International platform with more niche U.S. investment banking recruiting.",
-    "logo": "/logos/bbva.png"
+    "logo": "/logos/bbva.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bbva-houston",
@@ -6677,7 +7777,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Selective but limited energy and sustainable finance analyst visibility.",
     "notes": "Energy and cleantech hub; U.S. IB recruiting is niche relative to U.S. bulge brackets.",
-    "logo": "/logos/bbva.png"
+    "logo": "/logos/bbva.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pnc-capital-markets-pittsburgh",
@@ -6702,7 +7806,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Regular analyst opportunities with capital markets and corporate banking adjacency.",
     "notes": "Regional bank platform with middle-market capital markets and advisory exposure.",
-    "logo": "/logos/pnc-capital-markets.png"
+    "logo": "/logos/pnc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pnc-capital-markets-new-york",
@@ -6727,7 +7835,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective analyst visibility with capital markets exposure.",
     "notes": "Regional bank platform, not a traditional full-service advisory bank.",
-    "logo": "/logos/pnc-capital-markets.png"
+    "logo": "/logos/pnc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pnc-capital-markets-chicago",
@@ -6751,7 +7863,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Capital markets-oriented regional bank office.",
-    "logo": "/logos/pnc-capital-markets.png"
+    "logo": "/logos/pnc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pnc-capital-markets-charlotte",
@@ -6775,7 +7891,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional bank platform with financing and corporate banking adjacency.",
-    "logo": "/logos/pnc-capital-markets.png"
+    "logo": "/logos/pnc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pnc-capital-markets-atlanta",
@@ -6799,7 +7919,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional bank platform with middle-market capital markets exposure.",
-    "logo": "/logos/pnc-capital-markets.png"
+    "logo": "/logos/pnc-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "m-t-capital-markets-baltimore",
@@ -6823,7 +7947,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited but relevant regional analyst opportunities.",
     "notes": "Regional bank platform with financing and public finance relevance.",
-    "logo": "/logos/m-t-capital-markets.png"
+    "logo": "/logos/m-t-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "m-t-capital-markets-buffalo",
@@ -6847,7 +7975,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional bank platform with middle-market capital markets exposure.",
-    "logo": "/logos/m-t-capital-markets.png"
+    "logo": "/logos/m-t-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "m-t-capital-markets-new-york",
@@ -6871,7 +8003,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited analyst visibility compared with larger platforms.",
     "notes": "Regional bank capital markets platform, not a broad advisory office.",
-    "logo": "/logos/m-t-capital-markets.png"
+    "logo": "/logos/m-t-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "truist-securities-charlotte",
@@ -6896,7 +8032,11 @@
     "competitivenessScore": 7.7,
     "internshipOpportunities": "Regular analyst program with strong Charlotte banking visibility.",
     "notes": "Regional bank platform with meaningful middle-market capital markets and advisory exposure.",
-    "logo": "/logos/truist-securities.png"
+    "logo": "/logos/truist-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "truist-securities-atlanta",
@@ -6921,7 +8061,11 @@
     "competitivenessScore": 7.6,
     "internshipOpportunities": "Regular analyst opportunities with Southeast client exposure.",
     "notes": "Core office for Truist's regional bank securities platform.",
-    "logo": "/logos/truist-securities.png"
+    "logo": "/logos/truist-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "truist-securities-new-york",
@@ -6946,7 +8090,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Competitive analyst seats with capital markets and advisory exposure.",
     "notes": "Regional bank platform with stronger U.S. IB presence than many peers.",
-    "logo": "/logos/truist-securities.png"
+    "logo": "/logos/truist-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "truist-securities-houston",
@@ -6970,7 +8118,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective energy and capital markets analyst seats.",
     "notes": "Regional bank platform with energy financing relevance.",
-    "logo": "/logos/truist-securities.png"
+    "logo": "/logos/truist-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "truist-securities-san-francisco",
@@ -6994,7 +8146,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-relevant regional bank securities office.",
-    "logo": "/logos/truist-securities.png"
+    "logo": "/logos/truist-securities.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "huntington-capital-markets-columbus",
@@ -7018,7 +8174,11 @@
     "competitivenessScore": 6.8,
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Regional bank platform with middle-market financing and capital markets exposure.",
-    "logo": "/logos/huntington-capital-markets.png"
+    "logo": "/logos/huntington-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "huntington-capital-markets-chicago",
@@ -7042,7 +8202,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Regional bank capital markets office with Chicago middle-market relevance.",
-    "logo": "/logos/huntington-capital-markets.png"
+    "logo": "/logos/huntington-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "huntington-capital-markets-cleveland",
@@ -7066,7 +8230,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional bank platform with Ohio middle-market relevance.",
-    "logo": "/logos/huntington-capital-markets.png"
+    "logo": "/logos/huntington-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "huntington-capital-markets-detroit",
@@ -7090,7 +8258,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Automotive and industrial financing-oriented regional platform.",
-    "logo": "/logos/huntington-capital-markets.png"
+    "logo": "/logos/huntington-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "huntington-capital-markets-minneapolis",
@@ -7114,7 +8286,11 @@
     "competitivenessScore": 6.4,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional bank platform with Upper Midwest coverage relevance.",
-    "logo": "/logos/huntington-capital-markets.png"
+    "logo": "/logos/huntington-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "f-n-b-capital-markets-pittsburgh",
@@ -7138,7 +8314,11 @@
     "competitivenessScore": 6.15,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional bank platform with middle-market financing exposure.",
-    "logo": "/logos/f-n-b-capital-markets.png"
+    "logo": "/logos/f-n-b-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "f-n-b-capital-markets-cleveland",
@@ -7162,7 +8342,11 @@
     "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Small regional bank capital markets platform.",
-    "logo": "/logos/f-n-b-capital-markets.png"
+    "logo": "/logos/f-n-b-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "f-n-b-capital-markets-charlotte",
@@ -7186,7 +8370,11 @@
     "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional bank platform with financing exposure rather than broad IB coverage.",
-    "logo": "/logos/f-n-b-capital-markets.png"
+    "logo": "/logos/f-n-b-capital-markets.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bdo-capital-advisors-chicago",
@@ -7211,7 +8399,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited corporate finance analyst visibility.",
     "notes": "Accounting/advisory-adjacent platform with transaction advisory and corporate finance relevance.",
-    "logo": "/logos/bdo-capital-advisors.png"
+    "logo": "/logos/bdo-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bdo-capital-advisors-new-york",
@@ -7236,7 +8428,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "Transaction advisory and corporate finance platform adjacent to BDO's accounting network.",
-    "logo": "/logos/bdo-capital-advisors.png"
+    "logo": "/logos/bdo-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bdo-capital-advisors-los-angeles",
@@ -7261,7 +8457,11 @@
     "competitivenessScore": 6.15,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Accounting/advisory-adjacent rather than a pure investment banking office.",
-    "logo": "/logos/bdo-capital-advisors.png"
+    "logo": "/logos/bdo-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "bdo-capital-advisors-dallas",
@@ -7285,7 +8485,11 @@
     "competitivenessScore": 6.1,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Transaction advisory-adjacent platform with regional M&A relevance.",
-    "logo": "/logos/bdo-capital-advisors.png"
+    "logo": "/logos/bdo-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stout-chicago",
@@ -7310,7 +8514,11 @@
     "competitivenessScore": 6.8,
     "internshipOpportunities": "Selective analyst opportunities across advisory and valuation tracks.",
     "notes": "Advisory and valuation platform with investment banking relevance.",
-    "logo": "/logos/stout.png"
+    "logo": "/logos/stout.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stout-new-york",
@@ -7334,7 +8542,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective analyst opportunities with advisory and valuation exposure.",
     "notes": "Broader advisory platform rather than pure-play investment banking.",
-    "logo": "/logos/stout.png"
+    "logo": "/logos/stout.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stout-detroit",
@@ -7359,7 +8571,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Strong regional advisory and valuation platform with industrial relevance.",
-    "logo": "/logos/stout.png"
+    "logo": "/logos/stout.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stout-dallas",
@@ -7383,7 +8599,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Advisory platform with regional transaction exposure.",
-    "logo": "/logos/stout.png"
+    "logo": "/logos/stout.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "stout-los-angeles",
@@ -7408,7 +8628,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Advisory and valuation platform with transaction relevance.",
-    "logo": "/logos/stout.png"
+    "logo": "/logos/stout.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-new-york",
@@ -7433,7 +8657,11 @@
     "competitivenessScore": 7.35,
     "internshipOpportunities": "Competitive analyst opportunities across advisory and valuation practices.",
     "notes": "Large advisory platform with transaction advisory and investment banking relevance.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-chicago",
@@ -7458,7 +8686,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective advisory and valuation analyst opportunities.",
     "notes": "Broader advisory platform, not solely investment banking.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-los-angeles",
@@ -7483,7 +8715,11 @@
     "competitivenessScore": 6.9,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Advisory platform with transaction and valuation relevance.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-san-francisco",
@@ -7507,7 +8743,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Technology-relevant advisory and valuation platform.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-boston",
@@ -7532,7 +8772,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Advisory platform with healthcare and valuation relevance.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kroll-dallas",
@@ -7557,7 +8801,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Transaction advisory platform with regional sector relevance.",
-    "logo": "/logos/kroll.png"
+    "logo": "/logos/kroll.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "standard-chartered-new-york",
@@ -7582,7 +8830,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Competitive but niche U.S. analyst opportunities, strongest in markets and financing.",
     "notes": "Globally large bank, but U.S. IB presence is more niche than traditional U.S. bulge brackets.",
-    "logo": "/logos/standard-chartered.png"
+    "logo": "/logos/standard-chartered.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "standard-chartered-houston",
@@ -7606,7 +8858,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Energy and infrastructure financing presence with niche U.S. IB recruiting.",
-    "logo": "/logos/standard-chartered.png"
+    "logo": "/logos/standard-chartered.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "standard-chartered-san-francisco",
@@ -7630,7 +8886,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-adjacent office with niche U.S. IB recruiting.",
-    "logo": "/logos/standard-chartered.png"
+    "logo": "/logos/standard-chartered.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "intrepid-investment-bankers-los-angeles",
@@ -7655,7 +8915,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Selective analyst seats with hands-on M&A exposure.",
     "notes": "Strong Southern California LMM and MM advisory platform.",
-    "logo": "/logos/intrepid-investment-bankers.png"
+    "logo": "/logos/intrepid-investment-bankers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "intrepid-investment-bankers-new-york",
@@ -7679,7 +8943,11 @@
     "competitivenessScore": 6.65,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "Smaller East Coast presence within a Los Angeles-rooted advisory boutique.",
-    "logo": "/logos/intrepid-investment-bankers.png"
+    "logo": "/logos/intrepid-investment-bankers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "livingstone-chicago",
@@ -7704,7 +8972,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective middle-market analyst opportunities.",
     "notes": "International MM boutique with strong Chicago middle-market relevance.",
-    "logo": "/logos/livingstone.png"
+    "logo": "/logos/livingstone.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "livingstone-los-angeles",
@@ -7728,7 +9000,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office for lower-middle-market advisory.",
-    "logo": "/logos/livingstone.png"
+    "logo": "/logos/livingstone.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "livingstone-new-york",
@@ -7752,7 +9028,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "Smaller office within an international MM advisory platform.",
-    "logo": "/logos/livingstone.png"
+    "logo": "/logos/livingstone.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "chartwell-minneapolis",
@@ -7777,7 +9057,11 @@
     "competitivenessScore": 6.35,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "LMM boutique with ownership-transition and ESOP advisory relevance.",
-    "logo": "/logos/chartwell.png"
+    "logo": "/logos/chartwell.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "chartwell-chicago",
@@ -7801,7 +9085,11 @@
     "competitivenessScore": 6.1,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Specialized LMM advisory platform.",
-    "logo": "/logos/chartwell.png"
+    "logo": "/logos/chartwell.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "chartwell-dallas",
@@ -7825,7 +9113,11 @@
     "competitivenessScore": 6,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Specialized LMM advisory office.",
-    "logo": "/logos/chartwell.png"
+    "logo": "/logos/chartwell.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "marshberry-cleveland",
@@ -7850,7 +9142,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Limited analyst visibility with specialized insurance advisory exposure.",
     "notes": "Specialized insurance and financial services advisory platform.",
-    "logo": "/logos/marshberry.png"
+    "logo": "/logos/marshberry.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "marshberry-new-york",
@@ -7874,7 +9170,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited analyst visibility.",
     "notes": "Sector-specialist advisory platform rather than broad investment banking.",
-    "logo": "/logos/marshberry.png"
+    "logo": "/logos/marshberry.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "marshberry-grand-rapids",
@@ -7898,7 +9198,11 @@
     "competitivenessScore": 6.05,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Specialized insurance advisory office.",
-    "logo": "/logos/marshberry.png"
+    "logo": "/logos/marshberry.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rockefeller-capital-management-new-york",
@@ -7922,7 +9226,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Limited investment banking-specific analyst visibility.",
     "notes": "Boutique advisory platform; not a traditional investment banking analyst program.",
-    "logo": "/logos/rockefeller-capital-management.png"
+    "logo": "/logos/rockefeller-capital-management.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rockefeller-capital-management-san-francisco",
@@ -7946,7 +9254,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Very limited investment banking-specific analyst visibility.",
     "notes": "Advisory and private capital platform with limited IB recruiting.",
-    "logo": "/logos/rockefeller-capital-management.png"
+    "logo": "/logos/rockefeller-capital-management.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "rockefeller-capital-management-chicago",
@@ -7970,7 +9282,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Very limited investment banking-specific analyst visibility.",
     "notes": "Advisory platform rather than a pure investment banking office.",
-    "logo": "/logos/rockefeller-capital-management.png"
+    "logo": "/logos/rockefeller-capital-management.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-new-york",
@@ -7995,7 +9311,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Highly competitive analyst program across advisory, restructuring, and financial valuation teams.",
     "notes": "Strong global advisory platform; elite in restructuring and valuation-adjacent advisory.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-chicago",
@@ -8020,7 +9340,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Competitive regional analyst seats with strong middle-market advisory exposure.",
     "notes": "Strong Chicago option for middle-market M&A and restructuring.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-houston",
@@ -8045,7 +9369,11 @@
     "competitivenessScore": 8.2,
     "internshipOpportunities": "Selective energy and restructuring-oriented analyst opportunities.",
     "notes": "Energy-focused office within a top advisory and restructuring platform.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-dallas",
@@ -8070,7 +9398,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Selective regional analyst seats with sponsor-backed M&A exposure.",
     "notes": "Important Texas office for middle-market advisory.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-atlanta",
@@ -8095,7 +9427,11 @@
     "competitivenessScore": 7.95,
     "internshipOpportunities": "Selective regional analyst seats with strong advisory exposure.",
     "notes": "Southeast office with sponsor and middle-market M&A relevance.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-san-francisco",
@@ -8120,7 +9456,11 @@
     "competitivenessScore": 8.05,
     "internshipOpportunities": "Selective technology-focused analyst seats.",
     "notes": "Technology-focused office within a broad advisory platform.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "houlihan-lokey-minneapolis",
@@ -8145,7 +9485,11 @@
     "competitivenessScore": 7.55,
     "internshipOpportunities": "Limited but selective regional analyst opportunities.",
     "notes": "Regional office with middle-market and valuation-adjacent relevance.",
-    "logo": "/logos/houlihan-lokey.png"
+    "logo": "/logos/houlihan-lokey.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deloitte-corporate-finance-charlotte",
@@ -8170,7 +9514,11 @@
     "competitivenessScore": 6.95,
     "internshipOpportunities": "Selective corporate finance analyst opportunities with Big 4 transaction advisory adjacency.",
     "notes": "Big 4 corporate finance platform; investment banking exposure is more transaction-advisory-adjacent than traditional BB/EB banking.",
-    "logo": "/logos/deloitte-corporate-finance.png"
+    "logo": "/logos/deloitte-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deloitte-corporate-finance-chicago",
@@ -8195,7 +9543,11 @@
     "competitivenessScore": 6.8,
     "internshipOpportunities": "Selective regional corporate finance analyst visibility.",
     "notes": "Big 4 corporate finance platform with transaction advisory adjacency.",
-    "logo": "/logos/deloitte-corporate-finance.png"
+    "logo": "/logos/deloitte-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deloitte-corporate-finance-new-york",
@@ -8220,7 +9572,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective analyst visibility with Big 4 advisory platform exposure.",
     "notes": "Corporate finance exposure is more transaction-advisory-adjacent than traditional investment banking.",
-    "logo": "/logos/deloitte-corporate-finance.png"
+    "logo": "/logos/deloitte-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "deloitte-corporate-finance-los-angeles",
@@ -8245,7 +9601,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional corporate finance analyst visibility.",
     "notes": "Big 4 corporate finance platform with transaction advisory adjacency.",
-    "logo": "/logos/deloitte-corporate-finance.png"
+    "logo": "/logos/deloitte-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pwc-corporate-finance-new-york",
@@ -8270,7 +9630,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective deals and corporate finance analyst visibility.",
     "notes": "Big 4 corporate finance platform; investment banking exposure is more transaction-advisory-adjacent than traditional BB/EB banking.",
-    "logo": "/logos/pwc-corporate-finance.png"
+    "logo": "/logos/pwc-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pwc-corporate-finance-chicago",
@@ -8295,7 +9659,11 @@
     "competitivenessScore": 6.7,
     "internshipOpportunities": "Selective regional corporate finance and deals analyst visibility.",
     "notes": "Big 4 corporate finance platform with transaction advisory adjacency.",
-    "logo": "/logos/pwc-corporate-finance.png"
+    "logo": "/logos/pwc-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pwc-corporate-finance-houston",
@@ -8320,7 +9688,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional corporate finance analyst visibility.",
     "notes": "Big 4 corporate finance and deals platform with energy transaction relevance.",
-    "logo": "/logos/pwc-corporate-finance.png"
+    "logo": "/logos/pwc-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "pwc-corporate-finance-san-francisco",
@@ -8345,7 +9717,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Transaction-advisory-adjacent corporate finance platform.",
-    "logo": "/logos/pwc-corporate-finance.png"
+    "logo": "/logos/pwc-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ey-capital-advisors-new-york",
@@ -8370,7 +9746,11 @@
     "competitivenessScore": 6.85,
     "internshipOpportunities": "Selective corporate finance and transaction advisory analyst visibility.",
     "notes": "Big 4 corporate finance platform; investment banking exposure is more transaction-advisory-adjacent than traditional BB/EB banking.",
-    "logo": "/logos/ey-capital-advisors.png"
+    "logo": "/logos/ey-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ey-capital-advisors-chicago",
@@ -8395,7 +9775,11 @@
     "competitivenessScore": 6.7,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Big 4 corporate finance platform with transaction services adjacency.",
-    "logo": "/logos/ey-capital-advisors.png"
+    "logo": "/logos/ey-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ey-capital-advisors-los-angeles",
@@ -8420,7 +9804,11 @@
     "competitivenessScore": 6.55,
     "internshipOpportunities": "Limited regional corporate finance analyst visibility.",
     "notes": "Transaction-advisory-adjacent corporate finance platform.",
-    "logo": "/logos/ey-capital-advisors.png"
+    "logo": "/logos/ey-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "ey-capital-advisors-houston",
@@ -8445,7 +9833,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Big 4 corporate finance platform with energy transaction relevance.",
-    "logo": "/logos/ey-capital-advisors.png"
+    "logo": "/logos/ey-capital-advisors.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kpmg-corporate-finance-new-york",
@@ -8470,7 +9862,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Selective corporate finance analyst visibility.",
     "notes": "Big 4 corporate finance platform; investment banking exposure is more transaction-advisory-adjacent than traditional BB/EB banking.",
-    "logo": "/logos/kpmg-corporate-finance.png"
+    "logo": "/logos/kpmg-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kpmg-corporate-finance-chicago",
@@ -8495,7 +9891,11 @@
     "competitivenessScore": 6.6,
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Big 4 corporate finance platform with transaction advisory adjacency.",
-    "logo": "/logos/kpmg-corporate-finance.png"
+    "logo": "/logos/kpmg-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kpmg-corporate-finance-charlotte",
@@ -8520,7 +9920,11 @@
     "competitivenessScore": 6.5,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Big 4 corporate finance platform with middle-market advisory relevance.",
-    "logo": "/logos/kpmg-corporate-finance.png"
+    "logo": "/logos/kpmg-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "kpmg-corporate-finance-dallas",
@@ -8545,7 +9949,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Transaction-advisory-adjacent corporate finance platform.",
-    "logo": "/logos/kpmg-corporate-finance.png"
+    "logo": "/logos/kpmg-corporate-finance.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "sc-h-capital-baltimore",
@@ -8570,7 +9978,11 @@
     "competitivenessScore": 6.25,
     "internshipOpportunities": "Limited but hands-on analyst opportunities for regional advisory candidates.",
     "notes": "Regional lower-middle-market advisory platform with meaningful relevance for non-target recruiting.",
-    "logo": "/logos/sc-h-capital.png"
+    "logo": "/logos/sc-h-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "sc-h-capital-washington-dc",
@@ -8594,7 +10006,11 @@
     "competitivenessScore": 6.05,
     "internshipOpportunities": "Very limited analyst visibility.",
     "notes": "Regional LMM advisory platform with Mid-Atlantic transaction relevance.",
-    "logo": "/logos/sc-h-capital.png"
+    "logo": "/logos/sc-h-capital.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cain-brothers-new-york",
@@ -8619,7 +10035,11 @@
     "competitivenessScore": 7.75,
     "internshipOpportunities": "Selective healthcare-focused analyst opportunities.",
     "notes": "Healthcare-focused advisory platform with strong sector specialization.",
-    "logo": "/logos/cain-brothers.png"
+    "logo": "/logos/cain-brothers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cain-brothers-chicago",
@@ -8643,7 +10063,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional healthcare banking analyst opportunities.",
     "notes": "Healthcare-focused advisory office with strong sector specialization.",
-    "logo": "/logos/cain-brothers.png"
+    "logo": "/logos/cain-brothers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cain-brothers-san-francisco",
@@ -8667,7 +10091,11 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Selective regional healthcare analyst visibility.",
     "notes": "Healthcare-focused platform with West Coast health technology relevance.",
-    "logo": "/logos/cain-brothers.png"
+    "logo": "/logos/cain-brothers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "cain-brothers-nashville",
@@ -8691,7 +10119,11 @@
     "competitivenessScore": 7,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Healthcare-focused advisory platform with strong provider services relevance.",
-    "logo": "/logos/cain-brothers.png"
+    "logo": "/logos/cain-brothers.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-new-york",
@@ -8718,7 +10150,11 @@
     "competitivenessScore": 9.25,
     "internshipOpportunities": "Highly selective summer analyst opportunities with strong advisory exposure.",
     "notes": "Strong elite boutique platform with competitive analyst recruiting.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-houston",
@@ -8744,7 +10180,11 @@
     "competitivenessScore": 9,
     "internshipOpportunities": "Highly selective energy-focused analyst visibility.",
     "notes": "Premier energy advisory presence within an elite boutique platform.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-san-francisco",
@@ -8769,7 +10209,11 @@
     "competitivenessScore": 8.55,
     "internshipOpportunities": "Very selective regional analyst visibility focused on technology advisory.",
     "notes": "West Coast office with technology and growth advisory relevance.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-los-angeles",
@@ -8794,7 +10238,11 @@
     "competitivenessScore": 8.45,
     "internshipOpportunities": "Very selective regional analyst visibility.",
     "notes": "West Coast advisory office with sponsor, consumer, and media relevance.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-chicago",
@@ -8819,7 +10267,11 @@
     "competitivenessScore": 8.35,
     "internshipOpportunities": "Very selective regional analyst visibility.",
     "notes": "Midwest advisory office with industrials and sponsor relevance.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "perella-weinberg-partners-denver",
@@ -8844,7 +10296,11 @@
     "competitivenessScore": 8,
     "internshipOpportunities": "Limited but highly selective regional analyst visibility.",
     "notes": "Smaller regional advisory office within a strong elite boutique platform.",
-    "logo": "/logos/perella-weinberg-partners.png"
+    "logo": "/logos/perella-weinberg-partners.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-new-york",
@@ -8872,7 +10328,11 @@
     "competitivenessScore": 7.45,
     "internshipOpportunities": "Selective middle-market analyst opportunities with the strongest platform visibility in New York.",
     "notes": "Legitimate MM banking and capital markets platform with Citizens JMP advisory relevance.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-boston",
@@ -8896,7 +10356,11 @@
     "competitivenessScore": 7.25,
     "internshipOpportunities": "Selective regional analyst visibility with strong Boston recruiting relevance.",
     "notes": "Stronger recruiting-relevant office for healthcare, technology, and middle-market coverage.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-san-francisco",
@@ -8921,7 +10385,11 @@
     "competitivenessScore": 7.3,
     "internshipOpportunities": "Selective regional analyst opportunities focused on growth, technology, and healthcare coverage.",
     "notes": "Citizens JMP gives this office stronger technology and growth-company advisory relevance.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-charlotte",
@@ -8945,7 +10413,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective regional analyst visibility, especially for financing and capital markets roles.",
     "notes": "Stronger Citizens office for capital markets and corporate banking-adjacent exposure.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-chicago",
@@ -8969,7 +10441,11 @@
     "competitivenessScore": 7.05,
     "internshipOpportunities": "Selective regional analyst visibility in middle-market coverage and sponsor work.",
     "notes": "Relevant Midwest MM platform with industrials and sponsor coverage strength.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-los-angeles",
@@ -8993,7 +10469,11 @@
     "competitivenessScore": 6.75,
     "internshipOpportunities": "Limited but relevant regional analyst visibility.",
     "notes": "West Coast middle-market office with growth and sponsor relevance.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-atlanta",
@@ -9017,7 +10497,11 @@
     "competitivenessScore": 6.45,
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "More conservative recruiting relevance than Citizens' larger capital markets hubs.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   },
   {
     "id": "citizens-providence",
@@ -9041,6 +10525,10 @@
     "competitivenessScore": 6.35,
     "internshipOpportunities": "Limited analyst visibility with more corporate banking-adjacent exposure.",
     "notes": "Important Citizens market, but less traditional IB recruiting visibility than New York, Boston, or San Francisco.",
-    "logo": "/logos/citizens.png"
+    "logo": "/logos/citizens.png",
+    "address": "",
+    "zip": "",
+    "addressConfidence": "needs verification",
+    "sourceNote": "Exact public office address not yet verified."
   }
 ]

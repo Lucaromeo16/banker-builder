@@ -1368,6 +1368,13 @@ textarea {
   font-weight: 850;
 }
 
+.address-verification-note {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
 .office-popup dl {
   display: grid;
   gap: 8px;
