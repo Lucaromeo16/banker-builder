@@ -68,6 +68,50 @@ const features = [
         <path d="M19 9v4" />
       </svg>
     )
+  },
+  {
+    mode: 'resume-analyzer',
+    eyebrow: 'AI resume review',
+    title: 'Resume Analyzer',
+    description: 'Get AI-powered feedback on your resume for investment banking recruiting.',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 3h7l4 4v14H7z" />
+        <path d="M14 3v5h5" />
+        <path d="M10 12h6" />
+        <path d="M10 15h6" />
+        <path d="M10 18h4" />
+      </svg>
+    )
+  },
+  {
+    mode: 'application-tracker',
+    eyebrow: 'Application workflow',
+    title: 'Application Tracker',
+    description: 'Track applications, interview rounds, deadlines, contacts, and recruiting notes.',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 5h16" />
+        <path d="M4 12h16" />
+        <path d="M4 19h16" />
+        <path d="M8 3v18" />
+        <path d="M16 3v18" />
+      </svg>
+    )
+  },
+  {
+    mode: 'knowledge-base',
+    eyebrow: 'Recruiting guide',
+    title: 'Knowledge Base',
+    description: 'Learn investment banking groups, recruiting strategy, technical concepts, and market terminology.',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z" />
+        <path d="M4 5.5v16" />
+        <path d="M8 7h8" />
+        <path d="M8 11h7" />
+      </svg>
+    )
   }
 ];
 

@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
 import HomePage from './components/HomePage';
 import InterviewOddsPage from './components/InterviewOddsPage';
 import InterviewPrepPage from './components/InterviewPrepPage';
+import KnowledgeBasePage from './components/KnowledgeBasePage';
 import NetworkingHubPage from './components/NetworkingHubPage';
+import ResumeAnalyzerPage from './components/ResumeAnalyzerPage';
 import TargetListBuilderPage from './components/TargetListBuilderPage';
 
 const navItems = [
@@ -12,7 +15,10 @@ const navItems = [
   { label: 'Target List', mode: 'target-list' },
   { label: 'Interview Prep', mode: 'interview-prep' },
   { label: 'Firm Map', mode: 'firm-map' },
-  { label: 'Networking Hub', mode: 'networking-hub' }
+  { label: 'Networking Hub', mode: 'networking-hub' },
+  { label: 'Resume Analyzer', mode: 'resume-analyzer' },
+  { label: 'Application Tracker', mode: 'application-tracker' },
+  { label: 'Knowledge Base', mode: 'knowledge-base' }
 ];
 
 export default function App() {
@@ -58,7 +64,10 @@ export default function App() {
         {mode !== 'home' ? (
           <header className="header page-header">
             <h1>Banker Builder</h1>
-            <p>Model interview odds, build target lists, practice interviews, map IB offices, and manage networking workflows.</p>
+            <p>
+              Model interview odds, build target lists, practice interviews, map IB offices, manage networking workflows, and
+              organize your recruiting strategy.
+            </p>
           </header>
         ) : null}
 
@@ -75,6 +84,12 @@ export default function App() {
         {mode === 'networking-hub' ? (
           <NetworkingHubPage onBack={goHome} prefillContact={networkingPrefill} onPrefillConsumed={() => setNetworkingPrefill(null)} />
         ) : null}
+
+        {mode === 'resume-analyzer' ? <ResumeAnalyzerPage onBack={goHome} /> : null}
+
+        {mode === 'application-tracker' ? <ApplicationTrackerPage onBack={goHome} /> : null}
+
+        {mode === 'knowledge-base' ? <KnowledgeBasePage onBack={goHome} /> : null}
       </main>
     </>
   );

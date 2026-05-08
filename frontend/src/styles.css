@@ -1924,7 +1924,14 @@ li {
   color: #FFFFFF;
 }
 
-.networking-page {
+.networking-page,
+.application-tracker-page,
+.knowledge-base-page {
+  display: grid;
+  gap: 24px;
+}
+
+.resume-analyzer-page {
   display: grid;
   gap: 24px;
 }
@@ -2177,6 +2184,291 @@ li {
   font-weight: 750;
 }
 
+.resume-input-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(59, 130, 246, 0.12), transparent 34%),
+    rgba(17, 24, 39, 0.78);
+}
+
+.resume-input-card .section-heading {
+  align-items: flex-start;
+}
+
+.resume-input-card .section-heading p {
+  margin: 6px 0 0;
+}
+
+.resume-word-count {
+  flex: 0 0 auto;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.34rem 0.62rem;
+}
+
+.resume-textarea {
+  min-height: 340px;
+}
+
+.resume-loading {
+  margin: 0;
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  border-radius: 14px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #BFDBFE;
+  font-weight: 750;
+  padding: 12px 14px;
+}
+
+.resume-results {
+  display: grid;
+  gap: 18px;
+}
+
+.resume-score-grid,
+.resume-result-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.resume-score-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.resume-result-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.resume-score-card,
+.resume-section-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: rgba(17, 24, 39, 0.78);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.resume-score-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+}
+
+.resume-score-card.featured {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(59, 130, 246, 0.16), transparent 46%),
+    rgba(17, 24, 39, 0.84);
+}
+
+.resume-score-card span {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.resume-score-card strong {
+  color: #FFFFFF;
+  font-size: 1.55rem;
+}
+
+.resume-section-card {
+  padding: 18px;
+}
+
+.resume-section-card h3 {
+  margin: 0 0 12px;
+  color: #FFFFFF;
+}
+
+.resume-section-card p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.resume-section-card ul {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.resume-section-card li {
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  line-height: 1.55;
+}
+
+.resume-wide-card {
+  grid-column: 1 / -1;
+}
+
+.resume-rewrite-list {
+  display: grid;
+  gap: 12px;
+}
+
+.resume-rewrite-list article {
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 14px;
+}
+
+.resume-rewrite-list strong {
+  color: #FFFFFF;
+  line-height: 1.45;
+}
+
+.application-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 18px;
+}
+
+.application-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.application-notes-field,
+.application-form .primary {
+  grid-column: 1 / -1;
+}
+
+.application-notes-field textarea {
+  min-height: 120px;
+}
+
+.application-filters {
+  display: grid;
+  gap: 14px;
+}
+
+.application-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.application-column {
+  min-height: 260px;
+}
+
+.application-card {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  background: rgba(17, 24, 39, 0.74);
+  padding: 14px;
+}
+
+.application-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.application-card dt {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.application-card dd {
+  margin: 2px 0 0;
+  color: var(--text-primary);
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.knowledge-card {
+  display: grid;
+  gap: 12px;
+  min-height: 230px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: rgba(17, 24, 39, 0.78);
+  color: inherit;
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform var(--transition-card), box-shadow var(--transition-card), border-color var(--transition-card);
+}
+
+.knowledge-card:hover {
+  border-color: rgba(59, 130, 246, 0.48);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
+}
+
+.knowledge-card strong {
+  color: #FFFFFF;
+  font-size: 1.08rem;
+  line-height: 1.28;
+}
+
+.knowledge-card > span:not(.feature-eyebrow) {
+  color: var(--text-secondary);
+  line-height: 1.52;
+}
+
+.knowledge-card .tag-row {
+  margin: auto 0 0;
+}
+
+.knowledge-detail {
+  gap: 22px;
+}
+
+.knowledge-detail h2 {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.knowledge-summary {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.knowledge-detail h3 {
+  margin: 0 0 10px;
+  color: #FFFFFF;
+}
+
+.knowledge-detail p,
+.knowledge-detail li {
+  line-height: 1.65;
+}
+
+.knowledge-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.65fr);
+  gap: 18px;
+}
+
 .odds-result h2 {
   color: #FFFFFF;
   font-size: 4rem;
@@ -2232,6 +2524,8 @@ li {
 
   .home-grid,
   .home-about-grid,
+  .resume-score-grid,
+  .resume-result-grid,
   .results-grid,
   .intro-list,
   .choice-grid,
@@ -2302,8 +2596,20 @@ li {
 
   .networking-layout,
   .network-contact-form,
+  .application-layout,
+  .application-form,
+  .knowledge-grid,
+  .knowledge-detail-grid,
   .contact-card dl {
     grid-template-columns: 1fr;
+  }
+
+  .resume-textarea {
+    min-height: 280px;
+  }
+
+  .application-board {
+    grid-template-columns: repeat(8, minmax(250px, 1fr));
   }
 
   .pipeline-board {
