@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import ibOffices from '../../../data/ibOffices.json';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 const CONTACTS_STORAGE_KEY = 'bankerBuilder.networkingContacts';
 
 const connectionTypes = ['Cold Outreach', 'Alumni', 'Friend/Family', 'Campus Event', 'Recruiter', 'Existing Relationship'];
@@ -239,7 +238,7 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
     setDraftLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/networking-outreach`, {
+      const response = await fetch('/api/networking-outreach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(draftRequest)

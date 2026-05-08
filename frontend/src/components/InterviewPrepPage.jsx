@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
-
 const questionBanks = {
   technical: {
     title: 'Technical Questions',
@@ -314,7 +312,7 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
     setFeedbackLoading(true);
 
-    const feedbackEndpoint = `${API_BASE_URL}/api/interview-feedback`;
+    const feedbackEndpoint = '/api/interview-feedback';
     const payload = {
       category: currentQuestion.categoryTitle,
       question: currentQuestion.prompt,
