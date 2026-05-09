@@ -1,0 +1,37 @@
+[
+  {
+    "id": "capstone-partners-detroit",
+    "firm": "Capstone Partners",
+    "officeCity": "Detroit",
+    "state": "MI",
+    "currentLatitude": 42.3314,
+    "currentLongitude": -83.0458,
+    "type": "National LMM Boutique",
+    "groups": [
+      "Automotive",
+      "Industrials",
+      "Manufacturing",
+      "Business Services",
+      "M&A"
+    ],
+    "sourceNote": "Exact office address could not be confidently verified.",
+    "verificationAttempts": 1
+  },
+  {
+    "id": "capstone-partners-irvine",
+    "firm": "Capstone Partners",
+    "officeCity": "Irvine",
+    "state": "CA",
+    "currentLatitude": 33.6846,
+    "currentLongitude": -117.8265,
+    "type": "National LMM Boutique",
+    "groups": [
+      "Technology",
+      "Consumer & Retail",
+      "Healthcare",
+      "M&A"
+    ],
+    "sourceNote": "Exact office address could not be confidently verified.",
+    "verificationAttempts": 1
+  }
+]
