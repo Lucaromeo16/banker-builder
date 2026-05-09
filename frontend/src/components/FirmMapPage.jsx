@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
 import ibOffices from '../../../data/ibOffices.json';
+import usCities from '../../../data/usCities.json';
 
 const BANK_TYPE_OPTIONS = [
   'All',
@@ -63,6 +64,9 @@ const TYPE_CLASS_NAMES = {
   Unknown: 'unknown'
 };
 
+const DEFAULT_RADIUS_MILES = 50;
+const EARTH_RADIUS_MILES = 3958.8;
+
 const GROUP_MATCHERS = {
   'M&A': ['m&a', 'mergers'],
   Restructuring: ['restructuring', 'liability management', 'special situations'],
@@ -83,6 +87,39 @@ const GROUP_MATCHERS = {
 
 function renderStars(count) {
   return `${count}/5`;
+}
+
+function degreesToRadians(value) {
+  return (value * Math.PI) / 180;
+}
+
+function distanceInMiles(from, to) {
+  const lat1 = degreesToRadians(from.latitude);
+  const lat2 = degreesToRadians(to.latitude);
+  const deltaLat = degreesToRadians(to.latitude - from.latitude);
+  const deltaLon = degreesToRadians(to.longitude - from.longitude);
+  const a =
+    Math.sin(deltaLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return EARTH_RADIUS_MILES * c;
+}
+
+function formatDistance(miles) {
+  if (!Number.isFinite(miles)) return '';
+  return `${Math.round(miles)} miles`;
+}
+
+function cityMatchesSearch(city, searchTerm) {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  if (!normalizedSearch) return false;
+
+  return (
+    city.displayName.toLowerCase().includes(normalizedSearch) ||
+    city.city.toLowerCase().includes(normalizedSearch) ||
+    `${city.city} ${city.state}`.toLowerCase().includes(normalizedSearch)
+  );
 }
 
 function escapeHtml(value) {
@@ -207,7 +244,10 @@ function firmSummariesForOffices(offices) {
     .map((firm) => ({
       ...firm,
       groups: Array.from(firm.groups).sort(),
-      summary: firm.offices[0]?.officeHistory || ''
+      summary: firm.offices[0]?.officeHistory || '',
+      closestOffice: firm.offices
+        .filter((office) => Number.isFinite(office.distanceMiles))
+        .sort((a, b) => a.distanceMiles - b.distanceMiles)[0]
     }))
     .sort((a, b) => a.firm.localeCompare(b.firm));
 }
@@ -337,6 +377,9 @@ export default function FirmMapPage({ onBack, onAddContact }) {
   const [viewMode, setViewMode] = useState('map');
   const [expandedFirm, setExpandedFirm] = useState(null);
   const [bankSearch, setBankSearch] = useState('');
+  const [locationSearch, setLocationSearch] = useState('');
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [radiusMiles, setRadiusMiles] = useState(DEFAULT_RADIUS_MILES);
   const [filters, setFilters] = useState({
     bankType: 'All',
     group: 'All',
@@ -345,10 +388,34 @@ export default function FirmMapPage({ onBack, onAddContact }) {
     minCompetitiveness: 0
   });
 
-  const filteredOffices = useMemo(
-    () => ibOffices.filter((office) => officeMatchesBankSearch(office, bankSearch) && officeMatchesFilters(office, filters)),
-    [bankSearch, filters]
-  );
+  const citySuggestions = useMemo(() => {
+    if (!locationSearch.trim()) return [];
+    if (selectedCity && locationSearch === selectedCity.displayName) return [];
+
+    return usCities
+      .filter((city) => cityMatchesSearch(city, locationSearch))
+      .sort((a, b) => a.displayName.localeCompare(b.displayName))
+      .slice(0, 8);
+  }, [locationSearch, selectedCity]);
+
+  const radiusFilterActive = Boolean(selectedCity);
+
+  const filteredOffices = useMemo(() => {
+    return ibOffices
+      .filter((office) => officeMatchesBankSearch(office, bankSearch) && officeMatchesFilters(office, filters))
+      .map((office) => {
+        if (!radiusFilterActive) return office;
+
+        return {
+          ...office,
+          distanceMiles: distanceInMiles(selectedCity, {
+            latitude: office.latitude,
+            longitude: office.longitude
+          })
+        };
+      })
+      .filter((office) => !radiusFilterActive || office.distanceMiles <= radiusMiles);
+  }, [bankSearch, filters, radiusFilterActive, radiusMiles, selectedCity]);
 
   const firmSummaries = useMemo(() => firmSummariesForOffices(filteredOffices), [filteredOffices]);
 
@@ -362,13 +429,45 @@ export default function FirmMapPage({ onBack, onAddContact }) {
     setExpandedFirm(null);
   };
 
+  const updateLocationSearch = (value) => {
+    setLocationSearch(value);
+    if (!selectedCity || value !== selectedCity.displayName) {
+      setSelectedCity(null);
+    }
+    setExpandedFirm(null);
+  };
+
+  const selectCity = (city) => {
+    setSelectedCity(city);
+    setLocationSearch(city.displayName);
+    setExpandedFirm(null);
+  };
+
+  const clearLocationRadius = () => {
+    setLocationSearch('');
+    setSelectedCity(null);
+    setRadiusMiles(DEFAULT_RADIUS_MILES);
+    setExpandedFirm(null);
+  };
+
   const toggleFirm = (firm) => {
     setExpandedFirm((current) => (current === firm ? null : firm));
   };
 
   const hasBankSearch = bankSearch.trim().length > 0;
-  const emptyMapMessage = hasBankSearch ? 'No banks match your search and filters.' : 'No offices match the selected filters.';
-  const emptyListMessage = hasBankSearch ? 'No banks match your search and filters.' : 'No firms match the selected filters.';
+  const hasLocationSearch = locationSearch.trim().length > 0;
+  const showNoCityMatch = hasLocationSearch && !selectedCity && citySuggestions.length === 0;
+  const emptyRadiusMessage = 'No offices match the selected location radius and filters.';
+  const emptyMapMessage = radiusFilterActive
+    ? emptyRadiusMessage
+    : hasBankSearch
+      ? 'No banks match your search and filters.'
+      : 'No offices match the selected filters.';
+  const emptyListMessage = radiusFilterActive
+    ? emptyRadiusMessage
+    : hasBankSearch
+      ? 'No banks match your search and filters.'
+      : 'No firms match the selected filters.';
 
   return (
     <>
@@ -461,6 +560,54 @@ export default function FirmMapPage({ onBack, onAddContact }) {
             </select>
           </label>
 
+          <div className="location-radius-control">
+            <div className="location-radius-heading">
+              <span>Location Radius</span>
+              <button type="button" onClick={clearLocationRadius} disabled={!hasLocationSearch && radiusMiles === DEFAULT_RADIUS_MILES}>
+                Clear
+              </button>
+            </div>
+            <div className="city-search-wrap">
+              <input
+                type="search"
+                value={locationSearch}
+                onChange={(event) => updateLocationSearch(event.target.value)}
+                placeholder="Search any U.S. city or town..."
+                aria-label="Search any U.S. city or town"
+                autoComplete="off"
+              />
+              {citySuggestions.length > 0 ? (
+                <div className="city-suggestion-list" role="listbox">
+                  {citySuggestions.map((city) => (
+                    <button
+                      type="button"
+                      key={city.displayName}
+                      onClick={() => selectCity(city)}
+                      role="option"
+                    >
+                      {city.displayName}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+              {showNoCityMatch ? (
+                <p className="city-search-empty">No matching U.S. city found in current city dataset.</p>
+              ) : null}
+            </div>
+            <label className="radius-slider-control">
+              <span>Radius: {radiusMiles} miles</span>
+              <input
+                type="range"
+                min="10"
+                max="100"
+                step="5"
+                value={radiusMiles}
+                onChange={(event) => setRadiusMiles(Number(event.target.value))}
+              />
+            </label>
+            {selectedCity ? <p className="radius-active-note">Filtering from {selectedCity.displayName}</p> : null}
+          </div>
+
           <div className="map-view-toggle" aria-label="Map display mode">
             <button
               type="button"
@@ -503,6 +650,19 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                 maxZoom={19}
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+              {radiusFilterActive ? (
+                <Circle
+                  center={[selectedCity.latitude, selectedCity.longitude]}
+                  radius={radiusMiles * 1609.344}
+                  pathOptions={{
+                    color: '#38BDF8',
+                    fillColor: '#38BDF8',
+                    fillOpacity: 0.08,
+                    opacity: 0.55,
+                    weight: 1.5
+                  }}
+                />
+              ) : null}
               <ClusteredOfficeMarkers offices={filteredOffices} onAddContact={onAddContact} />
             </MapContainer>
           </div>
@@ -521,7 +681,15 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                     <div className="map-office-card-heading">
                       <div>
                         <h3>{firm.firm}</h3>
-                        <p>{firm.offices.length} matching {firm.offices.length === 1 ? 'office' : 'offices'}</p>
+                        <p>
+                          {firm.offices.length} matching {firm.offices.length === 1 ? 'office' : 'offices'}
+                          {radiusFilterActive ? ' within radius' : ''}
+                        </p>
+                        {radiusFilterActive && firm.closestOffice ? (
+                          <p className="map-distance-summary">
+                            Closest office: {firm.closestOffice.officeCity}, {firm.closestOffice.state} — {formatDistance(firm.closestOffice.distanceMiles)}
+                          </p>
+                        ) : null}
                       </div>
                       <span className={`map-type-pill map-type-pill-${TYPE_CLASS_NAMES[firm.type] || TYPE_CLASS_NAMES.Unknown}`}>
                         {firm.type}
@@ -560,6 +728,12 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                             </div>
                             <p>{office.officeHistory}</p>
                             <dl>
+                              {radiusFilterActive && Number.isFinite(office.distanceMiles) ? (
+                                <div>
+                                  <dt>Distance</dt>
+                                  <dd>{formatDistance(office.distanceMiles)} from {selectedCity.displayName}</dd>
+                                </div>
+                              ) : null}
                               {formattedAddress(office) ? (
                                 <div>
                                   <dt>Address</dt>

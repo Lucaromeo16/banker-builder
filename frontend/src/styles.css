@@ -924,6 +924,128 @@ textarea {
   box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.28);
 }
 
+.location-radius-control {
+  position: relative;
+  display: grid;
+  grid-column: span 3;
+  gap: 10px;
+  min-width: 0;
+}
+
+.location-radius-heading,
+.radius-slider-control span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.location-radius-heading button {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 850;
+  padding: 0.28rem 0.58rem;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.location-radius-heading button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.location-radius-heading button:not(:disabled):hover {
+  border-color: rgba(59, 130, 246, 0.55);
+  background: rgba(59, 130, 246, 0.16);
+  color: #FFFFFF;
+}
+
+.city-search-wrap {
+  position: relative;
+}
+
+.city-search-wrap input {
+  min-height: 42px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.city-suggestion-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  z-index: 700;
+  display: grid;
+  max-height: 228px;
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: rgba(10, 18, 36, 0.98);
+  box-shadow: var(--shadow-card);
+  padding: 6px;
+}
+
+.city-suggestion-list button {
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 750;
+  padding: 0.58rem 0.64rem;
+  text-align: left;
+}
+
+.city-suggestion-list button:hover {
+  background: rgba(59, 130, 246, 0.16);
+  color: #FFFFFF;
+}
+
+.city-search-empty,
+.radius-active-note,
+.map-distance-summary {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.city-search-empty {
+  margin-top: 7px;
+}
+
+.radius-slider-control {
+  display: grid;
+  gap: 6px;
+}
+
+.radius-slider-control input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.radius-active-note {
+  color: #BAE6FD;
+}
+
+.map-distance-summary {
+  margin-top: 5px;
+  color: #BAE6FD;
+}
+
 .map-card {
   position: relative;
   overflow: hidden;

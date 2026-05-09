@@ -1,0 +1,373 @@
+[
+  {
+    "city": "Arlington",
+    "state": "VA",
+    "displayName": "Arlington, VA",
+    "latitude": 38.8816,
+    "longitude": -77.091
+  },
+  {
+    "city": "Atlanta",
+    "state": "GA",
+    "displayName": "Atlanta, GA",
+    "latitude": 33.749,
+    "longitude": -84.388
+  },
+  {
+    "city": "Austin",
+    "state": "TX",
+    "displayName": "Austin, TX",
+    "latitude": 30.2672,
+    "longitude": -97.7431
+  },
+  {
+    "city": "Baltimore",
+    "state": "MD",
+    "displayName": "Baltimore, MD",
+    "latitude": 39.2904,
+    "longitude": -76.6122
+  },
+  {
+    "city": "Bethesda",
+    "state": "MD",
+    "displayName": "Bethesda, MD",
+    "latitude": 38.9847,
+    "longitude": -77.0947
+  },
+  {
+    "city": "Boston",
+    "state": "MA",
+    "displayName": "Boston, MA",
+    "latitude": 42.3601,
+    "longitude": -71.0589
+  },
+  {
+    "city": "Buffalo",
+    "state": "NY",
+    "displayName": "Buffalo, NY",
+    "latitude": 42.8864,
+    "longitude": -78.8784
+  },
+  {
+    "city": "Charlotte",
+    "state": "NC",
+    "displayName": "Charlotte, NC",
+    "latitude": 35.2271,
+    "longitude": -80.8431
+  },
+  {
+    "city": "Chicago",
+    "state": "IL",
+    "displayName": "Chicago, IL",
+    "latitude": 41.8781,
+    "longitude": -87.6298
+  },
+  {
+    "city": "Cincinnati",
+    "state": "OH",
+    "displayName": "Cincinnati, OH",
+    "latitude": 39.1031,
+    "longitude": -84.512
+  },
+  {
+    "city": "Cleveland",
+    "state": "OH",
+    "displayName": "Cleveland, OH",
+    "latitude": 41.4993,
+    "longitude": -81.6944
+  },
+  {
+    "city": "Columbia",
+    "state": "MD",
+    "displayName": "Columbia, MD",
+    "latitude": 39.2037,
+    "longitude": -76.861
+  },
+  {
+    "city": "Columbus",
+    "state": "OH",
+    "displayName": "Columbus, OH",
+    "latitude": 39.9612,
+    "longitude": -82.9988
+  },
+  {
+    "city": "Dallas",
+    "state": "TX",
+    "displayName": "Dallas, TX",
+    "latitude": 32.7767,
+    "longitude": -96.797
+  },
+  {
+    "city": "Dana Point",
+    "state": "CA",
+    "displayName": "Dana Point, CA",
+    "latitude": 33.4669,
+    "longitude": -117.6981
+  },
+  {
+    "city": "Denver",
+    "state": "CO",
+    "displayName": "Denver, CO",
+    "latitude": 39.7392,
+    "longitude": -104.9903
+  },
+  {
+    "city": "Detroit",
+    "state": "MI",
+    "displayName": "Detroit, MI",
+    "latitude": 42.3314,
+    "longitude": -83.0458
+  },
+  {
+    "city": "Fort Lauderdale",
+    "state": "FL",
+    "displayName": "Fort Lauderdale, FL",
+    "latitude": 26.1224,
+    "longitude": -80.1373
+  },
+  {
+    "city": "Fort Worth",
+    "state": "TX",
+    "displayName": "Fort Worth, TX",
+    "latitude": 32.7555,
+    "longitude": -97.3308
+  },
+  {
+    "city": "Frisco",
+    "state": "TX",
+    "displayName": "Frisco, TX",
+    "latitude": 33.1507,
+    "longitude": -96.8236
+  },
+  {
+    "city": "Grand Rapids",
+    "state": "MI",
+    "displayName": "Grand Rapids, MI",
+    "latitude": 42.9634,
+    "longitude": -85.6681
+  },
+  {
+    "city": "Greenwich",
+    "state": "CT",
+    "displayName": "Greenwich, CT",
+    "latitude": 41.0262,
+    "longitude": -73.6282
+  },
+  {
+    "city": "Houston",
+    "state": "TX",
+    "displayName": "Houston, TX",
+    "latitude": 29.7604,
+    "longitude": -95.3698
+  },
+  {
+    "city": "Irvine",
+    "state": "CA",
+    "displayName": "Irvine, CA",
+    "latitude": 33.6846,
+    "longitude": -117.8265
+  },
+  {
+    "city": "Little Rock",
+    "state": "AR",
+    "displayName": "Little Rock, AR",
+    "latitude": 34.7465,
+    "longitude": -92.2896
+  },
+  {
+    "city": "Los Angeles",
+    "state": "CA",
+    "displayName": "Los Angeles, CA",
+    "latitude": 34.0522,
+    "longitude": -118.2437
+  },
+  {
+    "city": "McLean",
+    "state": "VA",
+    "displayName": "McLean, VA",
+    "latitude": 38.9339,
+    "longitude": -77.1773
+  },
+  {
+    "city": "Memphis",
+    "state": "TN",
+    "displayName": "Memphis, TN",
+    "latitude": 35.1495,
+    "longitude": -90.049
+  },
+  {
+    "city": "Menlo Park",
+    "state": "CA",
+    "displayName": "Menlo Park, CA",
+    "latitude": 37.453,
+    "longitude": -122.1817
+  },
+  {
+    "city": "Miami",
+    "state": "FL",
+    "displayName": "Miami, FL",
+    "latitude": 25.7617,
+    "longitude": -80.1918
+  },
+  {
+    "city": "Milwaukee",
+    "state": "WI",
+    "displayName": "Milwaukee, WI",
+    "latitude": 43.0389,
+    "longitude": -87.9065
+  },
+  {
+    "city": "Minneapolis",
+    "state": "MN",
+    "displayName": "Minneapolis, MN",
+    "latitude": 44.9778,
+    "longitude": -93.265
+  },
+  {
+    "city": "Nashville",
+    "state": "TN",
+    "displayName": "Nashville, TN",
+    "latitude": 36.1627,
+    "longitude": -86.7816
+  },
+  {
+    "city": "New York",
+    "state": "NY",
+    "displayName": "New York, NY",
+    "latitude": 40.7128,
+    "longitude": -74.006
+  },
+  {
+    "city": "Orlando",
+    "state": "FL",
+    "displayName": "Orlando, FL",
+    "latitude": 28.5383,
+    "longitude": -81.3792
+  },
+  {
+    "city": "Palo Alto",
+    "state": "CA",
+    "displayName": "Palo Alto, CA",
+    "latitude": 37.4419,
+    "longitude": -122.143
+  },
+  {
+    "city": "Phoenix",
+    "state": "AZ",
+    "displayName": "Phoenix, AZ",
+    "latitude": 33.4484,
+    "longitude": -112.074
+  },
+  {
+    "city": "Pittsburgh",
+    "state": "PA",
+    "displayName": "Pittsburgh, PA",
+    "latitude": 40.4406,
+    "longitude": -79.9959
+  },
+  {
+    "city": "Plano",
+    "state": "TX",
+    "displayName": "Plano, TX",
+    "latitude": 33.0198,
+    "longitude": -96.6989
+  },
+  {
+    "city": "Providence",
+    "state": "RI",
+    "displayName": "Providence, RI",
+    "latitude": 41.824,
+    "longitude": -71.4128
+  },
+  {
+    "city": "Raleigh",
+    "state": "NC",
+    "displayName": "Raleigh, NC",
+    "latitude": 35.7796,
+    "longitude": -78.6382
+  },
+  {
+    "city": "Richmond",
+    "state": "VA",
+    "displayName": "Richmond, VA",
+    "latitude": 37.5407,
+    "longitude": -77.436
+  },
+  {
+    "city": "San Diego",
+    "state": "CA",
+    "displayName": "San Diego, CA",
+    "latitude": 32.7157,
+    "longitude": -117.1611
+  },
+  {
+    "city": "San Francisco",
+    "state": "CA",
+    "displayName": "San Francisco, CA",
+    "latitude": 37.7749,
+    "longitude": -122.4194
+  },
+  {
+    "city": "Seattle",
+    "state": "WA",
+    "displayName": "Seattle, WA",
+    "latitude": 47.6062,
+    "longitude": -122.3321
+  },
+  {
+    "city": "Southfield",
+    "state": "MI",
+    "displayName": "Southfield, MI",
+    "latitude": 42.4734,
+    "longitude": -83.2219
+  },
+  {
+    "city": "St. Louis",
+    "state": "MO",
+    "displayName": "St. Louis, MO",
+    "latitude": 38.627,
+    "longitude": -90.1994
+  },
+  {
+    "city": "St. Petersburg",
+    "state": "FL",
+    "displayName": "St. Petersburg, FL",
+    "latitude": 27.7676,
+    "longitude": -82.6403
+  },
+  {
+    "city": "Stamford",
+    "state": "CT",
+    "displayName": "Stamford, CT",
+    "latitude": 41.0534,
+    "longitude": -73.5387
+  },
+  {
+    "city": "Tampa",
+    "state": "FL",
+    "displayName": "Tampa, FL",
+    "latitude": 27.9506,
+    "longitude": -82.4572
+  },
+  {
+    "city": "Tysons Corner",
+    "state": "VA",
+    "displayName": "Tysons Corner, VA",
+    "latitude": 38.9187,
+    "longitude": -77.2311
+  },
+  {
+    "city": "Washington",
+    "state": "DC",
+    "displayName": "Washington, DC",
+    "latitude": 38.9072,
+    "longitude": -77.0369
+  },
+  {
+    "city": "West Palm Beach",
+    "state": "FL",
+    "displayName": "West Palm Beach, FL",
+    "latitude": 26.7153,
+    "longitude": -80.0534
+  }
+]
