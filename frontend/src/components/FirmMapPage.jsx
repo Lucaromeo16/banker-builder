@@ -725,7 +725,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
               <TileLayer
                 attribution='&copy; OpenStreetMap contributors &copy; CARTO'
                 maxZoom={19}
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               />
               {radiusFilterActive ? (
                 <Circle
