@@ -924,6 +924,84 @@ textarea {
   box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.28);
 }
 
+.favorites-filter-control {
+  display: grid;
+  align-self: end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.favorites-count-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  min-height: 24px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.08);
+  color: #FDE68A;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  padding: 0.18rem 0.56rem;
+  text-transform: none;
+}
+
+.favorites-only-toggle,
+.favorite-firm-button,
+.office-popup-favorite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-control);
+  background: rgba(245, 158, 11, 0.08);
+  color: #FDE68A;
+  cursor: pointer;
+  font-weight: 850;
+  letter-spacing: 0;
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.favorites-only-toggle {
+  min-height: 42px;
+  font-size: 0.84rem;
+  padding: 0 0.72rem;
+}
+
+.favorite-firm-button {
+  min-height: 32px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  padding: 0.28rem 0.62rem;
+  white-space: nowrap;
+}
+
+.office-popup-favorite {
+  min-height: 34px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  padding: 0.42rem 0.62rem;
+}
+
+.favorites-only-toggle:hover,
+.favorite-firm-button:hover,
+.office-popup-favorite:hover,
+.favorites-only-toggle.active,
+.favorite-firm-button.saved,
+.office-popup-favorite.saved {
+  border-color: rgba(245, 158, 11, 0.62);
+  background: rgba(245, 158, 11, 0.16);
+  color: #FFFFFF;
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.14);
+}
+
+.favorite-firm-button:hover,
+.office-popup-favorite:hover {
+  transform: translateY(-1px);
+}
+
 .location-radius-control {
   position: relative;
   display: grid;
@@ -1282,6 +1360,15 @@ textarea {
   gap: 12px;
 }
 
+.map-firm-card-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .map-office-card-heading h3 {
   margin: 0 0 4px;
   color: #FFFFFF;
@@ -1526,6 +1613,18 @@ textarea {
   cursor: pointer;
   font-weight: 850;
   padding: 0.55rem 0.75rem;
+}
+
+.office-popup-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.office-popup-actions .office-popup-add-contact,
+.office-popup-actions .office-popup-favorite {
+  flex: 1 1 120px;
+  width: auto;
 }
 
 .grid {

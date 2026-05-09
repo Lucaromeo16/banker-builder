@@ -66,6 +66,7 @@ const TYPE_CLASS_NAMES = {
 
 const DEFAULT_RADIUS_MILES = 50;
 const EARTH_RADIUS_MILES = 3958.8;
+const FAVORITE_FIRMS_STORAGE_KEY = 'bankerBuilderFavoriteFirms';
 
 const GROUP_MATCHERS = {
   'M&A': ['m&a', 'mergers'],
@@ -120,6 +121,27 @@ function cityMatchesSearch(city, searchTerm) {
     city.city.toLowerCase().includes(normalizedSearch) ||
     `${city.city} ${city.state}`.toLowerCase().includes(normalizedSearch)
   );
+}
+
+function loadFavoriteFirms() {
+  if (typeof window === 'undefined') return [];
+
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(FAVORITE_FIRMS_STORAGE_KEY) || '[]');
+    return Array.isArray(stored) ? stored.filter((firm) => typeof firm === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveFavoriteFirms(firms) {
+  if (typeof window === 'undefined') return;
+
+  try {
+    window.localStorage.setItem(FAVORITE_FIRMS_STORAGE_KEY, JSON.stringify(firms));
+  } catch {
+    // Ignore storage failures; the in-memory UI state still updates for this session.
+  }
 }
 
 function escapeHtml(value) {
@@ -260,7 +282,11 @@ function addressNeedsVerification(office) {
   return office.addressConfidence !== 'verified';
 }
 
-function popupHtml(office) {
+function favoriteButtonLabel(isFavorited) {
+  return `${isFavorited ? '★' : '☆'} ${isFavorited ? 'Saved' : 'Save'}`;
+}
+
+function popupHtml(office, isFavorited) {
   const address = formattedAddress(office);
   const addressHtml = address
     ? `
@@ -303,7 +329,12 @@ function popupHtml(office) {
         </div>
       </dl>
       ${verificationHtml}
-      <button type="button" class="office-popup-add-contact">Add Contact</button>
+      <div class="office-popup-actions">
+        <button type="button" class="office-popup-favorite ${isFavorited ? 'saved' : ''}" data-firm="${escapeHtml(office.firm)}">
+          ${favoriteButtonLabel(isFavorited)}
+        </button>
+        <button type="button" class="office-popup-add-contact">Add Contact</button>
+      </div>
     </div>
   `;
 }
@@ -337,7 +368,7 @@ function clusterIcon(cluster) {
   });
 }
 
-function ClusteredOfficeMarkers({ offices, onAddContact }) {
+function ClusteredOfficeMarkers({ offices, favoriteFirms, onAddContact, onToggleFavorite }) {
   const map = useMap();
 
   useEffect(() => {
@@ -351,14 +382,16 @@ function ClusteredOfficeMarkers({ offices, onAddContact }) {
 
     offices.forEach((office) => {
       const marker = L.marker([office.latitude, office.longitude], { icon: officeIcon(office) });
-      marker.bindPopup(popupHtml(office), {
+      marker.bindPopup(popupHtml(office, favoriteFirms.has(office.firm)), {
         className: 'banker-popup',
         maxWidth: 320
       });
       marker.on('popupopen', () => {
         const popupElement = marker.getPopup()?.getElement();
-        const button = popupElement?.querySelector('.office-popup-add-contact');
-        button?.addEventListener('click', () => onAddContact?.(office), { once: true });
+        const contactButton = popupElement?.querySelector('.office-popup-add-contact');
+        const favoriteButton = popupElement?.querySelector('.office-popup-favorite');
+        contactButton?.addEventListener('click', () => onAddContact?.(office), { once: true });
+        favoriteButton?.addEventListener('click', () => onToggleFavorite?.(office.firm), { once: true });
       });
       clusterLayer.addLayer(marker);
     });
@@ -368,7 +401,7 @@ function ClusteredOfficeMarkers({ offices, onAddContact }) {
     return () => {
       map.removeLayer(clusterLayer);
     };
-  }, [map, offices, onAddContact]);
+  }, [favoriteFirms, map, offices, onAddContact, onToggleFavorite]);
 
   return null;
 }
@@ -380,6 +413,8 @@ export default function FirmMapPage({ onBack, onAddContact }) {
   const [locationSearch, setLocationSearch] = useState('');
   const [selectedCity, setSelectedCity] = useState(null);
   const [radiusMiles, setRadiusMiles] = useState(DEFAULT_RADIUS_MILES);
+  const [favoriteFirmsList, setFavoriteFirmsList] = useState(() => loadFavoriteFirms());
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [filters, setFilters] = useState({
     bankType: 'All',
     group: 'All',
@@ -387,6 +422,8 @@ export default function FirmMapPage({ onBack, onAddContact }) {
     minPay: 0,
     minCompetitiveness: 0
   });
+
+  const favoriteFirms = useMemo(() => new Set(favoriteFirmsList), [favoriteFirmsList]);
 
   const citySuggestions = useMemo(() => {
     if (!locationSearch.trim()) return [];
@@ -403,6 +440,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
   const filteredOffices = useMemo(() => {
     return ibOffices
       .filter((office) => officeMatchesBankSearch(office, bankSearch) && officeMatchesFilters(office, filters))
+      .filter((office) => !showFavoritesOnly || favoriteFirms.has(office.firm))
       .map((office) => {
         if (!radiusFilterActive) return office;
 
@@ -415,7 +453,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
         };
       })
       .filter((office) => !radiusFilterActive || office.distanceMiles <= radiusMiles);
-  }, [bankSearch, filters, radiusFilterActive, radiusMiles, selectedCity]);
+  }, [bankSearch, favoriteFirms, filters, radiusFilterActive, radiusMiles, selectedCity, showFavoritesOnly]);
 
   const firmSummaries = useMemo(() => firmSummariesForOffices(filteredOffices), [filteredOffices]);
 
@@ -426,6 +464,26 @@ export default function FirmMapPage({ onBack, onAddContact }) {
 
   const updateBankSearch = (value) => {
     setBankSearch(value);
+    setExpandedFirm(null);
+  };
+
+  const toggleFavoriteFirm = (firm) => {
+    setFavoriteFirmsList((current) => {
+      const nextSet = new Set(current);
+      if (nextSet.has(firm)) {
+        nextSet.delete(firm);
+      } else {
+        nextSet.add(firm);
+      }
+
+      const next = Array.from(nextSet).sort((a, b) => a.localeCompare(b));
+      saveFavoriteFirms(next);
+      return next;
+    });
+  };
+
+  const toggleFavoritesOnly = () => {
+    setShowFavoritesOnly((current) => !current);
     setExpandedFirm(null);
   };
 
@@ -458,16 +516,23 @@ export default function FirmMapPage({ onBack, onAddContact }) {
   const hasLocationSearch = locationSearch.trim().length > 0;
   const showNoCityMatch = hasLocationSearch && !selectedCity && citySuggestions.length === 0;
   const emptyRadiusMessage = 'No offices match the selected location radius and filters.';
-  const emptyMapMessage = radiusFilterActive
-    ? emptyRadiusMessage
-    : hasBankSearch
-      ? 'No banks match your search and filters.'
-      : 'No offices match the selected filters.';
-  const emptyListMessage = radiusFilterActive
-    ? emptyRadiusMessage
-    : hasBankSearch
-      ? 'No banks match your search and filters.'
-      : 'No firms match the selected filters.';
+  const emptyFavoritesMessage = favoriteFirmsList.length === 0
+    ? 'You haven’t saved any banks yet.'
+    : 'No saved banks match your current filters.';
+  const emptyMapMessage = showFavoritesOnly
+    ? emptyFavoritesMessage
+    : radiusFilterActive
+      ? emptyRadiusMessage
+      : hasBankSearch
+        ? 'No banks match your search and filters.'
+        : 'No offices match the selected filters.';
+  const emptyListMessage = showFavoritesOnly
+    ? emptyFavoritesMessage
+    : radiusFilterActive
+      ? emptyRadiusMessage
+      : hasBankSearch
+        ? 'No banks match your search and filters.'
+        : 'No firms match the selected filters.';
 
   return (
     <>
@@ -559,6 +624,18 @@ export default function FirmMapPage({ onBack, onAddContact }) {
               ))}
             </select>
           </label>
+
+          <div className="favorites-filter-control">
+            <span className="favorites-count-badge">Saved Banks: {favoriteFirmsList.length}</span>
+            <button
+              type="button"
+              className={showFavoritesOnly ? 'favorites-only-toggle active' : 'favorites-only-toggle'}
+              onClick={toggleFavoritesOnly}
+              aria-pressed={showFavoritesOnly}
+            >
+              {showFavoritesOnly ? '★' : '☆'} Show Favorites Only
+            </button>
+          </div>
 
           <div className="location-radius-control">
             <div className="location-radius-heading">
@@ -663,7 +740,12 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                   }}
                 />
               ) : null}
-              <ClusteredOfficeMarkers offices={filteredOffices} onAddContact={onAddContact} />
+              <ClusteredOfficeMarkers
+                offices={filteredOffices}
+                favoriteFirms={favoriteFirms}
+                onAddContact={onAddContact}
+                onToggleFavorite={toggleFavoriteFirm}
+              />
             </MapContainer>
           </div>
         ) : (
@@ -691,9 +773,19 @@ export default function FirmMapPage({ onBack, onAddContact }) {
                           </p>
                         ) : null}
                       </div>
-                      <span className={`map-type-pill map-type-pill-${TYPE_CLASS_NAMES[firm.type] || TYPE_CLASS_NAMES.Unknown}`}>
-                        {firm.type}
-                      </span>
+                      <div className="map-firm-card-actions">
+                        <button
+                          type="button"
+                          className={favoriteFirms.has(firm.firm) ? 'favorite-firm-button saved' : 'favorite-firm-button'}
+                          onClick={() => toggleFavoriteFirm(firm.firm)}
+                          aria-pressed={favoriteFirms.has(firm.firm)}
+                        >
+                          {favoriteButtonLabel(favoriteFirms.has(firm.firm))}
+                        </button>
+                        <span className={`map-type-pill map-type-pill-${TYPE_CLASS_NAMES[firm.type] || TYPE_CLASS_NAMES.Unknown}`}>
+                          {firm.type}
+                        </span>
+                      </div>
                     </div>
                     <p className="map-office-history">{firm.summary}</p>
                     <dl>
