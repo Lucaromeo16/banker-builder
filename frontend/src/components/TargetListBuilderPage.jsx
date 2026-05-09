@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
-import schools from '../../../data/schools.json';
+import { defaultSchool, schoolDisplayName, schoolForPayload, schoolToScore } from '../schoolScoring';
 
 const stepTitles = [
   'IB Interest',
@@ -219,7 +220,7 @@ const defaultProfile = {
   locationPreferenceStrength: 'Flexible',
   prestigePreference: 'Medium',
   payPreference: 'Medium',
-  school: schools[0].schoolName,
+  school: defaultSchool,
   gpa: 3.7,
   workExperiences: [createWorkExperience()],
   activities: [createActivity()]
@@ -284,14 +285,6 @@ function createOpportunitiesFromOffices(offices = []) {
 }
 
 const localOpportunities = createOpportunitiesFromOffices(ibOffices);
-
-function schoolToScore(school) {
-  const normalized = school.trim().toLowerCase();
-  if (!normalized) return 5;
-
-  const matched = schools.find((entry) => entry.schoolName.toLowerCase() === normalized);
-  return matched?.prestigeScore ?? 5;
-}
 
 function dynamicSoftCutoff(baseCutoff, competitiveness) {
   return clamp(baseCutoff + (competitiveness - 7.5) * 0.08, 3.45, 3.9);
@@ -376,7 +369,7 @@ function extracurricularScore(profile) {
 }
 
 function resumeProfileScores(profile, competitiveness = 8) {
-  const schoolScore = schoolToScore(profile.school || '');
+  const schoolScore = schoolToScore(profile.school);
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
   const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
   const experience = resumeExperienceScore(profile);
@@ -781,6 +774,10 @@ export default function TargetListBuilderPage({ onBack }) {
       setError('Select a location from the search results or choose No preference.');
       return;
     }
+    if (currentStep === 2 && !profile.school) {
+      setError('Select a school from the search results or choose Other / Not Listed.');
+      return;
+    }
 
     setCurrentStep((step) => Math.min(step + 1, stepTitles.length - 1));
   };
@@ -839,6 +836,7 @@ export default function TargetListBuilderPage({ onBack }) {
     const preference = normalizeLocationPreference(profile);
     const profilePayload = {
       ...profile,
+      school: schoolForPayload(profile.school),
       selectedInterests: profile.interests,
       preferredLocation: preference,
       preferredLocations:
@@ -983,15 +981,9 @@ export default function TargetListBuilderPage({ onBack }) {
         <>
           <h2>Academic Info</h2>
           <div className="grid">
-            <label>
+            <label className="school-search-field">
               <span>School</span>
-              <select value={profile.school} onChange={(e) => setProfile({ ...profile, school: e.target.value })}>
-                {schools.map((school) => (
-                  <option key={school.schoolName} value={school.schoolName}>
-                    {school.schoolName} ({school.tier})
-                  </option>
-                ))}
-              </select>
+              <SchoolAutocomplete value={profile.school} onChange={(school) => setProfile({ ...profile, school })} />
             </label>
             <NumberField label="GPA" value={profile.gpa} min={2} max={4} step={0.01} onChange={(value) => setProfile({ ...profile, gpa: value })} />
           </div>
@@ -1152,7 +1144,7 @@ export default function TargetListBuilderPage({ onBack }) {
           </section>
           <section>
             <h3>Academic Info</h3>
-            <p>{profile.school || 'School not entered'}</p>
+            <p>{schoolDisplayName(profile.school) || 'School not entered'}</p>
             <p>GPA: {profile.gpa}</p>
           </section>
           <section>

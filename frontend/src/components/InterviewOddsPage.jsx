@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import ScoreBreakdown from './ScoreBreakdown';
+import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
-import schools from '../../../data/schools.json';
+import { defaultSchool, schoolDisplayName, schoolForPayload, schoolToScore } from '../schoolScoring';
 
 const fallbackGroups = [
   'Generalist',
@@ -27,6 +28,11 @@ const activityTypeOptions = [
   'Non-business leadership organization',
   'Other'
 ];
+
+function activityTypeLabel(option) {
+  if (option === 'Social fraternity / sorority executive board') return 'Social Fraternity/Sorority';
+  return option;
+}
 
 const selectivityOptions = [
   { value: 'highly selective', label: 'Highly selective' },
@@ -124,6 +130,112 @@ const connectionMultiplier = {
   'close connection': 1.45
 };
 
+const stateRegions = {
+  CT: 'Northeast',
+  MA: 'Northeast',
+  ME: 'Northeast',
+  NH: 'Northeast',
+  NY: 'Northeast',
+  RI: 'Northeast',
+  VT: 'Northeast',
+  DC: 'Mid-Atlantic',
+  DE: 'Mid-Atlantic',
+  MD: 'Mid-Atlantic',
+  NJ: 'Mid-Atlantic',
+  PA: 'Mid-Atlantic',
+  VA: 'Mid-Atlantic',
+  AL: 'Southeast',
+  FL: 'Southeast',
+  GA: 'Southeast',
+  KY: 'Southeast',
+  LA: 'Southeast',
+  MS: 'Southeast',
+  NC: 'Southeast',
+  SC: 'Southeast',
+  TN: 'Southeast',
+  IL: 'Midwest',
+  IN: 'Midwest',
+  IA: 'Midwest',
+  MI: 'Midwest',
+  MN: 'Midwest',
+  MO: 'Midwest',
+  OH: 'Midwest',
+  WI: 'Midwest',
+  TX: 'Texas',
+  AZ: 'Southwest',
+  NM: 'Southwest',
+  OK: 'Southwest',
+  AR: 'Southwest',
+  CO: 'Mountain West',
+  ID: 'Mountain West',
+  MT: 'Mountain West',
+  NV: 'Mountain West',
+  UT: 'Mountain West',
+  WY: 'Mountain West',
+  CA: 'West Coast',
+  OR: 'West Coast',
+  WA: 'West Coast'
+};
+
+const adjacentRegions = {
+  Northeast: ['Mid-Atlantic'],
+  'Mid-Atlantic': ['Northeast', 'Southeast', 'Midwest'],
+  Southeast: ['Mid-Atlantic', 'Texas'],
+  Midwest: ['Mid-Atlantic', 'Texas', 'Mountain West'],
+  Texas: ['Southeast', 'Southwest', 'Midwest'],
+  Southwest: ['Texas', 'Mountain West', 'West Coast'],
+  'Mountain West': ['Southwest', 'Midwest', 'West Coast'],
+  'West Coast': ['Southwest', 'Mountain West']
+};
+
+const schoolMetroMap = {
+  'nyu-stern': ['New York'],
+  columbia: ['New York'],
+  'fordham-gabelli': ['New York'],
+  'baruch-zicklin': ['New York'],
+  'cuny-transfer': ['New York'],
+  harvard: ['Boston'],
+  'mit-sloan': ['Boston'],
+  'bc-carroll': ['Boston'],
+  northeastern: ['Boston'],
+  bentley: ['Boston'],
+  babson: ['Boston'],
+  stanford: ['Palo Alto', 'Menlo Park', 'San Francisco'],
+  'berkeley-haas': ['San Francisco'],
+  ucla: ['Los Angeles'],
+  'usc-marshall': ['Los Angeles'],
+  'texas-mccombs': ['Austin'],
+  'rice': ['Houston'],
+  'houston-bauer': ['Houston'],
+  'smu-cox': ['Dallas'],
+  'ohio-state-fisher': ['Columbus'],
+  'cincinnati-lindner': ['Cincinnati'],
+  'case-western-weatherhead': ['Cleveland'],
+  'michigan-ross': ['Detroit'],
+  'michigan-state-broad': ['Detroit'],
+  'uchicago': ['Chicago'],
+  northwestern: ['Chicago'],
+  'illinois-gies': ['Chicago'],
+  'washu-olin': ['St. Louis'],
+  'emory-goizueta': ['Atlanta'],
+  'georgia-terry': ['Atlanta'],
+  'georgia-tech-scheller': ['Atlanta'],
+  'vanderbilt': ['Nashville'],
+  'unc-kenan-flagler': ['Raleigh', 'Charlotte'],
+  duke: ['Raleigh', 'Charlotte'],
+  'uva-mcintire': ['Washington', 'Richmond'],
+  georgetown: ['Washington'],
+  'maryland-smith': ['Washington', 'Baltimore'],
+  'washington-foster': ['Seattle'],
+  'wisconsin': ['Milwaukee'],
+  'minnesota-carlson': ['Minneapolis'],
+  'florida-warrington': ['Miami', 'Tampa'],
+  'miami-herbert': ['Miami'],
+  'arizona-state-carey': ['Phoenix'],
+  'denver-daniels': ['Denver'],
+  'colorado-boulder-leeds': ['Denver']
+};
+
 const profileWeights = {
   'Summer Analyst': {
     academic: 0.28,
@@ -149,18 +261,85 @@ const profileWeights = {
 };
 
 const workTypeOptions = [
-  'None',
-  'Part-time job',
-  'Campus job',
-  'Search fund internship',
-  'Corporate finance internship',
-  'Accounting / audit internship',
-  'Wealth management internship',
-  'Private equity internship',
-  'Investment banking internship',
-  'Other finance internship',
-  'Other internship'
+  'Investment Banking Internship',
+  'Private Equity Internship',
+  'Accounting / Audit Internship',
+  'TAS / Business Valuation Internship',
+  'Corporate Finance / Corporate Accounting Internship',
+  'Consulting Internship',
+  'Wealth Management Internship',
+  'Venture Capital Internship',
+  'Other High Finance Internship',
+  'Commercial Banking Internship',
+  'Real Estate / CRE Internship',
+  'General / Other Experience'
 ];
+
+const recencyOptions = [
+  'Current / most recent',
+  'Past 1-2 years',
+  'Older experience'
+];
+
+const experienceFollowUps = {
+  'Investment Banking Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Elite Platform (BB / EB)', 'Strong MM', 'Middle Market', 'Regional Boutique', 'Small / Local Boutique'] }
+  ],
+  'Private Equity Internship': [
+    { key: 'fundTier', label: 'Fund Tier', options: ['Megafund', 'Upper Middle Market', 'Middle Market', 'Lower Middle Market', 'Independent Sponsor / Small Fund'] }
+  ],
+  'Accounting / Audit Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'function', label: 'Function', options: ['Audit', 'Tax'] }
+  ],
+  'TAS / Business Valuation Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] }
+  ],
+  'Corporate Finance / Corporate Accounting Internship': [
+    { key: 'companyPrestige', label: 'Company Prestige', options: ['F100', 'F500', 'Large Private / Mid-Market', 'Small Company'] },
+    { key: 'roleType', label: 'Role Type', options: ['Corporate Development', 'Strategy / Finance Rotation', 'FP&A', 'Treasury', 'Corporate Accounting'] }
+  ],
+  'Consulting Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['MBB', 'Tier 2 Strategy Consulting', 'Big 4 Consulting', 'Middle Market / Boutique Consulting', 'Local / Small Consulting Firm'] }
+  ],
+  'Wealth Management Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Elite / BB Platform', 'Large National Platform', 'Regional Platform', 'Local RIA / Small Practice'] }
+  ],
+  'Venture Capital Internship': [
+    { key: 'fundTier', label: 'Fund Tier', options: ['Top-Tier VC Fund', 'Established Institutional VC', 'Smaller VC Fund', 'Angel / Independent / Tiny Fund'] }
+  ],
+  'Other High Finance Internship': [
+    { key: 'industry', label: 'Industry', options: ['Hedge Fund', 'Equity Research', 'Sales & Trading', 'Asset Management'] },
+    { key: 'platformPrestige', label: 'Platform Prestige', options: ['Elite Platform', 'Strong Institutional Platform', 'Mid-Tier Platform', 'Small / Unknown Platform'] }
+  ],
+  'Commercial Banking Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Bulge Bracket / Major Bank', 'Super-Regional / Strong National Bank', 'Regional Bank', 'Local / Community Bank'] }
+  ],
+  'Real Estate / CRE Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Institutional Platform', 'Large Brokerage / Advisory Platform', 'Regional Firm', 'Small / Local Firm'] }
+  ],
+  'General / Other Experience': [
+    { key: 'generalType', label: 'Experience Type', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
+  ]
+};
+
+const legacyWorkTypeMap = {
+  'Investment banking internship': { experienceType: 'Investment Banking Internship', firmTier: 'Middle Market' },
+  'Private equity internship': { experienceType: 'Private Equity Internship', fundTier: 'Middle Market' },
+  'Search fund internship': { experienceType: 'General / Other Experience', generalType: 'Search Fund Internship' },
+  'Corporate finance internship': {
+    experienceType: 'Corporate Finance / Corporate Accounting Internship',
+    companyPrestige: 'Large Private / Mid-Market',
+    roleType: 'FP&A'
+  },
+  'Accounting / audit internship': { experienceType: 'Accounting / Audit Internship', firmTier: 'National / Next Tier', function: 'Audit' },
+  'Wealth management internship': { experienceType: 'Wealth Management Internship', platformTier: 'Large National Platform' },
+  'Other finance internship': { experienceType: 'Other High Finance Internship', industry: 'Asset Management', platformPrestige: 'Mid-Tier Platform' },
+  'Other internship': { experienceType: 'General / Other Experience', generalType: 'Other Internship' },
+  'Part-time job': { experienceType: 'General / Other Experience', generalType: 'Part-Time Job' },
+  'Campus job': { experienceType: 'General / Other Experience', generalType: 'Campus Job' },
+  None: { experienceType: 'General / Other Experience', generalType: 'Other Internship' }
+};
 
 const seniorityOptions = [
   { value: 'analyst', label: 'Analyst' },
@@ -198,11 +377,17 @@ const createActivity = () => ({
 
 const createWorkExperience = () => ({
   id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`,
-  workType: 'None'
+  experienceType: 'General / Other Experience',
+  generalType: 'Other Internship',
+  recency: 'Current / most recent'
 });
 
+function defaultFollowUpValues(experienceType) {
+  return Object.fromEntries((experienceFollowUps[experienceType] || []).map((field) => [field.key, field.options[0]]));
+}
+
 const defaultProfile = {
-  school: schools[0].schoolName,
+  school: defaultSchool,
   gpa: 3.7,
   workType: 'None',
   workExperiences: [createWorkExperience()],
@@ -290,12 +475,71 @@ function clamp(value, min = 0, max = 10) {
   return Math.max(min, Math.min(max, value));
 }
 
-function schoolToScore(school) {
-  const normalized = school.trim().toLowerCase();
-  if (!normalized) return 5;
+function normalizedRegionForState(state) {
+  return stateRegions[String(state || '').toUpperCase()] || '';
+}
 
-  const matched = schools.find((entry) => entry.schoolName.toLowerCase() === normalized);
-  return matched?.prestigeScore ?? 5;
+function normalizedSchoolRegion(school) {
+  const schoolStateRegion = normalizedRegionForState(school?.state);
+  if (schoolStateRegion) return schoolStateRegion;
+
+  const region = String(school?.region || '');
+  if (region === 'West') return 'West Coast';
+  if (region === 'Southwest' && school?.state === 'TX') return 'Texas';
+  return region;
+}
+
+function normalizeCity(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/\./g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness) {
+  const school = profile.school && typeof profile.school === 'object' ? profile.school : null;
+  if (!school || school.id === 'other-not-listed' || school.id === 'community-college-transfer') {
+    return { points: 0, label: '' };
+  }
+
+  const schoolRegion = normalizedSchoolRegion(school);
+  const officeRegion = normalizedRegionForState(opportunity.state);
+  const schoolState = String(school.state || '').toUpperCase();
+  const officeState = String(opportunity.state || '').toUpperCase();
+  const officeCity = normalizeCity(opportunity.officeCity || opportunity.office);
+  const schoolMetroCities = schoolMetroMap[school.id] || [];
+  const sameMetro = schoolMetroCities.some((city) => normalizeCity(city) === officeCity);
+
+  let points = 0;
+  let label = '';
+
+  if (sameMetro) {
+    points = 0.7;
+    label = 'local-market';
+  } else if (schoolState && schoolState === officeState) {
+    points = 0.5;
+    label = 'in-state';
+  } else if (schoolRegion && schoolRegion === officeRegion) {
+    points = 0.3;
+    label = 'regional';
+  } else if (schoolRegion && adjacentRegions[schoolRegion]?.includes(officeRegion)) {
+    points = 0.15;
+    label = 'adjacent-region';
+  }
+
+  if (!points) return { points: 0, label: '' };
+
+  let dampener = 1;
+  if (profile.gpa < 3.5) dampener *= 0.35;
+  if (scores.experience < 4.5) dampener *= 0.55;
+  if (scores.networking < 3.2) dampener *= 0.65;
+  if (adjustedCompetitiveness >= 8.8) dampener *= 0.65;
+
+  return {
+    points: Number((points * dampener).toFixed(2)),
+    label
+  };
 }
 
 function dynamicSoftCutoff(baseCutoff, competitiveness) {
@@ -326,6 +570,155 @@ function gpaToNonlinearScore(gpa, competitiveness) {
 
 function workTypeScore(workType) {
   return clamp(workTypeScores[workType] ?? workTypeScores['Other internship']);
+}
+
+function normalizeExperience(experience = {}) {
+  if (experience.experienceType) {
+    return {
+      ...defaultFollowUpValues(experience.experienceType),
+      ...experience,
+      recency: experience.recency || 'Current / most recent'
+    };
+  }
+
+  return {
+    ...(legacyWorkTypeMap[experience.workType] || legacyWorkTypeMap.None),
+    ...experience,
+    recency: experience.recency || 'Current / most recent'
+  };
+}
+
+function experienceSummary(experience) {
+  const normalized = normalizeExperience(experience);
+  const detailValues = (experienceFollowUps[normalized.experienceType] || [])
+    .map((field) => normalized[field.key])
+    .filter(Boolean);
+
+  return [normalized.experienceType, ...detailValues, normalized.recency].filter(Boolean).join(' · ');
+}
+
+function experienceReasonText(experienceResult) {
+  if (!experienceResult?.signals?.length) return '';
+
+  const signal = experienceResult.signals[0];
+  const signalReason = experienceResult.eliteIb
+    ? ' Your prior IB internship is a major recruiting signal and meaningfully strengthens your profile.'
+    : ` Your ${signal} adds a relevant recruiting signal.`;
+  const affinityReason = experienceResult.affinityBoost > 0
+    ? ' Your prior experience also aligns with this target group.'
+    : '';
+
+  return `${signalReason}${affinityReason}`;
+}
+
+function recencyMultiplier(recency, hireType) {
+  if (recency === 'Current / most recent') return 1;
+  if (hireType === 'Summer Analyst') return recency === 'Past 1-2 years' ? 0.92 : 0.78;
+  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.72 : 0.42;
+  return recency === 'Past 1-2 years' ? 0.82 : 0.55;
+}
+
+function scoreSingleExperience(rawExperience, hireType) {
+  const experience = normalizeExperience(rawExperience);
+  const type = experience.experienceType;
+  let score = 3.2;
+  const signals = new Set();
+  const affinities = new Set();
+  let eliteIb = false;
+
+  if (type === 'Investment Banking Internship') {
+    signals.add('direct IB experience');
+    score = {
+      'Elite Platform (BB / EB)': 9.9,
+      'Strong MM': 9.1,
+      'Middle Market': 8.6,
+      'Regional Boutique': 8,
+      'Small / Local Boutique': 7.4
+    }[experience.firmTier] ?? 8.4;
+    eliteIb = experience.firmTier === 'Elite Platform (BB / EB)';
+    ['M&A', 'Financial Sponsors', 'Generalist'].forEach((group) => affinities.add(group));
+  } else if (type === 'Private Equity Internship') {
+    signals.add('private equity experience');
+    score = {
+      Megafund: 9.2,
+      'Upper Middle Market': 8.5,
+      'Middle Market': 8,
+      'Lower Middle Market': 7.4,
+      'Independent Sponsor / Small Fund': 6.7
+    }[experience.fundTier] ?? 7.8;
+    affinities.add('Financial Sponsors');
+  } else if (type === 'Accounting / Audit Internship') {
+    signals.add('accounting internship');
+    const tierScore = { 'Big 4': 6.9, 'National / Next Tier': 6.2, 'Top 100': 5.6, 'Local / Small Firm': 4.9 }[experience.firmTier] ?? 5.8;
+    score = tierScore + (experience.function === 'Audit' ? 0.35 : -0.25);
+    affinities.add('Financial Institutions');
+  } else if (type === 'TAS / Business Valuation Internship') {
+    signals.add('TAS / valuation experience');
+    score = { 'Big 4': 8.1, 'National / Next Tier': 7.4, 'Top 100': 6.8, 'Local / Small Firm': 6.1 }[experience.firmTier] ?? 7.2;
+    ['M&A', 'Generalist'].forEach((group) => affinities.add(group));
+  } else if (type === 'Corporate Finance / Corporate Accounting Internship') {
+    const prestige = { F100: 1, F500: 0.65, 'Large Private / Mid-Market': 0.25, 'Small Company': -0.25 }[experience.companyPrestige] ?? 0;
+    const role = { 'Corporate Development': 7.6, 'Strategy / Finance Rotation': 6.8, 'FP&A': 6.1, Treasury: 5.9, 'Corporate Accounting': 5.2 }[experience.roleType] ?? 5.9;
+    score = role + prestige;
+    signals.add(experience.roleType === 'Corporate Development' ? 'corporate development experience' : 'corporate finance experience');
+    if (experience.roleType === 'Corporate Development') affinities.add('M&A');
+  } else if (type === 'Consulting Internship') {
+    signals.add('consulting experience');
+    score = { MBB: 8.3, 'Tier 2 Strategy Consulting': 7.6, 'Big 4 Consulting': 6.7, 'Middle Market / Boutique Consulting': 6.1, 'Local / Small Consulting Firm': 5.3 }[experience.firmTier] ?? 6.5;
+    ['M&A', 'Generalist'].forEach((group) => affinities.add(group));
+  } else if (type === 'Wealth Management Internship') {
+    signals.add('wealth management experience');
+    score = { 'Elite / BB Platform': 6.1, 'Large National Platform': 5.4, 'Regional Platform': 4.8, 'Local RIA / Small Practice': 4.1 }[experience.platformTier] ?? 5;
+  } else if (type === 'Venture Capital Internship') {
+    signals.add('venture capital experience');
+    score = { 'Top-Tier VC Fund': 8.1, 'Established Institutional VC': 7.3, 'Smaller VC Fund': 6.5, 'Angel / Independent / Tiny Fund': 5.7 }[experience.fundTier] ?? 6.8;
+    affinities.add('Technology');
+  } else if (type === 'Other High Finance Internship') {
+    const industry = { 'Hedge Fund': 7.4, 'Equity Research': 7.2, 'Sales & Trading': 6.7, 'Asset Management': 6.5 }[experience.industry] ?? 6.6;
+    const prestige = { 'Elite Platform': 0.8, 'Strong Institutional Platform': 0.45, 'Mid-Tier Platform': 0, 'Small / Unknown Platform': -0.45 }[experience.platformPrestige] ?? 0;
+    score = industry + prestige;
+    signals.add('high finance experience');
+    if (experience.industry === 'Hedge Fund') affinities.add('Restructuring');
+    if (experience.industry === 'Equity Research') affinities.add('Financial Institutions');
+    if (experience.industry === 'Sales & Trading') affinities.add('DCM');
+  } else if (type === 'Commercial Banking Internship') {
+    signals.add('commercial banking experience');
+    score = { 'Bulge Bracket / Major Bank': 6.8, 'Super-Regional / Strong National Bank': 6.3, 'Regional Bank': 5.7, 'Local / Community Bank': 5 }[experience.platformTier] ?? 5.8;
+    ['DCM', 'Financial Institutions'].forEach((group) => affinities.add(group));
+  } else if (type === 'Real Estate / CRE Internship') {
+    signals.add('real estate finance experience');
+    score = { 'Institutional Platform': 6.9, 'Large Brokerage / Advisory Platform': 6.3, 'Regional Firm': 5.7, 'Small / Local Firm': 5 }[experience.platformTier] ?? 5.9;
+    affinities.add('Real Estate');
+  } else {
+    score = { 'Search Fund Internship': 6.5, 'Entrepreneurship / Startup': 5.9, 'Military Experience': 5.8, 'Leadership Program': 5.3, 'Student Research': 4.8, 'Other Internship': 4.4, 'Part-Time Job': 3.6, 'Campus Job': 3.3 }[experience.generalType] ?? 4.2;
+    signals.add(experience.generalType === 'Search Fund Internship' ? 'search fund experience' : 'general work experience');
+    if (experience.generalType === 'Entrepreneurship / Startup') affinities.add('Technology');
+  }
+
+  return {
+    score: clamp(score * recencyMultiplier(experience.recency, hireType)),
+    signals: Array.from(signals),
+    affinities: Array.from(affinities),
+    eliteIb
+  };
+}
+
+function structuredExperienceScore(profile, hireType, targetGroup) {
+  const experiences = (profile.workExperiences || []).map((experience) => scoreSingleExperience(experience, hireType));
+  if (!experiences.length) return { score: workTypeScore(profile.workType), affinityBoost: 0, signals: [], eliteIb: false };
+
+  const ranked = experiences.sort((a, b) => b.score - a.score);
+  const primary = ranked[0];
+  const secondary = ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.24 : 0.1), 0);
+  const stackCap = primary.eliteIb ? 10 : primary.score >= 8.5 ? 9.4 : 8.8;
+  const affinityBoost = ranked.some((experience) => experience.affinities.includes(targetGroup)) ? (primary.eliteIb ? 0.12 : 0.22) : 0;
+
+  return {
+    score: clamp(Math.min(primary.score + secondary, stackCap) + affinityBoost),
+    affinityBoost,
+    signals: [...new Set(ranked.flatMap((experience) => experience.signals))],
+    eliteIb: ranked.some((experience) => experience.eliteIb)
+  };
 }
 
 function normalizeNetworkingForScoring(networking = {}) {
@@ -464,11 +857,12 @@ function buildActionSteps(scoreBreakdown, profile) {
   return steps.slice(0, 3);
 }
 
-function profileScores(profile, competitiveness, weights, experienceOverride) {
-  const schoolScore = schoolToScore(profile.school || '');
+function profileScores(profile, competitiveness, weights, hireType, targetGroup) {
+  const schoolScore = schoolToScore(profile.school);
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
   const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
-  const experience = experienceOverride ?? workTypeScore(profile.workType);
+  const experienceResult = structuredExperienceScore(profile, hireType, targetGroup);
+  const experience = experienceResult.score;
   const networking = networkingScore(profile.networking);
   const extracurricular = extracurricularScore(profile);
   const total = clamp(
@@ -478,13 +872,13 @@ function profileScores(profile, competitiveness, weights, experienceOverride) {
       extracurricular * weights.extracurricular
   );
 
-  return { schoolScore, gpaScore, academic, experience, networking, extracurricular, total };
+  return { schoolScore, gpaScore, academic, experience, networking, extracurricular, total, experienceResult };
 }
 
 function hireTypeDifficultyAdjustment(hireType, profile) {
   const weights = profileWeights[hireType];
-  const experience = workTypeScore(profile.workType);
-  const schoolScore = schoolToScore(profile.school || '');
+  const experience = structuredExperienceScore(profile, hireType, 'Generalist').score;
+  const schoolScore = schoolToScore(profile.school);
   let adjustment = weights.baseDifficultyAdjustment;
 
   if (hireType === 'Lateral Hire') {
@@ -513,10 +907,14 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
   const adjustedCompetitiveness = clamp(
     opportunity.competitiveness + hireTypeDifficultyAdjustment(hireType, profile)
   );
-  const scores = profileScores(profile, adjustedCompetitiveness, weights, workTypeScore(profile.workType));
-  const delta = scores.total - adjustedCompetitiveness;
+  const scores = profileScores(profile, adjustedCompetitiveness, weights, hireType, opportunity.group);
+  const regionalBoost = regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness);
+  const boostedTotal = clamp(scores.total + regionalBoost.points);
+  const delta = boostedTotal - adjustedCompetitiveness;
+  const unboostedDelta = scores.total - adjustedCompetitiveness;
+  const unboostedLikelihood = 100 / (1 + Math.exp(-1.15 * (unboostedDelta + 0.1)));
   const rawLikelihood = 100 / (1 + Math.exp(-1.15 * (delta + 0.1)));
-  const likelihood = Math.round(Math.max(3, Math.min(92, rawLikelihood)));
+  const likelihood = Math.round(Math.max(3, Math.min(92, Math.min(rawLikelihood, unboostedLikelihood + 7))));
   const gateResult = applyGates({
     classification: baseClassification(delta),
     gpa: profile.gpa,
@@ -530,10 +928,14 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
     experience: Number(scores.experience.toFixed(2)),
     networking: Number(scores.networking.toFixed(2)),
     extracurricular: Number(scores.extracurricular.toFixed(2)),
-    total: Number(scores.total.toFixed(2)),
+    total: Number(boostedTotal.toFixed(2)),
     school: Number(scores.schoolScore.toFixed(2)),
     gpa: Number(scores.gpaScore.toFixed(2))
   };
+  const regionalReason = regionalBoost.points > 0
+    ? ' Your school has regional alignment with this office, which modestly improves your odds.'
+    : '';
+  const experienceReason = experienceReasonText(scores.experienceResult);
 
   return {
     opportunity: {
@@ -556,7 +958,7 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
     strengths: buildStrengths(scoreBreakdown, profile),
     gaps: buildGaps(scoreBreakdown, gateResult.gateReasons),
     actionSteps: buildActionSteps(scoreBreakdown, profile),
-    reason: `Your total score (${scores.total.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).`
+    reason: `Your total score (${boostedTotal.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).${regionalReason}${experienceReason}`
   };
 }
 
@@ -570,12 +972,7 @@ function cloneProfile(profile) {
 }
 
 function bestWorkScore(profile) {
-  const scores = (profile.workExperiences || [])
-    .map((experience) => workTypeScore(experience.workType))
-    .concat(workTypeScore(profile.workType))
-    .filter(Number.isFinite);
-
-  return scores.length ? Math.max(...scores) : workTypeScore('None');
+  return structuredExperienceScore(profile, 'Summer Analyst', 'Generalist').score;
 }
 
 function buildNeedleProjection(scoringPayload, opportunities, currentResult) {
@@ -620,11 +1017,23 @@ function buildNeedleProjection(scoringPayload, opportunities, currentResult) {
 
   if (bestWorkScore(baseProfile) < 7.5) {
     addScenario('Add a stronger finance/investing internship', (profile) => {
-      const upgradedWorkType = bestWorkScore(profile) < 5.5 ? 'Corporate finance internship' : 'Investment banking internship';
-      profile.workType = upgradedWorkType;
+      const upgradedExperience = bestWorkScore(profile) < 5.5
+        ? {
+            id: 'projected-work',
+            experienceType: 'Corporate Finance / Corporate Accounting Internship',
+            companyPrestige: 'F500',
+            roleType: 'FP&A',
+            recency: 'Current / most recent'
+          }
+        : {
+            id: 'projected-work',
+            experienceType: 'Investment Banking Internship',
+            firmTier: 'Middle Market',
+            recency: 'Current / most recent'
+          };
       profile.workExperiences = profile.workExperiences.length
-        ? [{ ...profile.workExperiences[0], workType: upgradedWorkType }, ...profile.workExperiences.slice(1)]
-        : [{ id: 'projected-work', workType: upgradedWorkType }];
+        ? [upgradedExperience, ...profile.workExperiences.slice(1)]
+        : [upgradedExperience];
       return profile;
     });
   }
@@ -839,12 +1248,23 @@ export default function InterviewOddsPage({ onBack }) {
     setProfile((prev) => ({ ...prev, workExperiences: [...prev.workExperiences, createWorkExperience()] }));
   };
 
-  const updateWorkExperience = (id, value) => {
+  const updateWorkExperience = (id, key, value) => {
     setProfile((prev) => ({
       ...prev,
-      workExperiences: prev.workExperiences.map((experience) =>
-        experience.id === id ? { ...experience, workType: value } : experience
-      )
+      workExperiences: prev.workExperiences.map((experience) => {
+        if (experience.id !== id) return experience;
+
+        if (key === 'experienceType') {
+          return {
+            id: experience.id,
+            experienceType: value,
+            ...defaultFollowUpValues(value),
+            recency: experience.recency || 'Current / most recent'
+          };
+        }
+
+        return { ...normalizeExperience(experience), [key]: value };
+      })
     }));
   };
 
@@ -856,6 +1276,10 @@ export default function InterviewOddsPage({ onBack }) {
     setError('');
     if (currentStep === 0 && !firmOptions.includes(selection.firm)) {
       setError('Select a bank from the search results before continuing.');
+      return;
+    }
+    if (currentStep === 3 && !profile.school) {
+      setError('Select a school from the search results or choose Other / Not Listed.');
       return;
     }
 
@@ -897,12 +1321,12 @@ export default function InterviewOddsPage({ onBack }) {
     setError('');
     setResult(null);
 
+    const normalizedWorkExperiences = (profile.workExperiences || []).map(normalizeExperience);
     const profilePayload = {
       ...normalizeProfileForScoring(profile),
-      workType:
-        profile.workExperiences.find((experience) => experience.workType !== 'None')?.workType ||
-        profile.workExperiences[0]?.workType ||
-        'None'
+      school: schoolForPayload(profile.school),
+      workExperiences: normalizedWorkExperiences,
+      workType: normalizedWorkExperiences[0]?.experienceType || 'None'
     };
     const scoringPayload = {
       firmName: selection.firm,
@@ -1043,15 +1467,9 @@ export default function InterviewOddsPage({ onBack }) {
         <>
           <h2>Academic Info</h2>
           <div className="grid">
-            <label>
+            <label className="school-search-field">
               <span>School</span>
-              <select value={profile.school} onChange={(e) => setProfile({ ...profile, school: e.target.value })}>
-                {schools.map((school) => (
-                  <option key={school.schoolName} value={school.schoolName}>
-                    {school.schoolName} ({school.tier})
-                  </option>
-                ))}
-              </select>
+              <SchoolAutocomplete value={profile.school} onChange={(school) => setProfile({ ...profile, school })} />
             </label>
             <NumberField
               label="GPA"
@@ -1089,7 +1507,7 @@ export default function InterviewOddsPage({ onBack }) {
                   <select value={activity.activityType} onChange={(e) => updateActivity(activity.id, 'activityType', e.target.value)}>
                     {activityTypeOptions.map((option) => (
                       <option key={option} value={option}>
-                        {option}
+                        {activityTypeLabel(option)}
                       </option>
                     ))}
                   </select>
@@ -1131,7 +1549,11 @@ export default function InterviewOddsPage({ onBack }) {
             </button>
           </div>
           <div className="activity-list">
-            {profile.workExperiences.map((experience, index) => (
+            {profile.workExperiences.map((experience, index) => {
+              const normalizedExperience = normalizeExperience(experience);
+              const followUps = experienceFollowUps[normalizedExperience.experienceType] || [];
+
+              return (
               <article className="activity-card" key={experience.id}>
                 <div className="activity-card-heading">
                   <h4>Experience {index + 1}</h4>
@@ -1140,8 +1562,11 @@ export default function InterviewOddsPage({ onBack }) {
                   </button>
                 </div>
                 <label>
-                  <span>Work Type</span>
-                  <select value={experience.workType} onChange={(e) => updateWorkExperience(experience.id, e.target.value)}>
+                  <span>Experience category</span>
+                  <select
+                    value={normalizedExperience.experienceType}
+                    onChange={(e) => updateWorkExperience(experience.id, 'experienceType', e.target.value)}
+                  >
                     {workTypeOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -1149,8 +1574,41 @@ export default function InterviewOddsPage({ onBack }) {
                     ))}
                   </select>
                 </label>
+                <div className="experience-follow-up-panel">
+                  <div className="experience-follow-up-grid">
+                    {followUps.map((field) => (
+                      <label key={field.key}>
+                        <span>{field.label}</span>
+                        <select
+                          value={normalizedExperience[field.key] || field.options[0]}
+                          onChange={(e) => updateWorkExperience(experience.id, field.key, e.target.value)}
+                        >
+                          {field.options.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ))}
+                    <label>
+                      <span>Timing</span>
+                      <select
+                        value={normalizedExperience.recency}
+                        onChange={(e) => updateWorkExperience(experience.id, 'recency', e.target.value)}
+                      >
+                        {recencyOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         </>
       );
@@ -1208,19 +1666,19 @@ export default function InterviewOddsPage({ onBack }) {
           </section>
           <section>
             <h3>Academic Info</h3>
-            <p>{profile.school || 'School not entered'}</p>
+            <p>{schoolDisplayName(profile.school) || 'School not entered'}</p>
             <p>GPA: {profile.gpa}</p>
           </section>
           <section>
             <h3>Activities</h3>
             {profile.activities.map((activity) => (
-              <p key={activity.id}>{activity.activityType} · {activity.selectivity} · {activity.leadershipLevel}</p>
+              <p key={activity.id}>{activityTypeLabel(activity.activityType)} · {activity.selectivity} · {activity.leadershipLevel}</p>
             ))}
           </section>
           <section>
             <h3>Work Experience</h3>
             {profile.workExperiences.map((experience) => (
-              <p key={experience.id}>{experience.workType}</p>
+              <p key={experience.id}>{experienceSummary(experience)}</p>
             ))}
           </section>
           <section>

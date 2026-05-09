@@ -1792,6 +1792,100 @@ textarea {
   padding-right: 2.45rem;
 }
 
+.school-search-field {
+  position: relative;
+  z-index: 18;
+}
+
+.school-autocomplete {
+  position: relative;
+  display: grid;
+  gap: 8px;
+}
+
+.school-autocomplete input {
+  min-height: 44px;
+}
+
+.school-autocomplete-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  z-index: 55;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: rgba(10, 18, 36, 0.97);
+  box-shadow: var(--shadow-card), 0 0 30px rgba(59, 130, 246, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.school-autocomplete-menu button {
+  display: grid;
+  width: 100%;
+  gap: 3px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.72rem 0.86rem;
+  text-align: left;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.school-autocomplete-menu button strong {
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.school-autocomplete-menu button span {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.school-autocomplete-menu button:hover {
+  background: rgba(59, 130, 246, 0.16);
+  color: #FFFFFF;
+}
+
+.school-autocomplete-menu button:hover span {
+  color: #BFDBFE;
+}
+
+.school-autocomplete-menu p,
+.selected-school-chip {
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: 750;
+}
+
+.school-autocomplete-menu p {
+  padding: 0.76rem 0.85rem;
+}
+
+.school-fallback-option {
+  background: rgba(245, 158, 11, 0.08) !important;
+}
+
+.school-fallback-option:hover {
+  background: rgba(245, 158, 11, 0.15) !important;
+}
+
+.selected-school-chip {
+  width: fit-content;
+  border: 1px solid rgba(59, 130, 246, 0.26);
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #DBEAFE;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.62rem;
+}
+
 .location-clear-button {
   position: absolute;
   top: 50%;
@@ -1941,6 +2035,34 @@ li {
 
 .activity-card-heading {
   grid-column: 1 / -1;
+}
+
+.experience-follow-up-panel {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  animation: followUpReveal 180ms ease-out;
+}
+
+.experience-follow-up-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.28);
+}
+
+@keyframes followUpReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chips {
