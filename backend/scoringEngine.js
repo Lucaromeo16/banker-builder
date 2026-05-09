@@ -36,12 +36,6 @@ const contactSeniorityMultiplier = {
   'vp+': 1.35
 };
 
-const connectionMultiplier = {
-  cold: 1,
-  alumni: 1.2,
-  'close connection': 1.45
-};
-
 const stateRegions = {
   CT: 'Northeast',
   MA: 'Northeast',
@@ -332,28 +326,39 @@ function dynamicSoftCutoff(baseCutoff, competitiveness) {
   return clamp(baseCutoff + (competitiveness - 7.5) * 0.08, 3.45, 3.9);
 }
 
+function isHyperEliteOpportunity(opportunity = {}, competitiveness = 0) {
+  const firm = String(opportunity.firm || opportunity.name || '').toLowerCase();
+  const group = String(opportunity.group || '').toLowerCase();
+  const office = String(opportunity.office || opportunity.officeCity || '').toLowerCase();
+  const eliteFirm = /(centerview|qatalyst|evercore|pjt|goldman sachs|morgan stanley|j\.p\. morgan)/.test(firm);
+  const eliteGroup = /(restructuring|rssg|technology|tmt|financial sponsors|m&a)/.test(group);
+  const eliteOffice = /(menlo park|new york|san francisco)/.test(office);
+
+  return competitiveness >= 9 || (eliteFirm && eliteGroup) || (firm.includes('evercore') && office.includes('menlo')) || (eliteFirm && eliteOffice && competitiveness >= 8.7);
+}
+
+function gpaBand(gpa) {
+  if (gpa >= 3.7) return 'strong';
+  if (gpa >= 3.5) return 'baseline';
+  if (gpa >= 3.3) return 'penalty';
+  return 'severe';
+}
+
 function gpaToNonlinearScore(gpa, competitiveness) {
+  const numericGpa = Number(gpa);
+  if (!Number.isFinite(numericGpa)) return 0;
+  const hyperPressure = competitiveness >= 8.9 ? 0.35 : 0;
+
+  // GPA cliff: 3.5 is treated as a real screening breakpoint, with sub-3.3 near-disqualifying.
+  if (numericGpa < 3.3) return clamp(0.7 + Math.max(numericGpa - 2.7, 0) * 1.8 - hyperPressure, 0.4, 2.1);
+  if (numericGpa < 3.5) return clamp(2.2 + ((numericGpa - 3.3) / 0.2) * 2.1 - hyperPressure, 1.8, 4.4);
+  if (numericGpa < 3.7) return clamp(5.6 + ((numericGpa - 3.5) / 0.2) * 1.4 - hyperPressure * 0.45, 5.1, 7.1);
+
   const cutoff = dynamicSoftCutoff(3.7, competitiveness);
-
-  if (gpa < 2.7) {
-    return 0.5;
-  }
-
-  if (gpa < 3.5) {
-    const severeBand = (gpa - 2.7) / 0.8;
-    return clamp(1 + Math.pow(severeBand, 1.8) * 3.8);
-  }
-
-  const belowCutoffRange = Math.max(cutoff - 3.5, 0.1);
-  if (gpa <= cutoff) {
-    const normalized = (gpa - 3.5) / belowCutoffRange;
-    return clamp(5 + Math.pow(normalized, 1.25) * 3.2);
-  }
-
   const aboveRange = 4 - cutoff;
-  const normalizedAbove = (gpa - cutoff) / Math.max(aboveRange, 0.05);
-  const diminishingBonus = Math.log1p(normalizedAbove * 3) / Math.log(4);
-  return clamp(8.2 + diminishingBonus * 1.8);
+  const normalizedAbove = (numericGpa - cutoff) / Math.max(aboveRange, 0.05);
+  const diminishingBonus = Math.log1p(Math.max(normalizedAbove, 0) * 3) / Math.log(4);
+  return clamp(8 + diminishingBonus * 1.9 - hyperPressure * 0.2, 7.8, 9.9);
 }
 
 function experienceScore(internshipType, exposureLevel) {
@@ -448,9 +453,9 @@ function normalizeExperience(experience = {}) {
 
 function recencyMultiplier(recency, hireType) {
   if (recency === 'Current / most recent') return 1;
-  if (hireType === 'Summer Analyst') return recency === 'Past 1-2 years' ? 0.92 : 0.78;
-  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.72 : 0.42;
-  return recency === 'Past 1-2 years' ? 0.82 : 0.55;
+  if (hireType === 'Summer Analyst') return recency === 'Past 1-2 years' ? 0.95 : 0.86;
+  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.68 : 0.36;
+  return recency === 'Past 1-2 years' ? 0.76 : 0.48;
 }
 
 function scoreSingleExperience(rawExperience, hireType) {
@@ -507,13 +512,13 @@ function scoreSingleExperience(rawExperience, hireType) {
     const prestige = { 'Elite Platform': 0.8, 'Strong Institutional Platform': 0.45, 'Mid-Tier Platform': 0, 'Small / Unknown Platform': -0.45 }[experience.platformPrestige] ?? 0;
     score = industry + prestige;
     signals.add('high finance experience');
-    if (experience.industry === 'Hedge Fund') affinities.add('Restructuring');
+    if (experience.industry === 'Hedge Fund') ['Restructuring', 'Financial Sponsors'].forEach((target) => affinities.add(target));
     if (experience.industry === 'Equity Research') affinities.add('Financial Institutions');
-    if (experience.industry === 'Sales & Trading') affinities.add('DCM');
+    if (experience.industry === 'Sales & Trading') ['DCM', 'Markets'].forEach((target) => affinities.add(target));
   } else if (type === 'Commercial Banking Internship') {
     signals.add('commercial banking experience');
     score = { 'Bulge Bracket / Major Bank': 6.8, 'Super-Regional / Strong National Bank': 6.3, 'Regional Bank': 5.7, 'Local / Community Bank': 5 }[experience.platformTier] ?? 5.8;
-    ['DCM', 'Financial Institutions'].forEach((target) => affinities.add(target));
+    ['DCM', 'LevFin', 'Financial Institutions'].forEach((target) => affinities.add(target));
   } else if (type === 'Real Estate / CRE Internship') {
     signals.add('real estate finance experience');
     score = { 'Institutional Platform': 6.9, 'Large Brokerage / Advisory Platform': 6.3, 'Regional Firm': 5.7, 'Small / Local Firm': 5 }[experience.platformTier] ?? 5.9;
@@ -521,7 +526,7 @@ function scoreSingleExperience(rawExperience, hireType) {
   } else {
     score = { 'Search Fund Internship': 6.5, 'Entrepreneurship / Startup': 5.9, 'Military Experience': 5.8, 'Leadership Program': 5.3, 'Student Research': 4.8, 'Other Internship': 4.4, 'Part-Time Job': 3.6, 'Campus Job': 3.3 }[experience.generalType] ?? 4.2;
     signals.add(experience.generalType === 'Search Fund Internship' ? 'search fund experience' : 'general work experience');
-    if (experience.generalType === 'Entrepreneurship / Startup') affinities.add('Technology');
+    if (experience.generalType === 'Entrepreneurship / Startup') ['Technology', 'Strategic Advisory'].forEach((target) => affinities.add(target));
   }
 
   return {
@@ -541,9 +546,11 @@ function structuredExperienceScore(profile, hireType, targetGroup) {
 
   const ranked = experiences.sort((a, b) => b.score - a.score);
   const primary = ranked[0];
-  const secondary = ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.24 : 0.1), 0);
-  const stackCap = primary.eliteIb ? 10 : primary.score >= 8.5 ? 9.4 : 8.8;
-  const affinityBoost = ranked.some((experience) => experience.affinities.includes(targetGroup)) ? (primary.eliteIb ? 0.12 : 0.22) : 0;
+  // Multi-experience cap: strongest experience dominates; extras help, but weak roles cannot stack into elite odds.
+  const secondary = ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.22 : index === 1 ? 0.11 : 0.04), 0);
+  const stackCap = primary.eliteIb ? 10 : primary.score >= 8.5 ? 9.35 : primary.score >= 7 ? 8.8 : 7.2;
+  const normalizedTargetGroup = String(targetGroup || '');
+  const affinityBoost = ranked.some((experience) => experience.affinities.includes(normalizedTargetGroup)) ? (primary.eliteIb ? 0.1 : 0.2) : 0;
 
   return {
     score: clamp(Math.min(primary.score + secondary, stackCap) + affinityBoost),
@@ -598,17 +605,19 @@ function resumeExperienceScore(profile) {
 }
 
 function networkingScore(networking) {
-  const points =
-    networking.initialChats * 1 +
-    networking.followUps * 1.5 +
-    networking.strongRelationships * 5 +
-    networking.referrals * 7;
+  const calls = Number(networking.initialChats || 0);
+  const followUps = Number(networking.followUps || 0);
+  const relationships = Number(networking.strongRelationships || 0);
+  const referrals = Number(networking.referrals || 0);
+  // Networking diminishing returns: quality relationships and first referral beat raw call volume.
+  const callPoints = Math.min(calls, 15) * 0.36 + Math.min(Math.max(calls - 15, 0), 15) * 0.1;
+  const followUpPoints = Math.min(followUps, 12) * 0.32 + Math.min(Math.max(followUps - 12, 0), 10) * 0.08;
+  const relationshipPoints = Math.min(relationships, 3) * 2.2 + Math.min(Math.max(relationships - 3, 0), 2) * 0.75;
+  const referralPoints = (referrals > 0 ? 2.7 : 0) + Math.min(Math.max(referrals - 1, 0), 2) * 0.85;
 
-  const seniority = contactSeniorityMultiplier[networking.strongestContactSeniority] ?? 1;
-  const connection = connectionMultiplier[networking.connectionType] ?? 1;
+  const seniority = { analyst: 1, associate: 1.04, 'vp+': 1.12 }[networking.strongestContactSeniority] ?? 1;
 
-  const adjusted = points * seniority * connection;
-  return clamp((adjusted / 120) * 10);
+  return clamp(((callPoints + followUpPoints + relationshipPoints + referralPoints) * seniority / 18) * 10);
 }
 
 function normalizeActivities(profile) {
@@ -679,13 +688,63 @@ function baseClassification(delta) {
   return 'Reach';
 }
 
-function applyGates({ classification, gpa, networking, experience, competitiveness, gpaScore }) {
+function applyGates({
+  classification,
+  gpa,
+  networking,
+  experience,
+  competitiveness,
+  gpaScore,
+  schoolScore,
+  extracurricular,
+  experienceResult,
+  hyperElite,
+  calibratedInterviewOdds = false
+}) {
   let updated = classification;
   const gateReasons = [];
 
-  if (gpa < 3.5) {
+  if (!calibratedInterviewOdds) {
+    if (gpa < 3.5) {
+      updated = 'Reach';
+      gateReasons.push('GPA below 3.5 creates a strong screening risk for many IB processes.');
+    }
+
+    if (networking < 3.2 && competitiveness > 8.0 && updated !== 'Reach') {
+      updated = 'Reach';
+      gateReasons.push('Low networking activity reduces interview conversion at competitive firms.');
+    }
+
+    if (experience < 4.5 && competitiveness >= 8.5 && updated === 'Safety') {
+      updated = 'Target';
+      gateReasons.push('Limited deal-relevant experience caps upside for top-tier roles.');
+    }
+
+    if (gpaScore < 4.5 && competitiveness >= 8.8 && updated !== 'Reach') {
+      updated = 'Reach';
+      gateReasons.push('GPA profile is below this office\'s adjusted soft cutoff.');
+    }
+
+    return { classification: updated, gateReasons };
+  }
+
+  const compensators = [
+    experience >= 8.4,
+    networking >= 7,
+    schoolScore >= 8,
+    extracurricular >= 7,
+    experienceResult?.eliteIb
+  ].filter(Boolean).length;
+
+  if (gpa < 3.3) {
     updated = 'Reach';
-    gateReasons.push('GPA below 3.5 creates a strong screening risk for many IB processes.');
+    gateReasons.push('GPA below 3.3 is a near-disqualifying screen for serious IB recruiting.');
+  } else if (gpa < 3.5 && compensators < 3) {
+    updated = 'Reach';
+    gateReasons.push('GPA below 3.5 creates a major screening risk unless several strong compensators are present.');
+  } else if (gpa < 3.5 && updated === 'Safety') {
+    updated = 'Target';
+    gateReasons.push('GPA below 3.5 still caps upside even with strong compensating signals.');
   }
 
   if (networking < 3.2 && competitiveness > 8.0 && updated !== 'Reach') {
@@ -693,14 +752,24 @@ function applyGates({ classification, gpa, networking, experience, competitivene
     gateReasons.push('Low networking activity reduces interview conversion at competitive firms.');
   }
 
+  if (networking < 1.5 && experience < 8.8 && updated !== 'Reach') {
+    updated = 'Reach';
+    gateReasons.push('Very limited networking makes interview conversion difficult without an elite internship signal.');
+  }
+
   if (experience < 4.5 && competitiveness >= 8.5 && updated === 'Safety') {
     updated = 'Target';
     gateReasons.push('Limited deal-relevant experience caps upside for top-tier roles.');
   }
 
-  if (gpaScore < 4.5 && competitiveness >= 8.8 && updated !== 'Reach') {
+  if (experience < 6 && extracurricular >= 8 && competitiveness >= 8 && updated === 'Safety') {
+    updated = 'Target';
+    gateReasons.push('Leadership helps the story but cannot substitute for finance internship experience at this level.');
+  }
+
+  if ((gpaScore < 4.5 || gpa < 3.6) && (competitiveness >= 8.8 || hyperElite) && updated !== 'Reach') {
     updated = 'Reach';
-    gateReasons.push('GPA profile is below this office\'s adjusted soft cutoff.');
+    gateReasons.push('GPA profile is below this office\'s heightened screen.');
   }
 
   return { classification: updated, gateReasons };
@@ -771,21 +840,40 @@ function profileScores(
   competitiveness = 8,
   weights = profileWeights['Summer Analyst'],
   hireType = 'Summer Analyst',
-  targetGroup = 'Generalist'
+  targetGroup = 'Generalist',
+  opportunity = {}
 ) {
+  const hyperElite = isHyperEliteOpportunity(opportunity, competitiveness);
   const schoolScore = schoolToScore(profile.school || '');
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
-  const academic = clamp(schoolScore * 0.45 + gpaScore * 0.55);
   const experienceResult = structuredExperienceScore(profile, hireType, targetGroup);
   const experience = experienceResult.score;
+  const honorsBoost = profile.honorsCollege ? 0.15 : 0;
+  const schoolWeight = hyperElite ? 0.5 : experienceResult.eliteIb ? 0.32 : experience >= 8.5 ? 0.36 : experience >= 7 ? 0.42 : 0.48;
+  const academic = clamp(schoolScore * schoolWeight + gpaScore * (1 - schoolWeight) + honorsBoost);
   const networking = networkingScore(profile.networking);
   const extracurricular = extracurricularScore(profile);
+  // Hyper-elite group amplification: top groups compress merely good profiles and reward pedigree, GPA, and elite internships.
+  const effectiveWeights = hyperElite
+    ? {
+        academic: weights.academic + 0.04,
+        experience: weights.experience + 0.04,
+        networking: Math.max(weights.networking - 0.06, 0.18),
+        extracurricular: Math.max(weights.extracurricular - 0.02, 0.05)
+      }
+    : weights;
+  // Elite IB override: when minimum professionalism signals clear, elite direct IB receives a modest readiness lift.
+  const eliteReadinessBoost =
+    experienceResult.eliteIb && profile.gpa >= 3.5 && networking >= 3.2 && extracurricular >= 4.5
+      ? hyperElite ? 0.18 : 0.35
+      : 0;
 
   const total = clamp(
-    academic * weights.academic +
-      experience * weights.experience +
-      networking * weights.networking +
-      extracurricular * weights.extracurricular
+    academic * effectiveWeights.academic +
+      experience * effectiveWeights.experience +
+      networking * effectiveWeights.networking +
+      extracurricular * effectiveWeights.extracurricular +
+      eliteReadinessBoost
   );
 
   return {
@@ -796,7 +884,8 @@ function profileScores(
     networking,
     extracurricular,
     total,
-    experienceResult
+    experienceResult,
+    hyperElite
   };
 }
 
@@ -930,14 +1019,22 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
   const adjustedCompetitiveness = clamp(
     opportunity.competitiveness + hireTypeDifficultyAdjustment(hireType, profile)
   );
-  const scores = profileScores(profile, adjustedCompetitiveness, weights, hireType, opportunity.group);
+  const scores = profileScores(profile, adjustedCompetitiveness, weights, hireType, opportunity.group, opportunity);
   const regionalBoost = regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness);
   const boostedTotal = clamp(scores.total + regionalBoost.points);
   const delta = boostedTotal - adjustedCompetitiveness;
   const unboostedDelta = scores.total - adjustedCompetitiveness;
-  const unboostedLikelihood = 100 / (1 + Math.exp(-1.15 * (unboostedDelta + 0.1)));
-  const rawLikelihood = 100 / (1 + Math.exp(-1.15 * (delta + 0.1)));
-  const likelihood = Math.round(Math.max(3, Math.min(92, Math.min(rawLikelihood, unboostedLikelihood + 7))));
+  const likelihoodSlope = scores.hyperElite ? 1.35 : 1.15;
+  const unboostedLikelihood = 100 / (1 + Math.exp(-likelihoodSlope * (unboostedDelta + 0.1)));
+  const rawLikelihood = 100 / (1 + Math.exp(-likelihoodSlope * (delta + 0.1)));
+  const gpaCap = profile.gpa < 3.3 ? 18 : profile.gpa < 3.5 ? 42 : 92;
+  const noNetworkingCap = scores.networking < 1.5 && !scores.experienceResult.eliteIb ? 32 : 92;
+  const weakExperienceCap = scores.experience < 5 && adjustedCompetitiveness >= 8.5 ? 38 : 92;
+  const eliteIbFloor =
+    scores.experienceResult.eliteIb && profile.gpa >= 3.5 && scores.networking >= 3.2 && scores.extracurricular >= 4.5
+      ? scores.hyperElite ? 48 : 58
+      : 3;
+  const likelihood = Math.round(Math.max(eliteIbFloor, Math.min(gpaCap, noNetworkingCap, weakExperienceCap, 92, Math.min(rawLikelihood, unboostedLikelihood + 7))));
   const classification = baseClassification(delta);
   const gateResult = applyGates({
     classification,
@@ -945,8 +1042,17 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     networking: scores.networking,
     experience: scores.experience,
     competitiveness: adjustedCompetitiveness,
-    gpaScore: scores.gpaScore
+    gpaScore: scores.gpaScore,
+    schoolScore: scores.schoolScore,
+    extracurricular: scores.extracurricular,
+    experienceResult: scores.experienceResult,
+    hyperElite: scores.hyperElite,
+    calibratedInterviewOdds: true
   });
+  const finalClassification =
+    eliteIbFloor >= 48 && gateResult.classification === 'Reach' && !gateResult.gateReasons.length
+      ? 'Target'
+      : gateResult.classification;
 
   const scoreBreakdown = {
     academic: Number(scores.academic.toFixed(2)),
@@ -961,6 +1067,21 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     ? ' Your school has regional alignment with this office, which modestly improves your odds.'
     : '';
   const experienceReason = experienceReasonText(scores.experienceResult);
+  const gpaReason =
+    gpaBand(profile.gpa) === 'strong'
+      ? ' Your GPA is above the main IB screening threshold.'
+      : gpaBand(profile.gpa) === 'baseline'
+        ? ' Your GPA clears the baseline screen but is not a major differentiator.'
+        : ' Your GPA is a key constraint for this process.';
+  const networkingReason =
+    scores.networking >= 7
+      ? ' Networking depth is a strength.'
+      : scores.networking >= 4
+        ? ' Networking is credible but could be deeper.'
+        : ' Networking is currently a limiting factor.';
+  const hyperReason = scores.hyperElite
+    ? ' This is a hyper-competitive target, so pedigree, GPA, and elite internship signals are weighted more heavily.'
+    : '';
 
   return {
     opportunity: {
@@ -977,12 +1098,12 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     },
     hireType,
     likelihood,
-    classification: gateResult.classification,
+    classification: finalClassification,
     confidence: confidenceFromDelta(delta),
     scoreBreakdown,
     strengths: buildStrengths(scoreBreakdown, profile),
     gaps: buildGaps(scoreBreakdown, gateResult.gateReasons),
     actionSteps: buildActionSteps(scoreBreakdown, profile, { includeFinanceChair: false }),
-    reason: `Your total score (${boostedTotal.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).${regionalReason}${experienceReason}`
+    reason: `Your total score (${boostedTotal.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).${gpaReason}${networkingReason}${regionalReason}${experienceReason}${hyperReason}`
   };
 }
