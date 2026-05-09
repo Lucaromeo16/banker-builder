@@ -485,8 +485,8 @@
     "firm": "William Blair",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8827,
-    "longitude": -87.6233,
+    "latitude": 41.8841,
+    "longitude": -87.6388,
     "type": "MM",
     "groups": [
       "M&A",
@@ -505,18 +505,18 @@
     "internshipOpportunities": "Consistent analyst hiring with strong Midwest and growth-company appeal.",
     "notes": "Flagship office with broad middle-market advisory and growth-company coverage.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "150 North Riverside Plaza",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-minneapolis",
     "firm": "Piper Sandler",
     "officeCity": "Minneapolis",
     "state": "MN",
-    "latitude": 44.9778,
-    "longitude": -93.265,
+    "latitude": 44.9844,
+    "longitude": -93.2761,
     "type": "MM",
     "groups": [
       "M&A",
@@ -532,10 +532,10 @@
     "competitivenessScore": 7.2,
     "internshipOpportunities": "Good analyst opportunities for candidates targeting middle-market banking.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified.",
+    "address": "350 North 5th Street, Suite 1000",
+    "zip": "55401",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information.",
     "notes": ""
   },
   {
@@ -543,8 +543,8 @@
     "firm": "Baird",
     "officeCity": "Milwaukee",
     "state": "WI",
-    "latitude": 43.0389,
-    "longitude": -87.9065,
+    "latitude": 43.0387,
+    "longitude": -87.9022,
     "type": "MM",
     "groups": [
       "M&A",
@@ -561,10 +561,10 @@
     "internshipOpportunities": "Regular summer analyst seats, often attractive to Midwest candidates.",
     "notes": "Headquarters office with strong industrials and sponsor-backed middle-market coverage.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "777 East Wisconsin Avenue",
+    "zip": "53202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "harris-williams-richmond",
@@ -600,8 +600,8 @@
     "firm": "Lincoln International",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8836,
-    "longitude": -87.6287,
+    "latitude": 41.8834,
+    "longitude": -87.6372,
     "type": "MM",
     "groups": [
       "M&A",
@@ -619,18 +619,18 @@
     "internshipOpportunities": "Competitive middle-market internship opportunities with heavy M&A exposure.",
     "notes": "Headquarters office with broad middle-market advisory and sponsor coverage.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "110 North Wacker Drive, 51st Floor",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "stifel-baltimore",
     "firm": "Stifel",
     "officeCity": "Baltimore",
     "state": "MD",
-    "latitude": 39.2904,
-    "longitude": -76.6122,
+    "latitude": 39.2786,
+    "longitude": -76.5981,
     "type": "MM",
     "groups": [
       "M&A",
@@ -647,10 +647,10 @@
     "internshipOpportunities": "Moderately selective internships with exposure to sector coverage and execution.",
     "notes": "Legacy advisory office connected to Stifel's broader middle-market investment banking platform.",
     "logo": "/logos/stifel.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1201 Wills Street, Suite 600",
+    "zip": "21231",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "brown-gibbons-lang-cleveland",
@@ -1982,8 +1982,8 @@
     "firm": "William Blair",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7562,
-    "longitude": -73.9821,
+    "latitude": 40.7578,
+    "longitude": -73.9822,
     "type": "MM",
     "groups": [
       "M&A",
@@ -2001,18 +2001,18 @@
     "internshipOpportunities": "Competitive summer analyst seats across several coverage groups.",
     "notes": "Important East Coast office for William Blair's middle-market banking platform.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1166 Avenue of the Americas, 20th Floor",
+    "zip": "10036",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-boston",
     "firm": "William Blair",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3556,
+    "longitude": -71.0533,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -2029,18 +2029,18 @@
     "internshipOpportunities": "Regular but selective summer analyst opportunities.",
     "notes": "Strong office for candidates interested in healthcare and technology growth companies.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "125 High Street, Oliver Street Tower, Suite 1901",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-charlotte",
     "firm": "William Blair",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2268,
+    "longitude": -80.8426,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -2057,10 +2057,10 @@
     "internshipOpportunities": "Selective regional seats with Charlotte banking appeal.",
     "notes": "Relevant for candidates targeting leveraged finance and sponsor coverage.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "101 South Tryon Street, Suite 2000",
+    "zip": "28280",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-atlanta",
@@ -2085,18 +2085,18 @@
     "internshipOpportunities": "Smaller regional analyst intake with selective recruiting.",
     "notes": "Good fit for candidates seeking Southeast middle-market M&A exposure.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3060 Peachtree Road NW, Suite 900",
+    "zip": "30305",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-los-angeles",
     "firm": "William Blair",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0595,
-    "longitude": -118.4135,
+    "latitude": 34.0594,
+    "longitude": -118.417,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2113,18 +2113,18 @@
     "internshipOpportunities": "Selective summer analyst seats with West Coast client exposure.",
     "notes": "Useful target for candidates interested in Southern California growth advisory.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1900 Avenue of the Stars, Suite 500",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "william-blair-san-francisco",
     "firm": "William Blair",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.4014,
+    "latitude": 37.7934,
+    "longitude": -122.401,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2141,17 +2141,17 @@
     "internshipOpportunities": "Competitive technology-oriented summer analyst seats.",
     "notes": "Strong fit for candidates seeking middle-market technology banking.",
     "logo": "/logos/william-blair.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "343 Sansome Street, 12th Floor",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-new-york",
     "firm": "RBC Capital Markets",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.713,
+    "latitude": 40.7149,
     "longitude": -74.0155,
     "type": "MM",
     "groups": [
@@ -2170,18 +2170,18 @@
     "internshipOpportunities": "Large and competitive analyst program across banking and capital markets.",
     "notes": "Core U.S. hub for RBC's investment banking franchise.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 Vesey Street, 9th Floor",
+    "zip": "10281",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-houston",
     "firm": "RBC Capital Markets",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7605,
+    "longitude": -95.3639,
     "type": "MM",
     "groups": [
       "Energy",
@@ -2198,18 +2198,18 @@
     "internshipOpportunities": "Competitive energy banking seats with sector-specific expectations.",
     "notes": "Strong office for candidates targeting energy and infrastructure banking.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "609 Main Street, Suite 3600",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-san-francisco",
     "firm": "RBC Capital Markets",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7953,
-    "longitude": -122.3973,
+    "latitude": 37.7952,
+    "longitude": -122.3971,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2226,18 +2226,18 @@
     "internshipOpportunities": "Selective technology banking summer analyst opportunities.",
     "notes": "Good fit for candidates interested in technology and growth advisory.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2 Embarcadero Center, Suite 1200 & Suite 2300",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-chicago",
     "firm": "RBC Capital Markets",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8807,
-    "longitude": -87.6365,
+    "latitude": 41.88,
+    "longitude": -87.6366,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -2254,18 +2254,18 @@
     "internshipOpportunities": "Selective regional analyst seats with Midwest coverage exposure.",
     "notes": "Practical target for candidates seeking Chicago banking at a Canadian bank platform.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "111 South Wacker Drive, Suite 3200",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-los-angeles",
     "firm": "RBC Capital Markets",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0595,
-    "longitude": -118.4135,
+    "latitude": 34.0598,
+    "longitude": -118.4139,
     "type": "MM",
     "groups": [
       "Media",
@@ -2282,18 +2282,18 @@
     "internshipOpportunities": "Limited regional summer analyst seats with sector-focused recruiting.",
     "notes": "Relevant for candidates targeting media and consumer banking.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2049 Century Park East, Suite 2530",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-boston",
     "firm": "RBC Capital Markets",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3562,
-    "longitude": -71.0545,
+    "latitude": 42.3568,
+    "longitude": -71.0543,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -2310,18 +2310,18 @@
     "internshipOpportunities": "Smaller regional analyst presence with selective recruiting.",
     "notes": "Good fit for healthcare and technology coverage interest.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "225 Franklin Street, 21st Floor",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-minneapolis",
     "firm": "RBC Capital Markets",
     "officeCity": "Minneapolis",
     "state": "MN",
-    "latitude": 44.9778,
-    "longitude": -93.265,
+    "latitude": 44.984,
+    "longitude": -93.2708,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -2338,18 +2338,18 @@
     "internshipOpportunities": "Selective regional seats with strong Midwest relevance.",
     "notes": "Regional hub with meaningful Upper Midwest client coverage.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "250 Nicollet Mall",
+    "zip": "55401",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "rbc-capital-markets-charlotte",
     "firm": "RBC Capital Markets",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.1558,
+    "longitude": -80.8361,
     "type": "MM",
     "groups": [
       "Financial Institutions",
@@ -2366,18 +2366,18 @@
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "Plausible fit for candidates targeting Charlotte banking and financing roles.",
     "logo": "/logos/rbc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "6805 Carnegie Boulevard, Suite 100",
+    "zip": "28211",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-new-york",
     "firm": "Baird",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7557,
-    "longitude": -73.9863,
+    "latitude": 40.7566,
+    "longitude": -73.9829,
     "type": "MM",
     "groups": [
       "M&A",
@@ -2395,18 +2395,18 @@
     "internshipOpportunities": "Competitive middle-market analyst opportunities with sector coverage exposure.",
     "notes": "Important office for Baird's national investment banking platform.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1155 Avenue of the Americas, 36th Floor",
+    "zip": "10036",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-chicago",
     "firm": "Baird",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8808,
+    "longitude": -87.6349,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -2423,18 +2423,18 @@
     "internshipOpportunities": "Regular regional analyst seats with strong Midwest appeal.",
     "notes": "Good fit for candidates seeking Chicago middle-market M&A.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "227 West Monroe Street, Suite 5700",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-boston",
     "firm": "Baird",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3508,
+    "longitude": -71.0754,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -2451,18 +2451,18 @@
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Relevant for healthcare and technology middle-market advisory.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "500 Boylston Street, Suite 2550",
+    "zip": "02116",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-charlotte",
     "firm": "Baird",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.1507,
+    "longitude": -80.8392,
     "type": "MM",
     "groups": [
       "Financial Sponsors",
@@ -2479,18 +2479,18 @@
     "internshipOpportunities": "Smaller regional analyst intake with relationship-driven recruiting.",
     "notes": "Plausible Charlotte option for middle-market advisory candidates.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "6000 Fairview Road, Suite 1100",
+    "zip": "28210",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-denver",
     "firm": "Baird",
     "officeCity": "Denver",
     "state": "CO",
-    "latitude": 39.7392,
-    "longitude": -104.9903,
+    "latitude": 39.7206,
+    "longitude": -104.9593,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2507,18 +2507,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Good regional fit for growth-company and services advisory.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "210 University Boulevard, Suite 700",
+    "zip": "80206",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-houston",
     "firm": "Baird",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7575,
+    "longitude": -95.3702,
     "type": "MM",
     "groups": [
       "Energy",
@@ -2535,18 +2535,18 @@
     "internshipOpportunities": "Limited but relevant energy banking analyst opportunities.",
     "notes": "Sector-focused office for energy and industrials candidates.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "333 Clay Street, Suite 4890",
+    "zip": "77010",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-san-francisco",
     "firm": "Baird",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.794,
+    "longitude": -122.3971,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2563,18 +2563,18 @@
     "internshipOpportunities": "Selective regional seats with technology coverage exposure.",
     "notes": "Relevant for candidates targeting technology-focused middle-market banking.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "50 California Street, Suite 1500",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-dallas",
     "firm": "Baird",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.8648,
+    "longitude": -96.8083,
     "type": "MM",
     "groups": [
       "Business Services",
@@ -2591,18 +2591,18 @@
     "internshipOpportunities": "Small regional analyst presence.",
     "notes": "Useful target for candidates seeking Texas middle-market advisory outside energy-only roles.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "8333 Douglas Avenue, Suite 1000",
+    "zip": "75225",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "baird-cleveland",
     "firm": "Baird",
     "officeCity": "Cleveland",
     "state": "OH",
-    "latitude": 41.4993,
-    "longitude": -81.6944,
+    "latitude": 41.5008,
+    "longitude": -81.6902,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -2619,10 +2619,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional option for candidates interested in industrial middle-market transactions.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 Public Square, Suite 1650",
+    "zip": "44114",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bnp-paribas-new-york",
@@ -2770,8 +2770,8 @@
     "firm": "Stifel",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7557,
-    "longitude": -73.9863,
+    "latitude": 40.7626,
+    "longitude": -73.9827,
     "type": "MM",
     "groups": [
       "M&A",
@@ -2789,18 +2789,18 @@
     "internshipOpportunities": "Competitive middle-market analyst seats across sector teams.",
     "notes": "Important East Coast hub for Stifel's institutional and banking platform.",
     "logo": "/logos/stifel.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "787 7th Avenue, 11th Floor",
+    "zip": "10019",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "stifel-san-francisco",
     "firm": "Stifel",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.7893,
+    "longitude": -122.4022,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2817,18 +2817,18 @@
     "internshipOpportunities": "Selective regional analyst seats with sector coverage exposure.",
     "notes": "Relevant for candidates targeting technology and healthcare middle-market banking.",
     "logo": "/logos/stifel.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Montgomery Street, Suite 3700",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "stifel-memphis",
     "firm": "Stifel",
     "officeCity": "Memphis",
     "state": "TN",
-    "latitude": 35.1495,
-    "longitude": -90.049,
+    "latitude": 35.1077,
+    "longitude": -89.8648,
     "type": "MM",
     "groups": [
       "Transportation & Logistics",
@@ -2845,18 +2845,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office with sector-specific relevance.",
     "logo": "/logos/stifel.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "775 Ridge Lake Boulevard",
+    "zip": "38120",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-new-york",
     "firm": "TD Securities",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7608,
-    "longitude": -73.9754,
+    "latitude": 40.753,
+    "longitude": -73.9787,
     "type": "MM",
     "groups": [
       "M&A",
@@ -2874,18 +2874,18 @@
     "internshipOpportunities": "Competitive analyst opportunities across banking and capital markets teams.",
     "notes": "Core U.S. hub following TD's expanded investment banking platform.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1 Vanderbilt Avenue",
+    "zip": "10017",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-houston",
     "firm": "TD Securities",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7564,
+    "longitude": -95.3638,
     "type": "MM",
     "groups": [
       "Energy",
@@ -2902,18 +2902,18 @@
     "internshipOpportunities": "Selective energy banking and capital markets seats.",
     "notes": "Strong regional option for candidates targeting energy and power coverage.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "909 Fannin Street, Suite 1100",
+    "zip": "77010",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-san-francisco",
     "firm": "TD Securities",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.7946,
+    "longitude": -122.4016,
     "type": "MM",
     "groups": [
       "Technology",
@@ -2930,18 +2930,18 @@
     "internshipOpportunities": "Selective technology-focused regional analyst opportunities.",
     "notes": "Useful for candidates targeting technology banking within TD's expanded platform.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "450 Sansome Street, 4th Floor",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-boston",
     "firm": "TD Securities",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3565,
+    "longitude": -71.0526,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -2958,18 +2958,18 @@
     "internshipOpportunities": "Selective regional analyst seats with healthcare focus.",
     "notes": "Strong fit for healthcare and biopharma banking interest.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2 International Place",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-chicago",
     "firm": "TD Securities",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8807,
+    "longitude": -87.6363,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -2986,18 +2986,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with coverage and financing orientation.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "71 South Wacker Drive, Suite 550",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-charlotte",
     "firm": "TD Securities",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2274,
+    "longitude": -80.8424,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -3014,18 +3014,18 @@
     "internshipOpportunities": "Limited but plausible regional analyst opportunities.",
     "notes": "Good fit for candidates targeting Charlotte banking and financing roles.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "101 North Tryon Street, One Independence Center, 7th Floor",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "td-securities-dallas",
     "firm": "TD Securities",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.794,
+    "longitude": -96.8037,
     "type": "MM",
     "groups": [
       "Technology",
@@ -3042,18 +3042,18 @@
     "internshipOpportunities": "Small regional analyst presence.",
     "notes": "Regional office with broader Texas coverage relevance.",
     "logo": "/logos/td-securities.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "2021 McKinney Avenue, 19th Floor",
+    "zip": "75201",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bmo-capital-markets-chicago",
     "firm": "BMO Capital Markets",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8837,
-    "longitude": -87.6324,
+    "latitude": 41.8775,
+    "longitude": -87.6399,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -3070,10 +3070,10 @@
     "internshipOpportunities": "Regular analyst opportunities with strong Chicago and Midwest visibility.",
     "notes": "Important U.S. hub for BMO Capital Markets.",
     "logo": "/logos/bmo-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "320 South Canal Street",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bmo-capital-markets-new-york",
@@ -3081,7 +3081,7 @@
     "officeCity": "New York",
     "state": "NY",
     "latitude": 40.7557,
-    "longitude": -73.9863,
+    "longitude": -73.9858,
     "type": "MM",
     "groups": [
       "M&A",
@@ -3099,10 +3099,10 @@
     "internshipOpportunities": "Competitive analyst class with broad coverage exposure.",
     "notes": "Core East Coast office for BMO's U.S. banking platform.",
     "logo": "/logos/bmo-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "151 West 42nd Street, 9th Floor",
+    "zip": "10036",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bmo-capital-markets-houston",
@@ -3249,8 +3249,8 @@
     "firm": "Santander",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7586,
-    "longitude": -73.9754,
+    "latitude": 40.7589,
+    "longitude": -73.9753,
     "type": "MM",
     "groups": [
       "M&A",
@@ -3268,18 +3268,18 @@
     "internshipOpportunities": "Primary U.S. analyst recruiting office with competitive placement into CIB groups.",
     "notes": "Core U.S. hub for Santander Corporate & Investment Banking.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "437 Madison Avenue, Floors 5-10",
+    "zip": "10022",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-los-angeles",
     "firm": "Santander",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0595,
-    "longitude": -118.4135,
+    "latitude": 34.0616,
+    "longitude": -118.4175,
     "type": "MM",
     "groups": [
       "Media",
@@ -3296,18 +3296,18 @@
     "internshipOpportunities": "Selective analyst opportunities with West Coast coverage exposure.",
     "notes": "Good fit for candidates targeting cross-border and financing-oriented advisory.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10100 Santa Monica Boulevard, Suite 1250",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-san-francisco",
     "firm": "Santander",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7929,
-    "longitude": -122.3971,
+    "latitude": 37.7937,
+    "longitude": -122.3972,
     "type": "MM",
     "groups": [
       "Technology",
@@ -3324,18 +3324,18 @@
     "internshipOpportunities": "Selective regional analyst seats with technology coverage relevance.",
     "notes": "Plausible target for candidates seeking tech banking at an international bank.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "100 California Street, Suite 615",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-boston",
     "firm": "Santander",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3584,
-    "longitude": -71.0568,
+    "latitude": 42.358,
+    "longitude": -71.0555,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -3352,18 +3352,18 @@
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "More financing-oriented than a broad advisory analyst hub.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "75 State Street, 4th Floor",
+    "zip": "02109",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-houston",
     "firm": "Santander",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.748,
+    "longitude": -95.4579,
     "type": "MM",
     "groups": [
       "Energy",
@@ -3380,18 +3380,18 @@
     "internshipOpportunities": "Limited but relevant energy and financing analyst opportunities.",
     "notes": "Sector-focused office with energy and infrastructure relevance.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1900 West Loop South, Suite 600",
+    "zip": "77027",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-chicago",
     "firm": "Santander",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8787,
-    "longitude": -87.6403,
+    "latitude": 41.882,
+    "longitude": -87.6404,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -3408,10 +3408,10 @@
     "internshipOpportunities": "Very limited regional analyst visibility.",
     "notes": "Regional office with stronger capital markets orientation.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "500 West Madison Street, Suite 3140",
+    "zip": "60661",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "scotiabank-new-york",
@@ -3503,8 +3503,8 @@
     "firm": "Macquarie",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7601,
-    "longitude": -73.9763,
+    "latitude": 40.7605,
+    "longitude": -73.9766,
     "type": "MM",
     "groups": [
       "Infrastructure",
@@ -3522,18 +3522,18 @@
     "internshipOpportunities": "Competitive analyst opportunities across advisory and investing-oriented teams.",
     "notes": "Core U.S. hub for infrastructure, energy transition, and principal advisory work.",
     "logo": "/logos/macquarie.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "660 Fifth Avenue",
+    "zip": "10103",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "macquarie-houston",
     "firm": "Macquarie",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.758,
+    "longitude": -95.3705,
     "type": "MM",
     "groups": [
       "Energy",
@@ -3550,18 +3550,18 @@
     "internshipOpportunities": "Selective analyst seats for energy and infrastructure-focused candidates.",
     "notes": "Strong office for energy, infrastructure, and transition-related transactions.",
     "logo": "/logos/macquarie.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "500 Dallas Street, One Allen Center, Floors 31-33",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "macquarie-chicago",
     "firm": "Macquarie",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.882,
-    "longitude": -87.6368,
+    "latitude": 41.8823,
+    "longitude": -87.6369,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -3578,18 +3578,18 @@
     "internshipOpportunities": "Selective regional analyst seats with infrastructure and markets exposure.",
     "notes": "Regional office with strong infrastructure and commodities adjacency.",
     "logo": "/logos/macquarie.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1 North Wacker Drive, Suite 2900",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "macquarie-los-angeles",
     "firm": "Macquarie",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0595,
-    "longitude": -118.4135,
+    "latitude": 34.0599,
+    "longitude": -118.4185,
     "type": "MM",
     "groups": [
       "Media",
@@ -3606,18 +3606,18 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Useful for candidates interested in infrastructure-adjacent West Coast advisory.",
     "logo": "/logos/macquarie.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10250 Constellation Boulevard, Suite 2250",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "hsbc-new-york",
     "firm": "HSBC",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7547,
-    "longitude": -74.0002,
+    "latitude": 40.7537,
+    "longitude": -74.0008,
     "type": "MM",
     "groups": [
       "M&A",
@@ -3635,10 +3635,10 @@
     "internshipOpportunities": "Large and competitive analyst opportunities across banking and markets.",
     "notes": "Core U.S. hub for HSBC's international banking platform.",
     "logo": "/logos/hsbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "66 Hudson Boulevard East",
+    "zip": "10001",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "hsbc-san-francisco",
@@ -3729,8 +3729,8 @@
     "firm": "MUFG",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.759,
-    "longitude": -73.982,
+    "latitude": 40.7601,
+    "longitude": -73.9815,
     "type": "MM",
     "groups": [
       "Capital Markets",
@@ -3748,18 +3748,18 @@
     "internshipOpportunities": "Competitive analyst opportunities with strong financing and capital markets exposure.",
     "notes": "Core U.S. office for MUFG's international securities and banking platform.",
     "logo": "/logos/mufg.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1251 Avenue of the Americas",
+    "zip": "10020-1104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mufg-san-francisco",
     "firm": "MUFG",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.7934,
+    "longitude": -122.4007,
     "type": "MM",
     "groups": [
       "Technology",
@@ -3776,18 +3776,18 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Relevant for candidates targeting technology and project finance exposure.",
     "logo": "/logos/mufg.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "350 California Street",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mufg-los-angeles",
     "firm": "MUFG",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.051,
-    "longitude": -118.256,
+    "latitude": 34.0508,
+    "longitude": -118.2579,
     "type": "MM",
     "groups": [
       "Media",
@@ -3804,18 +3804,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
     "logo": "/logos/mufg.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 South Flower Street",
+    "zip": "90071",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mufg-chicago",
     "firm": "MUFG",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.879,
-    "longitude": -87.636,
+    "latitude": 41.8807,
+    "longitude": -87.6363,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -3832,17 +3832,17 @@
     "internshipOpportunities": "Limited regional analyst visibility compared with New York.",
     "notes": "Regional office with stronger financing and corporate banking adjacency.",
     "logo": "/logos/mufg.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "71 South Wacker Drive",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-atlanta",
     "firm": "Lincoln International",
     "officeCity": "Atlanta",
     "state": "GA",
-    "latitude": 33.756,
+    "latitude": 33.7566,
     "longitude": -84.364,
     "type": "MM",
     "groups": [
@@ -3860,18 +3860,18 @@
     "internshipOpportunities": "Selective regional analyst seats with middle-market M&A exposure.",
     "notes": "Good fit for candidates targeting Southeast sponsor-backed advisory.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "124 Krog Street, Suite A300-A",
+    "zip": "30307",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-boston",
     "firm": "Lincoln International",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3537,
-    "longitude": -71.057,
+    "latitude": 42.3539,
+    "longitude": -71.0578,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -3888,18 +3888,18 @@
     "internshipOpportunities": "Selective regional seats with strong healthcare and technology exposure.",
     "notes": "Relevant for candidates interested in middle-market healthcare and technology M&A.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "100 Summer Street",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-dallas",
     "firm": "Lincoln International",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7867,
-    "longitude": -96.799,
+    "latitude": 32.7905,
+    "longitude": -96.8009,
     "type": "MM",
     "groups": [
       "Business Services",
@@ -3916,10 +3916,10 @@
     "internshipOpportunities": "Selective regional analyst visibility.",
     "notes": "Useful Texas office for sponsor-backed middle-market advisory.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1900 North Pearl Street, Suite 1900",
+    "zip": "75201",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-los-angeles",
@@ -3927,7 +3927,7 @@
     "officeCity": "Los Angeles",
     "state": "CA",
     "latitude": 34.0505,
-    "longitude": -118.2551,
+    "longitude": -118.254,
     "type": "MM",
     "groups": [
       "Consumer & Retail",
@@ -3944,18 +3944,18 @@
     "internshipOpportunities": "Selective analyst opportunities with West Coast M&A exposure.",
     "notes": "Strong fit for candidates targeting Southern California middle-market advisory.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "633 West Fifth Street, 66th Floor",
+    "zip": "90071",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-new-york",
     "firm": "Lincoln International",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7552,
-    "longitude": -73.9743,
+    "latitude": 40.7569,
+    "longitude": -73.9742,
     "type": "MM",
     "groups": [
       "M&A",
@@ -3973,18 +3973,18 @@
     "internshipOpportunities": "Competitive analyst seats across sector and sponsor groups.",
     "notes": "Important national office for Lincoln's U.S. investment banking platform.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "299 Park Avenue, 7th Floor",
+    "zip": "10171",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-richmond",
     "firm": "Lincoln International",
     "officeCity": "Richmond",
     "state": "VA",
-    "latitude": 37.5407,
-    "longitude": -77.436,
+    "latitude": 37.5376,
+    "longitude": -77.4357,
     "type": "MM",
     "groups": [
       "Business Services",
@@ -4001,18 +4001,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional middle-market M&A office.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 South 10th Street, Suite 1020",
+    "zip": "23219",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-san-francisco",
     "firm": "Lincoln International",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7955,
-    "longitude": -122.3996,
+    "latitude": 37.7952,
+    "longitude": -122.399,
     "type": "MM",
     "groups": [
       "Technology",
@@ -4029,10 +4029,10 @@
     "internshipOpportunities": "Selective regional seats with technology advisory exposure.",
     "notes": "Good fit for candidates interested in tech-focused middle-market M&A.",
     "logo": "/logos/lincoln-international.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Embarcadero Center, 37th Floor",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "lincoln-international-washington-dc",
@@ -4802,8 +4802,8 @@
     "firm": "Raymond James",
     "officeCity": "St. Petersburg",
     "state": "FL",
-    "latitude": 27.7676,
-    "longitude": -82.6403,
+    "latitude": 27.8912,
+    "longitude": -82.6686,
     "type": "MM",
     "groups": [
       "M&A",
@@ -4821,18 +4821,18 @@
     "internshipOpportunities": "Regular analyst program with broad middle-market exposure.",
     "notes": "Core office for Raymond James' investment banking leadership and execution platform.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "880 Carillon Parkway",
+    "zip": "33716",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-new-york",
     "firm": "Raymond James",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.758,
-    "longitude": -73.9855,
+    "latitude": 40.7575,
+    "longitude": -73.9744,
     "type": "MM",
     "groups": [
       "M&A",
@@ -4850,18 +4850,18 @@
     "internshipOpportunities": "Competitive analyst seats with middle-market and capital markets exposure.",
     "notes": "Important office for financial services and capital structure advisory.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "320 Park Avenue, 10th Floor",
+    "zip": "10022",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-boston",
     "firm": "Raymond James",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3568,
+    "longitude": -71.0543,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -4878,18 +4878,18 @@
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Good fit for healthcare and industrial middle-market coverage.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "225 Franklin Street, Suite 2200",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-chicago",
     "firm": "Raymond James",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.8798,
+    "longitude": -87.6387,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -4906,18 +4906,18 @@
     "internshipOpportunities": "Selective regional analyst seats.",
     "notes": "Practical option for Chicago middle-market banking candidates.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "120 South Riverside Plaza, Suite 700",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-san-francisco",
     "firm": "Raymond James",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7932,
-    "longitude": -122.3977,
+    "latitude": 37.7952,
+    "longitude": -122.399,
     "type": "MM",
     "groups": [
       "Technology",
@@ -4934,18 +4934,18 @@
     "internshipOpportunities": "Selective regional analyst seats with technology exposure.",
     "notes": "Relevant for technology and financial services middle-market advisory.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Embarcadero Center, Suite 650",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-houston",
     "firm": "Raymond James",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7493,
+    "longitude": -95.482,
     "type": "MM",
     "groups": [
       "Energy",
@@ -4962,18 +4962,18 @@
     "internshipOpportunities": "Selective regional analyst seats with energy relevance.",
     "notes": "Energy-focused office for middle-market candidates.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "5847 San Felipe Road, Suite 1800",
+    "zip": "77057",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-atlanta",
     "firm": "Raymond James",
     "officeCity": "Atlanta",
     "state": "GA",
-    "latitude": 33.7488,
-    "longitude": -84.3877,
+    "latitude": 33.8492,
+    "longitude": -84.363,
     "type": "MM",
     "groups": [
       "Consumer & Retail",
@@ -4990,18 +4990,18 @@
     "internshipOpportunities": "Selective regional analyst opportunities.",
     "notes": "Regional office with consumer, services, and healthcare relevance.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3414 Peachtree Road NE, Suite 500",
+    "zip": "30326",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-memphis",
     "firm": "Raymond James",
     "officeCity": "Memphis",
     "state": "TN",
-    "latitude": 35.1495,
-    "longitude": -90.049,
+    "latitude": 35.107,
+    "longitude": -89.8654,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -5018,10 +5018,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office for industrials and logistics coverage.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "110 Ridgeway Loop Road",
+    "zip": "38120",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "oppenheimer-new-york",
@@ -5085,8 +5085,8 @@
     "firm": "KeyBanc Capital Markets",
     "officeCity": "Cleveland",
     "state": "OH",
-    "latitude": 41.5013,
-    "longitude": -81.6944,
+    "latitude": 41.5009,
+    "longitude": -81.6937,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -5104,10 +5104,10 @@
     "internshipOpportunities": "Regular analyst opportunities with strong Cleveland and Midwest visibility.",
     "notes": "Core office for KeyBanc's middle-market and capital markets platform.",
     "logo": "/logos/keybanc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "127 Public Square",
+    "zip": "44114",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "keybanc-capital-markets-new-york",
@@ -5368,8 +5368,8 @@
     "firm": "SMBC",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7553,
-    "longitude": -73.9743,
+    "latitude": 40.7554,
+    "longitude": -73.9746,
     "type": "MM",
     "groups": [
       "M&A",
@@ -5387,18 +5387,18 @@
     "internshipOpportunities": "Competitive analyst opportunities, especially in financing and sponsor-oriented teams.",
     "notes": "Globally large platform, but U.S. IB recruiting is more selective/niche than traditional U.S. bulge brackets.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "277 Park Avenue",
+    "zip": "10172",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "smbc-houston",
     "firm": "SMBC",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7567,
+    "longitude": -95.371,
     "type": "MM",
     "groups": [
       "Energy",
@@ -5415,18 +5415,18 @@
     "internshipOpportunities": "Selective regional analyst visibility with energy and project finance relevance.",
     "notes": "Strong financing platform, with more niche U.S. advisory recruiting.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1200 Smith Street, Suite 1140",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "smbc-los-angeles",
     "firm": "SMBC",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0505,
-    "longitude": -118.2551,
+    "latitude": 34.0504,
+    "longitude": -118.259,
     "type": "MM",
     "groups": [
       "Media",
@@ -5443,18 +5443,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "601 South Figueroa Street, Suite 1800",
+    "zip": "90017",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "smbc-san-francisco",
     "firm": "SMBC",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7929,
-    "longitude": -122.3971,
+    "latitude": 37.792,
+    "longitude": -122.4037,
     "type": "MM",
     "groups": [
       "Technology",
@@ -5471,18 +5471,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology-adjacent financing presence with niche U.S. IB recruiting.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "555 California Street",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "smbc-charlotte",
     "firm": "SMBC",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2176,
+    "longitude": -80.8496,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -5499,18 +5499,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Financing-oriented office rather than a broad U.S. advisory hub.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "500 East Morehead Street, Suite 500",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "nomura-new-york",
     "firm": "Nomura",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7616,
-    "longitude": -73.9868,
+    "latitude": 40.7621,
+    "longitude": -73.9879,
     "type": "MM",
     "groups": [
       "M&A",
@@ -5528,18 +5528,18 @@
     "internshipOpportunities": "Competitive analyst opportunities with selective U.S. IB class sizes.",
     "notes": "Globally large platform, but U.S. IB recruiting presence is closer to an international MM platform.",
     "logo": "/logos/nomura.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "309 West 49th Street",
+    "zip": "10019-7316",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "nomura-boston",
     "firm": "Nomura",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3563,
+    "longitude": -71.0567,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -5556,18 +5556,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "More selective/niche U.S. IB presence than traditional U.S. bulge brackets.",
     "logo": "/logos/nomura.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Federal Street, Suite 3603",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "nomura-chicago",
     "firm": "Nomura",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8786,
-    "longitude": -87.6382,
+    "latitude": 41.8777,
+    "longitude": -87.6365,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -5584,18 +5584,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with more limited U.S. IB recruiting visibility.",
     "logo": "/logos/nomura.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "311 South Wacker Drive, Suite 1020",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "nomura-san-francisco",
     "firm": "Nomura",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7943,
-    "longitude": -122.3988,
+    "latitude": 37.7944,
+    "longitude": -122.3973,
     "type": "MM",
     "groups": [
       "Technology",
@@ -5612,18 +5612,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Technology coverage presence, but U.S. IB recruiting is comparatively niche.",
     "logo": "/logos/nomura.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "Three Embarcadero Center, Suite 1150",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-new-york",
     "firm": "Mizuho",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7604,
-    "longitude": -73.9806,
+    "latitude": 40.7605,
+    "longitude": -73.9809,
     "type": "MM",
     "groups": [
       "M&A",
@@ -5641,18 +5641,18 @@
     "internshipOpportunities": "Competitive analyst opportunities with strongest visibility in New York.",
     "notes": "Globally large Japanese platform; U.S. IB presence is meaningful but more selective than U.S. BB programs.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1271 Avenue of the Americas",
+    "zip": "10020",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-houston",
     "firm": "Mizuho",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.756,
-    "longitude": -95.3645,
+    "latitude": 29.7564,
+    "longitude": -95.3638,
     "type": "MM",
     "groups": [
       "Energy",
@@ -5669,18 +5669,18 @@
     "internshipOpportunities": "Selective energy and capital markets analyst seats.",
     "notes": "Sector-focused office with strong energy and financing relevance.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "909 Fannin Street, Suite 1600",
+    "zip": "77010",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-san-francisco",
     "firm": "Mizuho",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7929,
-    "longitude": -122.4038,
+    "latitude": 37.792,
+    "longitude": -122.4,
     "type": "MM",
     "groups": [
       "Technology",
@@ -5697,18 +5697,18 @@
     "internshipOpportunities": "Selective technology-focused regional analyst seats.",
     "notes": "Technology office strengthened by Greenhill and Mizuho Securities capabilities.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "235 Pine Street, 19th Floor",
+    "zip": "94104",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-chicago",
     "firm": "Mizuho",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8841,
-    "longitude": -87.6359,
+    "latitude": 41.8847,
+    "longitude": -87.637,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -5725,18 +5725,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and sector coverage relevance.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "155 North Wacker Drive, Suite 2800",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-boston",
     "firm": "Mizuho",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3555,
-    "longitude": -71.0556,
+    "latitude": 42.3556,
+    "longitude": -71.0533,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -5753,18 +5753,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Relevant for healthcare and life sciences coverage, with niche U.S. IB recruiting.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "125 High Street, 23rd Floor",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "mizuho-los-angeles",
     "firm": "Mizuho",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.051,
-    "longitude": -118.2551,
+    "latitude": 34.0521,
+    "longitude": -118.2516,
     "type": "MM",
     "groups": [
       "Media",
@@ -5781,10 +5781,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with financing and cross-border client relevance.",
     "logo": "/logos/mizuho.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "350 South Grand Avenue, Suite 1500",
+    "zip": "90071",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "capital-one-mclean",
@@ -6781,8 +6781,8 @@
     "firm": "CIBC Capital Markets",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8792,
-    "longitude": -87.6317,
+    "latitude": 41.8793,
+    "longitude": -87.6321,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -6799,18 +6799,18 @@
     "internshipOpportunities": "Competitive but smaller U.S. analyst presence than major U.S. BBs.",
     "notes": "Regional middle-market office rather than broad national flagship.",
     "logo": "/logos/cibc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "120 South LaSalle Street",
+    "zip": "60603",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "cibc-capital-markets-new-york",
     "firm": "CIBC Capital Markets",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7527,
-    "longitude": -73.979,
+    "latitude": 40.7524,
+    "longitude": -73.9801,
     "type": "MM",
     "groups": [
       "M&A",
@@ -6828,18 +6828,18 @@
     "internshipOpportunities": "Selective U.S. analyst seats with stronger New York visibility.",
     "notes": "Core U.S. IB office for CIBC Capital Markets.",
     "logo": "/logos/cibc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "300 Madison Avenue, 7th Floor",
+    "zip": "10017",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "cibc-capital-markets-milwaukee",
     "firm": "CIBC Capital Markets",
     "officeCity": "Milwaukee",
     "state": "WI",
-    "latitude": 43.039,
-    "longitude": -87.909,
+    "latitude": 43.0387,
+    "longitude": -87.9062,
     "type": "MM",
     "groups": [
       "Middle Market M&A",
@@ -6856,10 +6856,10 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities.",
     "notes": "Focused middle-market presence within CIBC Capital Markets.",
     "logo": "/logos/cibc-capital-markets.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "411 East Wisconsin Avenue, Suite 1850",
+    "zip": "53202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "ubs-new-york",
@@ -9876,8 +9876,8 @@
     "firm": "Baird",
     "officeCity": "Tysons Corner",
     "state": "VA",
-    "latitude": 38.9187,
-    "longitude": -77.2311,
+    "latitude": 38.9241,
+    "longitude": -77.222,
     "type": "MM",
     "groups": [
       "Aerospace & Defense",
@@ -9895,10 +9895,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Specialized regional office with defense and government advisory relevance.",
     "logo": "/logos/baird.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1775 Tysons Boulevard, Suite 1400",
+    "zip": "22102",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "bank-of-america-new-york",
@@ -11980,8 +11980,8 @@
     "firm": "MUFG",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.759,
+    "longitude": -95.368,
     "type": "MM",
     "groups": [
       "Energy",
@@ -11999,10 +11999,10 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Energy and infrastructure are the primary local strengths.",
     "logo": "/logos/mufg.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1100 Louisiana Street, Suite 4850",
+    "zip": "77002-5216",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "oppenheimer-miami",
@@ -12095,8 +12095,8 @@
     "firm": "Piper Sandler",
     "officeCity": "New York",
     "state": "NY",
-    "latitude": 40.7128,
-    "longitude": -74.006,
+    "latitude": 40.7601,
+    "longitude": -73.9815,
     "type": "MM",
     "groups": [
       "M&A",
@@ -12117,18 +12117,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1251 Avenue of the Americas, Sixth Floor",
+    "zip": "10020",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-san-francisco",
     "firm": "Piper Sandler",
     "officeCity": "San Francisco",
     "state": "CA",
-    "latitude": 37.7749,
-    "longitude": -122.4194,
+    "latitude": 37.794,
+    "longitude": -122.3971,
     "type": "MM",
     "groups": [
       "Technology",
@@ -12146,18 +12146,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "50 California Street, Suite 3100",
+    "zip": "94111",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-boston",
     "firm": "Piper Sandler",
     "officeCity": "Boston",
     "state": "MA",
-    "latitude": 42.3601,
-    "longitude": -71.0589,
+    "latitude": 42.3544,
+    "longitude": -71.0565,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -12175,18 +12175,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Healthcare and life sciences are key Boston strengths.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "100 Federal Street, 33rd Floor",
+    "zip": "02110",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-chicago",
     "firm": "Piper Sandler",
     "officeCity": "Chicago",
     "state": "IL",
-    "latitude": 41.8781,
-    "longitude": -87.6298,
+    "latitude": 41.886,
+    "longitude": -87.6397,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -12204,18 +12204,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "444 West Lake Street, 33rd Floor",
+    "zip": "60606",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-houston",
     "firm": "Piper Sandler",
     "officeCity": "Houston",
     "state": "TX",
-    "latitude": 29.7604,
-    "longitude": -95.3698,
+    "latitude": 29.7605,
+    "longitude": -95.3639,
     "type": "MM",
     "groups": [
       "Energy",
@@ -12233,18 +12233,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Energy is the primary local sector strength.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "609 Main Street, Suite 3800",
+    "zip": "77002",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "piper-sandler-charlotte",
     "firm": "Piper Sandler",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2236,
+    "longitude": -80.8434,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -12262,10 +12262,10 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Secondary office with more limited recruiting visibility than larger Piper Sandler hubs.",
     "logo": "/logos/piper-sandler.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "201 South College Street, Suite 2400",
+    "zip": "28244",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "pjt-partners-boston",
@@ -12417,8 +12417,8 @@
     "firm": "Raymond James",
     "officeCity": "Charlotte",
     "state": "NC",
-    "latitude": 35.2271,
-    "longitude": -80.8431,
+    "latitude": 35.2217,
+    "longitude": -80.8512,
     "type": "MM",
     "groups": [
       "Leveraged Finance",
@@ -12436,18 +12436,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Growing regional capital markets hub.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "650 South Tryon Street, Suite 1525",
+    "zip": "28202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-dallas",
     "firm": "Raymond James",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 32.7942,
+    "longitude": -96.8041,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -12465,18 +12465,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Growing regional capital markets hub.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 Crescent Court, Suite 510",
+    "zip": "75201",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-denver",
     "firm": "Raymond James",
     "officeCity": "Denver",
     "state": "CO",
-    "latitude": 39.7392,
-    "longitude": -104.9903,
+    "latitude": 39.7508,
+    "longitude": -105.0016,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -12494,18 +12494,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Growing regional capital markets hub.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1401 Wynkoop Street, Suite 350",
+    "zip": "80202",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-washington",
     "firm": "Raymond James",
     "officeCity": "Washington",
     "state": "DC",
-    "latitude": 38.9072,
-    "longitude": -77.0369,
+    "latitude": 38.9187,
+    "longitude": -77.2218,
     "type": "MM",
     "groups": [
       "Government Services",
@@ -12523,18 +12523,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Capital markets, sponsor, or corporate banking-adjacent exposure may be more prominent than traditional BB-style advisory.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "7900 Tysons One Place, Suite 600",
+    "zip": "22102",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-los-angeles",
     "firm": "Raymond James",
     "officeCity": "Los Angeles",
     "state": "CA",
-    "latitude": 34.0522,
-    "longitude": -118.2437,
+    "latitude": 34.0599,
+    "longitude": -118.4185,
     "type": "MM",
     "groups": [
       "Consumer/Retail",
@@ -12552,18 +12552,18 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "10250 Constellation Boulevard, Suite 1600",
+    "zip": "90067",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-nashville",
     "firm": "Raymond James",
     "officeCity": "Nashville",
     "state": "TN",
-    "latitude": 36.1627,
-    "longitude": -86.7816,
+    "latitude": 36.153,
+    "longitude": -86.7854,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -12581,18 +12581,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "1033 Demonbreun Street, Suite 505",
+    "zip": "37203",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-raleigh",
     "firm": "Raymond James",
     "officeCity": "Raleigh",
     "state": "NC",
-    "latitude": 35.7796,
-    "longitude": -78.6382,
+    "latitude": 35.8377,
+    "longitude": -78.6415,
     "type": "MM",
     "groups": [
       "Healthcare",
@@ -12610,18 +12610,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "4000 Center at North Hills Street, Suite 440",
+    "zip": "27609",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "raymond-james-west-palm-beach",
     "firm": "Raymond James",
     "officeCity": "West Palm Beach",
     "state": "FL",
-    "latitude": 26.7153,
-    "longitude": -80.0534,
+    "latitude": 26.7106,
+    "longitude": -80.051,
     "type": "MM",
     "groups": [
       "Consumer/Retail",
@@ -12639,18 +12639,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Important office given Raymond James’ Florida identity and history.",
     "logo": "/logos/raymond-james.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "222 Lakeview Avenue, Suite 1100",
+    "zip": "33401",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-austin",
     "firm": "Santander",
     "officeCity": "Austin",
     "state": "TX",
-    "latitude": 30.2672,
-    "longitude": -97.7431,
+    "latitude": 30.3606,
+    "longitude": -97.7473,
     "type": "MM",
     "groups": [
       "Technology",
@@ -12668,18 +12668,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "3445 Executive Center Drive, Suite 120",
+    "zip": "78731",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-fort-lauderdale",
     "firm": "Santander",
     "officeCity": "Fort Lauderdale",
     "state": "FL",
-    "latitude": 26.1224,
-    "longitude": -80.1373,
+    "latitude": 26.1225,
+    "longitude": -80.1417,
     "type": "MM",
     "groups": [
       "Consumer/Retail",
@@ -12697,18 +12697,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Regional office with focused investment banking or advisory relevance.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "200 East Broward Boulevard, Suite 1260",
+    "zip": "33301",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "santander-stamford",
     "firm": "Santander",
     "officeCity": "Stamford",
     "state": "CT",
-    "latitude": 41.0534,
-    "longitude": -73.5387,
+    "latitude": 41.0456,
+    "longitude": -73.5378,
     "type": "MM",
     "groups": [
       "Cross-Border Banking",
@@ -12726,18 +12726,18 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Cross-border and corporate banking adjacency are the primary local angles.",
     "logo": "/logos/santander.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Dock Street, Suite 400",
+    "zip": "06902",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "smbc-dallas",
     "firm": "SMBC",
     "officeCity": "Dallas",
     "state": "TX",
-    "latitude": 32.7767,
-    "longitude": -96.797,
+    "latitude": 33.0865,
+    "longitude": -96.8196,
     "type": "MM",
     "groups": [
       "Energy",
@@ -12755,10 +12755,10 @@
     "internshipOpportunities": "Selective middle-market analyst opportunities with meaningful regional visibility.",
     "notes": "Energy and sponsor coverage adjacency are key local strengths.",
     "logo": "/logos/smbc.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "5700 Granite Parkway, Suite 270",
+    "zip": "75024",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "stifel-washington",
@@ -12794,8 +12794,8 @@
     "firm": "Stifel",
     "officeCity": "St. Louis",
     "state": "MO",
-    "latitude": 38.627,
-    "longitude": -90.1994,
+    "latitude": 38.6302,
+    "longitude": -90.188,
     "type": "MM",
     "groups": [
       "Industrials",
@@ -12813,10 +12813,10 @@
     "internshipOpportunities": "Limited regional analyst visibility.",
     "notes": "Flagship identity office for Stifel.",
     "logo": "/logos/stifel.png",
-    "address": "",
-    "zip": "",
-    "addressConfidence": "needs verification",
-    "sourceNote": "Exact public office address not yet verified."
+    "address": "One Financial Plaza, 501 North Broadway",
+    "zip": "63102",
+    "addressConfidence": "verified",
+    "sourceNote": "Verified from public firm/location information."
   },
   {
     "id": "stifel-phoenix",
