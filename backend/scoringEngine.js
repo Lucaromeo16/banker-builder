@@ -576,32 +576,31 @@ function experienceReasonText(experienceResult) {
 
 function normalizeWorkExperiences(profile) {
   if (Array.isArray(profile.workExperiences)) {
-    return profile.workExperiences
-      .map((experience) => experience?.workType)
-      .filter(Boolean);
+    return profile.workExperiences.filter(Boolean);
   }
 
   if (profile.workType) {
-    return [profile.workType];
+    return [{ workType: profile.workType }];
   }
 
-  return ['None'];
+  return [{ workType: 'None' }];
 }
 
 function resumeExperienceScore(profile) {
   const ranked = normalizeWorkExperiences(profile)
-    .map(workTypeScore)
+    .map((experience) => scoreSingleExperience(experience, 'Summer Analyst').score)
     .sort((a, b) => b - a);
 
   if (!ranked.length) return workTypeScore('None');
 
   const primary = ranked[0];
   const incremental = ranked.slice(1).reduce((sum, score, index) => {
-    const weight = index === 0 ? 0.35 : index === 1 ? 0.2 : 0.1;
+    const weight = index === 0 ? 0.24 : index === 1 ? 0.12 : 0.05;
     return sum + score * weight;
   }, 0);
+  const stackCap = primary >= 9.5 ? 10 : primary >= 8.5 ? 9.35 : primary >= 7 ? 8.8 : 7.2;
 
-  return clamp(primary + incremental, 0, 10);
+  return clamp(Math.min(primary + incremental, stackCap), 0, 10);
 }
 
 function networkingScore(networking) {
