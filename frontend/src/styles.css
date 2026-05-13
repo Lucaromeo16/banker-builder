@@ -2270,6 +2270,17 @@ li {
   padding: 16px;
 }
 
+.odds-result-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1rem;
+}
+
+.edit-inputs-button {
+  white-space: nowrap;
+}
+
 .score-breakdown ul {
   margin: 0;
   padding: 0;
@@ -2980,9 +2991,19 @@ li {
   }
 
   .section-heading,
-  .activity-card-heading {
+  .activity-card-heading,
+  .odds-result-header {
     align-items: flex-start;
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading,
+  .activity-card-heading {
     flex-direction: column;
+  }
+
+  .edit-inputs-button {
+    width: 100%;
   }
 
   .map-header {

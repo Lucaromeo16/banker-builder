@@ -620,6 +620,37 @@ function networkingScore(networking) {
   return clamp(((callPoints + followUpPoints + relationshipPoints + referralPoints) * seniority / 18) * 10);
 }
 
+function hasZeroNetworking(networking = {}) {
+  return (
+    Number(networking.initialChats || 0) === 0 &&
+    Number(networking.followUps || 0) === 0 &&
+    Number(networking.strongRelationships || 0) === 0 &&
+    Number(networking.referrals || 0) === 0
+  );
+}
+
+function zeroNetworkingAdjustment(profile, opportunity, scores) {
+  if (!hasZeroNetworking(profile.networking)) return { penalty: 0, cap: 92 };
+
+  const stars = Number(opportunity.competitivenessStars || 0);
+  const strongCompensators = [
+    scores.experienceResult.eliteIb,
+    scores.experience >= 8.7,
+    scores.schoolScore >= 8.5,
+    scores.extracurricular >= 8
+  ].filter(Boolean).length;
+  const gpaDrag = profile.gpa < 3.7 && stars >= 3;
+  const basePenalty = stars >= 4 ? 1.15 : stars >= 3 ? 0.85 : 0.45;
+  const penalty = Math.max(0.25, basePenalty - strongCompensators * 0.18 + (gpaDrag ? 0.25 : 0));
+  const cap = stars >= 4
+    ? strongCompensators >= 2 ? 28 : 14
+    : stars >= 3
+      ? strongCompensators >= 2 ? 24 : 12
+      : strongCompensators >= 2 ? 32 : 22;
+
+  return { penalty, cap };
+}
+
 function normalizeActivities(profile) {
   if (Array.isArray(profile.activities)) {
     return profile.activities;
@@ -699,6 +730,7 @@ function applyGates({
   extracurricular,
   experienceResult,
   hyperElite,
+  zeroNetworking,
   calibratedInterviewOdds = false
 }) {
   let updated = classification;
@@ -750,6 +782,11 @@ function applyGates({
   if (networking < 3.2 && competitiveness > 8.0 && updated !== 'Reach') {
     updated = 'Reach';
     gateReasons.push('Low networking activity reduces interview conversion at competitive firms.');
+  }
+
+  if (zeroNetworking && competitiveness >= 7 && updated !== 'Reach') {
+    updated = 'Reach';
+    gateReasons.push('Networking is currently a major constraint for this opportunity.');
   }
 
   if (networking < 1.5 && experience < 8.8 && updated !== 'Reach') {
@@ -1021,7 +1058,9 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
   );
   const scores = profileScores(profile, adjustedCompetitiveness, weights, hireType, opportunity.group, opportunity);
   const regionalBoost = regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness);
-  const boostedTotal = clamp(scores.total + regionalBoost.points);
+  const zeroNetworking = hasZeroNetworking(profile.networking);
+  const zeroNetworkingEffect = zeroNetworkingAdjustment(profile, opportunity, scores);
+  const boostedTotal = clamp(scores.total + regionalBoost.points - zeroNetworkingEffect.penalty);
   const delta = boostedTotal - adjustedCompetitiveness;
   const unboostedDelta = scores.total - adjustedCompetitiveness;
   const likelihoodSlope = scores.hyperElite ? 1.35 : 1.15;
@@ -1034,7 +1073,12 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     scores.experienceResult.eliteIb && profile.gpa >= 3.5 && scores.networking >= 3.2 && scores.extracurricular >= 4.5
       ? scores.hyperElite ? 48 : 58
       : 3;
-  const likelihood = Math.round(Math.max(eliteIbFloor, Math.min(gpaCap, noNetworkingCap, weakExperienceCap, 92, Math.min(rawLikelihood, unboostedLikelihood + 7))));
+  const likelihood = Math.round(
+    Math.max(
+      eliteIbFloor,
+      Math.min(gpaCap, noNetworkingCap, zeroNetworkingEffect.cap, weakExperienceCap, 92, Math.min(rawLikelihood, unboostedLikelihood + 7))
+    )
+  );
   const classification = baseClassification(delta);
   const gateResult = applyGates({
     classification,
@@ -1047,6 +1091,7 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     extracurricular: scores.extracurricular,
     experienceResult: scores.experienceResult,
     hyperElite: scores.hyperElite,
+    zeroNetworking,
     calibratedInterviewOdds: true
   });
   const finalClassification =
@@ -1074,7 +1119,9 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
         ? ' Your GPA clears the baseline screen but is not a major differentiator.'
         : ' Your GPA is a key constraint for this process.';
   const networkingReason =
-    scores.networking >= 7
+    zeroNetworking
+      ? ' Networking is currently a major constraint for this opportunity.'
+      : scores.networking >= 7
       ? ' Networking depth is a strength.'
       : scores.networking >= 4
         ? ' Networking is credible but could be deeper.'
