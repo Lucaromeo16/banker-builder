@@ -1047,6 +1047,14 @@ export default function TargetListBuilderPage({ onBack }) {
     setError('');
   };
 
+  const editInputs = () => {
+    setTargetList(null);
+    setLoading(false);
+    setError('');
+    setIsLocationSelectorOpen(false);
+    setCurrentStep(0);
+  };
+
   const handleLocationSearchChange = (value) => {
     setLocationSearch(value);
     setIsLocationSelectorOpen(true);
@@ -1469,7 +1477,15 @@ export default function TargetListBuilderPage({ onBack }) {
         </div>
 
         <section className="panel results">
-          <h2>Target List Results</h2>
+          <div className="target-results-header">
+            <div>
+              <span className="feature-eyebrow">Generated recommendations</span>
+              <h2>Target List Results</h2>
+            </div>
+            <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
+              Edit Inputs
+            </button>
+          </div>
           {targetList.isLimitedByLocation ? (
             <p className="limited-results-note">
               Fewer recommendations are shown because your location preference is strict and the current dataset has limited matching firms.

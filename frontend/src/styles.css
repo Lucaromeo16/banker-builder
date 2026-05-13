@@ -2277,6 +2277,17 @@ li {
   gap: 1rem;
 }
 
+.target-results-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1rem;
+}
+
+.target-results-header h2 {
+  margin: 0.25rem 0 0;
+}
+
 .edit-inputs-button {
   white-space: nowrap;
 }
@@ -2992,7 +3003,8 @@ li {
 
   .section-heading,
   .activity-card-heading,
-  .odds-result-header {
+  .odds-result-header,
+  .target-results-header {
     align-items: flex-start;
     grid-template-columns: 1fr;
   }
