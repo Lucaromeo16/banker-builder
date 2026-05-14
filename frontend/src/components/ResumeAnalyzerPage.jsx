@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from 'react';
 const MIN_RESUME_TEXT_LENGTH = 200;
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const SUPPORTED_FILE_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000' : '');
 
 function clampScore(score) {
   const numericScore = Number(score);
@@ -76,24 +76,41 @@ function readFileAsDataUrl(file) {
 }
 
 function userMessageForExtractionError(payload, fallbackMessage) {
+  if (payload?.code === 'NETWORK_ERROR') return 'Backend route unreachable. Please refresh and try again.';
   if (payload?.code === 'MISSING_OPENAI_API_KEY') return 'Image OCR is not configured. Add an OpenAI API key or paste the resume text.';
   if (payload?.code === 'UNSUPPORTED_FILE_TYPE') return 'Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.';
   if (payload?.code === 'EXTRACTED_TEXT_TOO_SHORT') return 'Extracted text is too short. Try a clearer screenshot or paste the text.';
   if (payload?.code === 'CORRUPTED_TEXT') return 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.';
+  if (payload?.code === 'PDF_EXTRACTION_FAILED') return 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.';
   if (payload?.code === 'OPENAI_EXTRACTION_FAILED') return 'Image extraction failed. Try a clearer image or paste the resume text.';
+  if (payload?.code === 'OPENAI_ANALYSIS_FAILED') return 'AI analysis failed. Please try again.';
+  if (payload?.code === 'INVALID_REQUEST_PAYLOAD') return 'Invalid request payload. Please replace the file or paste clean resume text.';
   return payload?.error || fallbackMessage;
 }
 
 async function postJson(pathname, body) {
-  const response = await fetch(`${API_BASE_URL}${pathname}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${pathname}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  } catch (networkError) {
+    const error = new Error('Backend route unreachable.');
+    error.payload = { code: 'NETWORK_ERROR', error: networkError.message };
+    throw error;
+  }
+
   const responseText = await response.text();
-  const payload = responseText ? JSON.parse(responseText) : {};
+  let payload = {};
+  try {
+    payload = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    payload = { code: 'INVALID_RESPONSE', error: responseText || 'API returned an invalid response.' };
+  }
 
   if (!response.ok) {
     const error = new Error(payload?.details || payload?.error || `Request failed with status ${response.status}`);
