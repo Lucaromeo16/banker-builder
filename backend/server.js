@@ -15,7 +15,7 @@ const app = express();
 const preferredPort = Number(process.env.PORT) || 4000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '12mb' }));
 
 app.get('/api/health', (_, res) => {
   res.json({ ok: true, service: 'banker-builder-backend' });
@@ -112,6 +112,105 @@ const outreachDraftSchema = {
   }
 };
 
+const resumeExtractionSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['resumeText', 'formattingMetadata', 'warnings'],
+  properties: {
+    resumeText: {
+      type: 'string'
+    },
+    formattingMetadata: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['detectedSections', 'bulletCount', 'lineCount'],
+      properties: {
+        detectedSections: {
+          type: 'array',
+          items: { type: 'string' }
+        },
+        bulletCount: {
+          type: 'number'
+        },
+        lineCount: {
+          type: 'number'
+        }
+      }
+    },
+    warnings: {
+      type: 'array',
+      items: { type: 'string' }
+    }
+  }
+};
+
+const resumeAnalysisSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: [
+    'overallScoreOutOf10',
+    'ibReadinessScore',
+    'formattingScore',
+    'experienceScore',
+    'leadershipScore',
+    'technicalRelevanceScore',
+    'strengths',
+    'weaknesses',
+    'missingSignals',
+    'suggestedResumePositioning',
+    'recommendedBulletRewrites',
+    'nextSteps'
+  ],
+  properties: {
+    overallScoreOutOf10: { type: 'number', minimum: 1, maximum: 10 },
+    ibReadinessScore: { type: 'number', minimum: 1, maximum: 10 },
+    formattingScore: { type: 'number', minimum: 1, maximum: 10 },
+    experienceScore: { type: 'number', minimum: 1, maximum: 10 },
+    leadershipScore: { type: 'number', minimum: 1, maximum: 10 },
+    technicalRelevanceScore: { type: 'number', minimum: 1, maximum: 10 },
+    strengths: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 5,
+      items: { type: 'string' }
+    },
+    weaknesses: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 5,
+      items: { type: 'string' }
+    },
+    missingSignals: {
+      type: 'array',
+      minItems: 1,
+      maxItems: 5,
+      items: { type: 'string' }
+    },
+    suggestedResumePositioning: { type: 'string' },
+    recommendedBulletRewrites: {
+      type: 'array',
+      minItems: 1,
+      maxItems: 5,
+      items: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['originalBullet', 'rewrittenBullet', 'whyItWorks'],
+        properties: {
+          originalBullet: { type: 'string' },
+          rewrittenBullet: { type: 'string' },
+          whyItWorks: { type: 'string' }
+        }
+      }
+    },
+    nextSteps: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 6,
+      items: { type: 'string' }
+    }
+  }
+};
+
 function extractResponseText(responseData) {
   if (responseData.output_text) return responseData.output_text;
 
@@ -121,6 +220,143 @@ function extractResponseText(responseData) {
     .filter(Boolean)
     .join('\n');
 }
+
+app.post('/api/resume-extract', async (req, res) => {
+  try {
+    const { fileName, mimeType, dataUrl } = req.body;
+    const supportedImageTypes = ['image/png', 'image/jpeg'];
+
+    if (!supportedImageTypes.includes(mimeType) || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+      return res.status(400).json({ error: 'Invalid payload: upload a PNG, JPG, or JPEG image.' });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+    }
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        instructions:
+          'Extract resume text from the uploaded resume image. Preserve section headings, line breaks, bullet ordering, and obvious spacing cues as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
+        input: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_text',
+                text: JSON.stringify({
+                  fileName: fileName || 'resume image',
+                  task: 'Extract the resume content faithfully for later investment banking resume analysis.'
+                })
+              },
+              {
+                type: 'input_image',
+                image_url: dataUrl
+              }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'resume_extraction',
+            strict: true,
+            schema: resumeExtractionSchema
+          }
+        },
+        max_output_tokens: 1800
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      return res.status(502).json({ error: 'OpenAI resume extraction request failed.', details });
+    }
+
+    const data = await response.json();
+    const outputText = extractResponseText(data);
+
+    if (!outputText) {
+      return res.status(502).json({ error: 'OpenAI resume extraction response was empty.' });
+    }
+
+    return res.json(JSON.parse(outputText));
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to extract resume content.', details: error.message });
+  }
+});
+
+app.post('/api/resume-analyzer', async (req, res) => {
+  try {
+    const { resumeText } = req.body;
+
+    if (typeof resumeText !== 'string' || resumeText.trim().length < 200) {
+      return res.status(400).json({ error: 'Invalid payload: resumeText must include at least 200 characters.' });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+    }
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        instructions:
+          'You are a strict but practical investment banking resume reviewer. Evaluate the resume for undergraduate and early-career IB recruiting. Be specific, concise, and realistic. Prioritize finance relevance, transaction language, quantification, formatting clarity, leadership, and missing IB signals. Do not invent facts not present in the resume.',
+        input: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_text',
+                text: JSON.stringify({
+                  resumeText: resumeText.trim(),
+                  reviewLens: 'Investment banking analyst recruiting resume review'
+                })
+              }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'resume_analysis',
+            strict: true,
+            schema: resumeAnalysisSchema
+          }
+        },
+        max_output_tokens: 2400
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      return res.status(502).json({ error: 'OpenAI resume analyzer request failed.', details });
+    }
+
+    const data = await response.json();
+    const outputText = extractResponseText(data);
+
+    if (!outputText) {
+      return res.status(502).json({ error: 'OpenAI resume analyzer response was empty.' });
+    }
+
+    return res.json(JSON.parse(outputText));
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to analyze resume.', details: error.message });
+  }
+});
 
 app.post('/api/networking-outreach', async (req, res) => {
   try {

@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 const MIN_RESUME_TEXT_LENGTH = 200;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+const SUPPORTED_FILE_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 
 function clampScore(score) {
   const numericScore = Number(score);
@@ -27,26 +29,249 @@ function renderTextList(items) {
   );
 }
 
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes)) return '';
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+function getFileKind(file) {
+  if (!file) return '';
+  if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) return 'pdf';
+  if (
+    file.type === 'image/png' ||
+    file.type === 'image/jpeg' ||
+    /\.(png|jpe?g)$/i.test(file.name)
+  ) {
+    return 'image';
+  }
+  return '';
+}
+
+function getSupportedMimeType(file, fileKind) {
+  if (SUPPORTED_FILE_TYPES.includes(file.type)) return file.type;
+  if (fileKind === 'pdf') return 'application/pdf';
+  if (/\.png$/i.test(file.name)) return 'image/png';
+  if (/\.jpe?g$/i.test(file.name)) return 'image/jpeg';
+  return file.type;
+}
+
+function normalizeExtractedText(text) {
+  return String(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{4,}/g, '\n\n\n')
+    .trim();
+}
+
+function decodePdfLiteral(rawLiteral) {
+  const body = rawLiteral.slice(1, -1);
+  return body
+    .replace(/\\([0-7]{1,3})/g, (_, octal) => String.fromCharCode(parseInt(octal, 8)))
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\n')
+    .replace(/\\t/g, '\t')
+    .replace(/\\b/g, '\b')
+    .replace(/\\f/g, '\f')
+    .replace(/\\\(/g, '(')
+    .replace(/\\\)/g, ')')
+    .replace(/\\\\/g, '\\');
+}
+
+async function extractTextFromPdf(file) {
+  const buffer = await file.arrayBuffer();
+  const binary = new TextDecoder('latin1').decode(buffer);
+  const chunks = [];
+
+  for (const match of binary.matchAll(/\((?:\\.|[^\\)])*\)\s*Tj/g)) {
+    chunks.push(decodePdfLiteral(match[0].replace(/\s*Tj$/, '')));
+  }
+
+  for (const match of binary.matchAll(/\[((?:.|\n|\r){1,5000}?)\]\s*TJ/g)) {
+    const arrayText = [...match[1].matchAll(/\((?:\\.|[^\\)])*\)/g)].map((item) => decodePdfLiteral(item[0])).join('');
+    if (arrayText.trim()) chunks.push(arrayText);
+  }
+
+  if (chunks.join(' ').replace(/\s+/g, ' ').trim().length >= MIN_RESUME_TEXT_LENGTH) {
+    return normalizeExtractedText(chunks.join('\n'));
+  }
+
+  const readableText = binary
+    .replace(/[^\x09\x0A\x0D\x20-\x7E]+/g, '\n')
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter((line) => /[A-Za-z]/.test(line) && line.length >= 4 && !line.startsWith('/'))
+    .join('\n');
+
+  return normalizeExtractedText(readableText);
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('Unable to read file.'));
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function ResumeAnalyzerPage({ onBack }) {
   const [resumeText, setResumeText] = useState('');
+  const [inputMode, setInputMode] = useState('upload');
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [extracting, setExtracting] = useState(false);
+  const [parseWarning, setParseWarning] = useState('');
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
 
   const wordCount = useMemo(() => resumeText.trim().split(/\s+/).filter(Boolean).length, [resumeText]);
+
+  const clearUploadedFile = () => {
+    if (uploadedFile?.previewUrl) URL.revokeObjectURL(uploadedFile.previewUrl);
+    setUploadedFile(null);
+    setResumeText('');
+    setParseWarning('');
+    setError('');
+    setAnalysis(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const extractImageResumeText = async (file, previewUrl, mimeType) => {
+    const dataUrl = await readFileAsDataUrl(file);
+    const response = await fetch('/api/resume-extract', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fileName: file.name,
+        mimeType,
+        dataUrl
+      })
+    });
+
+    const responseText = await response.text();
+    const payload = responseText ? JSON.parse(responseText) : {};
+
+    if (!response.ok) {
+      throw new Error(payload?.details || payload?.error || `Resume extraction failed with status ${response.status}`);
+    }
+
+    return {
+      text: normalizeExtractedText(payload.resumeText),
+      warnings: payload.warnings || [],
+      formattingMetadata: payload.formattingMetadata || null,
+      previewUrl
+    };
+  };
+
+  const handleResumeFile = async (file) => {
+    const fileKind = getFileKind(file);
+    const mimeType = getSupportedMimeType(file, fileKind);
+    setError('');
+    setParseWarning('');
+    setAnalysis(null);
+
+    if (!fileKind || !SUPPORTED_FILE_TYPES.includes(mimeType)) {
+      setError('Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.');
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError('File is too large. Upload a resume file under 10 MB.');
+      return;
+    }
+
+    const previousPreviewUrl = uploadedFile?.previewUrl;
+    if (previousPreviewUrl) URL.revokeObjectURL(previousPreviewUrl);
+
+    const previewUrl = fileKind === 'image' ? URL.createObjectURL(file) : '';
+    setUploadedFile({
+      name: file.name,
+      type: mimeType,
+      size: file.size,
+      kind: fileKind,
+      previewUrl,
+      status: 'extracting'
+    });
+    setInputMode('upload');
+    setExtracting(true);
+
+    try {
+      const extracted =
+        fileKind === 'pdf'
+          ? { text: await extractTextFromPdf(file), warnings: [], formattingMetadata: null, previewUrl: '' }
+          : await extractImageResumeText(file, previewUrl, mimeType);
+
+      setResumeText(extracted.text);
+      setUploadedFile({
+        name: file.name,
+        type: mimeType,
+        size: file.size,
+        kind: fileKind,
+        previewUrl: extracted.previewUrl || previewUrl,
+        status: extracted.text ? 'ready' : 'needs-text',
+        formattingMetadata: extracted.formattingMetadata
+      });
+
+      if (!extracted.text || extracted.text.length < MIN_RESUME_TEXT_LENGTH) {
+        setParseWarning(
+          fileKind === 'pdf'
+            ? 'This PDF did not expose enough readable text. Use Paste Text Instead for a stronger analysis.'
+            : 'The image OCR did not capture enough readable text. Use Paste Text Instead for a stronger analysis.'
+        );
+      } else if (extracted.warnings?.length) {
+        setParseWarning(extracted.warnings.join(' '));
+      }
+    } catch (extractError) {
+      console.error('[resume-analyzer] Resume extraction failed', extractError);
+      setUploadedFile({
+        name: file.name,
+        type: mimeType,
+        size: file.size,
+        kind: fileKind,
+        previewUrl,
+        status: 'needs-text'
+      });
+      setResumeText('');
+      setParseWarning(
+        fileKind === 'image'
+          ? 'Image OCR is unavailable right now. Paste the resume text manually to continue.'
+          : 'PDF text could not be extracted from this file. Paste the resume text manually to continue.'
+      );
+    } finally {
+      setExtracting(false);
+    }
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) handleResumeFile(file);
+  };
 
   const analyzeResume = async () => {
     const trimmedResume = resumeText.trim();
     setAnalysis(null);
     setError('');
 
+    if (extracting) {
+      setError('Resume content is still being extracted.');
+      return;
+    }
+
     if (!trimmedResume) {
-      setError('Please paste your resume text first.');
+      setError('Upload a resume or paste resume text before analyzing.');
       return;
     }
 
     if (trimmedResume.length < MIN_RESUME_TEXT_LENGTH) {
-      setError('Please paste more resume content for a useful analysis.');
+      setError('Please provide more resume content for a useful analysis.');
       return;
     }
 
@@ -96,26 +321,110 @@ export default function ResumeAnalyzerPage({ onBack }) {
       <section className="network-section resume-input-card" aria-labelledby="resume-input-title">
         <div className="section-heading">
           <div>
-            <h3 id="resume-input-title">Paste Resume Text</h3>
-            <p className="muted">Paste the text version of your resume. PDF upload can come later; this MVP reviews pasted content.</p>
+            <h3 id="resume-input-title">Upload Resume</h3>
+            <p className="muted">
+              Upload a PDF, screenshot, or image of your resume. You can also paste resume text manually.
+            </p>
           </div>
           <span className="resume-word-count">{wordCount} words</span>
         </div>
 
-        <label>
-          Resume text
-          <textarea
-            className="resume-textarea"
-            value={resumeText}
-            onChange={(event) => setResumeText(event.target.value)}
-            placeholder="Paste your resume text here..."
-          />
-        </label>
+        <div className="resume-input-tabs" role="tablist" aria-label="Resume input method">
+          <button
+            type="button"
+            className={inputMode === 'upload' ? 'active' : ''}
+            onClick={() => setInputMode('upload')}
+          >
+            Upload Resume
+          </button>
+          <button type="button" className={inputMode === 'paste' ? 'active' : ''} onClick={() => setInputMode('paste')}>
+            Paste Text Instead
+          </button>
+        </div>
+
+        {inputMode === 'upload' ? (
+          <div className="resume-upload-panel">
+            <div
+              className={`resume-upload-dropzone${isDragging ? ' dragging' : ''}`}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) handleResumeFile(file);
+                }}
+              />
+              <span className="resume-upload-icon">FILE</span>
+              <div>
+                <strong>Drop your resume here</strong>
+                <p>PDF, PNG, JPG, or JPEG up to 10 MB. Standard one-page finance resumes work best.</p>
+              </div>
+              <button type="button" className="secondary" onClick={() => fileInputRef.current?.click()}>
+                Upload PDF/Image
+              </button>
+            </div>
+
+            {uploadedFile ? (
+              <div className="resume-file-preview">
+                {uploadedFile.previewUrl ? (
+                  <img src={uploadedFile.previewUrl} alt="" className="resume-file-thumbnail" />
+                ) : (
+                  <div className="resume-file-thumbnail resume-file-thumbnail-pdf">PDF</div>
+                )}
+                <div className="resume-file-meta">
+                  <strong>{uploadedFile.name}</strong>
+                  <span>
+                    {uploadedFile.kind?.toUpperCase()} · {formatFileSize(uploadedFile.size)}
+                  </span>
+                  <p>
+                    {uploadedFile.status === 'extracting'
+                      ? 'Extracting resume content...'
+                      : uploadedFile.status === 'ready'
+                        ? 'Resume content extracted and ready to analyze.'
+                        : 'Upload received. Paste text fallback is recommended for this file.'}
+                  </p>
+                </div>
+                <div className="resume-file-actions">
+                  <button type="button" className="secondary" onClick={() => fileInputRef.current?.click()} disabled={extracting}>
+                    Replace
+                  </button>
+                  <button type="button" className="secondary" onClick={clearUploadedFile} disabled={extracting}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <label className="resume-text-fallback">
+            Resume text
+            <textarea
+              className="resume-textarea"
+              value={resumeText}
+              onChange={(event) => {
+                setResumeText(event.target.value);
+                setParseWarning('');
+                setAnalysis(null);
+              }}
+              placeholder="Paste your resume text here..."
+            />
+          </label>
+        )}
 
         {error ? <p className="error">{error}</p> : null}
-        {loading ? <p className="resume-loading">Analyzing your resume through an investment banking recruiting lens...</p> : null}
+        {parseWarning ? <p className="resume-parse-warning">{parseWarning}</p> : null}
+        {extracting ? <p className="resume-loading">Extracting resume content...</p> : null}
+        {loading ? <p className="resume-loading">Analyzing resume through an investment banking recruiting lens...</p> : null}
 
-        <button type="button" className="primary" onClick={analyzeResume} disabled={loading}>
+        <button type="button" className="primary" onClick={analyzeResume} disabled={loading || extracting}>
           {loading ? 'Analyzing Resume...' : 'Analyze Resume'}
         </button>
       </section>
