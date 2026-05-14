@@ -1008,11 +1008,16 @@ export function scoreProfile(profile) {
 
       return {
         id: opportunity.id,
+        officeId: opportunity.officeId,
         firm: opportunity.firm,
         office: opportunity.office,
+        officeCity: opportunity.officeCity,
+        state: opportunity.state,
         group: opportunity.group,
         tier: opportunity.tier,
         type: opportunity.type,
+        latitude: opportunity.latitude,
+        longitude: opportunity.longitude,
         competitiveness: opportunity.competitiveness,
         prestigeStars: opportunity.prestigeStars,
         payStars: opportunity.payStars,

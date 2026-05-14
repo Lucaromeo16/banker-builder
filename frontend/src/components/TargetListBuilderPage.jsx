@@ -781,10 +781,22 @@ function selectedLocationCity(profile) {
   return usCities.find((city) => comparableLocation(city.displayName) === compact || comparableLocation(city.city) === compact) || null;
 }
 
+function officeForOpportunity(opportunity) {
+  return ibOffices.find((office) => {
+    if (opportunity.officeId && office.id === opportunity.officeId) return true;
+    return (
+      office.firm === opportunity.firm &&
+      office.officeCity === (opportunity.officeCity || opportunity.office) &&
+      (!opportunity.state || office.state === opportunity.state)
+    );
+  });
+}
+
 function opportunityDistanceMiles(opportunity, profile) {
   const city = selectedLocationCity(profile);
-  const latitude = Number(opportunity.latitude);
-  const longitude = Number(opportunity.longitude);
+  const office = officeForOpportunity(opportunity);
+  const latitude = Number(opportunity.latitude ?? office?.latitude);
+  const longitude = Number(opportunity.longitude ?? office?.longitude);
   if (!city || !Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
 
   return distanceInMiles(city, { latitude, longitude });
@@ -900,6 +912,13 @@ function buildTargetList(scoredResults, profile) {
   const strength = preference && preference !== 'No preference' ? profile.locationPreferenceStrength || 'Flexible' : 'Open';
   const isStrictLocation = preference && preference !== 'No preference' && strength === 'Strict';
   const hasRadiusLocation = Boolean(selectedLocationCity(profile));
+
+  // Location filter order:
+  // 1. scoreProfile supplies candidate fit/competitiveness results
+  // 2. attach radius distance using office coordinates, if available
+  // 3. apply realism gates so Reach remains plausible
+  // 4. apply Strict radius as the hard location filter; Flexible/Open use radius only for ranking
+  // 5. dedupe by firm and assign Reach / Target / Safety buckets
   const withDistance = scoredResults.map((opportunity) => {
     const distanceMiles = opportunityDistanceMiles(opportunity, profile);
     return {
@@ -908,13 +927,13 @@ function buildTargetList(scoredResults, profile) {
       withinSelectedRadius: Number.isFinite(distanceMiles) && distanceMiles <= (profile.locationRadiusMiles || DEFAULT_RADIUS_MILES)
     };
   });
+  const realisticResults = withDistance.filter((opportunity) => isRealisticRecommendation(opportunity, profile));
   const candidateResults =
     isStrictLocation && hasRadiusLocation
-      ? withDistance.filter((opportunity) => opportunity.withinSelectedRadius)
-      : withDistance;
-  const realisticResults = candidateResults.filter((opportunity) => isRealisticRecommendation(opportunity, profile));
+      ? realisticResults.filter((opportunity) => opportunity.withinSelectedRadius)
+      : realisticResults;
 
-  const ranked = realisticResults
+  const ranked = candidateResults
     .map((opportunity) => {
       const fitScore =
         groupInterestScore(opportunity.group, profile.interests) * 4 +
