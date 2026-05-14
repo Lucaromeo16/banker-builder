@@ -511,6 +511,10 @@ textarea {
   gap: 14px;
 }
 
+.choice-grid.compact {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
 .choice-card {
   min-height: 110px;
   border: 1px solid var(--border);
@@ -524,6 +528,11 @@ textarea {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   transition: transform var(--transition-card), box-shadow var(--transition-card), border-color var(--transition-card), background var(--transition-card);
+}
+
+.choice-grid.compact .choice-card {
+  min-height: 72px;
+  padding: 14px 16px;
 }
 
 .choice-card:hover,
@@ -684,6 +693,37 @@ textarea {
 
 .practice-actions .primary {
   grid-column: auto;
+}
+
+.interview-setup-panel {
+  display: grid;
+  gap: 22px;
+}
+
+.interview-setup-form {
+  display: grid;
+  gap: 24px;
+}
+
+.interview-setup-form section {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 16px;
+}
+
+.interview-setup-form h3 {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: 0.98rem;
+}
+
+.setup-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .voice-controls {

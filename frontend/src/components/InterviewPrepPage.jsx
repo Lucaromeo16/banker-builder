@@ -1,5 +1,53 @@
 import { useEffect, useRef, useState } from 'react';
 
+const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
+const targetGroupOptions = [
+  'M&A',
+  'Restructuring',
+  'LevFin',
+  'Financial Sponsors',
+  'ECM',
+  'DCM',
+  'Healthcare',
+  'Technology',
+  'Industrials',
+  'FIG',
+  'Real Estate',
+  'Energy',
+  'Generalist'
+];
+const bankTierOptions = ['Bulge Bracket', 'Elite Boutique', 'Middle Market', 'Regional Boutique', 'General / Mixed'];
+const workExperienceOptions = [
+  'Investment Banking',
+  'Private Equity',
+  'Big 4 Audit',
+  'TAS / Valuation',
+  'Consulting',
+  'Corporate Finance',
+  'Search Fund',
+  'Student Investment Fund',
+  'No Relevant Experience',
+  'Other'
+];
+
+const emptyPrepProfile = {
+  recruitingGoal: '',
+  targetGroups: [],
+  targetBankTier: '',
+  workExperienceBackground: []
+};
+const prepProfileSessionKey = 'bankerBuilderInterviewPrepProfile';
+
+function readStoredPrepProfile() {
+  if (typeof window === 'undefined') return null;
+  try {
+    const storedProfile = window.sessionStorage.getItem(prepProfileSessionKey);
+    return storedProfile ? JSON.parse(storedProfile) : null;
+  } catch {
+    return null;
+  }
+}
+
 const questionBanks = {
   technical: {
     title: 'Technical Questions',
@@ -52,6 +100,21 @@ const questionBanks = {
       {
         prompt: 'What is accretion/dilution?',
         keywords: ['eps', 'earnings per share', 'pro forma', 'purchase price', 'synergies', 'financing']
+      },
+      {
+        prompt: 'How would you evaluate whether an M&A transaction is financially attractive?',
+        keywords: ['valuation', 'synergies', 'purchase price', 'accretion', 'strategic rationale'],
+        targetGroups: ['M&A']
+      },
+      {
+        prompt: 'What are the key credit metrics you would look at for a debt financing?',
+        keywords: ['leverage', 'interest coverage', 'cash flow', 'debt capacity', 'credit'],
+        targetGroups: ['LevFin', 'DCM']
+      },
+      {
+        prompt: 'How would you think about recovery value in a restructuring?',
+        keywords: ['enterprise value', 'capital structure', 'priority', 'creditors', 'recovery'],
+        targetGroups: ['Restructuring']
       }
     ]
   },
@@ -69,6 +132,15 @@ const questionBanks = {
     questions: [
       { prompt: 'Tell me about yourself.', keywords: ['background', 'interest', 'banking', 'experience', 'why'] },
       { prompt: 'Walk me through your resume.', keywords: ['background', 'experience', 'transition', 'skills', 'banking'] },
+      { prompt: 'Walk me through your story.', keywords: ['story', 'background', 'motivation', 'banking', 'progression'] },
+      {
+        prompt: 'What experience on your resume are you most likely to discuss?',
+        keywords: ['experience', 'resume', 'impact', 'skills', 'banking']
+      },
+      {
+        prompt: 'Tell me about the experience that best prepared you for banking.',
+        keywords: ['prepared', 'experience', 'analytical', 'teamwork', 'deadline']
+      },
       { prompt: 'Tell me about a time you worked on a team.', keywords: ['team', 'role', 'collaboration', 'result', 'learned'] },
       { prompt: 'Tell me about a time you failed.', keywords: ['failed', 'mistake', 'learned', 'improved', 'result'] },
       { prompt: 'Tell me about a time you led a group.', keywords: ['led', 'team', 'goal', 'action', 'result'] },
@@ -91,16 +163,60 @@ const questionBanks = {
       'What would make you successful in this group?'
     ],
     questions: [
+      { prompt: 'Walk me through your story.', keywords: ['story', 'background', 'motivation', 'banking', 'fit'] },
       { prompt: 'Why investment banking?', keywords: ['transactions', 'finance', 'analytical', 'learning', 'client', 'pace'] },
       { prompt: 'Why this firm?', keywords: ['firm', 'culture', 'platform', 'deals', 'people', 'fit'] },
       { prompt: 'Why this group?', keywords: ['group', 'industry', 'transactions', 'interest', 'experience', 'fit'] },
       { prompt: 'Why this office?', keywords: ['office', 'market', 'location', 'team', 'clients', 'fit'] },
-      { prompt: 'Why are you interested in M&A?', keywords: ['strategic', 'valuation', 'synergies', 'transactions', 'companies'] },
-      { prompt: 'Why are you interested in restructuring?', keywords: ['distressed', 'capital structure', 'creditors', 'liquidity', 'turnaround'] },
+      {
+        prompt: 'Why are you interested in M&A?',
+        keywords: ['strategic', 'valuation', 'synergies', 'transactions', 'companies'],
+        targetGroups: ['M&A']
+      },
+      {
+        prompt: 'Why are you interested in restructuring?',
+        keywords: ['distressed', 'capital structure', 'creditors', 'liquidity', 'turnaround'],
+        targetGroups: ['Restructuring']
+      },
+      {
+        prompt: 'Why are you interested in Leveraged Finance?',
+        keywords: ['credit', 'debt', 'sponsors', 'capital structure', 'cash flow'],
+        targetGroups: ['LevFin']
+      },
+      {
+        prompt: 'Why are you interested in DCM?',
+        keywords: ['debt markets', 'rates', 'bonds', 'issuance', 'capital markets'],
+        targetGroups: ['DCM']
+      },
+      {
+        prompt: 'Why are you interested in Technology banking?',
+        keywords: ['software', 'growth', 'business models', 'innovation', 'valuation'],
+        targetGroups: ['Technology']
+      },
+      {
+        prompt: 'Why are you interested in Healthcare banking?',
+        keywords: ['healthcare', 'regulation', 'services', 'biotech', 'defensive'],
+        targetGroups: ['Healthcare']
+      },
       { prompt: 'Why should we hire you?', keywords: ['skills', 'work ethic', 'experience', 'team', 'impact'] },
       { prompt: 'What differentiates you from other candidates?', keywords: ['differentiates', 'experience', 'skill', 'perspective', 'evidence'] },
       { prompt: 'Where do you see yourself in five years?', keywords: ['banking', 'develop', 'responsibility', 'clients', 'long term'] },
-      { prompt: 'Why banking instead of consulting or corporate finance?', keywords: ['transactions', 'finance', 'ownership', 'pace', 'valuation'] }
+      { prompt: 'Why banking instead of consulting or corporate finance?', keywords: ['transactions', 'finance', 'ownership', 'pace', 'valuation'] },
+      {
+        prompt: 'How would you explain your transition from audit or accounting into investment banking?',
+        keywords: ['accounting', 'financial statements', 'transaction', 'transition', 'banking'],
+        workExperienceBackgrounds: ['Big 4 Audit']
+      },
+      {
+        prompt: 'How would you explain your transition from consulting into investment banking?',
+        keywords: ['strategy', 'transactions', 'finance', 'client', 'transition'],
+        workExperienceBackgrounds: ['Consulting']
+      },
+      {
+        prompt: 'How would you explain your interest in banking without prior finance experience?',
+        keywords: ['transferable skills', 'preparation', 'learning', 'analytical', 'motivation'],
+        workExperienceBackgrounds: ['No Relevant Experience', 'Other']
+      }
     ]
   },
   markets: {
@@ -124,7 +240,27 @@ const questionBanks = {
       { prompt: 'What makes a company an attractive acquisition target?', keywords: ['growth', 'margin', 'market position', 'cash flow', 'synergies'] },
       { prompt: 'How would you think about synergies in a merger?', keywords: ['cost synergies', 'revenue synergies', 'integration', 'timing', 'risk'] },
       { prompt: 'What is happening in the IPO market?', keywords: ['ipo', 'equity markets', 'volatility', 'rates', 'investor demand'] },
-      { prompt: 'What recent transaction stood out to you and why?', keywords: ['transaction', 'rationale', 'valuation', 'market', 'risk'] }
+      { prompt: 'What recent transaction stood out to you and why?', keywords: ['transaction', 'rationale', 'valuation', 'market', 'risk'] },
+      {
+        prompt: 'What debt market trend would matter most for a DCM or LevFin banker right now?',
+        keywords: ['rates', 'spreads', 'issuance', 'credit', 'refinancing'],
+        targetGroups: ['DCM', 'LevFin']
+      },
+      {
+        prompt: 'What trend are you watching in healthcare deal activity?',
+        keywords: ['healthcare', 'regulation', 'm&a', 'services', 'biotech'],
+        targetGroups: ['Healthcare']
+      },
+      {
+        prompt: 'What trend are you watching in technology M&A or IPOs?',
+        keywords: ['technology', 'software', 'ipo', 'm&a', 'growth'],
+        targetGroups: ['Technology']
+      },
+      {
+        prompt: 'How would energy prices affect deal activity in Energy banking?',
+        keywords: ['energy', 'commodity prices', 'cash flow', 'm&a', 'capital spending'],
+        targetGroups: ['Energy']
+      }
     ]
   }
 };
@@ -252,13 +388,66 @@ function getQuestionsForCategory(categoryId) {
   }));
 }
 
-function pickQuestion(categoryId, previousPrompt = '') {
-  const questions = getQuestionsForCategory(categoryId);
+function isGeneralPrepProfile(prepProfile) {
+  return (
+    !prepProfile ||
+    prepProfile.targetBankTier === 'General / Mixed' ||
+    prepProfile.targetGroups.includes('Generalist') ||
+    !prepProfile.targetGroups.length
+  );
+}
+
+function questionMatchesPrepProfile(question, categoryId, prepProfile) {
+  if (!prepProfile) return true;
+  const generalProfile = isGeneralPrepProfile(prepProfile);
+  const mixedPractice = categoryId === 'mixed';
+
+  if (question.targetGroups?.length && !generalProfile && !mixedPractice) {
+    return question.targetGroups.some((group) => prepProfile.targetGroups.includes(group));
+  }
+
+  if (question.workExperienceBackgrounds?.length) {
+    return question.workExperienceBackgrounds.some((background) => prepProfile.workExperienceBackground.includes(background));
+  }
+
+  return true;
+}
+
+function getPersonalizedQuestionsForCategory(categoryId, prepProfile) {
+  return getQuestionsForCategory(categoryId).filter((question) => questionMatchesPrepProfile(question, categoryId, prepProfile));
+}
+
+function getQuestionRelevanceScore(question, prepProfile) {
+  if (!prepProfile) return 1;
+  let score = 1;
+  if (question.targetGroups?.some((group) => prepProfile.targetGroups.includes(group))) score += 3;
+  if (question.workExperienceBackgrounds?.some((background) => prepProfile.workExperienceBackground.includes(background))) score += 3;
+  if (prepProfile.workExperienceBackground.includes('No Relevant Experience') && /why|story|prepared|transferable/i.test(question.prompt)) {
+    score += 2;
+  }
+  if (prepProfile.recruitingGoal === 'MBA Associate' && /lead|story|transition|why/i.test(question.prompt)) score += 1;
+  if (prepProfile.recruitingGoal === 'Lateral' && /deal|experience|transaction|technical/i.test(question.prompt)) score += 1;
+  return score;
+}
+
+function pickQuestion(categoryId, previousPrompt = '', prepProfile = null) {
+  const questions = getPersonalizedQuestionsForCategory(categoryId, prepProfile);
   const availableQuestions = questions.length > 1 ? questions.filter((question) => question.prompt !== previousPrompt) : questions;
-  return availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+  const weightedQuestions = availableQuestions.flatMap((question) =>
+    Array.from({ length: getQuestionRelevanceScore(question, prepProfile) }, () => question)
+  );
+  return weightedQuestions[Math.floor(Math.random() * weightedQuestions.length)] || availableQuestions[0];
+}
+
+function toggleArrayValue(values, value) {
+  return values.includes(value) ? values.filter((currentValue) => currentValue !== value) : [...values, value];
 }
 
 export default function InterviewPrepPage({ onBack }) {
+  const [prepProfile, setPrepProfile] = useState(() => readStoredPrepProfile());
+  const [setupDraft, setSetupDraft] = useState(() => readStoredPrepProfile() || emptyPrepProfile);
+  const [setupError, setSetupError] = useState('');
+  const [editingPrepProfile, setEditingPrepProfile] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answer, setAnswer] = useState('');
@@ -285,11 +474,29 @@ export default function InterviewPrepPage({ onBack }) {
 
   const startPractice = (categoryId) => {
     setSelectedCategoryId(categoryId);
-    setCurrentQuestion(pickQuestion(categoryId));
+    setCurrentQuestion(pickQuestion(categoryId, '', prepProfile));
     setAnswer('');
     setFeedback(null);
     setFeedbackError('');
     setSpeechMessage('');
+  };
+
+  const completePrepSetup = (event) => {
+    event.preventDefault();
+    if (!setupDraft.recruitingGoal || !setupDraft.targetBankTier || !setupDraft.targetGroups.length || !setupDraft.workExperienceBackground.length) {
+      setSetupError('Complete each section to personalize your practice.');
+      return;
+    }
+    setPrepProfile(setupDraft);
+    window.sessionStorage.setItem(prepProfileSessionKey, JSON.stringify(setupDraft));
+    setEditingPrepProfile(false);
+    setSetupError('');
+  };
+
+  const editPrepProfile = () => {
+    setSetupDraft(prepProfile || emptyPrepProfile);
+    setEditingPrepProfile(true);
+    setSetupError('');
   };
 
   const goBackToPrep = () => {
@@ -316,7 +523,8 @@ export default function InterviewPrepPage({ onBack }) {
     const payload = {
       category: currentQuestion.categoryTitle,
       question: currentQuestion.prompt,
-      userAnswer: answer
+      userAnswer: answer,
+      prepProfile
     };
 
     try {
@@ -386,7 +594,7 @@ export default function InterviewPrepPage({ onBack }) {
     if (recognitionRef.current) {
       recognitionRef.current.abort();
     }
-    setCurrentQuestion(pickQuestion(selectedCategoryId, currentQuestion.prompt));
+    setCurrentQuestion(pickQuestion(selectedCategoryId, currentQuestion.prompt, prepProfile));
     setAnswer('');
     setFeedback(null);
     setFeedbackLoading(false);
@@ -476,6 +684,115 @@ export default function InterviewPrepPage({ onBack }) {
     }
     setIsRecording(false);
   };
+
+  if (!prepProfile || editingPrepProfile) {
+    return (
+      <>
+        <button type="button" className="back-button" onClick={onBack}>
+          Back to Home
+        </button>
+
+        <section className="panel interview-setup-panel">
+          <div className="networking-header">
+            <div>
+              <span className="feature-eyebrow">Interview Prep setup</span>
+              <h2>Personalize your practice</h2>
+              <p>Answer a few quick questions so practice prompts and feedback match your recruiting path.</p>
+            </div>
+          </div>
+
+          <form className="interview-setup-form" onSubmit={completePrepSetup}>
+            <section>
+              <h3>Recruiting Goal</h3>
+              <div className="choice-grid compact">
+                {recruitingGoals.map((goal) => (
+                  <button
+                    type="button"
+                    className={setupDraft.recruitingGoal === goal ? 'choice-card selected' : 'choice-card'}
+                    key={goal}
+                    onClick={() => setSetupDraft((current) => ({ ...current, recruitingGoal: goal }))}
+                  >
+                    <strong>{goal}</strong>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h3>Target Groups / Areas of Interest</h3>
+              <div className="setup-chip-grid">
+                {targetGroupOptions.map((group) => (
+                  <button
+                    type="button"
+                    className={setupDraft.targetGroups.includes(group) ? 'chip selected' : 'chip'}
+                    key={group}
+                    onClick={() =>
+                      setSetupDraft((current) => ({
+                        ...current,
+                        targetGroups: toggleArrayValue(current.targetGroups, group)
+                      }))
+                    }
+                  >
+                    {group}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h3>Target Bank Tier</h3>
+              <div className="choice-grid compact">
+                {bankTierOptions.map((tier) => (
+                  <button
+                    type="button"
+                    className={setupDraft.targetBankTier === tier ? 'choice-card selected' : 'choice-card'}
+                    key={tier}
+                    onClick={() => setSetupDraft((current) => ({ ...current, targetBankTier: tier }))}
+                  >
+                    <strong>{tier}</strong>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h3>Work Experience Background</h3>
+              <div className="setup-chip-grid">
+                {workExperienceOptions.map((background) => (
+                  <button
+                    type="button"
+                    className={setupDraft.workExperienceBackground.includes(background) ? 'chip selected' : 'chip'}
+                    key={background}
+                    onClick={() =>
+                      setSetupDraft((current) => ({
+                        ...current,
+                        workExperienceBackground: toggleArrayValue(current.workExperienceBackground, background)
+                      }))
+                    }
+                  >
+                    {background}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {setupError ? <p className="error">{setupError}</p> : null}
+
+            <div className="survey-actions">
+              {editingPrepProfile ? (
+                <button type="button" className="secondary" onClick={() => setEditingPrepProfile(false)}>
+                  Cancel
+                </button>
+              ) : null}
+              <button type="submit" className="primary">
+                Continue to Practice Menu
+              </button>
+            </div>
+          </form>
+        </section>
+      </>
+    );
+  }
 
   if (selectedCategory && currentQuestion) {
     return (
@@ -596,7 +913,18 @@ export default function InterviewPrepPage({ onBack }) {
       </button>
 
       <section className="panel">
-        <h2>Interview Prep</h2>
+        <div className="target-results-header">
+          <div>
+            <h2>Interview Prep</h2>
+            <p className="muted">
+              {prepProfile.recruitingGoal} · {prepProfile.targetBankTier} · {prepProfile.targetGroups.slice(0, 3).join(', ')}
+              {prepProfile.targetGroups.length > 3 ? ` +${prepProfile.targetGroups.length - 3} more` : ''}
+            </p>
+          </div>
+          <button type="button" className="secondary edit-inputs-button" onClick={editPrepProfile}>
+            Edit Prep Profile
+          </button>
+        </div>
         <div className="home-grid">
           {categoryCards.map((category) => (
             <button type="button" className="feature-card" key={category.id} onClick={() => startPractice(category.id)}>

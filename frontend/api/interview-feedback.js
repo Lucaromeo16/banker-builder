@@ -62,12 +62,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { category, question, userAnswer } = parseBody(req);
+    const { category, question, userAnswer, prepProfile } = parseBody(req);
     console.log('[interview-feedback] Vercel API request received', {
       route: 'POST /api/interview-feedback',
       category,
       questionPreview: typeof question === 'string' ? question.slice(0, 90) : undefined,
       answerLength: typeof userAnswer === 'string' ? userAnswer.length : 0,
+      recruitingGoal: prepProfile?.recruitingGoal,
+      targetGroups: prepProfile?.targetGroups,
+      targetBankTier: prepProfile?.targetBankTier,
+      workExperienceBackground: prepProfile?.workExperienceBackground,
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
@@ -89,14 +93,14 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are an investment banking interviewer evaluating a student candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. The 10/10 example response must sound like something a strong undergraduate candidate could actually say in a real interview.',
+          'You are an investment banking interviewer evaluating a candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. Use the provided prep profile to tailor feedback to the candidate’s recruiting goal, target groups, target bank tier, and experience background. Do not penalize the candidate for not mentioning unrelated groups they did not target. The 10/10 example response must sound like something a strong candidate with this profile could actually say in a real interview.',
         input: [
           {
             role: 'user',
             content: [
               {
                 type: 'input_text',
-                text: JSON.stringify({ category, question, userAnswer })
+                text: JSON.stringify({ category, question, userAnswer, prepProfile: prepProfile || null })
               }
             ]
           }
