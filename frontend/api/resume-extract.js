@@ -1,4 +1,4 @@
-import { PDFParse } from 'pdf-parse';
+import zlib from 'node:zlib';
 
 export const config = {
   api: {
@@ -103,17 +103,105 @@ function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
   };
 }
 
+function decodePdfLiteralString(rawLiteral) {
+  const body = rawLiteral.slice(1, -1);
+  return body
+    .replace(/\\([0-7]{1,3})/g, (_, octal) => String.fromCharCode(parseInt(octal, 8)))
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\n')
+    .replace(/\\t/g, '\t')
+    .replace(/\\b/g, '\b')
+    .replace(/\\f/g, '\f')
+    .replace(/\\\(/g, '(')
+    .replace(/\\\)/g, ')')
+    .replace(/\\\\/g, '\\');
+}
+
+function decodePdfHexString(rawHex) {
+  const normalizedHex = rawHex.slice(1, -1).replace(/\s+/g, '');
+  const bytes = [];
+  for (let index = 0; index < normalizedHex.length; index += 2) {
+    bytes.push(parseInt(normalizedHex.slice(index, index + 2).padEnd(2, '0'), 16));
+  }
+
+  if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    let text = '';
+    for (let index = 2; index + 1 < bytes.length; index += 2) {
+      text += String.fromCharCode((bytes[index] << 8) | bytes[index + 1]);
+    }
+    return text;
+  }
+
+  return Buffer.from(bytes).toString('latin1');
+}
+
+function inflatePdfStream(streamBody) {
+  const buffer = Buffer.from(streamBody, 'latin1');
+  try {
+    return zlib.inflateSync(buffer).toString('latin1');
+  } catch {
+    try {
+      return zlib.inflateRawSync(buffer).toString('latin1');
+    } catch {
+      return streamBody;
+    }
+  }
+}
+
+function collectPdfTextFromContent(content) {
+  const chunks = [];
+
+  for (const match of content.matchAll(/\((?:\\.|[^\\)])*\)\s*Tj/g)) {
+    chunks.push(decodePdfLiteralString(match[0].replace(/\s*Tj$/, '')));
+  }
+
+  for (const match of content.matchAll(/<[\dA-Fa-f\s]+>\s*Tj/g)) {
+    chunks.push(decodePdfHexString(match[0].replace(/\s*Tj$/, '')));
+  }
+
+  for (const match of content.matchAll(/\[((?:.|\n|\r){1,12000}?)\]\s*TJ/g)) {
+    const literalParts = [...match[1].matchAll(/\((?:\\.|[^\\)])*\)/g)].map((item) => decodePdfLiteralString(item[0]));
+    const hexParts = [...match[1].matchAll(/<[\dA-Fa-f\s]+>/g)].map((item) => decodePdfHexString(item[0]));
+    const text = [...literalParts, ...hexParts].join('');
+    if (text.trim()) chunks.push(text);
+  }
+
+  return chunks;
+}
+
+function extractPdfTextFromBuffer(buffer) {
+  const binary = buffer.toString('latin1');
+  const contentPieces = [binary];
+
+  for (const match of binary.matchAll(/<<(?:.|\n|\r)*?\/Filter\s*\/FlateDecode(?:.|\n|\r)*?>>\s*stream\r?\n?([\s\S]*?)\r?\n?endstream/g)) {
+    contentPieces.push(inflatePdfStream(match[1]));
+  }
+
+  const chunks = contentPieces.flatMap((content) => collectPdfTextFromContent(content));
+  const textFromOperators = normalizeResumeText(chunks.join('\n'));
+
+  if (countResumeWords(textFromOperators) >= 30) {
+    return textFromOperators;
+  }
+
+  return normalizeResumeText(
+    binary
+      .replace(/[^\x09\x0A\x0D\x20-\x7E]+/g, '\n')
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter((line) => /[A-Za-z]/.test(line) && line.length >= 4 && !line.startsWith('/'))
+      .join('\n')
+  );
+}
+
 async function extractPdfResumeText(dataUrl) {
   const decoded = dataUrlToBuffer(dataUrl, ['application/pdf']);
   if (!decoded) {
     return { error: { status: 400, code: 'UNSUPPORTED_FILE_TYPE', message: 'Invalid payload: upload a PDF file.' } };
   }
 
-  let parser;
   try {
-    parser = new PDFParse({ data: decoded.buffer });
-    const result = await parser.getText();
-    const resumeText = normalizeResumeText(result.text);
+    const resumeText = extractPdfTextFromBuffer(decoded.buffer);
     const quality = getResumeTextQuality(resumeText);
 
     console.log('[resume-extract] PDF parse completed', {
@@ -158,8 +246,6 @@ async function extractPdfResumeText(dataUrl) {
         details: error.message
       }
     };
-  } finally {
-    await parser?.destroy?.();
   }
 }
 
