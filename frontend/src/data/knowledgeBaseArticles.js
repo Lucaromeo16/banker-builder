@@ -270,16 +270,183 @@ export const knowledgeBaseCategories = [
   'Private Equity / Buy-Side'
 ];
 
-function buildExplanation(title, category, summary) {
-  return `${summary} This guide is intentionally concise for the current Knowledge Base seed: it frames what candidates should understand, where the topic shows up in recruiting, and how to connect it to interviews, networking, or deal work.`;
+const categoryGuides = {
+  'Banking Groups': {
+    role: 'where bankers sit in the advisory ecosystem',
+    context:
+      'For recruiting, the important thing is not memorizing a label. You should understand what clients the group serves, what products or sectors drive the work, what analysts actually build, and how the group interacts with coverage, capital markets, sponsors, lawyers, lenders, and management teams.',
+    example:
+      'In practice, this topic can show up in a pitch, a live deal, a buyer or investor discussion, a financing process, or a group-placement conversation. A strong candidate can explain the client problem, the banker’s role, and the analytical work without overselling their own experience.',
+    interview:
+      'Interviewers may test whether you know why the group exists, how revenue is generated, what makes the work different from adjacent groups, and why your background fits. Your answer should connect the topic to specific deal situations, not just prestige or exits.',
+    pitfalls:
+      'Common mistakes include confusing product and coverage responsibilities, assuming every office does the same work, and talking about exits before showing interest in the actual banking job.'
+  },
+  Valuation: {
+    role: 'how bankers translate business performance, risk, and market evidence into a defensible value range',
+    context:
+      'Recruiters do not expect you to be a senior valuation expert, but they do expect you to know the intuition behind the method, the inputs that matter, and how assumptions change the answer. Good valuation answers balance formula knowledge with commercial judgment.',
+    example:
+      'In banking, valuation supports pitches, fairness discussions, buyer analyses, sell-side positioning, board materials, and investor conversations. The same company can produce different values under different methods because each method captures a different lens: market pricing, transaction precedent, intrinsic cash flow, asset value, or investor return requirements.',
+    interview:
+      'In interviews, be ready to walk through the mechanics, explain why the method is useful, identify the most sensitive assumptions, and discuss when the method is less reliable. The best answers include a simple example and acknowledge limitations.',
+    pitfalls:
+      'Common pitfalls include mixing levered and unlevered metrics, using the wrong multiple with the wrong denominator, treating a model output as precise, or forgetting that valuation is a range supported by judgment.'
+  },
+  'Technical Concepts': {
+    role: 'the practical mechanics behind deal analysis, modeling, capital structure, and interview technicals',
+    context:
+      'This topic matters because banking interviews reward candidates who can explain mechanics and intuition at the same time. You should know the definition, where it appears in a model, and what changes when assumptions move.',
+    example:
+      'Analysts use concepts like this while building pitch pages, checking model outputs, reviewing diligence, preparing committee materials, and answering senior banker questions. The technical point is usually tied to a business question: valuation, financing capacity, buyer returns, dilution, risk, or transaction feasibility.',
+    interview:
+      'When answering, start with the plain-English definition, then move to the mechanics, then explain why it matters. If there is a formula, explain the inputs rather than reciting it mechanically. If there is an edge case, name it briefly.',
+    pitfalls:
+      'Candidates often lose points by memorizing isolated flashcard answers, ignoring accounting flow-through, or failing to explain what the result means for a buyer, seller, lender, investor, or public shareholder.'
+  },
+  Accounting: {
+    role: 'the language that links operating performance, balance sheet claims, cash flow, taxes, and deal adjustments',
+    context:
+      'Bankers are not auditors, but they need enough accounting fluency to understand financial statements, normalize earnings, evaluate working capital, and avoid modeling errors. Accounting knowledge is especially important in technical interviews because it reveals whether a candidate understands cause and effect.',
+    example:
+      'In deal work, accounting shows up in quality of earnings, purchase accounting, debt-like items, cash flow conversion, revenue recognition, deferred taxes, and the bridge between reported results and valuation metrics. Small accounting details can change EBITDA, free cash flow, leverage, or purchase price.',
+    interview:
+      'For interviews, focus on how the item flows through the income statement, balance sheet, and cash flow statement. A practical answer should explain both the accounting treatment and why a banker or investor would care.',
+    pitfalls:
+      'Common mistakes include treating non-cash items as irrelevant, forgetting tax effects, confusing cash and revenue recognition, or failing to connect balance sheet changes to cash flow.'
+  },
+  'Recruiting Strategy': {
+    role: 'how candidates convert preparation, credibility, and relationships into interviews and offers',
+    context:
+      'Recruiting strategy matters because investment banking hiring is competitive, early, and relationship-driven. A strong candidate needs more than a polished resume: they need a target list, a timeline, technical readiness, a networking system, and a story that explains why banking makes sense.',
+    example:
+      'In practice, this topic affects how you prioritize firms, write outreach, handle coffee chats, ask for referrals, follow up, prepare for interviews, and respond when a process moves faster than expected. The best strategy is specific to your school, GPA, experience, geography, and realistic firm fit.',
+    interview:
+      'Recruiters and bankers will not ask for your whole recruiting plan, but they will see the results of it. Prepared candidates speak clearly, know the firm, ask better questions, and show evidence of sustained interest rather than last-minute application volume.',
+    pitfalls:
+      'Common mistakes include starting too late, sending generic outreach, asking for referrals too early, applying only to dream firms, or treating networking as a transaction instead of a credibility-building process.'
+  },
+  'Interview Prep': {
+    role: 'turning knowledge, experience, and motivation into clear answers under pressure',
+    context:
+      'Interview prep is not just memorization. Banking interviews test technical accuracy, judgment, communication, maturity, stamina, and whether the team would trust you on demanding client work. Strong prep makes your answers shorter, sharper, and more credible.',
+    example:
+      'This topic may appear in first rounds, superdays, technical screens, group-fit conversations, or informal banker calls. The best answers usually define the issue, explain the logic, and connect it to a deal, model, market event, or personal experience.',
+    interview:
+      'A good interview answer is structured but not robotic. Start with the direct answer, walk through the reasoning, and pause before overexplaining. For fit questions, use specific stories. For technical questions, show intuition and call out assumptions.',
+    pitfalls:
+      'Candidates often struggle when they memorize long scripts, fail to answer the question asked, hide uncertainty, or cannot connect their resume to why they want banking.'
+  },
+  'Resume & Applications': {
+    role: 'how candidates present evidence of readiness before a banker ever speaks with them',
+    context:
+      'The resume is a screening document, not a biography. For IB recruiting, it should quickly communicate academic credibility, relevant experience, analytical ability, leadership, polish, and evidence that the candidate understands the role.',
+    example:
+      'This topic affects how bullets are written, how experience is ordered, how GPA is presented, how projects are framed, and how applications are tracked. Strong application materials reduce perceived risk and make networking conversations easier because contacts can quickly see the candidate’s fit.',
+    interview:
+      'Anything on the resume can become an interview question. Candidates should be able to explain each bullet, defend numbers, describe tools used, and connect experience to banking skills such as modeling, diligence, research, process management, and client-ready communication.',
+    pitfalls:
+      'Common mistakes include vague bullets, inflated claims, inconsistent formatting, missing finance signals, cluttered layouts, and listing technical skills that the candidate cannot discuss.'
+  },
+  'Career Paths': {
+    role: 'how banking experience connects to longer-term finance roles, exits, and promotion paths',
+    context:
+      'Career-path topics help candidates understand what banking trains, what different platforms signal, and how future options differ by group, office, firm type, and performance. They also help candidates avoid sounding like they only want banking as a stepping stone.',
+    example:
+      'In practice, this topic affects firm selection, group preferences, internship decisions, lateral moves, MBA plans, and how you discuss goals in interviews. Different paths value different skills: deal execution, modeling, credit judgment, public markets thinking, sourcing, client management, or operating knowledge.',
+    interview:
+      'Interviewers want ambition, but they also want commitment to the banking role in front of you. Frame career interests as evidence that you understand the skill set, not as a reason you will mentally leave before starting.',
+    pitfalls:
+      'Common mistakes include ranking paths only by prestige, assuming all exits are equally available from every seat, or ignoring whether you actually like the day-to-day work required to get there.'
+  },
+  'Geography / Office Strategy': {
+    role: 'how location shapes deal flow, industry focus, alumni access, culture, and recruiting odds',
+    context:
+      'Office strategy matters because investment banking is not distributed evenly across cities. Some offices are headquarters-heavy and broad, while others specialize by sector, region, or client type. Local credibility can help, especially outside the largest hubs.',
+    example:
+      'This topic influences target lists, networking, school proximity, group selection, and the story you tell about why a specific office fits. A candidate targeting a regional office should understand local industries and show a reason beyond lower perceived competition.',
+    interview:
+      'If asked about location, connect the city to the platform, sector, alumni network, personal ties, or long-term interest. Strong answers show that you understand the office’s actual work and would accept the offer enthusiastically.',
+    pitfalls:
+      'Common mistakes include treating regional offices as backups, ignoring sector specialization, or applying broadly without adapting outreach and interview answers to each city.'
+  },
+  'Markets & Deals': {
+    role: 'the market context that determines when deals happen, how they are financed, and how investors price risk',
+    context:
+      'Bankers need market awareness because client advice depends on rates, equity valuations, credit spreads, volatility, investor appetite, and sector sentiment. You do not need to be a trader, but you should understand how markets affect transaction feasibility.',
+    example:
+      'This topic can influence IPO windows, refinancing decisions, sponsor exits, M&A timing, debt capacity, fairness discussions, and board-level strategic alternatives. A market change can alter valuation, financing cost, buyer appetite, or urgency.',
+    interview:
+      'Interviewers may ask what is happening in the markets or how a macro event affects banking. Strong answers connect the event to clients and transactions rather than reciting headlines.',
+    pitfalls:
+      'Common mistakes include giving vague market commentary, ignoring second-order effects, or failing to connect rates, spreads, or volatility to actual banking activity.'
+  },
+  'Private Equity / Buy-Side': {
+    role: 'how investors evaluate companies, returns, risk, sourcing, diligence, and exit outcomes',
+    context:
+      'Buy-side knowledge matters for banking candidates because sponsors are major clients and many analysts eventually recruit for investing roles. Understanding the investor lens helps candidates discuss deals with more commercial judgment.',
+    example:
+      'This topic can appear in sponsor coverage, LBO modeling, diligence calls, PE recruiting, case studies, and deal discussions. Investors care about business quality, entry valuation, leverage, downside protection, growth levers, exit options, and management execution.',
+    interview:
+      'For banking interviews, know the basics without sounding like you are already out the door. For buy-side interviews, be ready to form a thesis, identify risks, discuss returns, and explain why a company is or is not attractive.',
+    pitfalls:
+      'Common mistakes include reducing investing to an LBO template, ignoring business quality, overemphasizing leverage, or failing to explain how returns are actually created.'
+  }
+};
+
+function topicSpecificContext(title, tags, relatedTopics) {
+  const lowerTitle = title.toLowerCase();
+  const tagText = tags.join(', ');
+  const relatedText = relatedTopics.slice(0, 3).join(', ');
+
+  if (lowerTitle.includes('dcf')) {
+    return 'For DCF-related topics, pay special attention to unlevered free cash flow, discount rate selection, terminal value, and sensitivity analysis. Interviewers care less about perfect decimal precision and more about whether you understand why the output changes when growth, margins, capex, working capital, or WACC move.';
+  }
+  if (lowerTitle.includes('wacc') || lowerTitle.includes('capm')) {
+    return 'For cost-of-capital topics, focus on matching the discount rate to the cash flow being valued. A common interview trap is using an equity return requirement for unlevered free cash flow or forgetting that debt cost is tax-effected in WACC.';
+  }
+  if (lowerTitle.includes('accretion') || lowerTitle.includes('merger') || lowerTitle.includes('purchase')) {
+    return 'For M&A modeling topics, connect the mechanics to the business question: whether the buyer can justify price, financing, synergies, and accounting effects. Be ready to explain how consideration mix, interest expense, foregone interest, share issuance, amortization, and taxes affect the result.';
+  }
+  if (lowerTitle.includes('lbo') || lowerTitle.includes('private equity') || lowerTitle.includes('buy-side')) {
+    return 'For investor-oriented topics, keep returning to sources of return: purchase price, leverage, operating improvement, cash generation, multiple expansion or contraction, and exit timing. This is where technical modeling meets business judgment.';
+  }
+  if (lowerTitle.includes('coffee') || lowerTitle.includes('network') || lowerTitle.includes('referral') || lowerTitle.includes('outreach')) {
+    return 'For networking topics, the practical edge comes from specificity. A good process tracks who you contacted, why the contact is relevant, what you learned, when to follow up, and what concrete next step makes sense. The goal is trust, not a one-message referral.';
+  }
+  if (lowerTitle.includes('resume') || lowerTitle.includes('application') || lowerTitle.includes('linkedin')) {
+    return 'For application topics, think like a tired banker scanning quickly. Every line should make the candidate easier to underwrite: clear dates, clear role, relevant skills, quantified impact, and no claim that creates doubt in an interview.';
+  }
+  if (lowerTitle.includes('office') || lowerTitle.includes('nyc') || lowerTitle.includes('houston') || lowerTitle.includes('chicago')) {
+    return 'For geography topics, specificity is the difference between strategy and wishful thinking. Tie the office to sector exposure, alumni access, personal ties, realistic competitiveness, and the kind of deals you want to learn from.';
+  }
+  if (lowerTitle.includes('interview') || lowerTitle.includes('superday') || lowerTitle.includes('technical')) {
+    return 'For interview topics, practice should make answers easier to follow, not longer. Bankers reward candidates who answer directly, define assumptions, recover calmly from mistakes, and sound like someone who can be staffed with clients and senior team members.';
+  }
+
+  return `For this topic, connect the core idea to ${tagText || 'the relevant banking skill set'} and then relate it to ${relatedText || 'adjacent recruiting concepts'}. That linkage makes the topic useful rather than abstract.`;
 }
 
-function buildTakeaways(title, category, tags) {
+function buildExplanation(title, category, summary, tags, relatedTopics) {
+  const guide = categoryGuides[category] || categoryGuides['Technical Concepts'];
+  const specificContext = topicSpecificContext(title, tags, relatedTopics);
+
+  return [
+    `${summary} In investment banking recruiting, ${title.toLowerCase()} is best understood as part of ${guide.role}. Candidates should be able to define it plainly, explain why bankers care, and connect it to a realistic client, market, interview, or career situation.`,
+    guide.context,
+    guide.example,
+    specificContext,
+    `${guide.interview} A practical way to prepare is to build a two-minute explanation, one concrete example, and one common mistake or limitation. That gives you enough depth for interviews without drifting into textbook territory.`,
+    `${guide.pitfalls} If you can explain how ${title.toLowerCase()} connects to ${relatedTopics.slice(0, 2).join(' and ') || 'the rest of the recruiting process'}, you will sound more prepared than a candidate who only knows definitions.`
+  ].join('\n\n');
+}
+
+function buildTakeaways(title, category, tags, relatedTopics) {
   const primaryTag = tags[0] || category.toLowerCase();
   return [
-    `${title} is a practical topic for IB recruiting preparation.`,
-    `Know how to explain the concept clearly and connect it to ${primaryTag}.`,
-    'Use the topic to sharpen interview answers, networking conversations, or target-list decisions.'
+    `Be able to define ${title.toLowerCase()} in plain English and explain why it matters in banking.`,
+    `Connect the topic to ${primaryTag} and to a practical recruiting, modeling, deal, or market situation.`,
+    `Know at least one common mistake, limitation, or interview trap related to ${relatedTopics[0] || primaryTag}.`
   ];
 }
 
@@ -313,7 +480,7 @@ export const knowledgeBaseArticles = selectedArticleRows.map(
     estimatedDifficulty,
     estimatedReadTime,
     relatedTopics,
-    explanation: buildExplanation(title, category, summary),
-    takeaways: buildTakeaways(title, category, tags)
+    explanation: buildExplanation(title, category, summary, tags, relatedTopics),
+    takeaways: buildTakeaways(title, category, tags, relatedTopics)
   })
 );
