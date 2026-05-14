@@ -882,12 +882,12 @@ function priorityPreferenceScore(stars, preference) {
 
 function nextActionFor(category, opportunity) {
   if (category === 'Reach') {
-    return `Treat this as a realistic reach: prioritize warm networking in ${opportunity.office} and prepare a tight story for ${opportunity.group}.`;
+    return `Realistic stretch with strong networking: prioritize warm contacts in ${opportunity.office} and prepare a tight story for ${opportunity.group}.`;
   }
   if (category === 'Target') {
-    return `Build two to three contacts and tailor your pitch around ${opportunity.group} exposure.`;
+    return `Well aligned with your profile if you network appropriately; tailor your pitch around ${opportunity.group} exposure.`;
   }
-  return `Use this as a conversion-oriented option and apply early with a clean, specific outreach note.`;
+  return `More attainable relative to your profile, though networking is still recommended; apply early with a specific outreach note.`;
 }
 
 function categoryReason(category, opportunity, preference, strength) {
@@ -900,10 +900,10 @@ function categoryReason(category, opportunity, preference, strength) {
         : '';
   const categoryText =
     category === 'Reach'
-      ? ' This firm is a realistic reach if you network aggressively.'
+      ? ' Realistic stretch with strong networking.'
       : category === 'Target'
-        ? ' This is a strong target based on your profile and stated preferences.'
-        : ' This office aligns well with your current profile and school/experience background.';
+        ? ' Well aligned with your profile if you network appropriately.'
+        : ' More attainable relative to your profile, though networking is still recommended.';
   return `${opportunity.reason}${locationText}${categoryText} This is the best-fit ${opportunity.group} opportunity for ${opportunity.firm} after deduplicating by bank.`;
 }
 
@@ -918,7 +918,7 @@ function buildTargetList(scoredResults, profile) {
   // 2. attach radius distance using office coordinates, if available
   // 3. apply realism gates so Reach remains plausible
   // 4. apply Strict radius as the hard location filter; Flexible/Open use radius only for ranking
-  // 5. dedupe by firm and assign Reach / Target / Safety buckets
+  // 5. dedupe by firm, then bucket by each recommendation's independent classification
   const withDistance = scoredResults.map((opportunity) => {
     const distanceMiles = opportunityDistanceMiles(opportunity, profile);
     return {
@@ -969,25 +969,21 @@ function buildTargetList(scoredResults, profile) {
       b.competitiveness - a.competitiveness
   );
 
-  const used = new Set();
-  const take = (category, count) => {
-    const preferred = uniqueFirmRanked.filter((item) => item.classification === category && !used.has(item.firm));
-    const fallback = uniqueFirmRanked.filter((item) => !used.has(item.firm) && item.classification !== category);
-    return [...preferred, ...fallback].slice(0, count).map((item) => {
-      used.add(item.firm);
-      return {
-        ...item,
-        matchCategory: category,
-        reason: categoryReason(category, item, preference, strength),
-        suggestedNextAction: nextActionFor(category, item)
-      };
+  const bucketed = { Reach: [], Target: [], Safety: [] };
+  uniqueFirmRanked.forEach((item) => {
+    const category = ['Reach', 'Target', 'Safety'].includes(item.classification) ? item.classification : 'Reach';
+    bucketed[category].push({
+      ...item,
+      matchCategory: category,
+      reason: categoryReason(category, item, preference, strength),
+      suggestedNextAction: nextActionFor(category, item)
     });
-  };
+  });
 
   return {
-    Reach: take('Reach', 8),
-    Target: take('Target', 12),
-    Safety: take('Safety', 5),
+    Reach: bucketed.Reach,
+    Target: bucketed.Target,
+    Safety: bucketed.Safety,
     isLimitedByLocation: Boolean(isStrictLocation && uniqueFirmRanked.length < 25),
     locationLimitReason: isStrictLocation && uniqueFirmRanked.length < 25 ? 'strict' : ''
   };
