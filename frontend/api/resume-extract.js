@@ -1,5 +1,3 @@
-import zlib from 'node:zlib';
-
 export const config = {
   api: {
     bodyParser: {
@@ -103,109 +101,97 @@ function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
   };
 }
 
-function decodePdfLiteralString(rawLiteral) {
-  const body = rawLiteral.slice(1, -1);
-  return body
-    .replace(/\\([0-7]{1,3})/g, (_, octal) => String.fromCharCode(parseInt(octal, 8)))
-    .replace(/\\n/g, '\n')
-    .replace(/\\r/g, '\n')
-    .replace(/\\t/g, '\t')
-    .replace(/\\b/g, '\b')
-    .replace(/\\f/g, '\f')
-    .replace(/\\\(/g, '(')
-    .replace(/\\\)/g, ')')
-    .replace(/\\\\/g, '\\');
-}
-
-function decodePdfHexString(rawHex) {
-  const normalizedHex = rawHex.slice(1, -1).replace(/\s+/g, '');
-  const bytes = [];
-  for (let index = 0; index < normalizedHex.length; index += 2) {
-    bytes.push(parseInt(normalizedHex.slice(index, index + 2).padEnd(2, '0'), 16));
-  }
-
-  if (bytes[0] === 0xfe && bytes[1] === 0xff) {
-    let text = '';
-    for (let index = 2; index + 1 < bytes.length; index += 2) {
-      text += String.fromCharCode((bytes[index] << 8) | bytes[index + 1]);
-    }
-    return text;
-  }
-
-  return Buffer.from(bytes).toString('latin1');
-}
-
-function inflatePdfStream(streamBody) {
-  const buffer = Buffer.from(streamBody, 'latin1');
-  try {
-    return zlib.inflateSync(buffer).toString('latin1');
-  } catch {
-    try {
-      return zlib.inflateRawSync(buffer).toString('latin1');
-    } catch {
-      return streamBody;
-    }
-  }
-}
-
-function collectPdfTextFromContent(content) {
-  const chunks = [];
-
-  for (const match of content.matchAll(/\((?:\\.|[^\\)])*\)\s*Tj/g)) {
-    chunks.push(decodePdfLiteralString(match[0].replace(/\s*Tj$/, '')));
-  }
-
-  for (const match of content.matchAll(/<[\dA-Fa-f\s]+>\s*Tj/g)) {
-    chunks.push(decodePdfHexString(match[0].replace(/\s*Tj$/, '')));
-  }
-
-  for (const match of content.matchAll(/\[((?:.|\n|\r){1,12000}?)\]\s*TJ/g)) {
-    const literalParts = [...match[1].matchAll(/\((?:\\.|[^\\)])*\)/g)].map((item) => decodePdfLiteralString(item[0]));
-    const hexParts = [...match[1].matchAll(/<[\dA-Fa-f\s]+>/g)].map((item) => decodePdfHexString(item[0]));
-    const text = [...literalParts, ...hexParts].join('');
-    if (text.trim()) chunks.push(text);
-  }
-
-  return chunks;
-}
-
-function extractPdfTextFromBuffer(buffer) {
-  const binary = buffer.toString('latin1');
-  const contentPieces = [binary];
-
-  for (const match of binary.matchAll(/<<(?:.|\n|\r)*?\/Filter\s*\/FlateDecode(?:.|\n|\r)*?>>\s*stream\r?\n?([\s\S]*?)\r?\n?endstream/g)) {
-    contentPieces.push(inflatePdfStream(match[1]));
-  }
-
-  const chunks = contentPieces.flatMap((content) => collectPdfTextFromContent(content));
-  const textFromOperators = normalizeResumeText(chunks.join('\n'));
-
-  if (countResumeWords(textFromOperators) >= 30) {
-    return textFromOperators;
-  }
-
-  return normalizeResumeText(
-    binary
-      .replace(/[^\x09\x0A\x0D\x20-\x7E]+/g, '\n')
-      .split(/\n+/)
-      .map((line) => line.trim())
-      .filter((line) => /[A-Za-z]/.test(line) && line.length >= 4 && !line.startsWith('/'))
-      .join('\n')
-  );
-}
-
-async function extractPdfResumeText(dataUrl) {
-  const decoded = dataUrlToBuffer(dataUrl, ['application/pdf']);
-  if (!decoded) {
+async function extractPdfResumeText({ dataUrl, fileName }) {
+  const decodedPdf = dataUrlToBuffer(dataUrl, ['application/pdf']);
+  if (!decodedPdf) {
     return { error: { status: 400, code: 'UNSUPPORTED_FILE_TYPE', message: 'Invalid payload: upload a PDF file.' } };
   }
 
+  if (!process.env.OPENAI_API_KEY) {
+    return {
+      error: {
+        status: 500,
+        code: 'MISSING_OPENAI_API_KEY',
+        message: 'OPENAI_API_KEY is not configured on the serverless API route.'
+      }
+    };
+  }
+
   try {
-    const resumeText = extractPdfTextFromBuffer(decoded.buffer);
+    const model = process.env.OPENAI_VISION_MODEL || process.env.OPENAI_PDF_MODEL || 'gpt-4o-mini';
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model,
+        instructions:
+          'Extract clean resume text from the uploaded PDF. Preserve section headings, line breaks, bullet ordering, and obvious spacing cues as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
+        input: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_file',
+                filename: fileName || 'resume.pdf',
+                file_data: dataUrl
+              },
+              {
+                type: 'input_text',
+                text: 'Extract the resume content from this PDF for later investment banking resume analysis.'
+              }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'resume_extraction',
+            strict: true,
+            schema: resumeExtractionSchema
+          }
+        },
+        max_output_tokens: 2200
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      console.error('[resume-extract] OpenAI PDF extraction request failed', {
+        status: response.status,
+        statusText: response.statusText,
+        details
+      });
+      return {
+        error: {
+          status: 502,
+          code: 'PDF_EXTRACTION_FAILED',
+          message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.',
+          details
+        }
+      };
+    }
+
+    const data = await response.json();
+    const outputText = extractResponseText(data);
+    if (!outputText) {
+      return {
+        error: {
+          status: 502,
+          code: 'PDF_EXTRACTION_FAILED',
+          message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.'
+        }
+      };
+    }
+
+    const extracted = JSON.parse(outputText);
+    const resumeText = normalizeResumeText(extracted.resumeText);
     const quality = getResumeTextQuality(resumeText);
 
-    console.log('[resume-extract] PDF parse completed', {
-      bytes: decoded.bytes,
+    console.log('[resume-extract] OpenAI PDF extraction completed', {
+      bytes: decodedPdf.bytes,
       extractedLength: resumeText.length,
       extractedWords: countResumeWords(resumeText),
       qualityCode: quality.code || 'OK'
@@ -218,7 +204,7 @@ async function extractPdfResumeText(dataUrl) {
           code: quality.code,
           message:
             quality.code === 'CORRUPTED_TEXT'
-              ? 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.'
+              ? 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.'
               : 'Extracted text is too short. Try uploading a screenshot or pasting the text.'
         }
       };
@@ -226,12 +212,12 @@ async function extractPdfResumeText(dataUrl) {
 
     return {
       resumeText,
-      formattingMetadata: {
-        detectedSections: ['PDF text layer'],
+      formattingMetadata: extracted.formattingMetadata || {
+        detectedSections: ['PDF processed by OpenAI'],
         bulletCount: (resumeText.match(/[\u2022-]\s+/g) || []).length,
         lineCount: resumeText.split('\n').filter((line) => line.trim()).length
       },
-      warnings: []
+      warnings: extracted.warnings || []
     };
   } catch (error) {
     console.error('[resume-extract] PDF parse failed', {
@@ -242,7 +228,7 @@ async function extractPdfResumeText(dataUrl) {
       error: {
         status: 422,
         code: 'PDF_EXTRACTION_FAILED',
-        message: 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.',
+        message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.',
         details: error.message
       }
     };
@@ -277,7 +263,7 @@ export default async function handler(req, res) {
     }
 
     if (mimeType === 'application/pdf') {
-      const extractedPdf = await extractPdfResumeText(dataUrl);
+      const extractedPdf = await extractPdfResumeText({ dataUrl, fileName });
       if (extractedPdf.error) {
         return res.status(extractedPdf.error.status).json({
           code: extractedPdf.error.code,

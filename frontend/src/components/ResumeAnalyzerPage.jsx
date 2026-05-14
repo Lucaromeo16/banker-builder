@@ -81,7 +81,7 @@ function userMessageForExtractionError(payload, fallbackMessage) {
   if (payload?.code === 'UNSUPPORTED_FILE_TYPE') return 'Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.';
   if (payload?.code === 'EXTRACTED_TEXT_TOO_SHORT') return 'Extracted text is too short. Try a clearer screenshot or paste the text.';
   if (payload?.code === 'CORRUPTED_TEXT') return 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.';
-  if (payload?.code === 'PDF_EXTRACTION_FAILED') return 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.';
+  if (payload?.code === 'PDF_EXTRACTION_FAILED') return 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.';
   if (payload?.code === 'OPENAI_EXTRACTION_FAILED') return 'Image extraction failed. Try a clearer image or paste the resume text.';
   if (payload?.code === 'OPENAI_ANALYSIS_FAILED') return 'AI analysis failed. Please try again.';
   if (payload?.code === 'INVALID_REQUEST_PAYLOAD') return 'Invalid request payload. Please replace the file or paste clean resume text.';
