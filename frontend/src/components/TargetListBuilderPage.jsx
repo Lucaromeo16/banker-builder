@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
+import usCities from '../../../data/usCities.json';
 import { defaultSchool, schoolDisplayName, schoolForPayload, schoolToScore } from '../schoolScoring';
 
 const stepTitles = [
@@ -95,6 +96,8 @@ const locationStrengthOptions = [
 ];
 
 const recruitingPriorityOptions = ['Low', 'Medium', 'High'];
+const DEFAULT_RADIUS_MILES = 50;
+const EARTH_RADIUS_MILES = 3958.8;
 
 const workTypeOptions = [
   'Investment Banking Internship',
@@ -288,6 +291,7 @@ const defaultProfile = {
   payPreference: 'Medium',
   school: defaultSchool,
   gpa: 3.7,
+  locationRadiusMiles: DEFAULT_RADIUS_MILES,
   workExperiences: [createWorkExperience()],
   activities: [createActivity()]
 };
@@ -299,6 +303,9 @@ function officeLocationLabel(office) {
 function normalizeLocationLabel(value) {
   const compact = comparableLocation(value);
   if (compact === 'washington') return 'Washington, DC';
+
+  const city = usCities.find((item) => comparableLocation(item.displayName) === compact || comparableLocation(item.city) === compact);
+  if (city) return city.displayName;
 
   const office = ibOffices.find((item) => comparableLocation(officeLocationLabel(item)) === compact || comparableLocation(item.officeCity) === compact);
   return office ? officeLocationLabel(office) : value;
@@ -315,6 +322,28 @@ function NumberField({ label, value, onChange, step = 1, min = 0, max = 100 }) {
 
 function clamp(value, min = 0, max = 10) {
   return Math.max(min, Math.min(max, value));
+}
+
+function degreesToRadians(value) {
+  return (value * Math.PI) / 180;
+}
+
+function distanceInMiles(from, to) {
+  const lat1 = degreesToRadians(from.latitude);
+  const lat2 = degreesToRadians(to.latitude);
+  const deltaLat = degreesToRadians(to.latitude - from.latitude);
+  const deltaLon = degreesToRadians(to.longitude - from.longitude);
+  const a =
+    Math.sin(deltaLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return EARTH_RADIUS_MILES * c;
+}
+
+function formatDistance(miles) {
+  if (!Number.isFinite(miles)) return '';
+  return `${Math.round(miles)} miles`;
 }
 
 function slugify(value) {
@@ -340,6 +369,8 @@ function createOpportunitiesFromOffices(offices = []) {
         group,
         tier: office.type,
         type: office.type,
+        latitude: office.latitude,
+        longitude: office.longitude,
         competitiveness: Number(competitiveness.toFixed(2)),
         competitivenessScore: office.competitivenessScore,
         prestigeStars: office.prestigeStars,
@@ -742,6 +773,29 @@ function locationsMatch(office, preference) {
   return comparableLocation(office) === comparableLocation(preference);
 }
 
+function selectedLocationCity(profile) {
+  const preference = normalizeLocationPreference(profile);
+  if (!preference || preference === 'No preference') return null;
+  const compact = comparableLocation(preference);
+
+  return usCities.find((city) => comparableLocation(city.displayName) === compact || comparableLocation(city.city) === compact) || null;
+}
+
+function opportunityDistanceMiles(opportunity, profile) {
+  const city = selectedLocationCity(profile);
+  const latitude = Number(opportunity.latitude);
+  const longitude = Number(opportunity.longitude);
+  if (!city || !Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+
+  return distanceInMiles(city, { latitude, longitude });
+}
+
+function opportunityWithinRadius(opportunity, profile) {
+  const distanceMiles = opportunityDistanceMiles(opportunity, profile);
+  if (!Number.isFinite(distanceMiles)) return false;
+  return distanceMiles <= (profile.locationRadiusMiles || DEFAULT_RADIUS_MILES);
+}
+
 function groupInterestScore(group, interests) {
   if (interests.includes('Not sure yet')) {
     return ['Generalist', 'M&A', 'Healthcare', 'Technology', 'Industrials', 'Consumer & Retail', 'Financial Institutions'].includes(group)
@@ -755,13 +809,12 @@ function groupInterestScore(group, interests) {
   return 0;
 }
 
-function locationScore(office, preference, strength) {
-  if (!preference || preference === 'No preference') return 0.5;
-  if (locationsMatch(office, preference)) {
-    return strength === 'Open' ? 1.2 : 3;
-  }
-
-  return strength === 'Open' ? 0.35 : 0;
+function locationRadiusScore(opportunity, profile, strength) {
+  if (!selectedLocationCity(profile)) return 0.5;
+  if (!opportunity.withinSelectedRadius) return strength === 'Open' ? 0.35 : 0;
+  if (strength === 'Open') return 1.2;
+  if (strength === 'Flexible') return 3;
+  return 4;
 }
 
 function profileFitScore(opportunity) {
@@ -826,11 +879,12 @@ function nextActionFor(category, opportunity) {
 }
 
 function categoryReason(category, opportunity, preference, strength) {
+  const selectedCity = preference && preference !== 'No preference' ? preference : '';
   const locationText =
-    preference && preference !== 'No preference' && locationsMatch(opportunity.office, preference)
-      ? ` It matches your ${preference} location preference.`
-      : preference && preference !== 'No preference' && strength !== 'Strict'
-        ? ` Your ${preference} location preference was treated ${strength === 'Flexible' ? 'flexibly' : 'lightly'} for this match.`
+    selectedCity && opportunity.withinSelectedRadius
+      ? ` It is within your selected radius of ${selectedCity}.`
+      : selectedCity && Number.isFinite(opportunity.distanceMiles) && strength !== 'Strict'
+        ? ` Your ${selectedCity} radius preference was treated ${strength === 'Flexible' ? 'flexibly' : 'lightly'} for this match.`
         : '';
   const categoryText =
     category === 'Reach'
@@ -845,17 +899,26 @@ function buildTargetList(scoredResults, profile) {
   const preference = normalizeLocationPreference(profile);
   const strength = preference && preference !== 'No preference' ? profile.locationPreferenceStrength || 'Flexible' : 'Open';
   const isStrictLocation = preference && preference !== 'No preference' && strength === 'Strict';
+  const hasRadiusLocation = Boolean(selectedLocationCity(profile));
+  const withDistance = scoredResults.map((opportunity) => {
+    const distanceMiles = opportunityDistanceMiles(opportunity, profile);
+    return {
+      ...opportunity,
+      distanceMiles,
+      withinSelectedRadius: Number.isFinite(distanceMiles) && distanceMiles <= (profile.locationRadiusMiles || DEFAULT_RADIUS_MILES)
+    };
+  });
   const candidateResults =
-    isStrictLocation
-      ? scoredResults.filter((opportunity) => locationsMatch(opportunity.office, preference))
-      : scoredResults;
+    isStrictLocation && hasRadiusLocation
+      ? withDistance.filter((opportunity) => opportunity.withinSelectedRadius)
+      : withDistance;
   const realisticResults = candidateResults.filter((opportunity) => isRealisticRecommendation(opportunity, profile));
 
   const ranked = realisticResults
     .map((opportunity) => {
       const fitScore =
         groupInterestScore(opportunity.group, profile.interests) * 4 +
-        locationScore(opportunity.office, preference, strength) * 2 +
+        locationRadiusScore(opportunity, profile, strength) * 2 +
         experienceGroupAffinityScore(profile, opportunity.group) +
         profileFitScore(opportunity) * 2 +
         confidenceScore(opportunity.confidence) +
@@ -923,6 +986,13 @@ function TargetOpportunityCard({ opportunity }) {
           <span className={`tag status ${opportunity.matchCategory.toLowerCase()}`}>{opportunity.matchCategory}</span>
         </div>
         <p>{opportunity.reason}</p>
+        {Number.isFinite(opportunity.distanceMiles) ? (
+          <p className="map-distance-summary">
+            {opportunity.withinSelectedRadius
+              ? `Within your selected radius — ${formatDistance(opportunity.distanceMiles)} from selected location`
+              : `${formatDistance(opportunity.distanceMiles)} from selected location`}
+          </p>
+        ) : null}
         <p className="meta">
           <strong>Next action:</strong> {opportunity.suggestedNextAction}
         </p>
@@ -1061,7 +1131,12 @@ export default function TargetListBuilderPage({ onBack }) {
     setTargetList(null);
 
     if (!value.trim()) {
-      setProfile((prev) => ({ ...prev, locationPreference: 'No preference', locationPreferenceStrength: 'Flexible' }));
+      setProfile((prev) => ({
+        ...prev,
+        locationPreference: 'No preference',
+        locationPreferenceStrength: 'Flexible',
+        locationRadiusMiles: DEFAULT_RADIUS_MILES
+      }));
     } else if (value !== profile.locationPreference) {
       setProfile((prev) => ({ ...prev, locationPreference: '' }));
     }
@@ -1081,7 +1156,12 @@ export default function TargetListBuilderPage({ onBack }) {
   };
 
   const clearLocationPreference = () => {
-    setProfile((prev) => ({ ...prev, locationPreference: 'No preference', locationPreferenceStrength: 'Flexible' }));
+    setProfile((prev) => ({
+      ...prev,
+      locationPreference: 'No preference',
+      locationPreferenceStrength: 'Flexible',
+      locationRadiusMiles: DEFAULT_RADIUS_MILES
+    }));
     setLocationSearch('');
     setIsLocationSelectorOpen(false);
     setTargetList(null);
@@ -1099,9 +1179,10 @@ export default function TargetListBuilderPage({ onBack }) {
       workExperiences: normalizedWorkExperiences,
       selectedInterests: profile.interests,
       preferredLocation: preference,
+      locationRadiusMiles: profile.locationRadiusMiles || DEFAULT_RADIUS_MILES,
       preferredLocations:
         preference && preference !== 'No preference' && profile.locationPreferenceStrength === 'Strict'
-          ? [preference]
+          ? []
           : [],
       workType: normalizedWorkExperiences[0]?.experienceType || 'None'
     };
@@ -1213,6 +1294,17 @@ export default function TargetListBuilderPage({ onBack }) {
           </div>
           {profile.locationPreference && profile.locationPreference !== 'No preference' ? (
             <div className="preference-block">
+              <label className="radius-slider-control target-radius-control">
+                <span>Radius: {profile.locationRadiusMiles || DEFAULT_RADIUS_MILES} miles</span>
+                <input
+                  type="range"
+                  min="10"
+                  max="100"
+                  step="5"
+                  value={profile.locationRadiusMiles || DEFAULT_RADIUS_MILES}
+                  onChange={(e) => setProfile({ ...profile, locationRadiusMiles: Number(e.target.value) })}
+                />
+              </label>
               <h3>How strongly should Banker Builder follow this location preference?</h3>
               <div className="choice-grid preference-choice-grid">
                 {locationStrengthOptions.map((option) => (
@@ -1415,7 +1507,11 @@ export default function TargetListBuilderPage({ onBack }) {
           </section>
           <section>
             <h3>Location Preference</h3>
-            <p>{normalizeLocationPreference(profile) || 'No preference'}</p>
+            <p>
+              {normalizeLocationPreference(profile) === 'No preference'
+                ? 'No preference'
+                : `${normalizeLocationPreference(profile)} within ${profile.locationRadiusMiles || DEFAULT_RADIUS_MILES} miles`}
+            </p>
             <p>
               Strength:{' '}
               {profile.locationPreference && profile.locationPreference !== 'No preference'
