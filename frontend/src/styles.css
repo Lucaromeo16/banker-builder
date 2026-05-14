@@ -2816,6 +2816,10 @@ li {
   min-height: 340px;
 }
 
+.resume-extracted-textarea {
+  min-height: 220px;
+}
+
 .resume-loading,
 .resume-parse-warning {
   margin: 0;

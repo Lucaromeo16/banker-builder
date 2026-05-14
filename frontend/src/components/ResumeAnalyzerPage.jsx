@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from 'react';
 const MIN_RESUME_TEXT_LENGTH = 200;
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const SUPPORTED_FILE_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 
 function clampScore(score) {
   const numericScore = Number(score);
@@ -65,48 +66,6 @@ function normalizeExtractedText(text) {
     .trim();
 }
 
-function decodePdfLiteral(rawLiteral) {
-  const body = rawLiteral.slice(1, -1);
-  return body
-    .replace(/\\([0-7]{1,3})/g, (_, octal) => String.fromCharCode(parseInt(octal, 8)))
-    .replace(/\\n/g, '\n')
-    .replace(/\\r/g, '\n')
-    .replace(/\\t/g, '\t')
-    .replace(/\\b/g, '\b')
-    .replace(/\\f/g, '\f')
-    .replace(/\\\(/g, '(')
-    .replace(/\\\)/g, ')')
-    .replace(/\\\\/g, '\\');
-}
-
-async function extractTextFromPdf(file) {
-  const buffer = await file.arrayBuffer();
-  const binary = new TextDecoder('latin1').decode(buffer);
-  const chunks = [];
-
-  for (const match of binary.matchAll(/\((?:\\.|[^\\)])*\)\s*Tj/g)) {
-    chunks.push(decodePdfLiteral(match[0].replace(/\s*Tj$/, '')));
-  }
-
-  for (const match of binary.matchAll(/\[((?:.|\n|\r){1,5000}?)\]\s*TJ/g)) {
-    const arrayText = [...match[1].matchAll(/\((?:\\.|[^\\)])*\)/g)].map((item) => decodePdfLiteral(item[0])).join('');
-    if (arrayText.trim()) chunks.push(arrayText);
-  }
-
-  if (chunks.join(' ').replace(/\s+/g, ' ').trim().length >= MIN_RESUME_TEXT_LENGTH) {
-    return normalizeExtractedText(chunks.join('\n'));
-  }
-
-  const readableText = binary
-    .replace(/[^\x09\x0A\x0D\x20-\x7E]+/g, '\n')
-    .split(/\n+/)
-    .map((line) => line.trim())
-    .filter((line) => /[A-Za-z]/.test(line) && line.length >= 4 && !line.startsWith('/'))
-    .join('\n');
-
-  return normalizeExtractedText(readableText);
-}
-
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -114,6 +73,35 @@ function readFileAsDataUrl(file) {
     reader.onerror = () => reject(reader.error || new Error('Unable to read file.'));
     reader.readAsDataURL(file);
   });
+}
+
+function userMessageForExtractionError(payload, fallbackMessage) {
+  if (payload?.code === 'MISSING_OPENAI_API_KEY') return 'Image OCR is not configured. Add an OpenAI API key or paste the resume text.';
+  if (payload?.code === 'UNSUPPORTED_FILE_TYPE') return 'Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.';
+  if (payload?.code === 'EXTRACTED_TEXT_TOO_SHORT') return 'Extracted text is too short. Try a clearer screenshot or paste the text.';
+  if (payload?.code === 'CORRUPTED_TEXT') return 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.';
+  if (payload?.code === 'OPENAI_EXTRACTION_FAILED') return 'Image extraction failed. Try a clearer image or paste the resume text.';
+  return payload?.error || fallbackMessage;
+}
+
+async function postJson(pathname, body) {
+  const response = await fetch(`${API_BASE_URL}${pathname}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  const responseText = await response.text();
+  const payload = responseText ? JSON.parse(responseText) : {};
+
+  if (!response.ok) {
+    const error = new Error(payload?.details || payload?.error || `Request failed with status ${response.status}`);
+    error.payload = payload;
+    throw error;
+  }
+
+  return payload;
 }
 
 export default function ResumeAnalyzerPage({ onBack }) {
@@ -140,26 +128,13 @@ export default function ResumeAnalyzerPage({ onBack }) {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const extractImageResumeText = async (file, previewUrl, mimeType) => {
+  const extractUploadedResumeText = async (file, previewUrl, mimeType) => {
     const dataUrl = await readFileAsDataUrl(file);
-    const response = await fetch('/api/resume-extract', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        fileName: file.name,
-        mimeType,
-        dataUrl
-      })
+    const payload = await postJson('/api/resume-extract', {
+      fileName: file.name,
+      mimeType,
+      dataUrl
     });
-
-    const responseText = await response.text();
-    const payload = responseText ? JSON.parse(responseText) : {};
-
-    if (!response.ok) {
-      throw new Error(payload?.details || payload?.error || `Resume extraction failed with status ${response.status}`);
-    }
 
     return {
       text: normalizeExtractedText(payload.resumeText),
@@ -202,10 +177,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
     setExtracting(true);
 
     try {
-      const extracted =
-        fileKind === 'pdf'
-          ? { text: await extractTextFromPdf(file), warnings: [], formattingMetadata: null, previewUrl: '' }
-          : await extractImageResumeText(file, previewUrl, mimeType);
+      const extracted = await extractUploadedResumeText(file, previewUrl, mimeType);
 
       setResumeText(extracted.text);
       setUploadedFile({
@@ -238,11 +210,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
         status: 'needs-text'
       });
       setResumeText('');
-      setParseWarning(
-        fileKind === 'image'
-          ? 'Image OCR is unavailable right now. Paste the resume text manually to continue.'
-          : 'PDF text could not be extracted from this file. Paste the resume text manually to continue.'
-      );
+      setParseWarning(userMessageForExtractionError(extractError.payload, 'Extraction failed. Try another file or paste the resume text.'));
     } finally {
       setExtracting(false);
     }
@@ -278,25 +246,11 @@ export default function ResumeAnalyzerPage({ onBack }) {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/resume-analyzer', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ resumeText: trimmedResume })
-      });
-
-      const responseText = await response.text();
-      const payload = responseText ? JSON.parse(responseText) : {};
-
-      if (!response.ok) {
-        throw new Error(payload?.details || payload?.error || `Resume analyzer request failed with status ${response.status}`);
-      }
-
+      const payload = await postJson('/api/resume-analyzer', { resumeText: trimmedResume });
       setAnalysis(payload);
     } catch (requestError) {
       console.error('[resume-analyzer] Analysis request failed', requestError);
-      setError('Resume analysis could not be generated. Please try again.');
+      setError(userMessageForExtractionError(requestError.payload, 'Resume analysis could not be generated. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -388,7 +342,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
                     {uploadedFile.status === 'extracting'
                       ? 'Extracting resume content...'
                       : uploadedFile.status === 'ready'
-                        ? 'Resume content extracted and ready to analyze.'
+                        ? `Resume content extracted: ${wordCount} words ready to analyze.`
                         : 'Upload received. Paste text fallback is recommended for this file.'}
                   </p>
                 </div>
@@ -401,6 +355,21 @@ export default function ResumeAnalyzerPage({ onBack }) {
                   </button>
                 </div>
               </div>
+            ) : null}
+            {resumeText ? (
+              <label className="resume-text-fallback">
+                Review extracted text
+                <textarea
+                  className="resume-textarea resume-extracted-textarea"
+                  value={resumeText}
+                  onChange={(event) => {
+                    setResumeText(event.target.value);
+                    setParseWarning('');
+                    setAnalysis(null);
+                  }}
+                  placeholder="Extracted resume text will appear here..."
+                />
+              </label>
             ) : null}
           </div>
         ) : (

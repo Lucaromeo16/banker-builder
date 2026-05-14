@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { PDFParse } from 'pdf-parse';
 import { ibOffices, opportunities, opportunitySummary } from './firms.js';
 import { groupOptions, scoreInterviewOdds, scoreProfile } from './scoringEngine.js';
 
@@ -15,7 +16,7 @@ const app = express();
 const preferredPort = Number(process.env.PORT) || 4000;
 
 app.use(cors());
-app.use(express.json({ limit: '12mb' }));
+app.use(express.json({ limit: '16mb' }));
 
 app.get('/api/health', (_, res) => {
   res.json({ ok: true, service: 'banker-builder-backend' });
@@ -221,17 +222,138 @@ function extractResponseText(responseData) {
     .join('\n');
 }
 
+function normalizeResumeText(text) {
+  return String(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{4,}/g, '\n\n\n')
+    .trim();
+}
+
+function countResumeWords(text) {
+  return normalizeResumeText(text).split(/\s+/).filter(Boolean).length;
+}
+
+function getResumeTextQuality(text) {
+  const cleanedText = normalizeResumeText(text);
+  const characters = cleanedText.length;
+  const words = countResumeWords(cleanedText);
+  const alphaCharacters = (cleanedText.match(/[A-Za-z]/g) || []).length;
+  const controlCharacters = (cleanedText.match(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g) || []).length;
+  const pdfInternalMarkers = (cleanedText.match(/\b(obj|endobj|stream|endstream|xref|trailer|FlateDecode|startxref)\b/g) || [])
+    .length;
+  const alphaRatio = characters ? alphaCharacters / characters : 0;
+  const controlRatio = characters ? controlCharacters / characters : 0;
+
+  if (characters < 200 || words < 30) {
+    return { ok: false, code: 'EXTRACTED_TEXT_TOO_SHORT', message: 'Extracted text is too short.' };
+  }
+
+  if (alphaRatio < 0.35 || controlRatio > 0.02 || pdfInternalMarkers >= 4) {
+    return { ok: false, code: 'CORRUPTED_TEXT', message: 'Extracted text appears corrupted or binary-like.' };
+  }
+
+  return { ok: true, words };
+}
+
+function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
+  if (typeof dataUrl !== 'string') return null;
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match || !expectedMimeTypes.includes(match[1])) return null;
+  return {
+    mimeType: match[1],
+    buffer: Buffer.from(match[2], 'base64')
+  };
+}
+
+async function extractPdfResumeText(dataUrl) {
+  const decoded = dataUrlToBuffer(dataUrl, ['application/pdf']);
+  if (!decoded) {
+    return { error: { status: 400, code: 'UNSUPPORTED_FILE_TYPE', message: 'Invalid payload: upload a PDF file.' } };
+  }
+
+  let parser;
+  try {
+    parser = new PDFParse({ data: decoded.buffer });
+    const result = await parser.getText();
+    const resumeText = normalizeResumeText(result.text);
+    const quality = getResumeTextQuality(resumeText);
+
+    if (!quality.ok) {
+      return {
+        error: {
+          status: 422,
+          code: quality.code,
+          message:
+            quality.code === 'CORRUPTED_TEXT'
+              ? 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.'
+              : 'Extracted text is too short. Try uploading a screenshot or pasting the text.'
+        }
+      };
+    }
+
+    return {
+      resumeText,
+      formattingMetadata: {
+        detectedSections: ['PDF text layer'],
+        bulletCount: (resumeText.match(/[\u2022-]\s+/g) || []).length,
+        lineCount: resumeText.split('\n').filter((line) => line.trim()).length
+      },
+      warnings: []
+    };
+  } catch (error) {
+    return {
+      error: {
+        status: 422,
+        code: 'PDF_EXTRACTION_FAILED',
+        message: 'We couldn’t read this PDF. Try uploading a screenshot or pasting the text.',
+        details: error.message
+      }
+    };
+  } finally {
+    await parser?.destroy?.();
+  }
+}
+
 app.post('/api/resume-extract', async (req, res) => {
   try {
     const { fileName, mimeType, dataUrl } = req.body;
     const supportedImageTypes = ['image/png', 'image/jpeg'];
+    const supportedFileTypes = ['application/pdf', ...supportedImageTypes];
 
-    if (!supportedImageTypes.includes(mimeType) || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
-      return res.status(400).json({ error: 'Invalid payload: upload a PNG, JPG, or JPEG image.' });
+    if (!supportedFileTypes.includes(mimeType) || typeof dataUrl !== 'string') {
+      return res.status(400).json({
+        code: 'UNSUPPORTED_FILE_TYPE',
+        error: 'Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.'
+      });
+    }
+
+    if (mimeType === 'application/pdf') {
+      const extractedPdf = await extractPdfResumeText(dataUrl);
+      if (extractedPdf.error) {
+        return res.status(extractedPdf.error.status).json({
+          code: extractedPdf.error.code,
+          error: extractedPdf.error.message,
+          details: extractedPdf.error.details
+        });
+      }
+
+      return res.json(extractedPdf);
+    }
+
+    if (!dataUrl.startsWith('data:image/')) {
+      return res.status(400).json({
+        code: 'UNSUPPORTED_FILE_TYPE',
+        error: 'Invalid payload: upload a PNG, JPG, or JPEG image.'
+      });
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+      return res.status(500).json({
+        code: 'MISSING_OPENAI_API_KEY',
+        error: 'OPENAI_API_KEY is not configured on the backend.'
+      });
     }
 
     const response = await fetch('https://api.openai.com/v1/responses', {
@@ -276,32 +398,72 @@ app.post('/api/resume-extract', async (req, res) => {
 
     if (!response.ok) {
       const details = await response.text();
-      return res.status(502).json({ error: 'OpenAI resume extraction request failed.', details });
+      return res.status(502).json({
+        code: 'OPENAI_EXTRACTION_FAILED',
+        error: 'OpenAI resume extraction request failed.',
+        details
+      });
     }
 
     const data = await response.json();
     const outputText = extractResponseText(data);
 
     if (!outputText) {
-      return res.status(502).json({ error: 'OpenAI resume extraction response was empty.' });
+      return res.status(502).json({
+        code: 'EXTRACTED_TEXT_TOO_SHORT',
+        error: 'OpenAI resume extraction response was empty.'
+      });
     }
 
-    return res.json(JSON.parse(outputText));
+    const extracted = JSON.parse(outputText);
+    extracted.resumeText = normalizeResumeText(extracted.resumeText);
+
+    const quality = getResumeTextQuality(extracted.resumeText);
+    if (!quality.ok) {
+      return res.status(422).json({
+        code: quality.code,
+        error:
+          quality.code === 'CORRUPTED_TEXT'
+            ? 'Extracted text appears corrupted. Try a clearer image or paste the text.'
+            : 'Extracted text is too short. Try a clearer image or paste the text.'
+      });
+    }
+
+    return res.json(extracted);
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to extract resume content.', details: error.message });
+    return res.status(500).json({
+      code: 'EXTRACTION_FAILED',
+      error: 'Failed to extract resume content.',
+      details: error.message
+    });
   }
 });
 
 app.post('/api/resume-analyzer', async (req, res) => {
   try {
     const { resumeText } = req.body;
+    const cleanedResumeText = normalizeResumeText(resumeText);
+    const quality = getResumeTextQuality(cleanedResumeText);
 
-    if (typeof resumeText !== 'string' || resumeText.trim().length < 200) {
-      return res.status(400).json({ error: 'Invalid payload: resumeText must include at least 200 characters.' });
+    if (typeof resumeText !== 'string') {
+      return res.status(400).json({ code: 'EXTRACTED_TEXT_TOO_SHORT', error: 'Invalid payload: resumeText is required.' });
+    }
+
+    if (!quality.ok) {
+      return res.status(400).json({
+        code: quality.code,
+        error:
+          quality.code === 'CORRUPTED_TEXT'
+            ? 'Resume text appears corrupted or binary-like. Upload a readable resume or paste clean text.'
+            : 'Resume text is too short for useful analysis.'
+      });
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+      return res.status(500).json({
+        code: 'MISSING_OPENAI_API_KEY',
+        error: 'OPENAI_API_KEY is not configured on the backend.'
+      });
     }
 
     const response = await fetch('https://api.openai.com/v1/responses', {
@@ -321,7 +483,7 @@ app.post('/api/resume-analyzer', async (req, res) => {
               {
                 type: 'input_text',
                 text: JSON.stringify({
-                  resumeText: resumeText.trim(),
+                  resumeText: cleanedResumeText,
                   reviewLens: 'Investment banking analyst recruiting resume review'
                 })
               }
@@ -342,19 +504,19 @@ app.post('/api/resume-analyzer', async (req, res) => {
 
     if (!response.ok) {
       const details = await response.text();
-      return res.status(502).json({ error: 'OpenAI resume analyzer request failed.', details });
+      return res.status(502).json({ code: 'OPENAI_ANALYSIS_FAILED', error: 'OpenAI resume analyzer request failed.', details });
     }
 
     const data = await response.json();
     const outputText = extractResponseText(data);
 
     if (!outputText) {
-      return res.status(502).json({ error: 'OpenAI resume analyzer response was empty.' });
+      return res.status(502).json({ code: 'OPENAI_ANALYSIS_FAILED', error: 'OpenAI resume analyzer response was empty.' });
     }
 
     return res.json(JSON.parse(outputText));
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to analyze resume.', details: error.message });
+    return res.status(500).json({ code: 'ANALYSIS_FAILED', error: 'Failed to analyze resume.', details: error.message });
   }
 });
 
