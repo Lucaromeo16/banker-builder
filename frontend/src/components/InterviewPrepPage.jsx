@@ -8,41 +8,174 @@ const targetGroupOptions = [
   'Financial Sponsors',
   'ECM',
   'DCM',
+  'Capital Markets',
+  'Strategic Advisory',
   'Healthcare',
   'Technology',
+  'Software',
+  'FinTech',
   'Industrials',
   'FIG',
   'Real Estate',
   'Energy',
+  'Power & Utilities',
+  'Infrastructure',
+  'Consumer & Retail',
+  'Business Services',
+  'Media & Telecom',
+  'Aerospace & Defense',
+  'Natural Resources',
   'Generalist'
 ];
 const bankTierOptions = ['Bulge Bracket', 'Elite Boutique', 'Middle Market', 'Regional Boutique', 'General / Mixed'];
+
 const workExperienceOptions = [
-  'Investment Banking',
-  'Private Equity',
-  'Big 4 Audit',
-  'TAS / Valuation',
-  'Consulting',
-  'Corporate Finance',
-  'Search Fund',
+  'Investment Banking Internship',
+  'Private Equity Internship',
+  'Accounting / Audit Internship',
+  'TAS / Business Valuation Internship',
+  'Corporate Finance / Corporate Accounting Internship',
+  'Consulting Internship',
+  'Wealth Management Internship',
+  'Venture Capital Internship',
+  'Other High Finance Internship',
+  'Commercial Banking Internship',
+  'Real Estate / CRE Internship',
+  'General / Other Experience'
+];
+
+const experienceFollowUps = {
+  'Investment Banking Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Elite Platform (BB / EB)', 'Strong MM', 'Middle Market', 'Regional Boutique', 'Small / Local Boutique'] }
+  ],
+  'Private Equity Internship': [
+    { key: 'fundTier', label: 'Fund Tier', options: ['Megafund', 'Upper Middle Market', 'Middle Market', 'Lower Middle Market', 'Independent Sponsor / Small Fund'] }
+  ],
+  'Accounting / Audit Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'function', label: 'Function', options: ['Audit', 'Tax'] }
+  ],
+  'TAS / Business Valuation Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] }
+  ],
+  'Corporate Finance / Corporate Accounting Internship': [
+    { key: 'companyPrestige', label: 'Company Prestige', options: ['F100', 'F500', 'Large Private / Mid-Market', 'Small Company'] },
+    { key: 'roleType', label: 'Role Type', options: ['Corporate Development', 'Strategy / Finance Rotation', 'FP&A', 'Treasury', 'Corporate Accounting'] }
+  ],
+  'Consulting Internship': [
+    { key: 'firmTier', label: 'Firm Tier', options: ['MBB', 'Tier 2 Strategy Consulting', 'Big 4 Consulting', 'Middle Market / Boutique Consulting', 'Local / Small Consulting Firm'] }
+  ],
+  'Wealth Management Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Elite / BB Platform', 'Large National Platform', 'Regional Platform', 'Local RIA / Small Practice'] }
+  ],
+  'Venture Capital Internship': [
+    { key: 'fundTier', label: 'Fund Tier', options: ['Top-Tier VC Fund', 'Established Institutional VC', 'Smaller VC Fund', 'Angel / Independent / Tiny Fund'] }
+  ],
+  'Other High Finance Internship': [
+    { key: 'industry', label: 'Industry', options: ['Hedge Fund', 'Equity Research', 'Sales & Trading', 'Asset Management'] },
+    { key: 'platformPrestige', label: 'Platform Prestige', options: ['Elite Platform', 'Strong Institutional Platform', 'Mid-Tier Platform', 'Small / Unknown Platform'] }
+  ],
+  'Commercial Banking Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Bulge Bracket / Major Bank', 'Super-Regional / Strong National Bank', 'Regional Bank', 'Local / Community Bank'] }
+  ],
+  'Real Estate / CRE Internship': [
+    { key: 'platformTier', label: 'Platform Tier', options: ['Institutional Platform', 'Large Brokerage / Advisory Platform', 'Regional Firm', 'Small / Local Firm'] }
+  ],
+  'General / Other Experience': [
+    { key: 'generalType', label: 'Experience Type', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
+  ]
+};
+
+const leadershipActivityOptions = [
+  'Social Fraternity/Sorority',
+  'Finance Club',
   'Student Investment Fund',
-  'No Relevant Experience',
-  'Other'
+  'Varsity Athletics',
+  'Entrepreneurship / Startup',
+  'Student Government',
+  'Honors / Scholars Program',
+  'Nonprofit / Volunteering',
+  'Other Leadership'
+];
+
+const leadershipLevelOptions = [
+  'Member / Participant',
+  'Committee / Analyst',
+  'VP / Director',
+  'President / Founder / Captain'
 ];
 
 const emptyPrepProfile = {
   recruitingGoal: '',
   targetGroups: [],
   targetBankTier: '',
-  workExperienceBackground: []
+  workExperiences: [],
+  leadershipActivities: []
 };
 const prepProfileSessionKey = 'bankerBuilderInterviewPrepProfile';
+
+const legacyExperienceMap = {
+  'Investment Banking': { experienceType: 'Investment Banking Internship', firmTier: 'Middle Market' },
+  'Private Equity': { experienceType: 'Private Equity Internship', fundTier: 'Middle Market' },
+  'Big 4 Audit': { experienceType: 'Accounting / Audit Internship', firmTier: 'Big 4', function: 'Audit' },
+  'TAS / Valuation': { experienceType: 'TAS / Business Valuation Internship', firmTier: 'Big 4' },
+  Consulting: { experienceType: 'Consulting Internship', firmTier: 'Big 4 Consulting' },
+  'Corporate Finance': {
+    experienceType: 'Corporate Finance / Corporate Accounting Internship',
+    companyPrestige: 'Large Private / Mid-Market',
+    roleType: 'FP&A'
+  },
+  'Search Fund': { experienceType: 'General / Other Experience', generalType: 'Search Fund Internship' },
+  Other: { experienceType: 'General / Other Experience', generalType: 'Other Internship' }
+};
+
+function defaultFollowUpValues(experienceType) {
+  return Object.fromEntries((experienceFollowUps[experienceType] || []).map((followUp) => [followUp.key, followUp.options[0]]));
+}
+
+function createPrepExperience(experienceType, overrides = {}) {
+  return {
+    id: overrides.id || `exp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    experienceType,
+    ...defaultFollowUpValues(experienceType),
+    ...overrides
+  };
+}
+
+function createLeadershipActivity(activityType, overrides = {}) {
+  return {
+    id: overrides.id || `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    activityType,
+    leadershipLevel: 'Member / Participant',
+    ...overrides
+  };
+}
+
+function normalizePrepProfile(profile) {
+  if (!profile) return null;
+  const legacyExperiences = Array.isArray(profile.workExperienceBackground)
+    ? profile.workExperienceBackground
+        .filter((background) => background !== 'No Relevant Experience' && background !== 'Student Investment Fund')
+        .map((background) => createPrepExperience(legacyExperienceMap[background]?.experienceType || 'General / Other Experience', legacyExperienceMap[background]))
+    : [];
+  const legacyLeadership = Array.isArray(profile.workExperienceBackground) && profile.workExperienceBackground.includes('Student Investment Fund')
+    ? [createLeadershipActivity('Student Investment Fund', { leadershipLevel: 'Committee / Analyst' })]
+    : [];
+
+  return {
+    ...emptyPrepProfile,
+    ...profile,
+    targetGroups: Array.isArray(profile.targetGroups) ? profile.targetGroups : [],
+    workExperiences: Array.isArray(profile.workExperiences) ? profile.workExperiences : legacyExperiences,
+    leadershipActivities: Array.isArray(profile.leadershipActivities) ? profile.leadershipActivities : legacyLeadership
+  };
+}
 
 function readStoredPrepProfile() {
   if (typeof window === 'undefined') return null;
   try {
     const storedProfile = window.sessionStorage.getItem(prepProfileSessionKey);
-    return storedProfile ? JSON.parse(storedProfile) : null;
+    return storedProfile ? normalizePrepProfile(JSON.parse(storedProfile)) : null;
   } catch {
     return null;
   }
@@ -115,6 +248,41 @@ const questionBanks = {
         prompt: 'How would you think about recovery value in a restructuring?',
         keywords: ['enterprise value', 'capital structure', 'priority', 'creditors', 'recovery'],
         targetGroups: ['Restructuring']
+      },
+      {
+        prompt: 'What would make an acquisition accretive or dilutive?',
+        keywords: ['eps', 'purchase price', 'financing mix', 'synergies', 'pro forma earnings'],
+        groupTags: ['M&A']
+      },
+      {
+        prompt: 'How would you estimate debt capacity for a leveraged buyout?',
+        keywords: ['leverage', 'ebitda', 'interest coverage', 'cash flow', 'covenants'],
+        groupTags: ['LevFin', 'Financial Sponsors']
+      },
+      {
+        prompt: 'What factors influence whether a company should issue debt or equity?',
+        keywords: ['cost of capital', 'leverage', 'market conditions', 'dilution', 'credit rating'],
+        groupTags: ['DCM', 'ECM', 'Capital Markets']
+      },
+      {
+        prompt: 'How would rising rates affect bond issuance and refinancing activity?',
+        keywords: ['rates', 'yield', 'spreads', 'refinancing', 'duration'],
+        groupTags: ['DCM', 'Capital Markets']
+      },
+      {
+        prompt: 'What SaaS metrics would you focus on when evaluating a software company?',
+        keywords: ['arr', 'net retention', 'churn', 'gross margin', 'rule of 40'],
+        groupTags: ['Technology', 'Software']
+      },
+      {
+        prompt: 'How are banks or financial institutions often valued differently from industrial companies?',
+        keywords: ['book value', 'tangible book', 'roe', 'regulatory capital', 'net interest margin'],
+        groupTags: ['FIG']
+      },
+      {
+        prompt: 'What metrics matter when valuing a real estate company?',
+        keywords: ['nav', 'cap rate', 'noi', 'ffo', 'occupancy'],
+        groupTags: ['Real Estate']
       }
     ]
   },
@@ -148,7 +316,27 @@ const questionBanks = {
       { prompt: 'What is your greatest weakness?', keywords: ['weakness', 'example', 'improve', 'steps', 'progress'] },
       { prompt: 'What is an accomplishment you are proud of?', keywords: ['accomplishment', 'challenge', 'action', 'impact', 'proud'] },
       { prompt: 'Tell me about a time you worked under pressure.', keywords: ['pressure', 'deadline', 'prioritize', 'execute', 'result'] },
-      { prompt: 'Tell me about a time you received difficult feedback.', keywords: ['feedback', 'listened', 'improved', 'changed', 'result'] }
+      { prompt: 'Tell me about a time you received difficult feedback.', keywords: ['feedback', 'listened', 'improved', 'changed', 'result'] },
+      {
+        prompt: 'Tell me about a time your student investment fund or finance club work changed your view on a company.',
+        keywords: ['investment', 'research', 'thesis', 'team', 'judgment'],
+        leadershipTags: ['Student Investment Fund', 'Finance Club']
+      },
+      {
+        prompt: 'Tell me about a time you led peers without formal authority.',
+        keywords: ['leadership', 'influence', 'team', 'communication', 'result'],
+        leadershipTags: ['Social Fraternity/Sorority', 'Student Government', 'Nonprofit / Volunteering', 'Other Leadership']
+      },
+      {
+        prompt: 'Tell me about a time athletics or another demanding activity taught you how to handle pressure.',
+        keywords: ['pressure', 'discipline', 'team', 'resilience', 'performance'],
+        leadershipTags: ['Varsity Athletics']
+      },
+      {
+        prompt: 'Tell me about a time you built something from scratch.',
+        keywords: ['initiative', 'startup', 'ambiguity', 'ownership', 'result'],
+        leadershipTags: ['Entrepreneurship / Startup']
+      }
     ]
   },
   fit: {
@@ -189,33 +377,95 @@ const questionBanks = {
         targetGroups: ['DCM']
       },
       {
+        prompt: 'Why are you interested in Financial Sponsors?',
+        keywords: ['private equity', 'lbo', 'portfolio companies', 'debt financing', 'relationships'],
+        groupTags: ['Financial Sponsors']
+      },
+      {
+        prompt: 'Why are you interested in ECM?',
+        keywords: ['ipo', 'equity markets', 'investor demand', 'issuance', 'growth companies'],
+        groupTags: ['ECM', 'Capital Markets']
+      },
+      {
+        prompt: 'Why are you interested in Strategic Advisory?',
+        keywords: ['strategy', 'board-level advice', 'shareholder value', 'alternatives', 'transactions'],
+        groupTags: ['Strategic Advisory']
+      },
+      {
         prompt: 'Why are you interested in Technology banking?',
         keywords: ['software', 'growth', 'business models', 'innovation', 'valuation'],
-        targetGroups: ['Technology']
+        targetGroups: ['Technology', 'Software', 'FinTech']
       },
       {
         prompt: 'Why are you interested in Healthcare banking?',
         keywords: ['healthcare', 'regulation', 'services', 'biotech', 'defensive'],
         targetGroups: ['Healthcare']
       },
+      {
+        prompt: 'Why are you interested in FIG?',
+        keywords: ['banks', 'insurance', 'fintech', 'regulation', 'capital'],
+        groupTags: ['FIG', 'FinTech']
+      },
+      {
+        prompt: 'Why are you interested in Real Estate banking?',
+        keywords: ['assets', 'cash flow', 'cap rates', 'development', 'reit'],
+        groupTags: ['Real Estate']
+      },
+      {
+        prompt: 'Why are you interested in Energy or Natural Resources banking?',
+        keywords: ['commodity prices', 'cash flow', 'capital intensity', 'energy transition', 'assets'],
+        groupTags: ['Energy', 'Natural Resources', 'Power & Utilities']
+      },
+      {
+        prompt: 'Why are you interested in Consumer & Retail banking?',
+        keywords: ['brands', 'consumer behavior', 'margins', 'growth', 'omnichannel'],
+        groupTags: ['Consumer & Retail']
+      },
       { prompt: 'Why should we hire you?', keywords: ['skills', 'work ethic', 'experience', 'team', 'impact'] },
       { prompt: 'What differentiates you from other candidates?', keywords: ['differentiates', 'experience', 'skill', 'perspective', 'evidence'] },
       { prompt: 'Where do you see yourself in five years?', keywords: ['banking', 'develop', 'responsibility', 'clients', 'long term'] },
       { prompt: 'Why banking instead of consulting or corporate finance?', keywords: ['transactions', 'finance', 'ownership', 'pace', 'valuation'] },
       {
+        prompt: 'Why do you want to train on a bulge bracket platform?',
+        keywords: ['platform', 'balance sheet', 'global', 'training', 'deal flow'],
+        bankTierTags: ['Bulge Bracket']
+      },
+      {
+        prompt: 'Why are you interested in an elite boutique environment?',
+        keywords: ['advisory', 'lean teams', 'm&a', 'restructuring', 'senior exposure'],
+        bankTierTags: ['Elite Boutique']
+      },
+      {
+        prompt: 'Why are you interested in a middle-market or regional platform?',
+        keywords: ['middle market', 'responsibility', 'clients', 'lean teams', 'regional'],
+        bankTierTags: ['Middle Market', 'Regional Boutique']
+      },
+      {
         prompt: 'How would you explain your transition from audit or accounting into investment banking?',
         keywords: ['accounting', 'financial statements', 'transaction', 'transition', 'banking'],
-        workExperienceBackgrounds: ['Big 4 Audit']
+        experienceTags: ['Accounting / Audit Internship']
+      },
+      {
+        prompt: 'How would you connect TAS or business valuation experience to M&A banking?',
+        keywords: ['valuation', 'diligence', 'quality of earnings', 'transactions', 'm&a'],
+        groupTags: ['M&A', 'Strategic Advisory'],
+        experienceTags: ['TAS / Business Valuation Internship']
       },
       {
         prompt: 'How would you explain your transition from consulting into investment banking?',
         keywords: ['strategy', 'transactions', 'finance', 'client', 'transition'],
-        workExperienceBackgrounds: ['Consulting']
+        experienceTags: ['Consulting Internship']
+      },
+      {
+        prompt: 'How would you connect corporate development or FP&A experience to advisory work?',
+        keywords: ['corporate finance', 'strategy', 'analysis', 'transactions', 'forecasting'],
+        groupTags: ['M&A', 'Strategic Advisory'],
+        experienceTags: ['Corporate Finance / Corporate Accounting Internship']
       },
       {
         prompt: 'How would you explain your interest in banking without prior finance experience?',
         keywords: ['transferable skills', 'preparation', 'learning', 'analytical', 'motivation'],
-        workExperienceBackgrounds: ['No Relevant Experience', 'Other']
+        noRelevantExperienceOnly: true
       }
     ]
   },
@@ -254,12 +504,32 @@ const questionBanks = {
       {
         prompt: 'What trend are you watching in technology M&A or IPOs?',
         keywords: ['technology', 'software', 'ipo', 'm&a', 'growth'],
-        targetGroups: ['Technology']
+        targetGroups: ['Technology', 'Software', 'FinTech']
       },
       {
         prompt: 'How would energy prices affect deal activity in Energy banking?',
         keywords: ['energy', 'commodity prices', 'cash flow', 'm&a', 'capital spending'],
         targetGroups: ['Energy']
+      },
+      {
+        prompt: 'What capital markets trend would matter most for a company considering an IPO?',
+        keywords: ['ipo', 'equity markets', 'volatility', 'valuation', 'investor demand'],
+        groupTags: ['ECM', 'Capital Markets']
+      },
+      {
+        prompt: 'What distressed market signal would you watch for a restructuring banker?',
+        keywords: ['defaults', 'spreads', 'liquidity', 'maturities', 'capital structure'],
+        groupTags: ['Restructuring']
+      },
+      {
+        prompt: 'What deal trend matters most for private equity sponsors right now?',
+        keywords: ['sponsors', 'lbo', 'financing', 'exit', 'valuation'],
+        groupTags: ['Financial Sponsors', 'LevFin']
+      },
+      {
+        prompt: 'What trend are you watching in infrastructure or power markets?',
+        keywords: ['infrastructure', 'power', 'utilities', 'project finance', 'energy transition'],
+        groupTags: ['Infrastructure', 'Power & Utilities']
       }
     ]
   }
@@ -366,6 +636,8 @@ const allPracticeQuestions = Object.entries(questionBanks).flatMap(([categoryId,
     ...question,
     categoryId,
     categoryTitle: bank.title,
+    applicablePracticeTypes: question.applicablePracticeTypes || [categoryId],
+    difficulty: question.difficulty || 'Core',
     concepts: bank.concepts,
     structureHint: bank.structureHint,
     followUps: bank.followUps
@@ -382,6 +654,8 @@ function getQuestionsForCategory(categoryId) {
     ...question,
     categoryId,
     categoryTitle: bank.title,
+    applicablePracticeTypes: question.applicablePracticeTypes || [categoryId],
+    difficulty: question.difficulty || 'Core',
     concepts: bank.concepts,
     structureHint: bank.structureHint,
     followUps: bank.followUps
@@ -392,39 +666,113 @@ function isGeneralPrepProfile(prepProfile) {
   return (
     !prepProfile ||
     prepProfile.targetBankTier === 'General / Mixed' ||
-    prepProfile.targetGroups.includes('Generalist') ||
-    !prepProfile.targetGroups.length
+    (prepProfile.targetGroups || []).includes('Generalist') ||
+    !(prepProfile.targetGroups || []).length
   );
 }
 
-function questionMatchesPrepProfile(question, categoryId, prepProfile) {
-  if (!prepProfile) return true;
-  const generalProfile = isGeneralPrepProfile(prepProfile);
-  const mixedPractice = categoryId === 'mixed';
+function getQuestionGroupTags(question) {
+  return question.groupTags || question.targetGroups || [];
+}
 
-  if (question.targetGroups?.length && !generalProfile && !mixedPractice) {
-    return question.targetGroups.some((group) => prepProfile.targetGroups.includes(group));
+function getQuestionExperienceTags(question) {
+  return question.experienceTags || question.workExperienceBackgrounds || [];
+}
+
+function getQuestionBankTierTags(question) {
+  return question.bankTierTags || [];
+}
+
+function getSelectedExperienceTags(prepProfile) {
+  return (prepProfile?.workExperiences || []).flatMap((experience) => [
+    experience.experienceType,
+    experience.firmTier,
+    experience.fundTier,
+    experience.function,
+    experience.roleType,
+    experience.industry,
+    experience.generalType
+  ]).filter(Boolean);
+}
+
+function getSelectedLeadershipTags(prepProfile) {
+  return (prepProfile?.leadershipActivities || []).map((activity) => activity.activityType).filter(Boolean);
+}
+
+function getExpandedTargetGroups(prepProfile) {
+  const selectedGroups = new Set(prepProfile?.targetGroups || []);
+  if (selectedGroups.has('Capital Markets')) {
+    selectedGroups.add('ECM');
+    selectedGroups.add('DCM');
   }
-
-  if (question.workExperienceBackgrounds?.length) {
-    return question.workExperienceBackgrounds.some((background) => prepProfile.workExperienceBackground.includes(background));
+  if (selectedGroups.has('Technology')) {
+    selectedGroups.add('Software');
+    selectedGroups.add('FinTech');
   }
+  if (selectedGroups.has('Software') || selectedGroups.has('FinTech')) selectedGroups.add('Technology');
+  if (selectedGroups.has('Energy')) {
+    selectedGroups.add('Natural Resources');
+    selectedGroups.add('Power & Utilities');
+  }
+  if (selectedGroups.has('Natural Resources') || selectedGroups.has('Power & Utilities')) selectedGroups.add('Energy');
+  return selectedGroups;
+}
 
-  return true;
+function hasOverlap(values, selectedValues) {
+  return values.some((value) => selectedValues.has(value));
+}
+
+function questionMatchesExperience(question, prepProfile) {
+  if (question.noRelevantExperienceOnly) return !(prepProfile?.workExperiences || []).length;
+  const experienceTags = getQuestionExperienceTags(question);
+  if (!experienceTags.length) return true;
+  return hasOverlap(experienceTags, new Set(getSelectedExperienceTags(prepProfile)));
+}
+
+function questionMatchesLeadership(question, prepProfile) {
+  const leadershipTags = question.leadershipTags || [];
+  if (!leadershipTags.length) return true;
+  return hasOverlap(leadershipTags, new Set(getSelectedLeadershipTags(prepProfile)));
+}
+
+function questionMatchesPracticeType(question, categoryId) {
+  return categoryId === 'mixed' || (question.applicablePracticeTypes || [question.categoryId]).includes(categoryId);
+}
+
+function questionMatchesSelectedGroups(question, prepProfile) {
+  const groupTags = getQuestionGroupTags(question);
+  if (!groupTags.length || isGeneralPrepProfile(prepProfile)) return true;
+  return hasOverlap(groupTags, getExpandedTargetGroups(prepProfile));
 }
 
 function getPersonalizedQuestionsForCategory(categoryId, prepProfile) {
-  return getQuestionsForCategory(categoryId).filter((question) => questionMatchesPrepProfile(question, categoryId, prepProfile));
+  const baseQuestions = getQuestionsForCategory(categoryId).filter((question) => questionMatchesPracticeType(question, categoryId));
+  const contextFilteredQuestions = baseQuestions.filter(
+    (question) => questionMatchesExperience(question, prepProfile) && questionMatchesLeadership(question, prepProfile)
+  );
+
+  if (categoryId === 'mixed' || isGeneralPrepProfile(prepProfile)) {
+    return contextFilteredQuestions;
+  }
+
+  const alignedOrBroadQuestions = contextFilteredQuestions.filter((question) => questionMatchesSelectedGroups(question, prepProfile));
+  const minimumRelevantQuestions = categoryId === 'markets' ? 6 : 8;
+
+  // Keep group-specific prompts tightly aligned first; only relax if a niche profile has too few usable prompts.
+  return alignedOrBroadQuestions.length >= minimumRelevantQuestions ? alignedOrBroadQuestions : contextFilteredQuestions;
 }
 
 function getQuestionRelevanceScore(question, prepProfile) {
   if (!prepProfile) return 1;
   let score = 1;
-  if (question.targetGroups?.some((group) => prepProfile.targetGroups.includes(group))) score += 3;
-  if (question.workExperienceBackgrounds?.some((background) => prepProfile.workExperienceBackground.includes(background))) score += 3;
-  if (prepProfile.workExperienceBackground.includes('No Relevant Experience') && /why|story|prepared|transferable/i.test(question.prompt)) {
+  if (hasOverlap(getQuestionGroupTags(question), getExpandedTargetGroups(prepProfile))) score += 5;
+  if (hasOverlap(getQuestionExperienceTags(question), new Set(getSelectedExperienceTags(prepProfile)))) score += 4;
+  if (hasOverlap(question.leadershipTags || [], new Set(getSelectedLeadershipTags(prepProfile)))) score += 3;
+  if (hasOverlap(getQuestionBankTierTags(question), new Set([prepProfile.targetBankTier]))) score += 3;
+  if (!(prepProfile.workExperiences || []).length && /why|story|prepared|transferable/i.test(question.prompt)) {
     score += 2;
   }
+  if (prepProfile.targetBankTier !== 'General / Mixed' && /firm|platform|bank|tier/i.test(question.prompt)) score += 1;
   if (prepProfile.recruitingGoal === 'MBA Associate' && /lead|story|transition|why/i.test(question.prompt)) score += 1;
   if (prepProfile.recruitingGoal === 'Lateral' && /deal|experience|transaction|technical/i.test(question.prompt)) score += 1;
   return score;
@@ -481,20 +829,65 @@ export default function InterviewPrepPage({ onBack }) {
     setSpeechMessage('');
   };
 
+  const toggleSetupExperience = (experienceType) => {
+    setSetupDraft((current) => {
+      const existingExperiences = current.workExperiences || [];
+      const hasExperience = existingExperiences.some((experience) => experience.experienceType === experienceType);
+      return {
+        ...current,
+        workExperiences: hasExperience
+          ? existingExperiences.filter((experience) => experience.experienceType !== experienceType)
+          : [...existingExperiences, createPrepExperience(experienceType)]
+      };
+    });
+  };
+
+  const updateSetupExperience = (experienceId, key, value) => {
+    setSetupDraft((current) => ({
+      ...current,
+      workExperiences: (current.workExperiences || []).map((experience) =>
+        experience.id === experienceId ? { ...experience, [key]: value } : experience
+      )
+    }));
+  };
+
+  const toggleSetupLeadershipActivity = (activityType) => {
+    setSetupDraft((current) => {
+      const existingActivities = current.leadershipActivities || [];
+      const hasActivity = existingActivities.some((activity) => activity.activityType === activityType);
+      return {
+        ...current,
+        leadershipActivities: hasActivity
+          ? existingActivities.filter((activity) => activity.activityType !== activityType)
+          : [...existingActivities, createLeadershipActivity(activityType)]
+      };
+    });
+  };
+
+  const updateSetupLeadershipActivity = (activityId, value) => {
+    setSetupDraft((current) => ({
+      ...current,
+      leadershipActivities: (current.leadershipActivities || []).map((activity) =>
+        activity.id === activityId ? { ...activity, leadershipLevel: value } : activity
+      )
+    }));
+  };
+
   const completePrepSetup = (event) => {
     event.preventDefault();
-    if (!setupDraft.recruitingGoal || !setupDraft.targetBankTier || !setupDraft.targetGroups.length || !setupDraft.workExperienceBackground.length) {
-      setSetupError('Complete each section to personalize your practice.');
+    if (!setupDraft.recruitingGoal || !setupDraft.targetBankTier || !setupDraft.targetGroups.length) {
+      setSetupError('Choose a recruiting goal, target groups, and target bank tier to personalize your practice.');
       return;
     }
-    setPrepProfile(setupDraft);
-    window.sessionStorage.setItem(prepProfileSessionKey, JSON.stringify(setupDraft));
+    const normalizedProfile = normalizePrepProfile(setupDraft);
+    setPrepProfile(normalizedProfile);
+    window.sessionStorage.setItem(prepProfileSessionKey, JSON.stringify(normalizedProfile));
     setEditingPrepProfile(false);
     setSetupError('');
   };
 
   const editPrepProfile = () => {
-    setSetupDraft(prepProfile || emptyPrepProfile);
+    setSetupDraft(normalizePrepProfile(prepProfile) || emptyPrepProfile);
     setEditingPrepProfile(true);
     setSetupError('');
   };
@@ -758,22 +1151,84 @@ export default function InterviewPrepPage({ onBack }) {
             <section>
               <h3>Work Experience Background</h3>
               <div className="setup-chip-grid">
-                {workExperienceOptions.map((background) => (
+                {workExperienceOptions.map((experienceType) => (
                   <button
                     type="button"
-                    className={setupDraft.workExperienceBackground.includes(background) ? 'chip selected' : 'chip'}
-                    key={background}
-                    onClick={() =>
-                      setSetupDraft((current) => ({
-                        ...current,
-                        workExperienceBackground: toggleArrayValue(current.workExperienceBackground, background)
-                      }))
-                    }
+                    className={(setupDraft.workExperiences || []).some((experience) => experience.experienceType === experienceType) ? 'chip selected' : 'chip'}
+                    key={experienceType}
+                    onClick={() => toggleSetupExperience(experienceType)}
                   >
-                    {background}
+                    {experienceType}
                   </button>
                 ))}
               </div>
+              {(setupDraft.workExperiences || []).length ? (
+                <div className="setup-follow-up-list">
+                  {setupDraft.workExperiences.map((experience) => (
+                    <div className="setup-follow-up-card" key={experience.id}>
+                      <strong>{experience.experienceType}</strong>
+                      <div className="setup-follow-up-grid">
+                        {(experienceFollowUps[experience.experienceType] || []).map((followUp) => (
+                          <label key={followUp.key}>
+                            {followUp.label}
+                            <select
+                              value={experience[followUp.key] || followUp.options[0]}
+                              onChange={(event) => updateSetupExperience(experience.id, followUp.key, event.target.value)}
+                            >
+                              {followUp.options.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="muted">Leave blank if you do not have relevant work experience yet.</p>
+              )}
+            </section>
+
+            <section>
+              <h3>Leadership / Extracurricular Background</h3>
+              <div className="setup-chip-grid">
+                {leadershipActivityOptions.map((activityType) => (
+                  <button
+                    type="button"
+                    className={(setupDraft.leadershipActivities || []).some((activity) => activity.activityType === activityType) ? 'chip selected' : 'chip'}
+                    key={activityType}
+                    onClick={() => toggleSetupLeadershipActivity(activityType)}
+                  >
+                    {activityType}
+                  </button>
+                ))}
+              </div>
+              {(setupDraft.leadershipActivities || []).length ? (
+                <div className="setup-follow-up-list">
+                  {setupDraft.leadershipActivities.map((activity) => (
+                    <div className="setup-follow-up-card" key={activity.id}>
+                      <strong>{activity.activityType}</strong>
+                      <div className="setup-follow-up-grid">
+                        <label>
+                          Leadership Level
+                          <select value={activity.leadershipLevel} onChange={(event) => updateSetupLeadershipActivity(activity.id, event.target.value)}>
+                            {leadershipLevelOptions.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="muted">Optional, but helpful for behavioral question personalization.</p>
+              )}
             </section>
 
             {setupError ? <p className="error">{setupError}</p> : null}

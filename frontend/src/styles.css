@@ -726,6 +726,36 @@ textarea {
   gap: 10px;
 }
 
+.setup-follow-up-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.setup-follow-up-card {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.62);
+  padding: 14px;
+}
+
+.setup-follow-up-card strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.setup-follow-up-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.setup-follow-up-grid label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .voice-controls {
   display: flex;
   align-items: center;
