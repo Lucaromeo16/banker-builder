@@ -483,7 +483,11 @@ const questionBanks = {
     questions: [
       { prompt: 'Tell me about a recent deal you followed.', keywords: ['buyer', 'seller', 'valuation', 'strategic rationale', 'synergies'] },
       { prompt: 'What makes a deal strategically attractive?', keywords: ['strategy', 'growth', 'synergies', 'market', 'capabilities'] },
-      { prompt: 'How would higher interest rates affect M&A activity?', keywords: ['rates', 'debt', 'financing', 'valuation', 'buyers'] },
+      {
+        prompt: 'How would higher interest rates affect M&A activity?',
+        keywords: ['rates', 'debt', 'financing', 'valuation', 'buyers'],
+        groupTags: ['M&A']
+      },
       { prompt: 'What industries are you currently following?', keywords: ['industry', 'trend', 'growth', 'companies', 'risks'] },
       { prompt: 'Pitch me a company.', keywords: ['company', 'business model', 'growth', 'valuation', 'risks'] },
       { prompt: 'What is one macro trend affecting investment banking?', keywords: ['macro', 'rates', 'inflation', 'markets', 'issuance'] },
@@ -683,6 +687,10 @@ function getQuestionBankTierTags(question) {
   return question.bankTierTags || [];
 }
 
+function isGroupSpecificQuestion(question) {
+  return Boolean(question.isGroupSpecific || getQuestionGroupTags(question).length);
+}
+
 function getSelectedExperienceTags(prepProfile) {
   return (prepProfile?.workExperiences || []).flatMap((experience) => [
     experience.experienceType,
@@ -745,21 +753,99 @@ function questionMatchesSelectedGroups(question, prepProfile) {
   return hasOverlap(groupTags, getExpandedTargetGroups(prepProfile));
 }
 
+function getPrimaryProfileGroup(prepProfile) {
+  const selectedGroups = prepProfile?.targetGroups || [];
+  return selectedGroups.find((group) => group !== 'Generalist') || 'Generalist';
+}
+
+function getExperienceSummary(prepProfile) {
+  const experience = prepProfile?.workExperiences?.[0];
+  if (!experience) return '';
+  const detail = experience.roleType || experience.function || experience.firmTier || experience.fundTier || experience.industry || experience.generalType || '';
+  return detail ? `${experience.experienceType} (${detail})` : experience.experienceType;
+}
+
+function createGeneratedQuestion(categoryId, prepProfile) {
+  const primaryGroup = getPrimaryProfileGroup(prepProfile);
+  const experienceSummary = getExperienceSummary(prepProfile);
+  const categoryTitle = categoryId === 'mixed' ? 'Mixed Mock Interview' : questionBanks[categoryId]?.title || 'Interview Prep';
+  const sharedFields = {
+    categoryId,
+    categoryTitle,
+    applicablePracticeTypes: [categoryId],
+    difficulty: 'Profile-specific',
+    generatedFromProfile: true,
+    broadApplicability: false,
+    concepts: questionBanks[categoryId]?.concepts || ['banking', 'fit', 'technical'],
+    structureHint: questionBanks[categoryId]?.structureHint || 'Answer directly, then support your answer with specific evidence from your background.',
+    followUps: questionBanks[categoryId]?.followUps || ['Can you make that answer more specific to your profile?'],
+    groupTags: primaryGroup === 'Generalist' ? [] : [primaryGroup],
+    keywords: [primaryGroup.toLowerCase(), 'banking', 'profile']
+  };
+
+  const experienceClause = experienceSummary ? ` and how does your ${experienceSummary} background support that interest` : '';
+  const generatedPrompts = {
+    technical: {
+      'Financial Sponsors': 'How would you evaluate debt capacity for a sponsor-backed LBO?',
+      DCM: 'How would rates and credit spreads affect a company deciding whether to issue bonds?',
+      LevFin: 'What leverage and coverage metrics would you focus on for an acquisition financing?',
+      Restructuring: 'How would you evaluate liquidity and creditor recovery in a distressed situation?',
+      'M&A': 'How would you evaluate whether an acquisition creates value for the buyer?',
+      ECM: 'What factors would determine whether an IPO is attractive for a company right now?',
+      Technology: 'What operating metrics would you focus on when valuing a software company?',
+      Software: 'What SaaS metrics would you focus on when evaluating a software company?',
+      Energy: 'How would commodity prices affect cash flow and valuation for an energy company?'
+    },
+    fit: {
+      default: `Why are you interested in ${primaryGroup} banking${experienceClause}?`
+    },
+    markets: {
+      'Financial Sponsors': 'What market trend matters most for private equity sponsors right now?',
+      DCM: 'What debt market trend would matter most for a DCM banker right now?',
+      LevFin: 'What trend in leveraged finance would affect sponsor deal activity?',
+      Restructuring: 'What distressed credit signal are you watching right now?',
+      'M&A': 'What recent M&A trend is most relevant to the groups you are targeting?',
+      ECM: 'What market condition would make the IPO window more attractive?',
+      Technology: 'What technology or AI trend could influence M&A or IPO activity?',
+      Software: 'What software market trend could influence valuation and deal activity?',
+      Energy: 'How are energy transition and commodity prices affecting deal activity?'
+    },
+    behavioral: {
+      default: experienceSummary
+        ? `Tell me about a time your ${experienceSummary} experience prepared you for ${primaryGroup} banking.`
+        : `Tell me about a time your leadership or extracurricular background prepared you for ${primaryGroup} banking.`
+    },
+    mixed: {
+      default: `Why are you targeting ${primaryGroup}, and what evidence from your background supports that choice?`
+    }
+  };
+
+  const prompt = generatedPrompts[categoryId]?.[primaryGroup] || generatedPrompts[categoryId]?.default || generatedPrompts.mixed.default;
+  return {
+    ...sharedFields,
+    prompt
+  };
+}
+
 function getPersonalizedQuestionsForCategory(categoryId, prepProfile) {
   const baseQuestions = getQuestionsForCategory(categoryId).filter((question) => questionMatchesPracticeType(question, categoryId));
   const contextFilteredQuestions = baseQuestions.filter(
     (question) => questionMatchesExperience(question, prepProfile) && questionMatchesLeadership(question, prepProfile)
   );
 
-  if (categoryId === 'mixed' || isGeneralPrepProfile(prepProfile)) {
+  if (isGeneralPrepProfile(prepProfile)) {
     return contextFilteredQuestions;
   }
 
   const alignedOrBroadQuestions = contextFilteredQuestions.filter((question) => questionMatchesSelectedGroups(question, prepProfile));
+  const alignedGroupQuestions = alignedOrBroadQuestions.filter((question) => isGroupSpecificQuestion(question));
   const minimumRelevantQuestions = categoryId === 'markets' ? 6 : 8;
+  const generatedQuestion = createGeneratedQuestion(categoryId, prepProfile);
 
-  // Keep group-specific prompts tightly aligned first; only relax if a niche profile has too few usable prompts.
-  return alignedOrBroadQuestions.length >= minimumRelevantQuestions ? alignedOrBroadQuestions : contextFilteredQuestions;
+  // Never backfill with unrelated group-specific prompts. If static coverage is thin, add a profile-built prompt.
+  return alignedOrBroadQuestions.length >= minimumRelevantQuestions && alignedGroupQuestions.length
+    ? alignedOrBroadQuestions
+    : [...alignedOrBroadQuestions, generatedQuestion];
 }
 
 function getQuestionRelevanceScore(question, prepProfile) {
@@ -798,6 +884,7 @@ export default function InterviewPrepPage({ onBack }) {
   const [editingPrepProfile, setEditingPrepProfile] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState(null);
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
@@ -823,6 +910,7 @@ export default function InterviewPrepPage({ onBack }) {
   const startPractice = (categoryId) => {
     setSelectedCategoryId(categoryId);
     setCurrentQuestion(pickQuestion(categoryId, '', prepProfile));
+    setLastAnsweredQuestion(null);
     setAnswer('');
     setFeedback(null);
     setFeedbackError('');
@@ -898,6 +986,7 @@ export default function InterviewPrepPage({ onBack }) {
     }
     setSelectedCategoryId(null);
     setCurrentQuestion(null);
+    setLastAnsweredQuestion(null);
     setAnswer('');
     setFeedback(null);
     setFeedbackLoading(false);
@@ -917,6 +1006,12 @@ export default function InterviewPrepPage({ onBack }) {
       category: currentQuestion.categoryTitle,
       question: currentQuestion.prompt,
       userAnswer: answer,
+      followUpContext: currentQuestion.isFollowUp
+        ? {
+            parentQuestion: currentQuestion.parentQuestion,
+            parentAnswer: currentQuestion.parentAnswer
+          }
+        : null,
       prepProfile
     };
 
@@ -967,6 +1062,15 @@ export default function InterviewPrepPage({ onBack }) {
         exampleResponse: data.tenOutOfTenExampleResponse,
         followUpQuestion: data.followUpQuestion
       });
+      setLastAnsweredQuestion({
+        question: currentQuestion.prompt,
+        answer,
+        categoryTitle: currentQuestion.categoryTitle,
+        categoryId: currentQuestion.categoryId,
+        concepts: currentQuestion.concepts,
+        structureHint: currentQuestion.structureHint,
+        followUps: currentQuestion.followUps
+      });
     } catch (error) {
       console.error('[interview-feedback] Feedback request failed', {
         endpoint: feedbackEndpoint,
@@ -988,6 +1092,31 @@ export default function InterviewPrepPage({ onBack }) {
       recognitionRef.current.abort();
     }
     setCurrentQuestion(pickQuestion(selectedCategoryId, currentQuestion.prompt, prepProfile));
+    setAnswer('');
+    setFeedback(null);
+    setFeedbackLoading(false);
+    setFeedbackError('');
+    setIsRecording(false);
+    setSpeechMessage('');
+  };
+
+  const handleAnswerFollowUp = () => {
+    if (!feedback?.followUpQuestion) return;
+    if (recognitionRef.current) {
+      recognitionRef.current.abort();
+    }
+    const sourceQuestion = lastAnsweredQuestion || currentQuestion;
+    setCurrentQuestion({
+      ...sourceQuestion,
+      prompt: feedback.followUpQuestion,
+      categoryId: sourceQuestion.categoryId || selectedCategoryId,
+      categoryTitle: sourceQuestion.categoryTitle || selectedCategory?.title || 'Follow-Up Question',
+      isFollowUp: true,
+      parentQuestion: sourceQuestion.question || currentQuestion.prompt,
+      parentAnswer: sourceQuestion.answer || answer,
+      applicablePracticeTypes: [selectedCategoryId],
+      difficulty: 'Follow-up'
+    });
     setAnswer('');
     setFeedback(null);
     setFeedbackLoading(false);
@@ -1271,7 +1400,7 @@ export default function InterviewPrepPage({ onBack }) {
           </div>
 
           <div className="question-card">
-            <span className="question-label">Practice Question</span>
+            <span className="question-label">{currentQuestion.isFollowUp ? 'Follow-Up Question' : 'Practice Question'}</span>
             <p>{currentQuestion.prompt}</p>
           </div>
 
@@ -1353,6 +1482,9 @@ export default function InterviewPrepPage({ onBack }) {
               <div className="feedback-note">
                 <h3>Follow-Up Question</h3>
                 <p>{feedback.followUpQuestion}</p>
+                <button type="button" className="secondary" onClick={handleAnswerFollowUp}>
+                  Answer Follow-Up
+                </button>
               </div>
             </section>
           ) : null}

@@ -660,7 +660,7 @@ app.post('/api/networking-outreach', async (req, res) => {
 
 app.post('/api/interview-feedback', async (req, res) => {
   try {
-    const { category, question, userAnswer, prepProfile } = req.body;
+    const { category, question, userAnswer, prepProfile, followUpContext } = req.body;
     console.log('[interview-feedback] Request received', {
       route: 'POST /api/interview-feedback',
       category,
@@ -671,6 +671,7 @@ app.post('/api/interview-feedback', async (req, res) => {
       targetBankTier: prepProfile?.targetBankTier,
       workExperiences: prepProfile?.workExperiences,
       leadershipActivities: prepProfile?.leadershipActivities,
+      isFollowUp: Boolean(followUpContext),
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
@@ -694,7 +695,7 @@ app.post('/api/interview-feedback', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are an investment banking interviewer evaluating a candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. Use the provided prep profile to tailor feedback to the candidate’s recruiting goal, selected target groups, target bank tier, structured work experience background, and leadership/extracurricular background. Do not penalize the candidate for not mentioning unrelated groups they did not target. Reward credible links between their background and their selected groups, such as audit/TAS experience connecting to M&A diligence and valuation, DCM candidates discussing rates and credit, restructuring candidates discussing liquidity and capital structure, or student investment fund leadership supporting market judgment. The 10/10 example response must sound like something a strong candidate with this profile could actually say in a real interview.',
+          'You are an investment banking interviewer evaluating a candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. Use the provided prep profile to tailor feedback to the candidate’s recruiting goal, selected target groups, target bank tier, structured work experience background, and leadership/extracurricular background. Do not penalize the candidate for not mentioning unrelated groups they did not target. If followUpContext is present, evaluate the answer as a direct follow-up to the parent question and parent answer, while still scoring it like a normal interview response. Reward credible links between their background and their selected groups, such as audit/TAS experience connecting to M&A diligence and valuation, DCM candidates discussing rates and credit, restructuring candidates discussing liquidity and capital structure, or student investment fund leadership supporting market judgment. The 10/10 example response must sound like something a strong candidate with this profile could actually say in a real interview.',
         input: [
           {
             role: 'user',
@@ -705,7 +706,8 @@ app.post('/api/interview-feedback', async (req, res) => {
                   category,
                   question,
                   userAnswer,
-                  prepProfile: prepProfile || null
+                  prepProfile: prepProfile || null,
+                  followUpContext: followUpContext || null
                 })
               }
             ]
