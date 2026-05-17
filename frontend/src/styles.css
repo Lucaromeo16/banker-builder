@@ -679,6 +679,21 @@ textarea {
   text-transform: uppercase;
 }
 
+.question-source-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  border: 1px solid rgba(245, 158, 11, 0.36);
+  border-radius: 999px;
+  padding: 4px 9px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .answer-form {
   display: flex;
   flex-direction: column;

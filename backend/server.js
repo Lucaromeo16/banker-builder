@@ -98,6 +98,18 @@ const feedbackSchema = {
   }
 };
 
+const interviewQuestionSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['question'],
+  properties: {
+    question: {
+      type: 'string',
+      minLength: 20
+    }
+  }
+};
+
 const outreachDraftSchema = {
   type: 'object',
   additionalProperties: false,
@@ -762,6 +774,91 @@ app.post('/api/interview-feedback', async (req, res) => {
   } catch (error) {
     console.error('[interview-feedback] Failed to generate feedback', error);
     return res.status(500).json({ error: 'Failed to generate interview feedback.', details: error.message });
+  }
+});
+
+app.post('/api/interview-question', async (req, res) => {
+  try {
+    const { categoryId, categoryTitle, previousPrompt, prepProfile } = req.body;
+    console.log('[interview-question] Request received', {
+      route: 'POST /api/interview-question',
+      categoryId,
+      categoryTitle,
+      previousPromptPreview: typeof previousPrompt === 'string' ? previousPrompt.slice(0, 90) : undefined,
+      targetGroups: prepProfile?.targetGroups,
+      targetBankTier: prepProfile?.targetBankTier,
+      workExperiences: prepProfile?.workExperiences,
+      leadershipActivities: prepProfile?.leadershipActivities,
+      hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
+      model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
+    });
+
+    if (!categoryId || !categoryTitle || !prepProfile) {
+      return res.status(400).json({ error: 'Invalid payload: categoryId, categoryTitle, and prepProfile are required.' });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+    }
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        instructions:
+          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category using the candidate prep profile. Fit questions should focus on why banking, why the selected group, why the target bank tier, or transitions from their background. Behavioral questions should use their work experience and leadership context. Market questions should match selected product or coverage groups. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
+        input: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'input_text',
+                text: JSON.stringify({
+                  categoryId,
+                  categoryTitle,
+                  previousPrompt: previousPrompt || '',
+                  prepProfile
+                })
+              }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            type: 'json_schema',
+            name: 'interview_question',
+            strict: true,
+            schema: interviewQuestionSchema
+          }
+        },
+        max_output_tokens: 220
+      })
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      console.error('[interview-question] OpenAI request failed', {
+        status: response.status,
+        statusText: response.statusText,
+        details
+      });
+      return res.status(502).json({ error: 'OpenAI question request failed.', details });
+    }
+
+    const data = await response.json();
+    const outputText = extractResponseText(data);
+    if (!outputText) {
+      return res.status(502).json({ error: 'OpenAI question response was empty.' });
+    }
+
+    return res.json(JSON.parse(outputText));
+  } catch (error) {
+    console.error('[interview-question] Failed to generate question', error);
+    return res.status(500).json({ error: 'Failed to generate interview question.', details: error.message });
   }
 });
 

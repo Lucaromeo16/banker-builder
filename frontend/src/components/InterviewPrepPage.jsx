@@ -823,7 +823,8 @@ function createGeneratedQuestion(categoryId, prepProfile) {
   const prompt = generatedPrompts[categoryId]?.[primaryGroup] || generatedPrompts[categoryId]?.default || generatedPrompts.mixed.default;
   return {
     ...sharedFields,
-    prompt
+    prompt,
+    sourceType: 'ai_generated'
   };
 }
 
@@ -870,11 +871,18 @@ function pickQuestion(categoryId, previousPrompt = '', prepProfile = null) {
   const weightedQuestions = availableQuestions.flatMap((question) =>
     Array.from({ length: getQuestionRelevanceScore(question, prepProfile) }, () => question)
   );
-  return weightedQuestions[Math.floor(Math.random() * weightedQuestions.length)] || availableQuestions[0];
+  const question = weightedQuestions[Math.floor(Math.random() * weightedQuestions.length)] || availableQuestions[0];
+  return question ? { ...question, sourceType: question.sourceType || 'static' } : question;
 }
 
 function toggleArrayValue(values, value) {
   return values.includes(value) ? values.filter((currentValue) => currentValue !== value) : [...values, value];
+}
+
+const aiQuestionCategoryIds = ['fit', 'behavioral', 'markets'];
+
+function pickMixedQuestionCategory() {
+  return Math.random() < 0.4 ? 'technical' : aiQuestionCategoryIds[Math.floor(Math.random() * aiQuestionCategoryIds.length)];
 }
 
 export default function InterviewPrepPage({ onBack }) {
@@ -885,6 +893,8 @@ export default function InterviewPrepPage({ onBack }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState(null);
+  const [questionLoading, setQuestionLoading] = useState(false);
+  const [questionError, setQuestionError] = useState('');
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
@@ -907,14 +917,68 @@ export default function InterviewPrepPage({ onBack }) {
     };
   }, []);
 
-  const startPractice = (categoryId) => {
+  const generateAiQuestion = async (categoryId, previousPrompt = '') => {
+    const response = await fetch('/api/interview-question', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        categoryId,
+        categoryTitle: questionBanks[categoryId]?.title || 'Mixed Mock Interview',
+        previousPrompt,
+        prepProfile
+      })
+    });
+
+    if (!response.ok) {
+      let details = '';
+      try {
+        const errorPayload = await response.json();
+        details = [errorPayload.error, errorPayload.details].filter(Boolean).join(' ');
+      } catch {
+        details = await response.text();
+      }
+      throw new Error(details || `Question generation failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    return {
+      ...createGeneratedQuestion(categoryId, prepProfile),
+      prompt: data.question,
+      sourceType: 'ai_generated',
+      generatedFromProfile: true
+    };
+  };
+
+  const loadPracticeQuestion = async (categoryId, previousPrompt = '') => {
+    const effectiveCategoryId = categoryId === 'mixed' ? pickMixedQuestionCategory() : categoryId;
+    if (effectiveCategoryId === 'technical') {
+      return pickQuestion('technical', previousPrompt, prepProfile);
+    }
+
+    try {
+      return await generateAiQuestion(effectiveCategoryId, previousPrompt);
+    } catch (error) {
+      console.error('[interview-question] Falling back to local generated question', error);
+      setQuestionError('AI question generation was unavailable, so a profile-specific backup question was used.');
+      return createGeneratedQuestion(effectiveCategoryId, prepProfile);
+    }
+  };
+
+  const startPractice = async (categoryId) => {
     setSelectedCategoryId(categoryId);
-    setCurrentQuestion(pickQuestion(categoryId, '', prepProfile));
+    setCurrentQuestion(null);
     setLastAnsweredQuestion(null);
     setAnswer('');
     setFeedback(null);
     setFeedbackError('');
+    setQuestionError('');
     setSpeechMessage('');
+    setQuestionLoading(true);
+    try {
+      setCurrentQuestion(await loadPracticeQuestion(categoryId));
+    } finally {
+      setQuestionLoading(false);
+    }
   };
 
   const toggleSetupExperience = (experienceType) => {
@@ -987,6 +1051,8 @@ export default function InterviewPrepPage({ onBack }) {
     setSelectedCategoryId(null);
     setCurrentQuestion(null);
     setLastAnsweredQuestion(null);
+    setQuestionLoading(false);
+    setQuestionError('');
     setAnswer('');
     setFeedback(null);
     setFeedbackLoading(false);
@@ -1087,17 +1153,25 @@ export default function InterviewPrepPage({ onBack }) {
     }
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (recognitionRef.current) {
       recognitionRef.current.abort();
     }
-    setCurrentQuestion(pickQuestion(selectedCategoryId, currentQuestion.prompt, prepProfile));
+    const previousPrompt = currentQuestion.prompt;
+    setCurrentQuestion(null);
     setAnswer('');
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
+    setQuestionError('');
     setIsRecording(false);
     setSpeechMessage('');
+    setQuestionLoading(true);
+    try {
+      setCurrentQuestion(await loadPracticeQuestion(selectedCategoryId, previousPrompt));
+    } finally {
+      setQuestionLoading(false);
+    }
   };
 
   const handleAnswerFollowUp = () => {
@@ -1115,7 +1189,8 @@ export default function InterviewPrepPage({ onBack }) {
       parentQuestion: sourceQuestion.question || currentQuestion.prompt,
       parentAnswer: sourceQuestion.answer || answer,
       applicablePracticeTypes: [selectedCategoryId],
-      difficulty: 'Follow-up'
+      difficulty: 'Follow-up',
+      sourceType: 'ai_followup'
     });
     setAnswer('');
     setFeedback(null);
@@ -1378,6 +1453,31 @@ export default function InterviewPrepPage({ onBack }) {
     );
   }
 
+  if (selectedCategory && questionLoading) {
+    return (
+      <>
+        <div className="button-row">
+          <button type="button" className="back-button" onClick={goBackToPrep}>
+            Back to Interview Prep
+          </button>
+          <button type="button" className="back-button" onClick={onBack}>
+            Back to Home
+          </button>
+        </div>
+
+        <section className="panel practice-panel">
+          <div className="practice-header">
+            <div>
+              <span className="feature-eyebrow">{selectedCategory.title}</span>
+              <h2>Building your next question...</h2>
+              <p className="muted">Tailoring the prompt to your groups, experience, and recruiting goal.</p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
   if (selectedCategory && currentQuestion) {
     return (
       <>
@@ -1401,6 +1501,8 @@ export default function InterviewPrepPage({ onBack }) {
 
           <div className="question-card">
             <span className="question-label">{currentQuestion.isFollowUp ? 'Follow-Up Question' : 'Practice Question'}</span>
+            {currentQuestion.sourceType === 'ai_generated' ? <span className="question-source-badge">AI Tailored Question</span> : null}
+            {currentQuestion.sourceType === 'ai_followup' ? <span className="question-source-badge">AI Follow-Up</span> : null}
             <p>{currentQuestion.prompt}</p>
           </div>
 
@@ -1434,14 +1536,15 @@ export default function InterviewPrepPage({ onBack }) {
               <button type="button" className="secondary" onClick={handleTryAgain}>
                 Try Again
               </button>
-              <button type="button" className="secondary" onClick={handleNextQuestion}>
-                Next Question
+              <button type="button" className="secondary" onClick={handleNextQuestion} disabled={questionLoading}>
+                {questionLoading ? 'Loading...' : 'Next Question'}
               </button>
             </div>
           </form>
 
           {feedbackLoading ? <p className="muted">Analyzing your answer...</p> : null}
           {feedbackError ? <p className="error">{feedbackError}</p> : null}
+          {questionError ? <p className="muted">{questionError}</p> : null}
 
           {feedback ? (
             <section className="feedback-card" aria-live="polite">
