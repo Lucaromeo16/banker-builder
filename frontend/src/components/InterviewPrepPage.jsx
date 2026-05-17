@@ -905,6 +905,7 @@ export default function InterviewPrepPage({ onBack }) {
   const [showTextInput, setShowTextInput] = useState(false);
   const recognitionRef = useRef(null);
   const transcriptBufferRef = useRef('');
+  const interimTranscriptRef = useRef('');
   const shouldCommitTranscriptRef = useRef(false);
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
@@ -920,10 +921,33 @@ export default function InterviewPrepPage({ onBack }) {
 
     return () => {
       if (recognitionRef.current) {
-        recognitionRef.current.abort();
+        try {
+          recognitionRef.current.abort();
+        } catch {
+          // Ignore cleanup errors if recognition has already ended.
+        }
+        recognitionRef.current = null;
       }
     };
   }, []);
+
+  const resetVoiceAnswerState = (showFallback = !speechSupported) => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.abort();
+      } catch {
+        // Ignore cleanup errors if recognition has already ended.
+      }
+      recognitionRef.current = null;
+    }
+    transcriptBufferRef.current = '';
+    interimTranscriptRef.current = '';
+    shouldCommitTranscriptRef.current = false;
+    setAnswer('');
+    setShowTextInput(showFallback);
+    setIsRecording(false);
+    setSpeechMessage(showFallback && !speechSupported ? 'Voice recording is not supported in this browser. Please type your answer.' : '');
+  };
 
   const generateAiQuestion = async (categoryId, previousPrompt = '') => {
     const response = await fetch('/api/interview-question', {
@@ -976,14 +1000,10 @@ export default function InterviewPrepPage({ onBack }) {
     setSelectedCategoryId(categoryId);
     setCurrentQuestion(null);
     setLastAnsweredQuestion(null);
-    setAnswer('');
+    resetVoiceAnswerState(!speechSupported);
     setFeedback(null);
     setFeedbackError('');
     setQuestionError('');
-    setShowTextInput(!speechSupported);
-    transcriptBufferRef.current = '';
-    shouldCommitTranscriptRef.current = false;
-    setSpeechMessage('');
     setQuestionLoading(true);
     try {
       setCurrentQuestion(await loadPracticeQuestion(categoryId));
@@ -1056,23 +1076,15 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const goBackToPrep = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.abort();
-    }
     setSelectedCategoryId(null);
     setCurrentQuestion(null);
     setLastAnsweredQuestion(null);
     setQuestionLoading(false);
     setQuestionError('');
-    setAnswer('');
-    setShowTextInput(!speechSupported);
-    transcriptBufferRef.current = '';
-    shouldCommitTranscriptRef.current = false;
+    resetVoiceAnswerState();
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
-    setIsRecording(false);
-    setSpeechMessage('');
   };
 
   const handleSubmit = async (event) => {
@@ -1168,21 +1180,13 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const handleNextQuestion = async () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.abort();
-    }
     const previousPrompt = currentQuestion.prompt;
     setCurrentQuestion(null);
-    setAnswer('');
+    resetVoiceAnswerState(!speechSupported);
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
     setQuestionError('');
-    setShowTextInput(!speechSupported);
-    transcriptBufferRef.current = '';
-    shouldCommitTranscriptRef.current = false;
-    setIsRecording(false);
-    setSpeechMessage('');
     setQuestionLoading(true);
     try {
       setCurrentQuestion(await loadPracticeQuestion(selectedCategoryId, previousPrompt));
@@ -1193,9 +1197,6 @@ export default function InterviewPrepPage({ onBack }) {
 
   const handleAnswerFollowUp = () => {
     if (!feedback?.followUpQuestion) return;
-    if (recognitionRef.current) {
-      recognitionRef.current.abort();
-    }
     const sourceQuestion = lastAnsweredQuestion || currentQuestion;
     setCurrentQuestion({
       ...sourceQuestion,
@@ -1209,30 +1210,17 @@ export default function InterviewPrepPage({ onBack }) {
       difficulty: 'Follow-up',
       sourceType: 'ai_followup'
     });
-    setAnswer('');
+    resetVoiceAnswerState(!speechSupported);
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
-    setShowTextInput(!speechSupported);
-    transcriptBufferRef.current = '';
-    shouldCommitTranscriptRef.current = false;
-    setIsRecording(false);
-    setSpeechMessage('');
   };
 
   const handleTryAgain = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.abort();
-    }
-    setAnswer('');
+    resetVoiceAnswerState(!speechSupported);
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
-    setShowTextInput(!speechSupported);
-    transcriptBufferRef.current = '';
-    shouldCommitTranscriptRef.current = false;
-    setIsRecording(false);
-    setSpeechMessage('');
   };
 
   const handleStartRecording = () => {
@@ -1246,7 +1234,12 @@ export default function InterviewPrepPage({ onBack }) {
     }
 
     if (recognitionRef.current) {
-      recognitionRef.current.abort();
+      try {
+        recognitionRef.current.abort();
+      } catch {
+        // Some browsers throw if recognition is already inactive.
+      }
+      recognitionRef.current = null;
     }
 
     const recognition = new SpeechRecognition();
@@ -1254,6 +1247,7 @@ export default function InterviewPrepPage({ onBack }) {
     recognition.continuous = true;
     recognition.interimResults = true;
     transcriptBufferRef.current = '';
+    interimTranscriptRef.current = '';
     shouldCommitTranscriptRef.current = false;
 
     recognition.onstart = () => {
@@ -1279,22 +1273,28 @@ export default function InterviewPrepPage({ onBack }) {
       }
 
       if (interimTranscript.trim()) {
+        interimTranscriptRef.current = interimTranscript.trim();
         setSpeechMessage('Listening...');
       } else {
+        interimTranscriptRef.current = '';
         setSpeechMessage('Listening...');
       }
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (event) => {
       setIsRecording(false);
-      setSpeechMessage('Speech recognition stopped. You can start again or keep typing your answer.');
+      recognitionRef.current = null;
+      if (shouldCommitTranscriptRef.current) return;
+      setSpeechMessage(event.error === 'no-speech' ? 'No speech was captured. Try again or type instead.' : 'Speech recognition stopped. You can start again or type instead.');
     };
 
     recognition.onend = () => {
       setIsRecording(false);
-      if (shouldCommitTranscriptRef.current && transcriptBufferRef.current.trim()) {
+      const committedTranscript = `${transcriptBufferRef.current} ${interimTranscriptRef.current}`.trim();
+      recognitionRef.current = null;
+      if (shouldCommitTranscriptRef.current && committedTranscript) {
         setAnswer((currentAnswer) =>
-          `${currentAnswer}${currentAnswer.trim() ? ' ' : ''}${transcriptBufferRef.current.trim()}`
+          `${currentAnswer}${currentAnswer.trim() ? ' ' : ''}${committedTranscript}`
         );
         setShowTextInput(true);
         setSpeechMessage('Transcription ready. You can edit your answer before submitting.');
@@ -1303,6 +1303,8 @@ export default function InterviewPrepPage({ onBack }) {
           currentMessage.startsWith('Listening') ? 'Recording stopped. No speech was captured.' : currentMessage
         );
       }
+      transcriptBufferRef.current = '';
+      interimTranscriptRef.current = '';
       shouldCommitTranscriptRef.current = false;
     };
 
@@ -1313,7 +1315,14 @@ export default function InterviewPrepPage({ onBack }) {
   const handleStopRecording = () => {
     if (recognitionRef.current) {
       shouldCommitTranscriptRef.current = true;
-      recognitionRef.current.stop();
+      setSpeechMessage('Finalizing transcription...');
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        recognitionRef.current = null;
+        setIsRecording(false);
+        setSpeechMessage('Recording stopped. Try again or type instead.');
+      }
     }
     setIsRecording(false);
   };
