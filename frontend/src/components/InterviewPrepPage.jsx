@@ -902,13 +902,21 @@ export default function InterviewPrepPage({ onBack }) {
   const [isRecording, setIsRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [speechMessage, setSpeechMessage] = useState('');
+  const [showTextInput, setShowTextInput] = useState(false);
   const recognitionRef = useRef(null);
+  const transcriptBufferRef = useRef('');
+  const shouldCommitTranscriptRef = useRef(false);
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    setSpeechSupported(Boolean(SpeechRecognition));
+    const supportsSpeech = Boolean(SpeechRecognition);
+    setSpeechSupported(supportsSpeech);
+    if (!supportsSpeech) {
+      setShowTextInput(true);
+      setSpeechMessage('Voice recording is not supported in this browser. Please type your answer.');
+    }
 
     return () => {
       if (recognitionRef.current) {
@@ -972,6 +980,9 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedback(null);
     setFeedbackError('');
     setQuestionError('');
+    setShowTextInput(!speechSupported);
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
     setSpeechMessage('');
     setQuestionLoading(true);
     try {
@@ -1054,6 +1065,9 @@ export default function InterviewPrepPage({ onBack }) {
     setQuestionLoading(false);
     setQuestionError('');
     setAnswer('');
+    setShowTextInput(!speechSupported);
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
@@ -1164,6 +1178,9 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackLoading(false);
     setFeedbackError('');
     setQuestionError('');
+    setShowTextInput(!speechSupported);
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
     setIsRecording(false);
     setSpeechMessage('');
     setQuestionLoading(true);
@@ -1196,6 +1213,9 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
+    setShowTextInput(!speechSupported);
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
     setIsRecording(false);
     setSpeechMessage('');
   };
@@ -1208,6 +1228,9 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedback(null);
     setFeedbackLoading(false);
     setFeedbackError('');
+    setShowTextInput(!speechSupported);
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
     setIsRecording(false);
     setSpeechMessage('');
   };
@@ -1218,6 +1241,7 @@ export default function InterviewPrepPage({ onBack }) {
     if (!SpeechRecognition) {
       setSpeechSupported(false);
       setSpeechMessage('Speech recognition is not available in this browser. You can still type your answer below.');
+      setShowTextInput(true);
       return;
     }
 
@@ -1229,6 +1253,8 @@ export default function InterviewPrepPage({ onBack }) {
     recognition.lang = 'en-US';
     recognition.continuous = true;
     recognition.interimResults = true;
+    transcriptBufferRef.current = '';
+    shouldCommitTranscriptRef.current = false;
 
     recognition.onstart = () => {
       setIsRecording(true);
@@ -1249,11 +1275,11 @@ export default function InterviewPrepPage({ onBack }) {
       }
 
       if (finalTranscript.trim()) {
-        setAnswer((currentAnswer) => `${currentAnswer}${currentAnswer.trim() ? ' ' : ''}${finalTranscript.trim()}`);
+        transcriptBufferRef.current = `${transcriptBufferRef.current}${transcriptBufferRef.current.trim() ? ' ' : ''}${finalTranscript.trim()}`;
       }
 
       if (interimTranscript.trim()) {
-        setSpeechMessage(`Listening... ${interimTranscript.trim()}`);
+        setSpeechMessage('Listening...');
       } else {
         setSpeechMessage('Listening...');
       }
@@ -1266,9 +1292,18 @@ export default function InterviewPrepPage({ onBack }) {
 
     recognition.onend = () => {
       setIsRecording(false);
-      setSpeechMessage((currentMessage) =>
-        currentMessage.startsWith('Listening') ? 'Recording complete. You can edit the transcript before submitting.' : currentMessage
-      );
+      if (shouldCommitTranscriptRef.current && transcriptBufferRef.current.trim()) {
+        setAnswer((currentAnswer) =>
+          `${currentAnswer}${currentAnswer.trim() ? ' ' : ''}${transcriptBufferRef.current.trim()}`
+        );
+        setShowTextInput(true);
+        setSpeechMessage('Transcription ready. You can edit your answer before submitting.');
+      } else {
+        setSpeechMessage((currentMessage) =>
+          currentMessage.startsWith('Listening') ? 'Recording stopped. No speech was captured.' : currentMessage
+        );
+      }
+      shouldCommitTranscriptRef.current = false;
     };
 
     recognitionRef.current = recognition;
@@ -1277,6 +1312,7 @@ export default function InterviewPrepPage({ onBack }) {
 
   const handleStopRecording = () => {
     if (recognitionRef.current) {
+      shouldCommitTranscriptRef.current = true;
       recognitionRef.current.stop();
     }
     setIsRecording(false);
@@ -1507,28 +1543,55 @@ export default function InterviewPrepPage({ onBack }) {
           </div>
 
           <form className="answer-form" onSubmit={handleSubmit}>
-            <label>
-              Your answer
-              <div className="voice-controls">
-                <button type="button" className="secondary" onClick={handleStartRecording} disabled={isRecording}>
-                  Start Recording
-                </button>
-                {isRecording ? (
-                  <button type="button" className="secondary" onClick={handleStopRecording}>
-                    Stop Recording
-                  </button>
-                ) : null}
-                <span className={isRecording ? 'recording-status active' : 'recording-status'}>
-                  {speechSupported ? speechMessage || 'Voice recording is optional.' : 'Speech recognition is unavailable. Typed answers still work.'}
+            <section className={isRecording ? 'voice-answer-panel recording' : 'voice-answer-panel'}>
+              <button
+                type="button"
+                className={isRecording ? 'mic-button recording' : 'mic-button'}
+                onClick={isRecording ? handleStopRecording : handleStartRecording}
+                disabled={!speechSupported && !isRecording}
+                aria-label={isRecording ? 'Stop listening' : 'Start speaking'}
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="mic-icon">
+                  <path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v6a3.5 3.5 0 0 0 3.5 3.5Z" />
+                  <path d="M5 11.5a7 7 0 0 0 14 0" />
+                  <path d="M12 18.5V22" />
+                  <path d="M8.5 22h7" />
+                </svg>
+              </button>
+              <div className="voice-answer-copy">
+                <strong>{isRecording ? 'Listening...' : answer.trim() ? 'Transcription ready' : 'Start speaking'}</strong>
+                <span>
+                  {speechSupported
+                    ? speechMessage || 'Answer out loud like you would in an interview.'
+                    : 'Voice recording is not supported in this browser. Please type your answer.'}
                 </span>
               </div>
-              <textarea
-                value={answer}
-                onChange={(event) => setAnswer(event.target.value)}
-                placeholder="Type your answer as if you were speaking to an interviewer..."
-                rows="8"
-              />
-            </label>
+              <div className="voice-answer-actions">
+                {isRecording ? (
+                  <button type="button" className="secondary" onClick={handleStopRecording}>
+                    Stop listening
+                  </button>
+                ) : null}
+                {!showTextInput ? (
+                  <button type="button" className="secondary" onClick={() => setShowTextInput(true)}>
+                    Type instead
+                  </button>
+                ) : null}
+              </div>
+            </section>
+
+            {showTextInput ? (
+              <label className="typed-answer-fallback">
+                Your answer
+                <textarea
+                  value={answer}
+                  onChange={(event) => setAnswer(event.target.value)}
+                  placeholder="Type your answer as if you were speaking to an interviewer..."
+                  rows="8"
+                />
+                {answer.trim() ? <span className="muted">You can edit your answer before submitting.</span> : null}
+              </label>
+            ) : null}
             <div className="practice-actions">
               <button type="submit" className="primary" disabled={!answer.trim() || feedbackLoading}>
                 {feedbackLoading ? 'Analyzing...' : 'Submit Answer'}
