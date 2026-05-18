@@ -247,6 +247,13 @@ const profileWeights = {
     extracurricular: 0.14,
     baseDifficultyAdjustment: 0
   },
+  'Undergrad Full-Time': {
+    academic: 0.26,
+    experience: 0.28,
+    networking: 0.34,
+    extracurricular: 0.12,
+    baseDifficultyAdjustment: 0.75
+  },
   'Lateral Hire': {
     academic: 0.14,
     experience: 0.52,
@@ -278,11 +285,43 @@ const workTypeOptions = [
   'General / Other Experience'
 ];
 
+const lateralRoleOptions = [
+  'Current Investment Banking Role',
+  'Current Private Equity Role',
+  'Current Consulting Role',
+  'Current Corporate Development Role',
+  'Current Corporate Finance / FP&A Role',
+  'Current Big 4 / Accounting Role',
+  'Current TAS / Valuation Role',
+  'Current Commercial Banking Role',
+  'Current Asset Management / HF / ER Role',
+  'Current Industry / Operating Role',
+  'Other Current Professional Role'
+];
+
+const mbaRoleOptions = [
+  'Investment Banking Analyst',
+  'Private Equity',
+  'Consulting',
+  'Corporate Development',
+  'Corporate Finance / FP&A',
+  'Big 4 / Accounting',
+  'TAS / Valuation',
+  'Commercial Banking',
+  'Asset Management / Hedge Fund / Equity Research',
+  'Industry / Operating Role',
+  'Other Professional Experience'
+];
+
 const recencyOptions = [
   'Current / most recent',
   'Past 1-2 years',
   'Older experience'
 ];
+
+const yearsExperienceOptions = ['0-1 years', '1-2 years', '2-4 years', '4+ years'];
+const dealExposureOptions = ['High transaction exposure', 'Moderate transaction exposure', 'Limited transaction exposure', 'No transaction exposure'];
+const currentPlatformTierOptions = ['Elite / BB / EB Platform', 'Strong Institutional Platform', 'Middle Market / National Platform', 'Regional / Boutique Platform', 'Small / Unknown Platform'];
 
 const experienceFollowUps = {
   'Investment Banking Internship': [
@@ -323,6 +362,116 @@ const experienceFollowUps = {
   ],
   'General / Other Experience': [
     { key: 'generalType', label: 'Experience Type', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
+  ],
+  'Current Investment Banking Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Deal Exposure', options: dealExposureOptions }
+  ],
+  'Current Private Equity Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Exposure', options: dealExposureOptions }
+  ],
+  'Current Consulting Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction / Strategy Exposure', options: dealExposureOptions }
+  ],
+  'Current Corporate Development Role': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'M&A Exposure', options: dealExposureOptions }
+  ],
+  'Current Corporate Finance / FP&A Role': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Current Big 4 / Accounting Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Current TAS / Valuation Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Deal Exposure', options: dealExposureOptions }
+  ],
+  'Current Commercial Banking Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Credit / Transaction Exposure', options: dealExposureOptions }
+  ],
+  'Current Asset Management / HF / ER Role': [
+    { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Public Markets / Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Current Industry / Operating Role': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Finance / Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Other Current Professional Role': [
+    { key: 'platformTier', label: 'Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Investment Banking Analyst': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Deal Exposure', options: dealExposureOptions }
+  ],
+  'Private Equity': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Exposure', options: dealExposureOptions }
+  ],
+  'Consulting': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction / Strategy Exposure', options: dealExposureOptions }
+  ],
+  'Corporate Development': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'M&A Exposure', options: dealExposureOptions }
+  ],
+  'Corporate Finance / FP&A': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Big 4 / Accounting': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
+  ],
+  'TAS / Valuation': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Deal Exposure', options: dealExposureOptions }
+  ],
+  'Commercial Banking': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Credit / Transaction Exposure', options: dealExposureOptions }
+  ],
+  'Asset Management / Hedge Fund / Equity Research': [
+    { key: 'platformTier', label: 'Pre-MBA Platform Tier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Public Markets / Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Industry / Operating Role': [
+    { key: 'platformTier', label: 'Company / Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Finance / Transaction Relevance', options: dealExposureOptions }
+  ],
+  'Other Professional Experience': [
+    { key: 'platformTier', label: 'Platform Quality', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
+    { key: 'dealExposure', label: 'Transaction Relevance', options: dealExposureOptions }
   ]
 };
 
@@ -354,22 +503,15 @@ const seniorityOptions = [
 
 const graduationHonorsOptions = ['None', 'Cum Laude', 'Magna Cum Laude', 'Summa Cum Laude'];
 const gmatOptions = ['', '600-649', '650-699', '700-729', '730-759', '760+'];
-const professionalLeadershipOptions = [
-  { value: 'limited', label: 'Limited leadership / progression' },
-  { value: 'solid', label: 'Solid performance and ownership' },
-  { value: 'strong', label: 'Strong promotions, deal ownership, or team leadership' },
-  { value: 'exceptional', label: 'Exceptional trajectory with standout leadership or performance reviews' }
-];
-
-const stepTitles = [
-  'Bank + Office Selection',
-  'Hire Type',
-  'Group Selection',
-  'Academic Info',
-  'Extracurriculars & Leadership',
-  'Prior Work / Internship Experience',
-  'Networking Info',
-  'Review Your Inputs'
+const baseStepDefinitions = [
+  { key: 'opportunity', title: 'Bank + Office Selection' },
+  { key: 'hireType', title: 'Hire Type' },
+  { key: 'group', title: 'Group Selection' },
+  { key: 'academics', title: 'Academic Info' },
+  { key: 'activities', title: 'Extracurriculars & Leadership' },
+  { key: 'experience', title: 'Prior Work / Internship Experience' },
+  { key: 'networking', title: 'Networking Info' },
+  { key: 'review', title: 'Review Your Inputs' }
 ];
 
 const createActivity = () => ({
@@ -379,12 +521,40 @@ const createActivity = () => ({
   leadershipLevel: 'member'
 });
 
-const createWorkExperience = () => ({
+function experienceTypeOptionsForHireType(hireType) {
+  if (hireType === 'Lateral Hire') return lateralRoleOptions;
+  if (hireType === 'MBA Associate') return mbaRoleOptions;
+  return workTypeOptions;
+}
+
+function experienceStepTitle(hireType) {
+  if (hireType === 'Undergrad Full-Time') return 'Prior Internship / Full-Time Recruiting Experience';
+  if (hireType === 'Lateral Hire') return 'Current / Most Recent Role';
+  if (hireType === 'MBA Associate') return 'Pre-MBA / Full-Time Work Experience';
+  return 'Prior Work / Internship Experience';
+}
+
+function stepDefinitionsForHireType(hireType) {
+  return baseStepDefinitions
+    .filter((step) => step.key !== 'activities' || ['Summer Analyst', 'Undergrad Full-Time'].includes(hireType))
+    .map((step) => (step.key === 'experience' ? { ...step, title: experienceStepTitle(hireType) } : step));
+}
+
+const createWorkExperience = (hireType = 'Summer Analyst') => {
+  const defaultByHireType = {
+    'Summer Analyst': 'General / Other Experience',
+    'Undergrad Full-Time': 'General / Other Experience',
+    'Lateral Hire': 'Other Current Professional Role',
+    'MBA Associate': 'Other Professional Experience'
+  };
+  const experienceType = defaultByHireType[hireType] || experienceTypeOptionsForHireType(hireType)[0];
+  return {
   id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`,
-  experienceType: 'General / Other Experience',
-  generalType: 'Other Internship',
+  experienceType,
+  ...defaultFollowUpValues(experienceType),
   recency: 'Current / most recent'
-});
+  };
+};
 
 function defaultFollowUpValues(experienceType) {
   return Object.fromEntries((experienceFollowUps[experienceType] || []).map((field) => [field.key, field.options[0]]));
@@ -396,7 +566,6 @@ const defaultProfile = {
   honorsCollege: false,
   graduationHonors: 'None',
   gmatRange: '',
-  professionalLeadership: 'solid',
   workType: 'None',
   workExperiences: [createWorkExperience()],
   activities: [createActivity()],
@@ -606,13 +775,27 @@ function normalizeExperience(experience = {}) {
   };
 }
 
-function experienceSummary(experience) {
+function coerceExperienceForHireType(experience = {}, hireType = 'Summer Analyst') {
+  const options = experienceTypeOptionsForHireType(hireType);
   const normalized = normalizeExperience(experience);
+  const experienceType = options.includes(normalized.experienceType) ? normalized.experienceType : options[0];
+
+  return {
+    ...defaultFollowUpValues(experienceType),
+    ...normalized,
+    experienceType,
+    recency: normalized.recency || 'Current / most recent'
+  };
+}
+
+function experienceSummary(experience, hireType = 'Summer Analyst') {
+  const normalized = coerceExperienceForHireType(experience, hireType);
   const detailValues = (experienceFollowUps[normalized.experienceType] || [])
     .map((field) => normalized[field.key])
     .filter(Boolean);
+  const timing = ['Summer Analyst', 'Undergrad Full-Time'].includes(hireType) ? normalized.recency : '';
 
-  return [normalized.experienceType, ...detailValues, normalized.recency].filter(Boolean).join(' · ');
+  return [normalized.experienceType, ...detailValues, timing].filter(Boolean).join(' · ');
 }
 
 function experienceReasonText(experienceResult) {
@@ -631,13 +814,94 @@ function experienceReasonText(experienceResult) {
 
 function recencyMultiplier(recency, hireType) {
   if (recency === 'Current / most recent') return 1;
-  if (hireType === 'Summer Analyst') return recency === 'Past 1-2 years' ? 0.95 : 0.86;
-  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.68 : 0.36;
+  if (['Summer Analyst', 'Undergrad Full-Time'].includes(hireType)) return recency === 'Past 1-2 years' ? 0.95 : 0.86;
+  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.25 : 0.08;
   return recency === 'Past 1-2 years' ? 0.76 : 0.48;
+}
+
+function scoreProfessionalExperience(experience, hireType) {
+  const type = experience.experienceType;
+  const signals = new Set();
+  const affinities = new Set();
+  let eliteIb = false;
+  const platform = {
+    'Elite / BB / EB Platform': 1.1,
+    'Strong Institutional Platform': 0.65,
+    'Middle Market / National Platform': 0.25,
+    'Regional / Boutique Platform': -0.2,
+    'Small / Unknown Platform': -0.6,
+    'Big 4': 0.7,
+    'National / Next Tier': 0.25,
+    'Top 100': -0.15,
+    'Local / Small Firm': -0.6
+  }[experience.platformTier] ?? 0;
+  const years = { '0-1 years': -0.25, '1-2 years': 0.15, '2-4 years': 0.45, '4+ years': 0.35 }[experience.yearsExperience] ?? 0.15;
+  const exposure = {
+    'High transaction exposure': 0.85,
+    'Moderate transaction exposure': 0.35,
+    'Limited transaction exposure': -0.1,
+    'No transaction exposure': -0.55
+  }[experience.dealExposure] ?? 0.2;
+  let base = 5.2;
+
+  if (['Current Investment Banking Role', 'Investment Banking Analyst'].includes(type)) {
+    base = hireType === 'MBA Associate' ? 9 : 9.3;
+    eliteIb = experience.platformTier === 'Elite / BB / EB Platform';
+    signals.add(hireType === 'MBA Associate' ? 'pre-MBA investment banking experience' : 'current investment banking role');
+    ['M&A', 'Financial Sponsors', 'Generalist'].forEach((group) => affinities.add(group));
+  } else if (['Current Private Equity Role', 'Private Equity'].includes(type)) {
+    base = 8.4;
+    signals.add('private equity experience');
+    affinities.add('Financial Sponsors');
+  } else if (['Current Consulting Role', 'Consulting'].includes(type)) {
+    base = 7.4;
+    signals.add('consulting experience');
+    ['M&A', 'Generalist', 'Strategic Advisory'].forEach((group) => affinities.add(group));
+  } else if (['Current Corporate Development Role', 'Corporate Development'].includes(type)) {
+    base = 7.8;
+    signals.add('corporate development experience');
+    affinities.add('M&A');
+  } else if (['Current Corporate Finance / FP&A Role', 'Corporate Finance / FP&A'].includes(type)) {
+    base = 6.6;
+    signals.add('corporate finance experience');
+  } else if (['Current Big 4 / Accounting Role', 'Big 4 / Accounting'].includes(type)) {
+    base = 6.4;
+    signals.add('accounting experience');
+    affinities.add('Financial Institutions');
+  } else if (['Current TAS / Valuation Role', 'TAS / Valuation'].includes(type)) {
+    base = 7.8;
+    signals.add('TAS / valuation experience');
+    ['M&A', 'Generalist'].forEach((group) => affinities.add(group));
+  } else if (['Current Commercial Banking Role', 'Commercial Banking'].includes(type)) {
+    base = 6.6;
+    signals.add('commercial banking experience');
+    ['DCM', 'LevFin', 'Financial Institutions'].forEach((group) => affinities.add(group));
+  } else if (['Current Asset Management / HF / ER Role', 'Asset Management / Hedge Fund / Equity Research'].includes(type)) {
+    base = 6.9;
+    signals.add('public markets experience');
+    ['Restructuring', 'Financial Sponsors'].forEach((group) => affinities.add(group));
+  } else if (['Current Industry / Operating Role', 'Industry / Operating Role'].includes(type)) {
+    base = 5.8;
+    signals.add('industry operating experience');
+  } else {
+    base = 5.1;
+    signals.add('professional experience');
+  }
+
+  return {
+    score: clamp(base + platform + years + exposure),
+    signals: Array.from(signals),
+    affinities: Array.from(affinities),
+    eliteIb
+  };
 }
 
 function scoreSingleExperience(rawExperience, hireType) {
   const experience = normalizeExperience(rawExperience);
+  if (['Lateral Hire', 'MBA Associate'].includes(hireType)) {
+    return scoreProfessionalExperience(experience, hireType);
+  }
+
   const type = experience.experienceType;
   let score = 3.2;
   const signals = new Set();
@@ -722,13 +986,19 @@ function scoreSingleExperience(rawExperience, hireType) {
 }
 
 function structuredExperienceScore(profile, hireType, targetGroup) {
-  const experiences = (profile.workExperiences || []).map((experience) => scoreSingleExperience(experience, hireType));
+  const sourceExperiences = Array.isArray(profile.workExperiences) ? profile.workExperiences : [];
+  const relevantExperiences = ['Lateral Hire', 'MBA Associate'].includes(hireType)
+    ? sourceExperiences.slice(0, 1)
+    : sourceExperiences;
+  const experiences = relevantExperiences.map((experience) => scoreSingleExperience(experience, hireType));
   if (!experiences.length) return { score: workTypeScore(profile.workType), affinityBoost: 0, signals: [], eliteIb: false };
 
   const ranked = experiences.sort((a, b) => b.score - a.score);
   const primary = ranked[0];
   // Multi-experience cap: strongest experience dominates; extras help, but weak roles cannot stack into elite odds.
-  const secondary = ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.22 : index === 1 ? 0.11 : 0.04), 0);
+  const secondary = ['Lateral Hire', 'MBA Associate'].includes(hireType)
+    ? 0
+    : ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.22 : index === 1 ? 0.11 : 0.04), 0);
   const stackCap = primary.eliteIb ? 10 : primary.score >= 8.5 ? 9.35 : primary.score >= 7 ? 8.8 : 7.2;
   const normalizedTargetGroup = String(targetGroup || '');
   const affinityBoost = ranked.some((experience) => experience.affinities.includes(normalizedTargetGroup)) ? (primary.eliteIb ? 0.1 : 0.2) : 0;
@@ -866,21 +1136,9 @@ function extracurricularScore(profile) {
   return clamp(Math.min(primary + incremental, stackCap), 0, 10);
 }
 
-function professionalLeadershipScore(profile) {
-  const score = {
-    limited: 3.8,
-    solid: 5.8,
-    strong: 7.4,
-    exceptional: 8.8
-  }[profile.professionalLeadership] ?? 5.8;
-  return clamp(score);
-}
-
 function extracurricularScoreForHireType(profile, hireType) {
-  if (hireType === 'Summer Analyst') return extracurricularScore(profile);
-  const professionalScore = professionalLeadershipScore(profile);
-  const campusCarryover = extracurricularScore(profile);
-  return clamp(professionalScore * 0.78 + campusCarryover * 0.22);
+  if (['Summer Analyst', 'Undergrad Full-Time'].includes(hireType)) return extracurricularScore(profile);
+  return 5.5;
 }
 
 function confidenceFromDelta(delta) {
@@ -1008,7 +1266,7 @@ function profileScores(profile, competitiveness, weights, hireType, targetGroup,
   const hyperElite = isHyperEliteOpportunity(opportunity, competitiveness);
   const schoolScore = schoolToScore(profile.school);
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
-  const honorsBoost = hireType === 'Summer Analyst' && profile.honorsCollege ? 0.15 : 0;
+  const honorsBoost = ['Summer Analyst', 'Undergrad Full-Time'].includes(hireType) && profile.honorsCollege ? 0.15 : 0;
   const graduationHonorsBoost = hireType === 'Lateral Hire'
     ? { None: 0, 'Cum Laude': 0.12, 'Magna Cum Laude': 0.22, 'Summa Cum Laude': 0.32 }[profile.graduationHonors] ?? 0
     : 0;
@@ -1053,6 +1311,12 @@ function hireTypeDifficultyAdjustment(hireType, profile) {
   const experience = structuredExperienceScore(profile, hireType, 'Generalist').score;
   const schoolScore = schoolToScore(profile.school);
   let adjustment = weights.baseDifficultyAdjustment;
+
+  if (hireType === 'Undergrad Full-Time') {
+    if (experience < 7) adjustment += 0.35;
+    if (profile.networking?.referrals <= 0) adjustment += 0.25;
+    if (experience >= 8.5) adjustment -= 0.18;
+  }
 
   if (hireType === 'Lateral Hire') {
     if (experience < 6) adjustment += 0.65;
@@ -1404,13 +1668,14 @@ export default function InterviewOddsPage({ onBack }) {
   );
 
   const activeGroupOptions = selection.office ? groupOptions : [];
-  const dynamicStepTitles = useMemo(() => {
-    const titles = [...stepTitles];
-    titles[4] = selection.hireType === 'Summer Analyst' ? 'Extracurriculars & Leadership' : 'Professional Leadership';
-    return titles;
-  }, [selection.hireType]);
-  const progressPercent = ((currentStep + 1) / dynamicStepTitles.length) * 100;
+  const stepDefinitions = useMemo(() => stepDefinitionsForHireType(selection.hireType), [selection.hireType]);
+  const currentStepKey = stepDefinitions[currentStep]?.key || 'review';
+  const progressPercent = ((currentStep + 1) / stepDefinitions.length) * 100;
   const status = result ? oddsStatus(result.likelihood) : null;
+
+  useEffect(() => {
+    setCurrentStep((step) => Math.min(step, stepDefinitions.length - 1));
+  }, [stepDefinitions.length]);
 
   const handleFirmChange = (firmName) => {
     setSelection((prev) => ({
@@ -1460,7 +1725,7 @@ export default function InterviewOddsPage({ onBack }) {
   };
 
   const addWorkExperience = () => {
-    setProfile((prev) => ({ ...prev, workExperiences: [...prev.workExperiences, createWorkExperience()] }));
+    setProfile((prev) => ({ ...prev, workExperiences: [...prev.workExperiences, createWorkExperience(selection.hireType)] }));
   };
 
   const updateWorkExperience = (id, key, value) => {
@@ -1487,30 +1752,39 @@ export default function InterviewOddsPage({ onBack }) {
     setProfile((prev) => ({ ...prev, workExperiences: prev.workExperiences.filter((experience) => experience.id !== id) }));
   };
 
+  const handleHireTypeChange = (hireType) => {
+    setSelection((prev) => ({ ...prev, hireType }));
+    setProfile((prev) => ({
+      ...prev,
+      workExperiences: [createWorkExperience(hireType)]
+    }));
+    setResult(null);
+  };
+
   const goNext = () => {
     setError('');
-    if (currentStep === 0 && !firmOptions.includes(selection.firm)) {
+    if (currentStepKey === 'opportunity' && !firmOptions.includes(selection.firm)) {
       setError('Select a bank from the search results before continuing.');
       return;
     }
-    if (currentStep === 0 && !selection.office) {
+    if (currentStepKey === 'opportunity' && !selection.office) {
       setError('Select an office before continuing.');
       return;
     }
-    if (currentStep === 2 && !selection.group) {
+    if (currentStepKey === 'group' && !selection.group) {
       setError('Select a group before continuing.');
       return;
     }
-    if (currentStep === 3 && !profile.school) {
+    if (currentStepKey === 'academics' && !profile.school) {
       setError('Select a school from the search results or choose Other / Not Listed.');
       return;
     }
-    if (currentStep === 3 && (profile.gpa === '' || !Number.isFinite(Number(profile.gpa)))) {
+    if (currentStepKey === 'academics' && (profile.gpa === '' || !Number.isFinite(Number(profile.gpa)))) {
       setError('Enter your GPA before continuing.');
       return;
     }
 
-    setCurrentStep((step) => Math.min(step + 1, dynamicStepTitles.length - 1));
+    setCurrentStep((step) => Math.min(step + 1, stepDefinitions.length - 1));
   };
 
   const goBack = () => {
@@ -1556,7 +1830,7 @@ export default function InterviewOddsPage({ onBack }) {
     setError('');
     setResult(null);
 
-    const normalizedWorkExperiences = (profile.workExperiences || []).map(normalizeExperience);
+    const normalizedWorkExperiences = (profile.workExperiences || []).map((experience) => coerceExperienceForHireType(experience, selection.hireType));
     const profilePayload = {
       ...normalizeProfileForScoring(profile),
       school: schoolForPayload(profile.school),
@@ -1612,7 +1886,7 @@ export default function InterviewOddsPage({ onBack }) {
   };
 
   const renderStep = () => {
-    if (currentStep === 0) {
+    if (currentStepKey === 'opportunity') {
       return (
         <>
           <h2>Which bank and office are you targeting?</h2>
@@ -1660,17 +1934,17 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 1) {
+    if (currentStepKey === 'hireType') {
       return (
         <>
           <h2>What type of role are you recruiting for?</h2>
           <div className="choice-grid">
-            {['Summer Analyst', 'Lateral Hire', 'MBA Associate'].map((hireType) => (
+            {['Summer Analyst', 'Undergrad Full-Time', 'Lateral Hire', 'MBA Associate'].map((hireType) => (
               <button
                 type="button"
                 key={hireType}
                 className={selection.hireType === hireType ? 'choice-card selected' : 'choice-card'}
-                onClick={() => setSelection((prev) => ({ ...prev, hireType }))}
+                onClick={() => handleHireTypeChange(hireType)}
               >
                 {hireType}
               </button>
@@ -1680,7 +1954,7 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 2) {
+    if (currentStepKey === 'group') {
       return (
         <>
           <h2>Which group are you targeting?</h2>
@@ -1703,7 +1977,7 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 3) {
+    if (currentStepKey === 'academics') {
       return (
         <>
           <h2>Academic Info</h2>
@@ -1720,7 +1994,7 @@ export default function InterviewOddsPage({ onBack }) {
               step={0.01}
               onChange={(value) => setProfile({ ...profile, gpa: value })}
             />
-            {selection.hireType === 'Summer Analyst' ? (
+            {['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType) ? (
               <label className="checkbox-field">
                 <input
                   type="checkbox"
@@ -1755,28 +2029,7 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 4) {
-      if (selection.hireType !== 'Summer Analyst') {
-        return (
-          <>
-            <h2>{selection.hireType === 'MBA Associate' ? 'Professional Leadership & Trajectory' : 'Lateral Performance Signals'}</h2>
-            <p className="muted">
-              {selection.hireType === 'MBA Associate'
-                ? 'MBA associate recruiting weights prior leadership, career progression, and professional maturity more than undergraduate clubs.'
-                : 'Lateral recruiting weights role performance, promotions, deal ownership, and technical credibility more than campus involvement.'}
-            </p>
-            <label>
-              <span>Professional trajectory</span>
-              <select value={profile.professionalLeadership} onChange={(e) => setProfile({ ...profile, professionalLeadership: e.target.value })}>
-                {professionalLeadershipOptions.map((option) => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-              </select>
-            </label>
-          </>
-        );
-      }
-
+    if (currentStepKey === 'activities') {
       return (
         <>
           <div className="section-heading">
@@ -1831,35 +2084,46 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 5) {
+    if (currentStepKey === 'experience') {
+      const experienceOptions = experienceTypeOptionsForHireType(selection.hireType);
+      const showMultipleExperiences = ['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType);
+      const showTiming = showMultipleExperiences;
       return (
         <>
           <div className="section-heading">
-            <h2>Prior Work / Internship Experience</h2>
-            <button type="button" className="secondary" onClick={addWorkExperience}>
-              Add Experience
-            </button>
+            <div>
+              <h2>{experienceStepTitle(selection.hireType)}</h2>
+              {selection.hireType === 'Lateral Hire' ? <p className="muted">Current or most recent full-time role should drive lateral recruiting odds.</p> : null}
+              {selection.hireType === 'MBA Associate' ? <p className="muted">Use full-time pre-MBA experience. Old undergraduate internships are intentionally not part of this input.</p> : null}
+            </div>
+            {showMultipleExperiences ? (
+              <button type="button" className="secondary" onClick={addWorkExperience}>
+                Add Experience
+              </button>
+            ) : null}
           </div>
           <div className="activity-list">
             {profile.workExperiences.map((experience, index) => {
-              const normalizedExperience = normalizeExperience(experience);
+              const normalizedExperience = coerceExperienceForHireType(experience, selection.hireType);
               const followUps = experienceFollowUps[normalizedExperience.experienceType] || [];
 
               return (
               <article className="activity-card" key={experience.id}>
                 <div className="activity-card-heading">
-                  <h4>Experience {index + 1}</h4>
-                  <button type="button" className="text-button" onClick={() => removeWorkExperience(experience.id)}>
+                  <h4>{showMultipleExperiences ? `Experience ${index + 1}` : 'Current role'}</h4>
+                  {showMultipleExperiences ? (
+                    <button type="button" className="text-button" onClick={() => removeWorkExperience(experience.id)}>
                     Remove
-                  </button>
+                    </button>
+                  ) : null}
                 </div>
                 <label>
-                  <span>Experience category</span>
+                  <span>{selection.hireType === 'Lateral Hire' ? 'Current role type' : selection.hireType === 'MBA Associate' ? 'Pre-MBA experience type' : 'Experience category'}</span>
                   <select
                     value={normalizedExperience.experienceType}
                     onChange={(e) => updateWorkExperience(experience.id, 'experienceType', e.target.value)}
                   >
-                    {workTypeOptions.map((option) => (
+                    {experienceOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -1883,7 +2147,8 @@ export default function InterviewOddsPage({ onBack }) {
                         </select>
                       </label>
                     ))}
-                    <label>
+                    {showTiming ? (
+                      <label>
                       <span>Timing</span>
                       <select
                         value={normalizedExperience.recency}
@@ -1895,7 +2160,8 @@ export default function InterviewOddsPage({ onBack }) {
                           </option>
                         ))}
                       </select>
-                    </label>
+                      </label>
+                    ) : null}
                   </div>
                 </div>
               </article>
@@ -1906,7 +2172,7 @@ export default function InterviewOddsPage({ onBack }) {
       );
     }
 
-    if (currentStep === 6) {
+    if (currentStepKey === 'networking') {
       return (
         <>
           <h2>Networking Info</h2>
@@ -1950,24 +2216,22 @@ export default function InterviewOddsPage({ onBack }) {
             <h3>Academic Info</h3>
             <p>{schoolDisplayName(profile.school) || 'School not entered'}</p>
             <p>GPA: {profile.gpa || 'Not entered'}</p>
-            {selection.hireType === 'Summer Analyst' ? <p>Honors College: {profile.honorsCollege ? 'Yes' : 'No'}</p> : null}
+            {['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType) ? <p>Honors College: {profile.honorsCollege ? 'Yes' : 'No'}</p> : null}
             {selection.hireType === 'Lateral Hire' ? <p>Graduation Honors: {profile.graduationHonors}</p> : null}
             {selection.hireType === 'MBA Associate' ? <p>GMAT: {profile.gmatRange || 'Not provided'}</p> : null}
           </section>
-          <section>
-            <h3>{selection.hireType === 'Summer Analyst' ? 'Activities' : 'Professional Leadership'}</h3>
-            {selection.hireType === 'Summer Analyst' ? (
-              profile.activities.map((activity) => (
+          {['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType) ? (
+            <section>
+              <h3>Activities</h3>
+              {profile.activities.map((activity) => (
                 <p key={activity.id}>{activityTypeLabel(activity.activityType)} · {activity.selectivity} · {activity.leadershipLevel}</p>
-              ))
-            ) : (
-              <p>{professionalLeadershipOptions.find((option) => option.value === profile.professionalLeadership)?.label || 'Not entered'}</p>
-            )}
-          </section>
+              ))}
+            </section>
+          ) : null}
           <section>
-            <h3>Work Experience</h3>
+            <h3>{experienceStepTitle(selection.hireType)}</h3>
             {profile.workExperiences.map((experience) => (
-              <p key={experience.id}>{experienceSummary(experience)}</p>
+              <p key={experience.id}>{experienceSummary(experience, selection.hireType)}</p>
             ))}
           </section>
           <section>
@@ -2134,9 +2398,9 @@ export default function InterviewOddsPage({ onBack }) {
       <section className="panel survey-card">
         <div className="survey-progress">
           <span>
-            Step {currentStep + 1} of {dynamicStepTitles.length}
+            Step {currentStep + 1} of {stepDefinitions.length}
           </span>
-          <strong>{dynamicStepTitles[currentStep]}</strong>
+          <strong>{stepDefinitions[currentStep]?.title}</strong>
           <div className="progress-track">
             <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
           </div>
@@ -2154,7 +2418,7 @@ export default function InterviewOddsPage({ onBack }) {
           ) : (
             <span />
           )}
-          {currentStep < dynamicStepTitles.length - 1 ? (
+          {currentStep < stepDefinitions.length - 1 ? (
             <button type="button" className="primary" onClick={goNext}>
               Next
             </button>

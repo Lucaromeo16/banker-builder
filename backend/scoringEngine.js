@@ -199,6 +199,13 @@ const profileWeights = {
     extracurricular: 0.14,
     baseDifficultyAdjustment: 0
   },
+  'Undergrad Full-Time': {
+    academic: 0.26,
+    experience: 0.28,
+    networking: 0.34,
+    extracurricular: 0.12,
+    baseDifficultyAdjustment: 0.75
+  },
   'Lateral Hire': {
     academic: 0.14,
     experience: 0.52,
@@ -220,6 +227,10 @@ const resumeProfileWeights = {
   experience: 0.36,
   extracurricular: 0.24
 };
+
+const yearsExperienceOptions = ['0-1 years', '1-2 years', '2-4 years', '4+ years'];
+const dealExposureOptions = ['High transaction exposure', 'Moderate transaction exposure', 'Limited transaction exposure', 'No transaction exposure'];
+const currentPlatformTierOptions = ['Elite / BB / EB Platform', 'Strong Institutional Platform', 'Middle Market / National Platform', 'Regional / Boutique Platform', 'Small / Unknown Platform'];
 
 function clamp(value, min = 0, max = 10) {
   return Math.max(min, Math.min(max, value));
@@ -419,6 +430,116 @@ const experienceFollowUps = {
   ],
   'General / Other Experience': [
     { key: 'generalType', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
+  ],
+  'Current Investment Banking Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Private Equity Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Consulting Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Corporate Development Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Corporate Finance / FP&A Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Big 4 / Accounting Role': [
+    { key: 'platformTier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current TAS / Valuation Role': [
+    { key: 'platformTier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Commercial Banking Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Asset Management / HF / ER Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Current Industry / Operating Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Other Current Professional Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Investment Banking Analyst': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Private Equity': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  Consulting: [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Corporate Development': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Corporate Finance / FP&A': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Big 4 / Accounting': [
+    { key: 'platformTier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'TAS / Valuation': [
+    { key: 'platformTier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Commercial Banking': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Asset Management / Hedge Fund / Equity Research': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Industry / Operating Role': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
+  ],
+  'Other Professional Experience': [
+    { key: 'platformTier', options: currentPlatformTierOptions },
+    { key: 'yearsExperience', options: yearsExperienceOptions },
+    { key: 'dealExposure', options: dealExposureOptions }
   ]
 };
 
@@ -462,13 +583,94 @@ function normalizeExperience(experience = {}) {
 
 function recencyMultiplier(recency, hireType) {
   if (recency === 'Current / most recent') return 1;
-  if (hireType === 'Summer Analyst') return recency === 'Past 1-2 years' ? 0.95 : 0.86;
-  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.68 : 0.36;
+  if (['Summer Analyst', 'Undergrad Full-Time'].includes(hireType)) return recency === 'Past 1-2 years' ? 0.95 : 0.86;
+  if (hireType === 'MBA Associate') return recency === 'Past 1-2 years' ? 0.25 : 0.08;
   return recency === 'Past 1-2 years' ? 0.76 : 0.48;
+}
+
+function scoreProfessionalExperience(experience, hireType) {
+  const type = experience.experienceType;
+  const signals = new Set();
+  const affinities = new Set();
+  let eliteIb = false;
+  const platform = {
+    'Elite / BB / EB Platform': 1.1,
+    'Strong Institutional Platform': 0.65,
+    'Middle Market / National Platform': 0.25,
+    'Regional / Boutique Platform': -0.2,
+    'Small / Unknown Platform': -0.6,
+    'Big 4': 0.7,
+    'National / Next Tier': 0.25,
+    'Top 100': -0.15,
+    'Local / Small Firm': -0.6
+  }[experience.platformTier] ?? 0;
+  const years = { '0-1 years': -0.25, '1-2 years': 0.15, '2-4 years': 0.45, '4+ years': 0.35 }[experience.yearsExperience] ?? 0.15;
+  const exposure = {
+    'High transaction exposure': 0.85,
+    'Moderate transaction exposure': 0.35,
+    'Limited transaction exposure': -0.1,
+    'No transaction exposure': -0.55
+  }[experience.dealExposure] ?? 0.2;
+  let base = 5.2;
+
+  if (['Current Investment Banking Role', 'Investment Banking Analyst'].includes(type)) {
+    base = hireType === 'MBA Associate' ? 9 : 9.3;
+    eliteIb = experience.platformTier === 'Elite / BB / EB Platform';
+    signals.add(hireType === 'MBA Associate' ? 'pre-MBA investment banking experience' : 'current investment banking role');
+    ['M&A', 'Financial Sponsors', 'Generalist'].forEach((target) => affinities.add(target));
+  } else if (['Current Private Equity Role', 'Private Equity'].includes(type)) {
+    base = 8.4;
+    signals.add('private equity experience');
+    affinities.add('Financial Sponsors');
+  } else if (['Current Consulting Role', 'Consulting'].includes(type)) {
+    base = 7.4;
+    signals.add('consulting experience');
+    ['M&A', 'Generalist', 'Strategic Advisory'].forEach((target) => affinities.add(target));
+  } else if (['Current Corporate Development Role', 'Corporate Development'].includes(type)) {
+    base = 7.8;
+    signals.add('corporate development experience');
+    affinities.add('M&A');
+  } else if (['Current Corporate Finance / FP&A Role', 'Corporate Finance / FP&A'].includes(type)) {
+    base = 6.6;
+    signals.add('corporate finance experience');
+  } else if (['Current Big 4 / Accounting Role', 'Big 4 / Accounting'].includes(type)) {
+    base = 6.4;
+    signals.add('accounting experience');
+    affinities.add('Financial Institutions');
+  } else if (['Current TAS / Valuation Role', 'TAS / Valuation'].includes(type)) {
+    base = 7.8;
+    signals.add('TAS / valuation experience');
+    ['M&A', 'Generalist'].forEach((target) => affinities.add(target));
+  } else if (['Current Commercial Banking Role', 'Commercial Banking'].includes(type)) {
+    base = 6.6;
+    signals.add('commercial banking experience');
+    ['DCM', 'LevFin', 'Financial Institutions'].forEach((target) => affinities.add(target));
+  } else if (['Current Asset Management / HF / ER Role', 'Asset Management / Hedge Fund / Equity Research'].includes(type)) {
+    base = 6.9;
+    signals.add('public markets experience');
+    ['Restructuring', 'Financial Sponsors'].forEach((target) => affinities.add(target));
+  } else if (['Current Industry / Operating Role', 'Industry / Operating Role'].includes(type)) {
+    base = 5.8;
+    signals.add('industry operating experience');
+  } else {
+    base = 5.1;
+    signals.add('professional experience');
+  }
+
+  return {
+    score: clamp(base + platform + years + exposure),
+    signals: Array.from(signals),
+    affinities: Array.from(affinities),
+    eliteIb
+  };
 }
 
 function scoreSingleExperience(rawExperience, hireType) {
   const experience = normalizeExperience(rawExperience);
+  if (['Lateral Hire', 'MBA Associate'].includes(hireType)) {
+    return scoreProfessionalExperience(experience, hireType);
+  }
+
   const type = experience.experienceType;
   let score = 3.2;
   const signals = new Set();
@@ -550,13 +752,18 @@ function structuredExperienceScore(profile, hireType, targetGroup) {
   const sourceExperiences = Array.isArray(profile.workExperiences) && profile.workExperiences.length
     ? profile.workExperiences
     : [{ workType: profile.workType || 'None' }];
-  const experiences = sourceExperiences.map((experience) => scoreSingleExperience(experience, hireType));
+  const relevantExperiences = ['Lateral Hire', 'MBA Associate'].includes(hireType)
+    ? sourceExperiences.slice(0, 1)
+    : sourceExperiences;
+  const experiences = relevantExperiences.map((experience) => scoreSingleExperience(experience, hireType));
   if (!experiences.length) return { score: workTypeScore(profile.workType), affinityBoost: 0, signals: [], eliteIb: false };
 
   const ranked = experiences.sort((a, b) => b.score - a.score);
   const primary = ranked[0];
   // Multi-experience cap: strongest experience dominates; extras help, but weak roles cannot stack into elite odds.
-  const secondary = ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.22 : index === 1 ? 0.11 : 0.04), 0);
+  const secondary = ['Lateral Hire', 'MBA Associate'].includes(hireType)
+    ? 0
+    : ranked.slice(1).reduce((sum, experience, index) => sum + experience.score * (index === 0 ? 0.22 : index === 1 ? 0.11 : 0.04), 0);
   const stackCap = primary.eliteIb ? 10 : primary.score >= 8.5 ? 9.35 : primary.score >= 7 ? 8.8 : 7.2;
   const normalizedTargetGroup = String(targetGroup || '');
   const affinityBoost = ranked.some((experience) => experience.affinities.includes(normalizedTargetGroup)) ? (primary.eliteIb ? 0.1 : 0.2) : 0;
@@ -743,22 +950,9 @@ function extracurricularScore(profile) {
   return clamp(Math.min(primary + incremental, stackCap), 0, 10);
 }
 
-function professionalLeadershipScore(profile) {
-  const score = {
-    limited: 3.8,
-    solid: 5.8,
-    strong: 7.4,
-    exceptional: 8.8
-  }[profile.professionalLeadership] ?? 5.8;
-  return clamp(score);
-}
-
 function extracurricularScoreForHireType(profile, hireType) {
-  if (hireType === 'Summer Analyst') return extracurricularScore(profile);
-
-  const professionalScore = professionalLeadershipScore(profile);
-  const campusCarryover = extracurricularScore(profile);
-  return clamp(professionalScore * 0.78 + campusCarryover * 0.22);
+  if (['Summer Analyst', 'Undergrad Full-Time'].includes(hireType)) return extracurricularScore(profile);
+  return 5.5;
 }
 
 function confidenceFromDelta(delta) {
@@ -953,7 +1147,7 @@ function profileScores(
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
   const experienceResult = structuredExperienceScore(profile, hireType, targetGroup);
   const experience = experienceResult.score;
-  const honorsBoost = hireType === 'Summer Analyst' && profile.honorsCollege ? 0.15 : 0;
+  const honorsBoost = ['Summer Analyst', 'Undergrad Full-Time'].includes(hireType) && profile.honorsCollege ? 0.15 : 0;
   const graduationHonorsBoost = hireType === 'Lateral Hire'
     ? { None: 0, 'Cum Laude': 0.12, 'Magna Cum Laude': 0.22, 'Summa Cum Laude': 0.32 }[profile.graduationHonors] ?? 0
     : 0;
@@ -1030,6 +1224,12 @@ function hireTypeDifficultyAdjustment(hireType, profile) {
   const experience = structuredExperienceScore(profile, hireType, 'Generalist').score;
   const schoolScore = schoolToScore(profile.school || '');
   let adjustment = weights.baseDifficultyAdjustment;
+
+  if (hireType === 'Undergrad Full-Time') {
+    if (experience < 7) adjustment += 0.35;
+    if (profile.networking?.referrals <= 0) adjustment += 0.25;
+    if (experience >= 8.5) adjustment -= 0.18;
+  }
 
   if (hireType === 'Lateral Hire') {
     if (experience < 6) adjustment += 0.65;
