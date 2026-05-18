@@ -43,6 +43,20 @@ const features = [
     )
   },
   {
+    mode: 'hirevue-prep',
+    eyebrow: 'Timed video screen',
+    title: 'HireVue Prep',
+    description: 'Practice realistic timed video interviews with AI feedback on communication, confidence, structure, and delivery.',
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h11v10H4z" />
+        <path d="m15 10 5-3v10l-5-3" />
+        <path d="M8 20h4" />
+        <path d="M10 17v3" />
+      </svg>
+    )
+  },
+  {
     mode: 'firm-map',
     eyebrow: 'Office intelligence',
     title: 'Investment Bank Firm Map',

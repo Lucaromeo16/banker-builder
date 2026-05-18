@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
 import HomePage from './components/HomePage';
+import HireVuePrepPage from './components/HireVuePrepPage';
 import InterviewOddsPage from './components/InterviewOddsPage';
 import InterviewPrepPage from './components/InterviewPrepPage';
 import KnowledgeBasePage from './components/KnowledgeBasePage';
@@ -14,6 +15,7 @@ const navItems = [
   { label: 'Interview Odds', mode: 'interview' },
   { label: 'Target List', mode: 'target-list' },
   { label: 'Interview Prep', mode: 'interview-prep' },
+  { label: 'HireVue Prep', mode: 'hirevue-prep' },
   { label: 'Firm Map', mode: 'firm-map' },
   { label: 'Networking Hub', mode: 'networking-hub' },
   { label: 'Resume Analyzer', mode: 'resume-analyzer' },
@@ -78,6 +80,8 @@ export default function App() {
         {mode === 'target-list' ? <TargetListBuilderPage onBack={goHome} /> : null}
 
         {mode === 'interview-prep' ? <InterviewPrepPage onBack={goHome} /> : null}
+
+        {mode === 'hirevue-prep' ? <HireVuePrepPage onBack={goHome} /> : null}
 
         {mode === 'firm-map' ? <FirmMapPage onBack={goHome} onAddContact={addNetworkingContact} /> : null}
 
