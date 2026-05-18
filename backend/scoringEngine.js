@@ -144,41 +144,50 @@ const schoolMetroMap = {
 
 const activityTypeScores = {
   'Selective IB club': 9.4,
-  'Investment fund / student-run fund': 9,
-  'Business fraternity': 8.2,
-  'Social fraternity / sorority executive board': 8,
+  'Investment fund / student-run fund': 9.1,
+  'Business fraternity': 6.5,
+  'Social fraternity / sorority executive board': 6.2,
   'Scholars Group': 6.8,
-  'Finance/business club': 6.5,
-  'Consulting club': 5.8,
-  'Entrepreneurship club': 5.8,
-  'Non-business leadership organization': 5.2,
-  Other: 3.5
+  'Finance/business club': 5.8,
+  'Consulting club': 5.3,
+  'Entrepreneurship club': 5.7,
+  'Non-business leadership organization': 4.8,
+  Other: 3.2
 };
 
 const leadershipScores = {
-  president: 10,
-  vp: 9,
-  VP: 9,
-  treasurer: 9,
-  'finance chair': 9,
-  'committee lead': 7,
-  member: 3.2,
+  president: 7.2,
+  vp: 6.4,
+  VP: 6.4,
+  treasurer: 6.4,
+  'finance chair': 6.4,
+  'committee lead': 5.4,
+  member: 3,
   none: 0
 };
 
 const selectivityScores = {
-  'highly selective': 10,
-  selective: 8,
-  moderate: 5.5,
-  'open enrollment': 2.5
+  'highly selective': 9.2,
+  selective: 7.2,
+  moderate: 5.1,
+  'open enrollment': 2.2
 };
 
 const relevanceScores = {
-  high: 10,
-  moderate: 6.5,
-  low: 3.5,
+  high: 9,
+  moderate: 6,
+  low: 3.2,
   none: 1
 };
+
+const eliteFinanceActivityTypes = new Set(['Selective IB club', 'Investment fund / student-run fund']);
+const financeRelevantActivityTypes = new Set(['Selective IB club', 'Investment fund / student-run fund', 'Finance/business club']);
+const genericLeadershipActivityTypes = new Set([
+  'Business fraternity',
+  'Social fraternity / sorority executive board',
+  'Non-business leadership organization'
+]);
+const meaningfulLeadershipLevels = new Set(['president', 'vp', 'VP', 'treasurer', 'finance chair', 'committee lead']);
 
 export const groupOptions = opportunityGroups;
 
@@ -191,17 +200,17 @@ const profileWeights = {
     baseDifficultyAdjustment: 0
   },
   'Lateral Hire': {
-    academic: 0.16,
-    experience: 0.42,
-    networking: 0.34,
-    extracurricular: 0.08,
+    academic: 0.14,
+    experience: 0.52,
+    networking: 0.3,
+    extracurricular: 0.04,
     baseDifficultyAdjustment: 0.15
   },
   'MBA Associate': {
     academic: 0.34,
-    experience: 0.34,
-    networking: 0.24,
-    extracurricular: 0.08,
+    experience: 0.44,
+    networking: 0.18,
+    extracurricular: 0.04,
     baseDifficultyAdjustment: 0.25
   }
 };
@@ -681,15 +690,29 @@ function activityScore(activity) {
   const selectivity = selectivityScores[activity.selectivity] ?? 4;
   const leadership = leadershipScores[activity.leadershipLevel] ?? 0;
   const relevance = relevanceScores[activity.businessRelevance] ?? relevanceScores.moderate;
+  const isEliteFinance = eliteFinanceActivityTypes.has(activity.activityType);
+  const isFinanceRelevant = financeRelevantActivityTypes.has(activity.activityType);
+  const hasMeaningfulLeadership = meaningfulLeadershipLevels.has(activity.leadershipLevel);
 
-  const base = type * 0.33 + selectivity * 0.2 + leadership * 0.32 + relevance * 0.15;
   const openEnrollmentMemberPenalty =
     activity.selectivity === 'open enrollment' &&
     (!activity.leadershipLevel || ['member', 'none'].includes(activity.leadershipLevel))
-      ? 1.6
+      ? 1.4
       : 0;
+  const eliteFinanceBoost = isEliteFinance && activity.selectivity === 'highly selective' ? (hasMeaningfulLeadership ? 0.55 : 0.25) : 0;
+  const financeRelevanceBoost = isFinanceRelevant && activity.businessRelevance === 'high' ? 0.2 : 0;
+  const raw =
+    type * 0.42 +
+    selectivity * 0.2 +
+    leadership * 0.18 +
+    relevance * 0.2 +
+    eliteFinanceBoost +
+    financeRelevanceBoost -
+    openEnrollmentMemberPenalty;
+  const genericLeadershipCap = genericLeadershipActivityTypes.has(activity.activityType) && activity.businessRelevance !== 'high' ? 7.35 : 10;
+  const scholarsCap = activity.activityType === 'Scholars Group' && activity.businessRelevance !== 'high' ? 7.6 : 10;
 
-  return clamp(base - openEnrollmentMemberPenalty);
+  return clamp(Math.min(raw, genericLeadershipCap, scholarsCap));
 }
 
 function extracurricularScore(profile) {
@@ -698,12 +721,44 @@ function extracurricularScore(profile) {
 
   const ranked = activities.map(activityScore).sort((a, b) => b - a);
   const primary = ranked[0] ?? 0;
-  const secondary = ranked.slice(1).reduce((sum, score, index) => {
-    const weight = index === 0 ? 0.45 : 0.25;
+  const incremental = ranked.slice(1).reduce((sum, score, index) => {
+    const weight = index === 0 ? 0.32 : index === 1 ? 0.14 : 0.05;
     return sum + score * weight;
   }, 0);
+  const eliteFinanceCount = activities.filter((activity) => eliteFinanceActivityTypes.has(activity.activityType)).length;
+  const financeRelevantCount = activities.filter((activity) => financeRelevantActivityTypes.has(activity.activityType)).length;
+  const selectiveCount = activities.filter((activity) => ['highly selective', 'selective'].includes(activity.selectivity)).length;
+  const leadershipCount = activities.filter((activity) => meaningfulLeadershipLevels.has(activity.leadershipLevel)).length;
+  // Upper-end extracurricular scoring is intentionally nonlinear: strong generic leadership can score well,
+  // but 9s and 10s require stacked recruiting-relevant finance signals, not titles alone.
+  const stackCap =
+    eliteFinanceCount >= 2 && leadershipCount >= 1 ? 10 :
+    eliteFinanceCount >= 1 && financeRelevantCount >= 2 && selectiveCount >= 2 ? 9.65 :
+    eliteFinanceCount >= 1 && (leadershipCount >= 1 || selectiveCount >= 2) ? 9.35 :
+    financeRelevantCount >= 1 && leadershipCount >= 1 && selectiveCount >= 2 ? 9 :
+    leadershipCount >= 1 && selectiveCount >= 1 ? 8.75 :
+    primary >= 7 ? 8.35 :
+    7.2;
 
-  return clamp(primary + secondary, 0, 10);
+  return clamp(Math.min(primary + incremental, stackCap), 0, 10);
+}
+
+function professionalLeadershipScore(profile) {
+  const score = {
+    limited: 3.8,
+    solid: 5.8,
+    strong: 7.4,
+    exceptional: 8.8
+  }[profile.professionalLeadership] ?? 5.8;
+  return clamp(score);
+}
+
+function extracurricularScoreForHireType(profile, hireType) {
+  if (hireType === 'Summer Analyst') return extracurricularScore(profile);
+
+  const professionalScore = professionalLeadershipScore(profile);
+  const campusCarryover = extracurricularScore(profile);
+  return clamp(professionalScore * 0.78 + campusCarryover * 0.22);
 }
 
 function confidenceFromDelta(delta) {
@@ -811,26 +866,38 @@ function applyGates({
   return { classification: updated, gateReasons };
 }
 
-function buildStrengths(scoreBreakdown, profile) {
+function buildStrengths(scoreBreakdown, profile, hireType = 'Summer Analyst') {
   const strengths = [];
   if (scoreBreakdown.networking >= 7) strengths.push('Strong networking engine with meaningful touchpoints and relationship depth.');
   if (scoreBreakdown.experience >= 7) strengths.push('Experience profile signals credible deal-readiness and relevant exposure.');
   if (scoreBreakdown.academic >= 7) strengths.push('Academic profile clears most resume screens for IB analyst recruiting.');
-  if (scoreBreakdown.extracurricular >= 7) strengths.push('Activities & Leadership show credible operating responsibility and campus signal.');
+  if (scoreBreakdown.extracurricular >= 7) {
+    strengths.push(
+      hireType === 'Summer Analyst'
+        ? 'Activities & Leadership show credible operating responsibility and campus signal.'
+        : 'Professional leadership and trajectory show credible responsibility beyond core work experience.'
+    );
+  }
   if (profile.preferredLocations?.length) strengths.push(`Clear office preference (${profile.preferredLocations.join(', ')}) helps focus outreach.`);
   return strengths.slice(0, 3);
 }
 
-function buildGaps(scoreBreakdown, gateReasons) {
+function buildGaps(scoreBreakdown, gateReasons, hireType = 'Summer Analyst') {
   const gaps = [...gateReasons];
   if (scoreBreakdown.networking < 6) gaps.push('Networking volume and referral depth should be built further.');
   if (scoreBreakdown.experience < 6) gaps.push('Experience quality needs stronger transaction or valuation exposure.');
   if (scoreBreakdown.academic < 6) gaps.push('Academic profile is below average for top investment banking pipelines.');
-  if (scoreBreakdown.extracurricular < 5) gaps.push('Activities & Leadership signal is light; selective finance groups or real operating roles would help.');
+  if (scoreBreakdown.extracurricular < 5) {
+    gaps.push(
+      hireType === 'Summer Analyst'
+        ? 'Activities & Leadership signal is light; selective finance groups or real operating roles would help.'
+        : 'Professional leadership signal is light; stronger ownership, promotions, or deal responsibility would help.'
+    );
+  }
   return [...new Set(gaps)].slice(0, 3);
 }
 
-function buildActionSteps(scoreBreakdown, profile, { includeFinanceChair = true } = {}) {
+function buildActionSteps(scoreBreakdown, profile, { includeFinanceChair = true, hireType = 'Summer Analyst' } = {}) {
   const steps = [];
   if (scoreBreakdown.networking < 7) {
     steps.push('Run a 6-week networking sprint: 8-10 new chats/week with 48-hour follow-ups and weekly relationship tracking.');
@@ -843,9 +910,11 @@ function buildActionSteps(scoreBreakdown, profile, { includeFinanceChair = true 
   }
   if (scoreBreakdown.extracurricular < 6) {
     steps.push(
-      includeFinanceChair
-        ? 'Pursue a selective finance activity or a President, VP, Treasurer, or Finance Chair role with measurable responsibility.'
-        : 'Pursue a selective finance activity or a President, VP, or Treasurer role with measurable responsibility.'
+      hireType === 'Summer Analyst'
+        ? includeFinanceChair
+          ? 'Pursue a selective finance activity or a President, VP, Treasurer, or Finance Chair role with measurable responsibility.'
+          : 'Pursue a selective finance activity or a President, VP, or Treasurer role with measurable responsibility.'
+        : 'Build clearer professional leadership evidence through deal ownership, stronger manager feedback, or expanded responsibility.'
     );
   }
   if (steps.length < 2) {
@@ -884,11 +953,19 @@ function profileScores(
   const gpaScore = gpaToNonlinearScore(profile.gpa, competitiveness);
   const experienceResult = structuredExperienceScore(profile, hireType, targetGroup);
   const experience = experienceResult.score;
-  const honorsBoost = profile.honorsCollege ? 0.15 : 0;
-  const schoolWeight = hyperElite ? 0.5 : experienceResult.eliteIb ? 0.32 : experience >= 8.5 ? 0.36 : experience >= 7 ? 0.42 : 0.48;
-  const academic = clamp(schoolScore * schoolWeight + gpaScore * (1 - schoolWeight) + honorsBoost);
+  const honorsBoost = hireType === 'Summer Analyst' && profile.honorsCollege ? 0.15 : 0;
+  const graduationHonorsBoost = hireType === 'Lateral Hire'
+    ? { None: 0, 'Cum Laude': 0.12, 'Magna Cum Laude': 0.22, 'Summa Cum Laude': 0.32 }[profile.graduationHonors] ?? 0
+    : 0;
+  const gmatBoost = hireType === 'MBA Associate'
+    ? { '600-649': 0.05, '650-699': 0.14, '700-729': 0.25, '730-759': hyperElite ? 0.42 : 0.34, '760+': hyperElite ? 0.58 : 0.45 }[profile.gmatRange] ?? 0
+    : 0;
+  const schoolWeight = hireType === 'MBA Associate'
+    ? hyperElite ? 0.62 : 0.56
+    : hyperElite ? 0.5 : experienceResult.eliteIb ? 0.32 : experience >= 8.5 ? 0.36 : experience >= 7 ? 0.42 : 0.48;
+  const academic = clamp(schoolScore * schoolWeight + gpaScore * (1 - schoolWeight) + honorsBoost + graduationHonorsBoost + gmatBoost);
   const networking = networkingScore(profile.networking);
-  const extracurricular = extracurricularScore(profile);
+  const extracurricular = extracurricularScoreForHireType(profile, hireType);
   // Hyper-elite group amplification: top groups compress merely good profiles and reward pedigree, GPA, and elite internships.
   const effectiveWeights = hyperElite
     ? {
@@ -1152,9 +1229,9 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     classification: finalClassification,
     confidence: confidenceFromDelta(delta),
     scoreBreakdown,
-    strengths: buildStrengths(scoreBreakdown, profile),
-    gaps: buildGaps(scoreBreakdown, gateResult.gateReasons),
-    actionSteps: buildActionSteps(scoreBreakdown, profile, { includeFinanceChair: false }),
+    strengths: buildStrengths(scoreBreakdown, profile, hireType),
+    gaps: buildGaps(scoreBreakdown, gateResult.gateReasons, hireType),
+    actionSteps: buildActionSteps(scoreBreakdown, profile, { includeFinanceChair: false, hireType }),
     reason: `Your total score (${boostedTotal.toFixed(2)}) is ${delta >= 0 ? 'above' : 'below'} this ${hireType} ${opportunity.group} opportunity's adjusted benchmark (${adjustedCompetitiveness.toFixed(1)}).${gpaReason}${networkingReason}${regionalReason}${experienceReason}${hyperReason}`
   };
 }
