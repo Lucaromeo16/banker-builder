@@ -742,12 +742,7 @@ function groupInterestScore(group, interests) {
 
   const normalizedGroup = normalizedGroupValue(group);
   const aliases = selectedGroupAliases(interests);
-  if (aliases.has(normalizedGroup) || [...aliases].some((alias) => normalizedGroup.includes(alias) || alias.includes(normalizedGroup))) return 3;
-
-  const desiredGroups = interests.flatMap((interest) => interestToGroups[interest] || []);
-  if (desiredGroups.includes(group)) return 3;
-  if (group === 'M&A' && interests.some((interest) => ['Technology', 'Healthcare', 'Industrials', 'Consumer/Retail', 'Energy'].includes(interest))) return 1.25;
-  return 0;
+  return aliases.has(normalizedGroup) ? 3 : 0;
 }
 
 function normalizedGroupValue(value) {
@@ -761,20 +756,20 @@ function normalizedGroupValue(value) {
 
 function interestGroupAliases(interest) {
   const aliasMap = {
-    'Debt Capital Markets': ['DCM', 'Debt Capital Markets', 'Capital Markets', 'Capital Markets Advisory', 'Capital Structure Advisory', 'Liability Management', 'Corporate Banking', 'Project Finance', 'Structured Finance'],
-    'Equity Capital Markets': ['ECM', 'Equity Capital Markets', 'Capital Markets', 'Capital Markets Advisory', 'Capital Raising', 'Growth Equity', 'Private Placements'],
-    'Leveraged Finance': ['Leveraged Finance', 'LevFin', 'Debt Capital Markets', 'DCM', 'Capital Structure Advisory', 'Financial Sponsors'],
-    'Financial Sponsors': ['Financial Sponsors', 'Private Equity', 'Sponsor Coverage', 'M&A', 'M&A Advisory'],
-    'M&A': ['M&A', 'M&A Advisory', 'Middle Market M&A', 'Cross-Border M&A', 'Strategic Advisory'],
-    'Consumer/Retail': ['Consumer/Retail', 'Consumer & Retail', 'Consumer', 'Retail', 'Restaurants'],
-    FIG: ['FIG', 'Financial Institutions', 'Financial Services', 'Insurance', 'FinTech', 'Payments', 'Consumer Finance'],
-    Restructuring: ['Restructuring', 'Financial Restructuring', 'Special Situations', 'Liability Management'],
-    Healthcare: ['Healthcare', 'Healthcare Services', 'Healthcare M&A', 'Healthcare IT', 'Biopharma', 'Biotech', 'MedTech', 'Life Sciences', 'Provider Services'],
-    Technology: ['Technology', 'Software', 'SaaS', 'Internet', 'FinTech', 'Media & Technology', 'Tech-Enabled Services', 'Vertical Software', 'Cybersecurity', 'AI / ML'],
-    Industrials: ['Industrials', 'Diversified Industrials', 'Manufacturing', 'Aerospace & Defense', 'Automotive', 'Transportation & Logistics', 'Industrial Technology'],
+    'Debt Capital Markets': ['DCM', 'Debt Capital Markets'],
+    'Equity Capital Markets': ['ECM', 'Equity Capital Markets'],
+    'Leveraged Finance': ['Leveraged Finance', 'LevFin'],
+    'Financial Sponsors': ['Financial Sponsors'],
+    'M&A': ['M&A', 'M&A Advisory', 'Middle Market M&A', 'Cross-Border M&A'],
+    'Consumer/Retail': ['Consumer/Retail', 'Consumer & Retail', 'Consumer'],
+    FIG: ['FIG', 'Financial Institutions'],
+    Restructuring: ['Restructuring', 'Financial Restructuring', 'RX'],
+    Healthcare: ['Healthcare', 'Healthcare Services', 'Healthcare M&A', 'Healthcare IT', 'Biopharma', 'Biotech', 'MedTech', 'Life Sciences'],
+    Technology: ['Technology', 'Software', 'SaaS', 'Internet', 'Media & Technology', 'Vertical Software', 'Cybersecurity', 'AI / ML'],
+    Industrials: ['Industrials', 'Diversified Industrials', 'Manufacturing', 'Aerospace & Defense', 'Automotive', 'Transportation & Logistics'],
     'Real Estate': ['Real Estate'],
-    Energy: ['Energy', 'Energy Transition', 'Power', 'Power & Utilities', 'Infrastructure', 'Project Finance'],
-    'Public Finance': ['Public Finance', 'Public Sector', 'Government Services', 'Infrastructure']
+    Energy: ['Energy', 'Energy Transition', 'Power', 'Power & Utilities'],
+    'Public Finance': ['Public Finance']
   };
 
   const directGroups = (interestToGroups[interest] || []).filter((group) => interest === 'Generalist' || group !== 'Generalist');
@@ -796,7 +791,7 @@ function opportunityMatchesSelectedGroups(opportunity, interests = []) {
   const group = normalizedGroupValue(opportunity.group);
   if (!group) return false;
 
-  return [...aliases].some((alias) => group === alias || group.includes(alias) || alias.includes(group));
+  return aliases.has(group);
 }
 
 function locationRadiusScore(opportunity, profile, strength) {
@@ -904,6 +899,57 @@ function limitRecommendations(recommendations, maxFirmCount) {
     );
 }
 
+function officeKeyForOpportunity(opportunity) {
+  return `${opportunity.office || opportunity.officeCity || ''}-${opportunity.state || ''}`;
+}
+
+function isStrongSecondOfficeMatch(candidate, primary) {
+  const candidateFit = profileFitScore(candidate);
+  const primaryFit = profileFitScore(primary);
+  const locationQualified = !candidate.matchedLocation || candidate.withinSelectedRadius || primary.withinSelectedRadius === candidate.withinSelectedRadius;
+
+  return (
+    candidate.fitScore >= Math.max(8, primary.fitScore - 2.25) &&
+    candidateFit >= Math.max(1.25, primaryFit - 1.25) &&
+    locationQualified
+  );
+}
+
+function selectFirmOfficeRecommendations(ranked) {
+  const selected = [];
+  const firmCounts = new Map();
+  const firmOffices = new Map();
+  const firmPrimary = new Map();
+
+  ranked.forEach((opportunity) => {
+    const firm = opportunity.firm;
+    const officeKey = officeKeyForOpportunity(opportunity);
+    const currentCount = firmCounts.get(firm) || 0;
+    const usedOffices = firmOffices.get(firm) || new Set();
+
+    if (usedOffices.has(officeKey) || currentCount >= 2) return;
+
+    if (currentCount === 1 && !isStrongSecondOfficeMatch(opportunity, firmPrimary.get(firm))) {
+      return;
+    }
+
+    selected.push(opportunity);
+    firmCounts.set(firm, currentCount + 1);
+    usedOffices.add(officeKey);
+    firmOffices.set(firm, usedOffices);
+    if (!firmPrimary.has(firm)) {
+      firmPrimary.set(firm, opportunity);
+    }
+  });
+
+  return selected.sort(
+    (a, b) =>
+      b.fitScore - a.fitScore ||
+      profileFitScore(b) - profileFitScore(a) ||
+      b.competitiveness - a.competitiveness
+  );
+}
+
 function buildTargetList(scoredResults, profile) {
   const locationPreferences = normalizedLocationPreferences(profile);
   const strength = locationPreferences.length ? profile.locationPreferenceStrength || 'Flexible' : 'Open';
@@ -916,7 +962,7 @@ function buildTargetList(scoredResults, profile) {
   // 3. enforce selected group interests unless the user chose a broad Generalist/Not sure path
   // 4. apply realism gates so Reach remains plausible
   // 5. apply Strict radius as the hard location filter; Flexible/Open use radius only for ranking
-  // 6. dedupe by firm, cap output count, then bucket by each recommendation's independent classification
+  // 6. allow up to two high-quality offices per firm, cap output count, then bucket by each recommendation's independent classification
   const withDistance = scoredResults.map((opportunity) => {
     const locationMatch = opportunityLocationMatch(opportunity, profile);
     return {
@@ -952,23 +998,10 @@ function buildTargetList(scoredResults, profile) {
         b.competitiveness - a.competitiveness
     );
 
-  const bestByFirm = new Map();
-  ranked.forEach((opportunity) => {
-    const existing = bestByFirm.get(opportunity.firm);
-    if (!existing || opportunity.fitScore > existing.fitScore) {
-      bestByFirm.set(opportunity.firm, opportunity);
-    }
-  });
-
-  const uniqueFirmRanked = [...bestByFirm.values()].sort(
-    (a, b) =>
-      b.fitScore - a.fitScore ||
-      profileFitScore(b) - profileFitScore(a) ||
-      b.competitiveness - a.competitiveness
-  );
+  const firmOfficeRanked = selectFirmOfficeRecommendations(ranked);
 
   const bucketed = { Reach: [], Target: [], Safety: [] };
-  const limitedRecommendations = limitRecommendations(uniqueFirmRanked, maxFirmCount);
+  const limitedRecommendations = limitRecommendations(firmOfficeRanked, maxFirmCount);
   limitedRecommendations.forEach((item) => {
     const category = ['Reach', 'Target', 'Safety'].includes(item.classification) ? item.classification : 'Reach';
     bucketed[category].push({
@@ -985,8 +1018,8 @@ function buildTargetList(scoredResults, profile) {
     Safety: bucketed.Safety,
     maxFirmCount,
     totalCount: limitedRecommendations.length,
-    isLimitedByLocation: Boolean(isStrictLocation && uniqueFirmRanked.length < maxFirmCount),
-    locationLimitReason: isStrictLocation && uniqueFirmRanked.length < maxFirmCount ? 'strict' : ''
+    isLimitedByLocation: Boolean(isStrictLocation && firmOfficeRanked.length < maxFirmCount),
+    locationLimitReason: isStrictLocation && firmOfficeRanked.length < maxFirmCount ? 'strict' : ''
   };
 }
 
