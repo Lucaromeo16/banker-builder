@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AdminDashboardPage from './components/AdminDashboardPage';
 import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
 import HomePage from './components/HomePage';
@@ -24,6 +25,7 @@ const navItems = [
 ];
 
 export default function App() {
+  const isAdminRoute = typeof window !== 'undefined' && window.location.pathname === '/admin';
   const [mode, setMode] = useState('home');
   const [networkingPrefill, setNetworkingPrefill] = useState(null);
 
@@ -39,6 +41,10 @@ export default function App() {
     setNetworkingPrefill(office);
     setMode('networking-hub');
   };
+
+  if (isAdminRoute) {
+    return <AdminDashboardPage />;
+  }
 
   return (
     <>
