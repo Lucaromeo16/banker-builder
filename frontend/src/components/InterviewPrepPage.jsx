@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import {
+  defaultExperienceFollowUpValues,
+  undergraduateExperienceFollowUps,
+  undergraduateWorkTypeOptions
+} from '../experienceTaxonomy';
 
 const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const targetGroupOptions = [
@@ -29,62 +34,8 @@ const targetGroupOptions = [
 ];
 const bankTierOptions = ['Bulge Bracket', 'Elite Boutique', 'Middle Market', 'Regional Boutique', 'General / Mixed'];
 
-const workExperienceOptions = [
-  'Investment Banking Internship',
-  'Private Equity Internship',
-  'Accounting / Audit Internship',
-  'TAS / Business Valuation Internship',
-  'Corporate Finance / Corporate Accounting Internship',
-  'Consulting Internship',
-  'Wealth Management Internship',
-  'Venture Capital Internship',
-  'Other High Finance Internship',
-  'Commercial Banking Internship',
-  'Real Estate / CRE Internship',
-  'General / Other Experience'
-];
-
-const experienceFollowUps = {
-  'Investment Banking Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Elite Platform (BB / EB)', 'Strong MM', 'Middle Market', 'Regional Boutique', 'Small / Local Boutique'] }
-  ],
-  'Private Equity Internship': [
-    { key: 'fundTier', label: 'Fund Tier', options: ['Megafund', 'Upper Middle Market', 'Middle Market', 'Lower Middle Market', 'Independent Sponsor / Small Fund'] }
-  ],
-  'Accounting / Audit Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
-    { key: 'function', label: 'Function', options: ['Audit', 'Tax'] }
-  ],
-  'TAS / Business Valuation Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] }
-  ],
-  'Corporate Finance / Corporate Accounting Internship': [
-    { key: 'companyPrestige', label: 'Company Prestige', options: ['F100', 'F500', 'Large Private / Mid-Market', 'Small Company'] },
-    { key: 'roleType', label: 'Role Type', options: ['Corporate Development', 'Strategy / Finance Rotation', 'FP&A', 'Treasury', 'Corporate Accounting'] }
-  ],
-  'Consulting Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['MBB', 'Tier 2 Strategy Consulting', 'Big 4 Consulting', 'Middle Market / Boutique Consulting', 'Local / Small Consulting Firm'] }
-  ],
-  'Wealth Management Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Elite / BB Platform', 'Large National Platform', 'Regional Platform', 'Local RIA / Small Practice'] }
-  ],
-  'Venture Capital Internship': [
-    { key: 'fundTier', label: 'Fund Tier', options: ['Top-Tier VC Fund', 'Established Institutional VC', 'Smaller VC Fund', 'Angel / Independent / Tiny Fund'] }
-  ],
-  'Other High Finance Internship': [
-    { key: 'industry', label: 'Industry', options: ['Hedge Fund', 'Equity Research', 'Sales & Trading', 'Asset Management'] },
-    { key: 'platformPrestige', label: 'Platform Prestige', options: ['Elite Platform', 'Strong Institutional Platform', 'Mid-Tier Platform', 'Small / Unknown Platform'] }
-  ],
-  'Commercial Banking Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Bulge Bracket / Major Bank', 'Super-Regional / Strong National Bank', 'Regional Bank', 'Local / Community Bank'] }
-  ],
-  'Real Estate / CRE Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Institutional Platform', 'Large Brokerage / Advisory Platform', 'Regional Firm', 'Small / Local Firm'] }
-  ],
-  'General / Other Experience': [
-    { key: 'generalType', label: 'Experience Type', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
-  ]
-};
+const workExperienceOptions = undergraduateWorkTypeOptions;
+const experienceFollowUps = undergraduateExperienceFollowUps;
 
 const leadershipActivityOptions = [
   'Social Fraternity/Sorority',
@@ -130,7 +81,7 @@ const legacyExperienceMap = {
 };
 
 function defaultFollowUpValues(experienceType) {
-  return Object.fromEntries((experienceFollowUps[experienceType] || []).map((followUp) => [followUp.key, followUp.options[0]]));
+  return defaultExperienceFollowUpValues(experienceType, experienceFollowUps);
 }
 
 function createPrepExperience(experienceType, overrides = {}) {
@@ -698,7 +649,7 @@ function getSelectedExperienceTags(prepProfile) {
     experience.fundTier,
     experience.function,
     experience.roleType,
-    experience.industry,
+    experience.institutionType,
     experience.generalType
   ]).filter(Boolean);
 }
@@ -761,7 +712,7 @@ function getPrimaryProfileGroup(prepProfile) {
 function getExperienceSummary(prepProfile) {
   const experience = prepProfile?.workExperiences?.[0];
   if (!experience) return '';
-  const detail = experience.roleType || experience.function || experience.firmTier || experience.fundTier || experience.industry || experience.generalType || '';
+  const detail = experience.roleType || experience.function || experience.firmTier || experience.fundTier || experience.institutionType || experience.generalType || '';
   return detail ? `${experience.experienceType} (${detail})` : experience.experienceType;
 }
 
@@ -784,6 +735,13 @@ function createGeneratedQuestion(categoryId, prepProfile) {
   };
 
   const experienceClause = experienceSummary ? ` and how does your ${experienceSummary} background support that interest` : '';
+  const primaryExperienceType = prepProfile?.workExperiences?.[0]?.experienceType || '';
+  const transitionPrompt =
+    primaryExperienceType === 'Middle Office Finance Internship'
+      ? 'Why are you interested in transitioning from a middle-office risk or treasury background into investment banking?'
+      : primaryExperienceType === 'Back Office / Operations Finance Internship'
+        ? 'How would you explain the move from operations or control-focused finance work into investment banking?'
+        : null;
   const generatedPrompts = {
     technical: {
       'Financial Sponsors': 'How would you evaluate debt capacity for a sponsor-backed LBO?',
@@ -797,7 +755,7 @@ function createGeneratedQuestion(categoryId, prepProfile) {
       Energy: 'How would commodity prices affect cash flow and valuation for an energy company?'
     },
     fit: {
-      default: `Why are you interested in ${primaryGroup} banking${experienceClause}?`
+      default: transitionPrompt || `Why are you interested in ${primaryGroup} banking${experienceClause}?`
     },
     markets: {
       'Financial Sponsors': 'What market trend matters most for private equity sponsors right now?',

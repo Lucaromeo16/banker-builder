@@ -3,6 +3,13 @@ import ScoreBreakdown from './ScoreBreakdown';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
 import { schoolDisplayName, schoolForPayload, schoolToScore } from '../schoolScoring';
+import {
+  defaultExperienceFollowUpValues,
+  normalizeUndergraduateExperience,
+  scoreUndergraduateExperience,
+  undergraduateExperienceFollowUps,
+  undergraduateWorkTypeOptions
+} from '../experienceTaxonomy';
 
 const fallbackGroups = [
   'Generalist',
@@ -72,8 +79,10 @@ const workTypeScores = {
   'Search fund internship': 8.2,
   'Corporate finance internship': 6.4,
   'Accounting / audit internship': 6.1,
-  'Wealth management internship': 5.8,
-  'Other finance internship': 6,
+  'Front office finance internship': 6.7,
+  'Middle office finance internship': 5.8,
+  'Back office / operations finance internship': 4.9,
+  'Venture capital internship': 6.8,
   'Other internship': 4.4,
   'Part-time job': 3.6,
   'Campus job': 3.3,
@@ -270,21 +279,6 @@ const profileWeights = {
   }
 };
 
-const workTypeOptions = [
-  'Investment Banking Internship',
-  'Private Equity Internship',
-  'Accounting / Audit Internship',
-  'TAS / Business Valuation Internship',
-  'Corporate Finance / Corporate Accounting Internship',
-  'Consulting Internship',
-  'Wealth Management Internship',
-  'Venture Capital Internship',
-  'Other High Finance Internship',
-  'Commercial Banking Internship',
-  'Real Estate / CRE Internship',
-  'General / Other Experience'
-];
-
 const lateralRoleOptions = [
   'Current Investment Banking Role',
   'Current Private Equity Role',
@@ -324,45 +318,7 @@ const dealExposureOptions = ['High transaction exposure', 'Moderate transaction 
 const currentPlatformTierOptions = ['Elite / BB / EB Platform', 'Strong Institutional Platform', 'Middle Market / National Platform', 'Regional / Boutique Platform', 'Small / Unknown Platform'];
 
 const experienceFollowUps = {
-  'Investment Banking Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Elite Platform (BB / EB)', 'Strong MM', 'Middle Market', 'Regional Boutique', 'Small / Local Boutique'] }
-  ],
-  'Private Equity Internship': [
-    { key: 'fundTier', label: 'Fund Tier', options: ['Megafund', 'Upper Middle Market', 'Middle Market', 'Lower Middle Market', 'Independent Sponsor / Small Fund'] }
-  ],
-  'Accounting / Audit Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] },
-    { key: 'function', label: 'Function', options: ['Audit', 'Tax'] }
-  ],
-  'TAS / Business Valuation Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['Big 4', 'National / Next Tier', 'Top 100', 'Local / Small Firm'] }
-  ],
-  'Corporate Finance / Corporate Accounting Internship': [
-    { key: 'companyPrestige', label: 'Company Prestige', options: ['F100', 'F500', 'Large Private / Mid-Market', 'Small Company'] },
-    { key: 'roleType', label: 'Role Type', options: ['Corporate Development', 'Strategy / Finance Rotation', 'FP&A', 'Treasury', 'Corporate Accounting'] }
-  ],
-  'Consulting Internship': [
-    { key: 'firmTier', label: 'Firm Tier', options: ['MBB', 'Tier 2 Strategy Consulting', 'Big 4 Consulting', 'Middle Market / Boutique Consulting', 'Local / Small Consulting Firm'] }
-  ],
-  'Wealth Management Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Elite / BB Platform', 'Large National Platform', 'Regional Platform', 'Local RIA / Small Practice'] }
-  ],
-  'Venture Capital Internship': [
-    { key: 'fundTier', label: 'Fund Tier', options: ['Top-Tier VC Fund', 'Established Institutional VC', 'Smaller VC Fund', 'Angel / Independent / Tiny Fund'] }
-  ],
-  'Other High Finance Internship': [
-    { key: 'industry', label: 'Industry', options: ['Hedge Fund', 'Equity Research', 'Sales & Trading', 'Asset Management'] },
-    { key: 'platformPrestige', label: 'Platform Prestige', options: ['Elite Platform', 'Strong Institutional Platform', 'Mid-Tier Platform', 'Small / Unknown Platform'] }
-  ],
-  'Commercial Banking Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Bulge Bracket / Major Bank', 'Super-Regional / Strong National Bank', 'Regional Bank', 'Local / Community Bank'] }
-  ],
-  'Real Estate / CRE Internship': [
-    { key: 'platformTier', label: 'Platform Tier', options: ['Institutional Platform', 'Large Brokerage / Advisory Platform', 'Regional Firm', 'Small / Local Firm'] }
-  ],
-  'General / Other Experience': [
-    { key: 'generalType', label: 'Experience Type', options: ['Part-Time Job', 'Campus Job', 'Leadership Program', 'Search Fund Internship', 'Student Research', 'Entrepreneurship / Startup', 'Military Experience', 'Other Internship'] }
-  ],
+  ...undergraduateExperienceFollowUps,
   'Current Investment Banking Role': [
     { key: 'platformTier', label: 'Current Platform Tier', options: currentPlatformTierOptions },
     { key: 'yearsExperience', label: 'Years of Experience', options: yearsExperienceOptions },
@@ -475,24 +431,6 @@ const experienceFollowUps = {
   ]
 };
 
-const legacyWorkTypeMap = {
-  'Investment banking internship': { experienceType: 'Investment Banking Internship', firmTier: 'Middle Market' },
-  'Private equity internship': { experienceType: 'Private Equity Internship', fundTier: 'Middle Market' },
-  'Search fund internship': { experienceType: 'General / Other Experience', generalType: 'Search Fund Internship' },
-  'Corporate finance internship': {
-    experienceType: 'Corporate Finance / Corporate Accounting Internship',
-    companyPrestige: 'Large Private / Mid-Market',
-    roleType: 'FP&A'
-  },
-  'Accounting / audit internship': { experienceType: 'Accounting / Audit Internship', firmTier: 'National / Next Tier', function: 'Audit' },
-  'Wealth management internship': { experienceType: 'Wealth Management Internship', platformTier: 'Large National Platform' },
-  'Other finance internship': { experienceType: 'Other High Finance Internship', industry: 'Asset Management', platformPrestige: 'Mid-Tier Platform' },
-  'Other internship': { experienceType: 'General / Other Experience', generalType: 'Other Internship' },
-  'Part-time job': { experienceType: 'General / Other Experience', generalType: 'Part-Time Job' },
-  'Campus job': { experienceType: 'General / Other Experience', generalType: 'Campus Job' },
-  None: { experienceType: 'General / Other Experience', generalType: 'Other Internship' }
-};
-
 const seniorityOptions = [
   { value: 'analyst', label: 'Analyst' },
   { value: 'associate', label: 'Associate' },
@@ -524,7 +462,7 @@ const createActivity = () => ({
 function experienceTypeOptionsForHireType(hireType) {
   if (hireType === 'Lateral Hire') return lateralRoleOptions;
   if (hireType === 'MBA Associate') return mbaRoleOptions;
-  return workTypeOptions;
+  return undergraduateWorkTypeOptions;
 }
 
 function experienceStepTitle(hireType) {
@@ -557,7 +495,7 @@ const createWorkExperience = (hireType = 'Summer Analyst') => {
 };
 
 function defaultFollowUpValues(experienceType) {
-  return Object.fromEntries((experienceFollowUps[experienceType] || []).map((field) => [field.key, field.options[0]]));
+  return defaultExperienceFollowUpValues(experienceType, experienceFollowUps);
 }
 
 const defaultProfile = {
@@ -760,16 +698,23 @@ function workTypeScore(workType) {
 }
 
 function normalizeExperience(experience = {}) {
-  if (experience.experienceType) {
+  if (undergraduateWorkTypeOptions.includes(experience.experienceType) || !experience.experienceType) {
     return {
-      ...defaultFollowUpValues(experience.experienceType),
-      ...experience,
+      ...normalizeUndergraduateExperience(experience),
+      recency: experience.recency || 'Current / most recent'
+    };
+  }
+
+  const normalizedUndergraduate = normalizeUndergraduateExperience(experience);
+  if (undergraduateWorkTypeOptions.includes(normalizedUndergraduate.experienceType)) {
+    return {
+      ...normalizedUndergraduate,
       recency: experience.recency || 'Current / most recent'
     };
   }
 
   return {
-    ...(legacyWorkTypeMap[experience.workType] || legacyWorkTypeMap.None),
+    ...defaultFollowUpValues(experience.experienceType),
     ...experience,
     recency: experience.recency || 'Current / most recent'
   };
@@ -902,86 +847,11 @@ function scoreSingleExperience(rawExperience, hireType) {
     return scoreProfessionalExperience(experience, hireType);
   }
 
-  const type = experience.experienceType;
-  let score = 3.2;
-  const signals = new Set();
-  const affinities = new Set();
-  let eliteIb = false;
-
-  if (type === 'Investment Banking Internship') {
-    signals.add('direct IB experience');
-    score = {
-      'Elite Platform (BB / EB)': 9.9,
-      'Strong MM': 9.1,
-      'Middle Market': 8.6,
-      'Regional Boutique': 8,
-      'Small / Local Boutique': 7.4
-    }[experience.firmTier] ?? 8.4;
-    eliteIb = experience.firmTier === 'Elite Platform (BB / EB)';
-    ['M&A', 'Financial Sponsors', 'Generalist'].forEach((group) => affinities.add(group));
-  } else if (type === 'Private Equity Internship') {
-    signals.add('private equity experience');
-    score = {
-      Megafund: 9.2,
-      'Upper Middle Market': 8.5,
-      'Middle Market': 8,
-      'Lower Middle Market': 7.4,
-      'Independent Sponsor / Small Fund': 6.7
-    }[experience.fundTier] ?? 7.8;
-    affinities.add('Financial Sponsors');
-  } else if (type === 'Accounting / Audit Internship') {
-    signals.add('accounting internship');
-    const tierScore = { 'Big 4': 6.9, 'National / Next Tier': 6.2, 'Top 100': 5.6, 'Local / Small Firm': 4.9 }[experience.firmTier] ?? 5.8;
-    score = tierScore + (experience.function === 'Audit' ? 0.35 : -0.25);
-    affinities.add('Financial Institutions');
-  } else if (type === 'TAS / Business Valuation Internship') {
-    signals.add('TAS / valuation experience');
-    score = { 'Big 4': 8.1, 'National / Next Tier': 7.4, 'Top 100': 6.8, 'Local / Small Firm': 6.1 }[experience.firmTier] ?? 7.2;
-    ['M&A', 'Generalist'].forEach((group) => affinities.add(group));
-  } else if (type === 'Corporate Finance / Corporate Accounting Internship') {
-    const prestige = { F100: 1, F500: 0.65, 'Large Private / Mid-Market': 0.25, 'Small Company': -0.25 }[experience.companyPrestige] ?? 0;
-    const role = { 'Corporate Development': 7.6, 'Strategy / Finance Rotation': 6.8, 'FP&A': 6.1, Treasury: 5.9, 'Corporate Accounting': 5.2 }[experience.roleType] ?? 5.9;
-    score = role + prestige;
-    signals.add(experience.roleType === 'Corporate Development' ? 'corporate development experience' : 'corporate finance experience');
-    if (experience.roleType === 'Corporate Development') affinities.add('M&A');
-  } else if (type === 'Consulting Internship') {
-    signals.add('consulting experience');
-    score = { MBB: 8.3, 'Tier 2 Strategy Consulting': 7.6, 'Big 4 Consulting': 6.7, 'Middle Market / Boutique Consulting': 6.1, 'Local / Small Consulting Firm': 5.3 }[experience.firmTier] ?? 6.5;
-    ['M&A', 'Generalist'].forEach((group) => affinities.add(group));
-  } else if (type === 'Wealth Management Internship') {
-    signals.add('wealth management experience');
-    score = { 'Elite / BB Platform': 6.1, 'Large National Platform': 5.4, 'Regional Platform': 4.8, 'Local RIA / Small Practice': 4.1 }[experience.platformTier] ?? 5;
-  } else if (type === 'Venture Capital Internship') {
-    signals.add('venture capital experience');
-    score = { 'Top-Tier VC Fund': 8.1, 'Established Institutional VC': 7.3, 'Smaller VC Fund': 6.5, 'Angel / Independent / Tiny Fund': 5.7 }[experience.fundTier] ?? 6.8;
-    affinities.add('Technology');
-  } else if (type === 'Other High Finance Internship') {
-    const industry = { 'Hedge Fund': 7.4, 'Equity Research': 7.2, 'Sales & Trading': 6.7, 'Asset Management': 6.5 }[experience.industry] ?? 6.6;
-    const prestige = { 'Elite Platform': 0.8, 'Strong Institutional Platform': 0.45, 'Mid-Tier Platform': 0, 'Small / Unknown Platform': -0.45 }[experience.platformPrestige] ?? 0;
-    score = industry + prestige;
-    signals.add('high finance experience');
-    if (experience.industry === 'Hedge Fund') ['Restructuring', 'Financial Sponsors'].forEach((group) => affinities.add(group));
-    if (experience.industry === 'Equity Research') affinities.add('Financial Institutions');
-    if (experience.industry === 'Sales & Trading') ['DCM', 'Markets'].forEach((group) => affinities.add(group));
-  } else if (type === 'Commercial Banking Internship') {
-    signals.add('commercial banking experience');
-    score = { 'Bulge Bracket / Major Bank': 6.8, 'Super-Regional / Strong National Bank': 6.3, 'Regional Bank': 5.7, 'Local / Community Bank': 5 }[experience.platformTier] ?? 5.8;
-    ['DCM', 'LevFin', 'Financial Institutions'].forEach((group) => affinities.add(group));
-  } else if (type === 'Real Estate / CRE Internship') {
-    signals.add('real estate finance experience');
-    score = { 'Institutional Platform': 6.9, 'Large Brokerage / Advisory Platform': 6.3, 'Regional Firm': 5.7, 'Small / Local Firm': 5 }[experience.platformTier] ?? 5.9;
-    affinities.add('Real Estate');
-  } else {
-    score = { 'Search Fund Internship': 6.5, 'Entrepreneurship / Startup': 5.9, 'Military Experience': 5.8, 'Leadership Program': 5.3, 'Student Research': 4.8, 'Other Internship': 4.4, 'Part-Time Job': 3.6, 'Campus Job': 3.3 }[experience.generalType] ?? 4.2;
-    signals.add(experience.generalType === 'Search Fund Internship' ? 'search fund experience' : 'general work experience');
-    if (experience.generalType === 'Entrepreneurship / Startup') ['Technology', 'Strategic Advisory'].forEach((group) => affinities.add(group));
-  }
+  const result = scoreUndergraduateExperience(experience, clamp);
 
   return {
-    score: clamp(score * recencyMultiplier(experience.recency, hireType)),
-    signals: Array.from(signals),
-    affinities: Array.from(affinities),
-    eliteIb
+    ...result,
+    score: clamp(result.score * recencyMultiplier(experience.recency, hireType))
   };
 }
 
@@ -1037,12 +907,47 @@ function networkingScore(networking) {
   // Networking diminishing returns: quality relationships and first referral beat raw call volume.
   const callPoints = Math.min(calls, 15) * 0.36 + Math.min(Math.max(calls - 15, 0), 15) * 0.1;
   const followUpPoints = Math.min(followUps, 12) * 0.32 + Math.min(Math.max(followUps - 12, 0), 10) * 0.08;
-  const relationshipPoints = Math.min(relationships, 3) * 2.2 + Math.min(Math.max(relationships - 3, 0), 2) * 0.75;
-  const referralPoints = (referrals > 0 ? 2.7 : 0) + Math.min(Math.max(referrals - 1, 0), 2) * 0.85;
+  const relationshipPoints = (relationships > 0 ? 3.1 : 0) + Math.min(Math.max(relationships - 1, 0), 2) * 1.25 + Math.min(Math.max(relationships - 3, 0), 2) * 0.5;
+  const referralPoints = (referrals > 0 ? 4.4 : 0) + Math.min(Math.max(referrals - 1, 0), 2) * 0.75;
 
   const seniority = { analyst: 1, associate: 1.04, 'vp+': 1.12 }[networking.strongestContactSeniority] ?? 1;
 
   return clamp(((callPoints + followUpPoints + relationshipPoints + referralPoints) * seniority / 18) * 10);
+}
+
+function networkingConversionBoost(networking = {}, scores, adjustedCompetitiveness) {
+  const referrals = Number(networking.referrals || 0);
+  const relationships = Number(networking.strongRelationships || 0);
+  const hasCredibleBaseline = scores.gpaScore >= 4 && scores.experience >= 4.8;
+  if (!hasCredibleBaseline) return 0;
+
+  const referralBoost = referrals > 0 ? 0.48 + Math.min(referrals - 1, 2) * 0.12 : 0;
+  const relationshipBoost = relationships > 0 ? 0.24 + Math.min(relationships - 1, 2) * 0.08 : 0;
+  const competitivenessDampener = adjustedCompetitiveness >= 8.8 ? 0.62 : adjustedCompetitiveness >= 8 ? 0.78 : 1;
+  return Math.min(0.85, referralBoost + relationshipBoost) * competitivenessDampener;
+}
+
+function networkingLikelihoodFloor(networking = {}, scores, adjustedCompetitiveness) {
+  const referrals = Number(networking.referrals || 0);
+  const relationships = Number(networking.strongRelationships || 0);
+  const plausibleCandidate = scores.gpaScore >= 4 && scores.experience >= 4.8;
+  if (!plausibleCandidate) return 3;
+
+  if (referrals > 0) {
+    if (adjustedCompetitiveness >= 8.8) return 10;
+    if (adjustedCompetitiveness >= 8) return 14;
+    if (adjustedCompetitiveness >= 7) return 20;
+    return 28;
+  }
+
+  if (relationships > 0) {
+    if (adjustedCompetitiveness >= 8.8) return 7;
+    if (adjustedCompetitiveness >= 8) return 10;
+    if (adjustedCompetitiveness >= 7) return 15;
+    return 20;
+  }
+
+  return 3;
 }
 
 function hasZeroNetworking(networking = {}) {
@@ -1348,7 +1253,8 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
   const regionalBoost = regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness);
   const zeroNetworking = hasZeroNetworking(profile.networking);
   const zeroNetworkingEffect = zeroNetworkingAdjustment(profile, opportunity, scores);
-  const boostedTotal = clamp(scores.total + regionalBoost.points - zeroNetworkingEffect.penalty);
+  const relationshipBoost = networkingConversionBoost(profile.networking, scores, adjustedCompetitiveness);
+  const boostedTotal = clamp(scores.total + regionalBoost.points + relationshipBoost - zeroNetworkingEffect.penalty);
   const delta = boostedTotal - adjustedCompetitiveness;
   const unboostedDelta = scores.total - adjustedCompetitiveness;
   const likelihoodSlope = scores.hyperElite ? 1.35 : 1.15;
@@ -1361,9 +1267,11 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
     scores.experienceResult.eliteIb && profile.gpa >= 3.5 && scores.networking >= 3.2 && scores.extracurricular >= 4.5
       ? scores.hyperElite ? 48 : 58
       : 3;
+  const relationshipFloor = networkingLikelihoodFloor(profile.networking, scores, adjustedCompetitiveness);
   const likelihood = Math.round(
     Math.max(
       eliteIbFloor,
+      relationshipFloor,
       Math.min(gpaCap, noNetworkingCap, zeroNetworkingEffect.cap, weakExperienceCap, 92, Math.min(rawLikelihood, unboostedLikelihood + 7))
     )
   );

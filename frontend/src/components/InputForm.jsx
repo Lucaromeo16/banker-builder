@@ -36,10 +36,12 @@ const workTypeOptions = [
   'Search fund internship',
   'Corporate finance internship',
   'Accounting / audit internship',
-  'Wealth management internship',
+  'Front office finance internship',
+  'Middle office finance internship',
+  'Back office / operations finance internship',
   'Private equity internship',
   'Investment banking internship',
-  'Other finance internship',
+  'Venture capital internship',
   'Other internship'
 ];
 
