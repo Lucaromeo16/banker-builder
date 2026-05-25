@@ -223,12 +223,14 @@ function defaultFollowUpValues(experienceType) {
 const defaultProfile = {
   interests: ['Not sure yet'],
   locationPreference: 'No preference',
+  locationPreferences: [],
   locationPreferenceStrength: 'Flexible',
   prestigePreference: 'Medium',
   payPreference: 'Medium',
   school: defaultSchool,
   gpa: 3.7,
   locationRadiusMiles: DEFAULT_RADIUS_MILES,
+  maxFirmCount: 25,
   workExperiences: [createWorkExperience()],
   activities: [createActivity()]
 };
@@ -542,10 +544,7 @@ function ultraCompetitiveReadiness(profile, opportunity) {
   const extracurricular = extracurricularScore(profile);
   const strongest = strongestExperience(profile);
   const groupAffinity = experienceGroupAffinityScore(profile, opportunity.group) > 0;
-  const locationFit =
-    profile.locationPreference &&
-    profile.locationPreference !== 'No preference' &&
-    locationsMatch(opportunity.office, profile.locationPreference);
+  const locationFit = opportunityWithinRadius(opportunity, profile);
   const eliteIb = strongest.experience.experienceType === 'Investment Banking Internship' && strongest.experience.firmTier === 'Elite Platform (BB / EB)';
   const strongMmIb = strongest.experience.experienceType === 'Investment Banking Internship' && ['Strong MM', 'Middle Market'].includes(strongest.experience.firmTier);
   const strongAdjacent = strongest.score >= 8.1;
@@ -638,7 +637,36 @@ function scoreProfileLocally(profile) {
 }
 
 function normalizeLocationPreference(profile) {
-  return profile.locationPreference || 'No preference';
+  const preferences = normalizedLocationPreferences(profile);
+  return preferences.length ? preferences[0].location : 'No preference';
+}
+
+function normalizedLocationPreferences(profile) {
+  if (Array.isArray(profile.locationPreferences) && profile.locationPreferences.length) {
+    return profile.locationPreferences
+      .filter((item) => item?.location && item.location !== 'No preference')
+      .map((item) => ({
+        id: item.id || item.location,
+        location: normalizeLocationLabel(item.location),
+        radiusMiles: Number(item.radiusMiles || profile.locationRadiusMiles || DEFAULT_RADIUS_MILES)
+      }));
+  }
+
+  if (profile.locationPreference && profile.locationPreference !== 'No preference') {
+    return [{
+      id: profile.locationPreference,
+      location: normalizeLocationLabel(profile.locationPreference),
+      radiusMiles: Number(profile.locationRadiusMiles || DEFAULT_RADIUS_MILES)
+    }];
+  }
+
+  return [];
+}
+
+function locationPreferencesSummary(profile) {
+  const preferences = normalizedLocationPreferences(profile);
+  if (!preferences.length) return 'No preference';
+  return preferences.map((item) => `${item.location} within ${item.radiusMiles} miles`).join('; ');
 }
 
 function comparableLocation(value) {
@@ -653,9 +681,7 @@ function locationsMatch(office, preference) {
   return comparableLocation(office) === comparableLocation(preference);
 }
 
-function selectedLocationCity(profile) {
-  const preference = normalizeLocationPreference(profile);
-  if (!preference || preference === 'No preference') return null;
+function cityForLocationPreference(preference) {
   const compact = comparableLocation(preference);
 
   return usCities.find((city) => comparableLocation(city.displayName) === compact || comparableLocation(city.city) === compact) || null;
@@ -672,20 +698,39 @@ function officeForOpportunity(opportunity) {
   });
 }
 
-function opportunityDistanceMiles(opportunity, profile) {
-  const city = selectedLocationCity(profile);
+function opportunityLocationMatch(opportunity, profile) {
+  const preferences = normalizedLocationPreferences(profile);
   const office = officeForOpportunity(opportunity);
   const latitude = Number(opportunity.latitude ?? office?.latitude);
   const longitude = Number(opportunity.longitude ?? office?.longitude);
-  if (!city || !Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+  if (!preferences.length || !Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    return { distanceMiles: null, withinSelectedRadius: false, matchedLocation: null, radiusMiles: null };
+  }
 
-  return distanceInMiles(city, { latitude, longitude });
+  const matches = preferences
+    .map((preference) => {
+      const city = cityForLocationPreference(preference.location);
+      if (!city) return null;
+      const distanceMiles = distanceInMiles(city, { latitude, longitude });
+      return {
+        distanceMiles,
+        withinSelectedRadius: distanceMiles <= preference.radiusMiles,
+        matchedLocation: preference.location,
+        radiusMiles: preference.radiusMiles
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => Number(b.withinSelectedRadius) - Number(a.withinSelectedRadius) || a.distanceMiles - b.distanceMiles);
+
+  return matches[0] || { distanceMiles: null, withinSelectedRadius: false, matchedLocation: null, radiusMiles: null };
+}
+
+function opportunityDistanceMiles(opportunity, profile) {
+  return opportunityLocationMatch(opportunity, profile).distanceMiles;
 }
 
 function opportunityWithinRadius(opportunity, profile) {
-  const distanceMiles = opportunityDistanceMiles(opportunity, profile);
-  if (!Number.isFinite(distanceMiles)) return false;
-  return distanceMiles <= (profile.locationRadiusMiles || DEFAULT_RADIUS_MILES);
+  return opportunityLocationMatch(opportunity, profile).withinSelectedRadius;
 }
 
 function groupInterestScore(group, interests) {
@@ -695,14 +740,67 @@ function groupInterestScore(group, interests) {
       : 0.75;
   }
 
+  const normalizedGroup = normalizedGroupValue(group);
+  const aliases = selectedGroupAliases(interests);
+  if (aliases.has(normalizedGroup) || [...aliases].some((alias) => normalizedGroup.includes(alias) || alias.includes(normalizedGroup))) return 3;
+
   const desiredGroups = interests.flatMap((interest) => interestToGroups[interest] || []);
   if (desiredGroups.includes(group)) return 3;
   if (group === 'M&A' && interests.some((interest) => ['Technology', 'Healthcare', 'Industrials', 'Consumer/Retail', 'Energy'].includes(interest))) return 1.25;
   return 0;
 }
 
+function normalizedGroupValue(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function interestGroupAliases(interest) {
+  const aliasMap = {
+    'Debt Capital Markets': ['DCM', 'Debt Capital Markets', 'Capital Markets', 'Capital Markets Advisory', 'Capital Structure Advisory', 'Liability Management', 'Corporate Banking', 'Project Finance', 'Structured Finance'],
+    'Equity Capital Markets': ['ECM', 'Equity Capital Markets', 'Capital Markets', 'Capital Markets Advisory', 'Capital Raising', 'Growth Equity', 'Private Placements'],
+    'Leveraged Finance': ['Leveraged Finance', 'LevFin', 'Debt Capital Markets', 'DCM', 'Capital Structure Advisory', 'Financial Sponsors'],
+    'Financial Sponsors': ['Financial Sponsors', 'Private Equity', 'Sponsor Coverage', 'M&A', 'M&A Advisory'],
+    'M&A': ['M&A', 'M&A Advisory', 'Middle Market M&A', 'Cross-Border M&A', 'Strategic Advisory'],
+    'Consumer/Retail': ['Consumer/Retail', 'Consumer & Retail', 'Consumer', 'Retail', 'Restaurants'],
+    FIG: ['FIG', 'Financial Institutions', 'Financial Services', 'Insurance', 'FinTech', 'Payments', 'Consumer Finance'],
+    Restructuring: ['Restructuring', 'Financial Restructuring', 'Special Situations', 'Liability Management'],
+    Healthcare: ['Healthcare', 'Healthcare Services', 'Healthcare M&A', 'Healthcare IT', 'Biopharma', 'Biotech', 'MedTech', 'Life Sciences', 'Provider Services'],
+    Technology: ['Technology', 'Software', 'SaaS', 'Internet', 'FinTech', 'Media & Technology', 'Tech-Enabled Services', 'Vertical Software', 'Cybersecurity', 'AI / ML'],
+    Industrials: ['Industrials', 'Diversified Industrials', 'Manufacturing', 'Aerospace & Defense', 'Automotive', 'Transportation & Logistics', 'Industrial Technology'],
+    'Real Estate': ['Real Estate'],
+    Energy: ['Energy', 'Energy Transition', 'Power', 'Power & Utilities', 'Infrastructure', 'Project Finance'],
+    'Public Finance': ['Public Finance', 'Public Sector', 'Government Services', 'Infrastructure']
+  };
+
+  const directGroups = (interestToGroups[interest] || []).filter((group) => interest === 'Generalist' || group !== 'Generalist');
+  return [...new Set(aliasMap[interest] || directGroups)];
+}
+
+function selectedGroupAliases(interests = []) {
+  return new Set(interests.flatMap(interestGroupAliases).map(normalizedGroupValue).filter(Boolean));
+}
+
+function hasBroadGroupInterest(interests = []) {
+  return interests.includes('Not sure yet') || interests.includes('Generalist');
+}
+
+function opportunityMatchesSelectedGroups(opportunity, interests = []) {
+  if (!interests.length || hasBroadGroupInterest(interests)) return true;
+  const aliases = selectedGroupAliases(interests);
+  if (!aliases.size) return true;
+  const group = normalizedGroupValue(opportunity.group);
+  if (!group) return false;
+
+  return [...aliases].some((alias) => group === alias || group.includes(alias) || alias.includes(group));
+}
+
 function locationRadiusScore(opportunity, profile, strength) {
-  if (!selectedLocationCity(profile)) return 0.5;
+  if (!normalizedLocationPreferences(profile).length) return 0.5;
   if (!opportunity.withinSelectedRadius) return strength === 'Open' ? 0.35 : 0;
   if (strength === 'Open') return 1.2;
   if (strength === 'Flexible') return 3;
@@ -748,13 +846,13 @@ function nextActionFor(category, opportunity) {
   return `More attainable relative to your profile, though networking is still recommended; apply early with a specific outreach note.`;
 }
 
-function categoryReason(category, opportunity, preference, strength) {
-  const selectedCity = preference && preference !== 'No preference' ? preference : '';
+function categoryReason(category, opportunity, profile, strength) {
+  const hasLocationPreference = normalizedLocationPreferences(profile).length > 0;
   const locationText =
-    selectedCity && opportunity.withinSelectedRadius
-      ? ` It is within your selected radius of ${selectedCity}.`
-      : selectedCity && Number.isFinite(opportunity.distanceMiles) && strength !== 'Strict'
-        ? ` Your ${selectedCity} radius preference was treated ${strength === 'Flexible' ? 'flexibly' : 'lightly'} for this match.`
+    hasLocationPreference && opportunity.withinSelectedRadius
+      ? ` It is within ${opportunity.radiusMiles} miles of ${opportunity.matchedLocation}.`
+      : hasLocationPreference && Number.isFinite(opportunity.distanceMiles) && strength !== 'Strict'
+        ? ` Your location radius preferences were treated ${strength === 'Flexible' ? 'flexibly' : 'lightly'} for this match.`
         : '';
   const categoryText =
     category === 'Reach'
@@ -765,29 +863,71 @@ function categoryReason(category, opportunity, preference, strength) {
   return `${opportunity.reason}${locationText}${categoryText} This is the best-fit ${opportunity.group} opportunity for ${opportunity.firm} after deduplicating by bank.`;
 }
 
+function limitRecommendations(recommendations, maxFirmCount) {
+  if (recommendations.length <= maxFirmCount) return recommendations;
+
+  const quotas = {
+    Reach: Math.round(maxFirmCount * 0.3),
+    Target: Math.round(maxFirmCount * 0.45),
+    Safety: maxFirmCount - Math.round(maxFirmCount * 0.3) - Math.round(maxFirmCount * 0.45)
+  };
+  const selected = [];
+  const selectedIds = new Set();
+  const buckets = {
+    Reach: recommendations.filter((item) => item.classification === 'Reach'),
+    Target: recommendations.filter((item) => item.classification === 'Target'),
+    Safety: recommendations.filter((item) => item.classification === 'Safety')
+  };
+
+  ['Reach', 'Target', 'Safety'].forEach((category) => {
+    buckets[category].slice(0, quotas[category]).forEach((item) => {
+      selected.push(item);
+      selectedIds.add(item.id);
+    });
+  });
+
+  recommendations
+    .filter((item) => !selectedIds.has(item.id))
+    .slice(0, Math.max(0, maxFirmCount - selected.length))
+    .forEach((item) => {
+      selected.push(item);
+      selectedIds.add(item.id);
+    });
+
+  return selected
+    .slice(0, maxFirmCount)
+    .sort(
+      (a, b) =>
+        b.fitScore - a.fitScore ||
+        profileFitScore(b) - profileFitScore(a) ||
+        b.competitiveness - a.competitiveness
+    );
+}
+
 function buildTargetList(scoredResults, profile) {
-  const preference = normalizeLocationPreference(profile);
-  const strength = preference && preference !== 'No preference' ? profile.locationPreferenceStrength || 'Flexible' : 'Open';
-  const isStrictLocation = preference && preference !== 'No preference' && strength === 'Strict';
-  const hasRadiusLocation = Boolean(selectedLocationCity(profile));
+  const locationPreferences = normalizedLocationPreferences(profile);
+  const strength = locationPreferences.length ? profile.locationPreferenceStrength || 'Flexible' : 'Open';
+  const isStrictLocation = locationPreferences.length > 0 && strength === 'Strict';
+  const maxFirmCount = Math.max(10, Math.min(50, Number(profile.maxFirmCount || 25)));
 
   // Location filter order:
   // 1. scoreProfile supplies candidate fit/competitiveness results
   // 2. attach radius distance using office coordinates, if available
-  // 3. apply realism gates so Reach remains plausible
-  // 4. apply Strict radius as the hard location filter; Flexible/Open use radius only for ranking
-  // 5. dedupe by firm, then bucket by each recommendation's independent classification
+  // 3. enforce selected group interests unless the user chose a broad Generalist/Not sure path
+  // 4. apply realism gates so Reach remains plausible
+  // 5. apply Strict radius as the hard location filter; Flexible/Open use radius only for ranking
+  // 6. dedupe by firm, cap output count, then bucket by each recommendation's independent classification
   const withDistance = scoredResults.map((opportunity) => {
-    const distanceMiles = opportunityDistanceMiles(opportunity, profile);
+    const locationMatch = opportunityLocationMatch(opportunity, profile);
     return {
       ...opportunity,
-      distanceMiles,
-      withinSelectedRadius: Number.isFinite(distanceMiles) && distanceMiles <= (profile.locationRadiusMiles || DEFAULT_RADIUS_MILES)
+      ...locationMatch
     };
   });
-  const realisticResults = withDistance.filter((opportunity) => isRealisticRecommendation(opportunity, profile));
+  const groupMatchedResults = withDistance.filter((opportunity) => opportunityMatchesSelectedGroups(opportunity, profile.interests));
+  const realisticResults = groupMatchedResults.filter((opportunity) => isRealisticRecommendation(opportunity, profile));
   const candidateResults =
-    isStrictLocation && hasRadiusLocation
+    isStrictLocation
       ? realisticResults.filter((opportunity) => opportunity.withinSelectedRadius)
       : realisticResults;
 
@@ -828,12 +968,13 @@ function buildTargetList(scoredResults, profile) {
   );
 
   const bucketed = { Reach: [], Target: [], Safety: [] };
-  uniqueFirmRanked.forEach((item) => {
+  const limitedRecommendations = limitRecommendations(uniqueFirmRanked, maxFirmCount);
+  limitedRecommendations.forEach((item) => {
     const category = ['Reach', 'Target', 'Safety'].includes(item.classification) ? item.classification : 'Reach';
     bucketed[category].push({
       ...item,
       matchCategory: category,
-      reason: categoryReason(category, item, preference, strength),
+      reason: categoryReason(category, item, profile, strength),
       suggestedNextAction: nextActionFor(category, item)
     });
   });
@@ -842,8 +983,10 @@ function buildTargetList(scoredResults, profile) {
     Reach: bucketed.Reach,
     Target: bucketed.Target,
     Safety: bucketed.Safety,
-    isLimitedByLocation: Boolean(isStrictLocation && uniqueFirmRanked.length < 25),
-    locationLimitReason: isStrictLocation && uniqueFirmRanked.length < 25 ? 'strict' : ''
+    maxFirmCount,
+    totalCount: limitedRecommendations.length,
+    isLimitedByLocation: Boolean(isStrictLocation && uniqueFirmRanked.length < maxFirmCount),
+    locationLimitReason: isStrictLocation && uniqueFirmRanked.length < maxFirmCount ? 'strict' : ''
   };
 }
 
@@ -862,8 +1005,8 @@ function TargetOpportunityCard({ opportunity }) {
         {Number.isFinite(opportunity.distanceMiles) ? (
           <p className="map-distance-summary">
             {opportunity.withinSelectedRadius
-              ? `Within your selected radius — ${formatDistance(opportunity.distanceMiles)} from selected location`
-              : `${formatDistance(opportunity.distanceMiles)} from selected location`}
+              ? `Within selected radius — ${formatDistance(opportunity.distanceMiles)} from ${opportunity.matchedLocation}`
+              : `${formatDistance(opportunity.distanceMiles)} from nearest selected location`}
           </p>
         ) : null}
         <p className="meta">
@@ -963,10 +1106,6 @@ export default function TargetListBuilderPage({ onBack }) {
 
   const goNext = () => {
     setError('');
-    if (currentStep === 1 && !profile.locationPreference) {
-      setError('Select a location from the search results or choose No preference.');
-      return;
-    }
     if (currentStep === 2 && !profile.school) {
       setError('Select a school from the search results or choose Other / Not Listed.');
       return;
@@ -1002,27 +1141,29 @@ export default function TargetListBuilderPage({ onBack }) {
     setLocationSearch(value);
     setIsLocationSelectorOpen(true);
     setTargetList(null);
-
-    if (!value.trim()) {
-      setProfile((prev) => ({
-        ...prev,
-        locationPreference: 'No preference',
-        locationPreferenceStrength: 'Flexible',
-        locationRadiusMiles: DEFAULT_RADIUS_MILES
-      }));
-    } else if (value !== profile.locationPreference) {
-      setProfile((prev) => ({ ...prev, locationPreference: '' }));
-    }
   };
 
   const handleLocationSelect = (location) => {
     const normalizedLocation = location === 'No preference' ? 'No preference' : normalizeLocationLabel(location);
+    if (normalizedLocation === 'No preference') {
+      clearLocationPreference();
+      return;
+    }
+
     setProfile((prev) => ({
       ...prev,
       locationPreference: normalizedLocation,
-      locationPreferenceStrength: normalizedLocation === 'No preference' ? 'Flexible' : prev.locationPreferenceStrength || 'Flexible'
+      locationPreferences: [
+        ...normalizedLocationPreferences(prev).filter((item) => comparableLocation(item.location) !== comparableLocation(normalizedLocation)),
+        {
+          id: globalThis.crypto?.randomUUID?.() || `${normalizedLocation}-${Date.now()}`,
+          location: normalizedLocation,
+          radiusMiles: prev.locationRadiusMiles || DEFAULT_RADIUS_MILES
+        }
+      ],
+      locationPreferenceStrength: prev.locationPreferenceStrength || 'Flexible'
     }));
-    setLocationSearch(normalizedLocation === 'No preference' ? '' : normalizedLocation);
+    setLocationSearch('');
     setIsLocationSelectorOpen(false);
     setTargetList(null);
     setError('');
@@ -1032,6 +1173,7 @@ export default function TargetListBuilderPage({ onBack }) {
     setProfile((prev) => ({
       ...prev,
       locationPreference: 'No preference',
+      locationPreferences: [],
       locationPreferenceStrength: 'Flexible',
       locationRadiusMiles: DEFAULT_RADIUS_MILES
     }));
@@ -1040,23 +1182,51 @@ export default function TargetListBuilderPage({ onBack }) {
     setTargetList(null);
   };
 
+  const updateLocationPreferenceRadius = (locationId, radiusMiles) => {
+    setProfile((prev) => {
+      const locationPreferences = normalizedLocationPreferences(prev).map((item) =>
+        item.id === locationId ? { ...item, radiusMiles } : item
+      );
+      return {
+        ...prev,
+        locationPreferences,
+        locationPreference: locationPreferences[0]?.location || 'No preference',
+        locationRadiusMiles: locationPreferences[0]?.radiusMiles || DEFAULT_RADIUS_MILES
+      };
+    });
+    setTargetList(null);
+  };
+
+  const removeLocationPreference = (locationId) => {
+    setProfile((prev) => {
+      const locationPreferences = normalizedLocationPreferences(prev).filter((item) => item.id !== locationId);
+      return {
+        ...prev,
+        locationPreferences,
+        locationPreference: locationPreferences[0]?.location || 'No preference',
+        locationPreferenceStrength: locationPreferences.length ? prev.locationPreferenceStrength : 'Flexible',
+        locationRadiusMiles: locationPreferences[0]?.radiusMiles || DEFAULT_RADIUS_MILES
+      };
+    });
+    setTargetList(null);
+  };
+
   const buildList = async () => {
     setLoading(true);
     setError('');
 
+    const locationPreferences = normalizedLocationPreferences(profile);
     const preference = normalizeLocationPreference(profile);
     const normalizedWorkExperiences = (profile.workExperiences || []).map(normalizeExperience);
     const profilePayload = {
       ...profile,
+      locationPreferences,
       school: schoolForPayload(profile.school),
       workExperiences: normalizedWorkExperiences,
       selectedInterests: profile.interests,
       preferredLocation: preference,
-      locationRadiusMiles: profile.locationRadiusMiles || DEFAULT_RADIUS_MILES,
-      preferredLocations:
-        preference && preference !== 'No preference' && profile.locationPreferenceStrength === 'Strict'
-          ? []
-          : [],
+      locationRadiusMiles: locationPreferences[0]?.radiusMiles || profile.locationRadiusMiles || DEFAULT_RADIUS_MILES,
+      preferredLocations: [],
       workType: normalizedWorkExperiences[0]?.experienceType || 'None'
     };
 
@@ -1116,12 +1286,13 @@ export default function TargetListBuilderPage({ onBack }) {
     }
 
     if (currentStep === 1) {
+      const selectedLocations = normalizedLocationPreferences(profile);
       return (
         <>
           <h2>Do you have a location preference?</h2>
           <div className="grid">
             <label className="firm-search-field">
-              <span>Location preference</span>
+              <span>{selectedLocations.length ? 'Add another location' : 'Add preferred location'}</span>
               <div className="firm-autocomplete location-autocomplete">
                 <input
                   type="search"
@@ -1132,7 +1303,7 @@ export default function TargetListBuilderPage({ onBack }) {
                   onFocus={() => setIsLocationSelectorOpen(true)}
                   onBlur={() => setTimeout(() => setIsLocationSelectorOpen(false), 120)}
                 />
-                {profile.locationPreference !== 'No preference' ? (
+                {selectedLocations.length ? (
                   <button type="button" className="location-clear-button" aria-label="Clear location preference" onClick={clearLocationPreference}>
                     x
                   </button>
@@ -1157,27 +1328,38 @@ export default function TargetListBuilderPage({ onBack }) {
                 ) : null}
               </div>
               <span className="field-helper">
-                {profile.locationPreference === 'No preference'
-                  ? 'No location filter will be applied.'
-                  : profile.locationPreference
-                    ? `Selected: ${profile.locationPreference}`
-                    : 'Select a suggested city to apply a location preference.'}
+                {selectedLocations.length
+                  ? 'Add another city or adjust each radius below.'
+                  : 'No location filter will be applied unless you add a city.'}
               </span>
             </label>
           </div>
-          {profile.locationPreference && profile.locationPreference !== 'No preference' ? (
+          {selectedLocations.length ? (
             <div className="preference-block">
-              <label className="radius-slider-control target-radius-control">
-                <span>Radius: {profile.locationRadiusMiles || DEFAULT_RADIUS_MILES} miles</span>
-                <input
-                  type="range"
-                  min="10"
-                  max="100"
-                  step="5"
-                  value={profile.locationRadiusMiles || DEFAULT_RADIUS_MILES}
-                  onChange={(e) => setProfile({ ...profile, locationRadiusMiles: Number(e.target.value) })}
-                />
-              </label>
+              <div className="target-location-list">
+                {selectedLocations.map((location) => (
+                  <article className="target-location-card" key={location.id}>
+                    <div>
+                      <h3>{location.location}</h3>
+                      <p>{location.radiusMiles} mile radius</p>
+                    </div>
+                    <label className="radius-slider-control target-radius-control">
+                      <span>Radius: {location.radiusMiles} miles</span>
+                      <input
+                        type="range"
+                        min="10"
+                        max="100"
+                        step="5"
+                        value={location.radiusMiles}
+                        onChange={(e) => updateLocationPreferenceRadius(location.id, Number(e.target.value))}
+                      />
+                    </label>
+                    <button type="button" className="text-button" onClick={() => removeLocationPreference(location.id)}>
+                      Remove
+                    </button>
+                  </article>
+                ))}
+              </div>
               <h3>How strongly should Banker Builder follow this location preference?</h3>
               <div className="choice-grid preference-choice-grid">
                 {locationStrengthOptions.map((option) => (
@@ -1366,6 +1548,20 @@ export default function TargetListBuilderPage({ onBack }) {
               ))}
             </div>
           </div>
+          <div className="preference-block">
+            <h3>Maximum firms in target list</h3>
+            <label className="radius-slider-control target-radius-control">
+              <span>{profile.maxFirmCount || 25} firms</span>
+              <input
+                type="range"
+                min="10"
+                max="50"
+                step="5"
+                value={profile.maxFirmCount || 25}
+                onChange={(e) => setProfile({ ...profile, maxFirmCount: Number(e.target.value) })}
+              />
+            </label>
+          </div>
         </>
       );
     }
@@ -1380,14 +1576,10 @@ export default function TargetListBuilderPage({ onBack }) {
           </section>
           <section>
             <h3>Location Preference</h3>
-            <p>
-              {normalizeLocationPreference(profile) === 'No preference'
-                ? 'No preference'
-                : `${normalizeLocationPreference(profile)} within ${profile.locationRadiusMiles || DEFAULT_RADIUS_MILES} miles`}
-            </p>
+            <p>{locationPreferencesSummary(profile)}</p>
             <p>
               Strength:{' '}
-              {profile.locationPreference && profile.locationPreference !== 'No preference'
+              {normalizedLocationPreferences(profile).length
                 ? profile.locationPreferenceStrength
                 : 'Not applied'}
             </p>
@@ -1396,6 +1588,7 @@ export default function TargetListBuilderPage({ onBack }) {
             <h3>Recruiting Priorities</h3>
             <p>Prestige: {profile.prestigePreference}</p>
             <p>Pay: {profile.payPreference}</p>
+            <p>Max firms: {profile.maxFirmCount || 25}</p>
           </section>
           <section>
             <h3>Academic Info</h3>
@@ -1450,6 +1643,7 @@ export default function TargetListBuilderPage({ onBack }) {
             <div>
               <span className="feature-eyebrow">Generated recommendations</span>
               <h2>Target List Results</h2>
+              <p className="muted">Showing {targetList.totalCount} of up to {targetList.maxFirmCount} firms.</p>
             </div>
             <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
               Edit Inputs
