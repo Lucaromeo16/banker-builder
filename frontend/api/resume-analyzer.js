@@ -200,7 +200,7 @@ const grammarFormattingOverlapPattern =
   /\b(spell(?:ing)?|grammar|grammatical|tense|punctuation|sentence|mechanics|writing mechanics|wording|action verb|tone)\b/i;
 
 const reliableFormattingIssuePattern =
-  /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests)\b/i;
+  /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests|chronological|reverse chronological|high school|objective|summary|skills-heavy|student-resume)\b/i;
 
 const resumeSubscoreFields = [
   ['ibReadinessScore', 'ibReadiness'],
@@ -289,6 +289,73 @@ function capScore(sanitized, scoreField, detailKey, cap, reason) {
   };
 }
 
+function addScoreReason(sanitized, scoreField, detailKey, scoreDelta, reason, improvement) {
+  const currentScore = clampNumericScore(sanitized[scoreField]);
+  if (currentScore === null) return;
+  const newScore = Math.max(1, currentScore - scoreDelta);
+  sanitized[scoreField] = newScore;
+
+  const detail = sanitized.scoreDetails[detailKey] || {};
+  sanitized.scoreDetails[detailKey] = {
+    ...detail,
+    score: newScore,
+    pointLossReasons: Array.from(new Set([...normalizeList(detail.pointLossReasons), reason])),
+    improvements: Array.from(new Set([...normalizeList(detail.improvements), improvement].filter(Boolean)))
+  };
+}
+
+function hasLowercaseBulletStarts(resumeText) {
+  const lines = normalizeResumeText(resumeText).split('\n');
+  return lines.filter((line) => /^[\s]*[-*\u2022]\s+[a-z][A-Za-z'-]+\b/.test(line)).length;
+}
+
+function isLikelyFreshmanProfile(resumeText) {
+  return /\b(freshman|first-year|first year|class of 2029|class of 2030)\b/i.test(resumeText);
+}
+
+function getSectionKey(line) {
+  const normalized = line.trim().toLowerCase().replace(/[^a-z/& ]/g, '').replace(/\s+/g, ' ');
+  if (/^(work experience|professional experience|experience|employment)$/.test(normalized)) return 'experience';
+  if (/^(leadership|leadership activities|activities|involvement|extracurriculars|campus involvement)$/.test(normalized)) {
+    return 'leadership';
+  }
+  if (/^(education|academic background)$/.test(normalized)) return 'education';
+  if (/^(additional|skills|certifications|interests|other|projects)$/.test(normalized)) return 'other';
+  return '';
+}
+
+function dateSortValue(line) {
+  const yearMatches = [...line.matchAll(/\b(20\d{2}|19\d{2})\b/g)].map((match) => Number(match[1]));
+  if (!yearMatches.length) return null;
+  if (/\b(present|current)\b/i.test(line)) return 3000;
+  return Math.max(...yearMatches);
+}
+
+function hasClearlyOutOfOrderDates(resumeText) {
+  const sectionDates = {
+    experience: [],
+    leadership: [],
+    education: []
+  };
+  let currentSection = '';
+
+  normalizeResumeText(resumeText).split('\n').forEach((line) => {
+    const sectionKey = getSectionKey(line);
+    if (sectionKey) {
+      currentSection = sectionKey;
+      return;
+    }
+
+    if (!sectionDates[currentSection]) return;
+    const sortValue = dateSortValue(line);
+    if (sortValue !== null) sectionDates[currentSection].push(sortValue);
+  });
+
+  return Object.values(sectionDates).some((dates) =>
+    dates.length >= 3 && dates.some((date, index) => index > 0 && date > dates[index - 1])
+  );
+}
+
 function calibrateWeakIbProfileScores(sanitized, resumeText) {
   const signals = detectResumeCompetitivenessSignals(resumeText);
   const hasDirectFinance = signals.financeSignals >= 2;
@@ -364,6 +431,50 @@ function calibrateWeakIbProfileScores(sanitized, resumeText) {
   }
 }
 
+function applyConcreteIbResumeIssueCalibration(sanitized, resumeText) {
+  const lowercaseBulletStarts = hasLowercaseBulletStarts(resumeText);
+  if (lowercaseBulletStarts >= 1) {
+    addScoreReason(
+      sanitized,
+      'spellingGrammarScore',
+      'spellingGrammar',
+      lowercaseBulletStarts >= 3 ? 1 : 0.5,
+      'Spelling & Grammar lost points because one or more bullets begin with a lowercase word instead of sentence-style capitalization.',
+      'Start each bullet with a capitalized action verb or clear sentence-style phrase.'
+    );
+  }
+
+  if (detectResumeCompetitivenessSignals(resumeText).highSchoolSignals && !isLikelyFreshmanProfile(resumeText)) {
+    addScoreReason(
+      sanitized,
+      'ibReadinessScore',
+      'ibReadiness',
+      0.5,
+      'IB Readiness lost points because high school content on a college/post-college IB resume can make the recruiting profile look underdeveloped.',
+      'Remove high school education, GPA, and extracurriculars unless there is a very specific reason to keep a strong SAT/ACT score.'
+    );
+    addScoreReason(
+      sanitized,
+      'formattingScore',
+      'formatting',
+      0.5,
+      'Formatting lost points because high school content disrupts the standard college IB resume structure.',
+      'Keep the education section focused on college credentials and relevant standardized test scores if appropriate.'
+    );
+  }
+
+  if (hasClearlyOutOfOrderDates(resumeText)) {
+    addScoreReason(
+      sanitized,
+      'formattingScore',
+      'formatting',
+      0.5,
+      'Formatting lost points because one section appears not to follow clean reverse-chronological ordering.',
+      'List entries within each section from most recent to oldest when dates are available.'
+    );
+  }
+}
+
 function sanitizeFormattingAnalysis(analysis, resumeText = '') {
   const sanitized = {
     ...analysis,
@@ -412,6 +523,7 @@ function sanitizeFormattingAnalysis(analysis, resumeText = '') {
   };
 
   calibrateWeakIbProfileScores(sanitized, resumeText);
+  applyConcreteIbResumeIssueCalibration(sanitized, resumeText);
 
   resumeSubscoreFields.forEach(([scoreField, detailKey]) => {
     const detail = sanitized.scoreDetails[detailKey] || {};
@@ -521,17 +633,20 @@ export default async function handler(req, res) {
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
             'Formatting checks may include only: standard finance resume section ordering, clear section hierarchy, consistent section naming, date/location formatting consistency, company/title/location/date line consistency, resume organization, and standard one-page finance structure.',
+            'Formatting should also evaluate reverse-chronological ordering when dates are clear: Work Experience, Leadership/Activities/Extracurriculars, and Education entries should generally run from most recent to oldest. If dates are clearly out of order within a section, flag it under Formatting with evidence. Do not guess when PDF extraction makes ordering ambiguous.',
             'Do not evaluate bullet-ending punctuation. Do not mention bullets using periods versus not using periods. Do not deduct formatting points for periods or no periods at the end of bullets. Do not invent exact counts like "two bullets" unless directly and reliably extracted.',
             'Do not flag line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
-            'For weak/general resumes, finance formatting standards are stricter than general student resume standards. When reliably observable from extracted text, formatting may lose points for non-finance resume structure, high school content on a college IB resume, generic objective/summary sections, generic skills-heavy structure, weak hierarchy, or outdated student-resume organization. Do not hallucinate visual issues.',
+            'For weak/general resumes, finance formatting standards are stricter than general student resume standards. When reliably observable from extracted text, formatting may lose points for non-finance resume structure, high school content on a college IB resume, generic objective/summary sections, generic skills-heavy structure, weak hierarchy, outdated student-resume organization, or clearly non-reverse-chronological section ordering. Do not hallucinate visual issues.',
+            'High school education, high school GPA, and high school extracurriculars generally should not appear on college sophomore/junior/senior/post-college IB resumes. SAT/ACT may be acceptable for undergrads if strong/relevant. If high school content appears and the candidate does not look like a freshman, reflect it under Formatting when it disrupts standard IB structure and under IB Readiness because it can signal an underdeveloped recruiting resume.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
             'Do not penalize formatting for bullet wording strength, action verb quality, bullet strength, tone, grammar, spelling, tense usage, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership, and put writing mechanics under Spelling & Grammar.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
             'For a resume that follows standard section order, has clear hierarchy, and has consistent extracted-text structure, formatting should be 10/10 if no material formatting issue exists.',
             'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Company, title, location, and date lines follow a consistent structure." Avoid bullet-ending punctuation comments and vague claims like sections being too lengthy unless obviously true.',
             'If no reliable structure formatting problems are found, give formatting 10/10 and say: "No material formatting concerns detected." Do not provide pointLossReasons or improvements for a 10/10 formatting score.',
-            'Spelling & Grammar must evaluate spelling, grammar, sentence clarity, punctuation correctness, professional writing mechanics, and tense consistency. It must not evaluate resume ordering, section hierarchy, finance relevance, or content strength. Punctuation correctness excludes bullet-ending period/no-period style; do not treat consistently omitted bullet-ending periods as an error.',
+            'Spelling & Grammar must evaluate spelling, grammar, capitalization, sentence clarity, punctuation correctness, professional writing mechanics, and tense consistency. It must not evaluate resume ordering, section hierarchy, finance relevance, or content strength. Punctuation correctness excludes bullet-ending period/no-period style; do not treat consistently omitted bullet-ending periods as an error.',
+            'If a bullet starts with a lowercase word when it should begin a sentence/action verb, flag it under Spelling & Grammar. For example, "responsible for assisting..." should lose spelling/grammar/writing-mechanics points because it begins lowercase and uses weak sentence mechanics. Do not put lowercase bullet starts under Formatting.',
             'Tense consistency rules: current roles should primarily use present tense action verbs; completed roles should primarily use past tense; incoming or future roles may use future-oriented phrasing such as "will support", "incoming", or "expected to join". Do not over-penalize mixed tense caused by role transitions, future internships, or hybrid current responsibilities. Deduct only when tense usage is clearly inconsistent or incorrect.',
             'Return scoreDetails for ibReadiness, formatting, experience, leadership, technicalRelevance, and spellingGrammar. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
             'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10. If a subscore is 10, pointLossReasons must be an empty array and improvements may be an empty array.',
