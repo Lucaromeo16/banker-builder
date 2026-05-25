@@ -16,13 +16,13 @@ const scoreDetailSchema = {
     },
     pointLossReasons: {
       type: 'array',
-      minItems: 1,
+      minItems: 0,
       maxItems: 5,
       items: { type: 'string' }
     },
     improvements: {
       type: 'array',
-      minItems: 1,
+      minItems: 0,
       maxItems: 5,
       items: { type: 'string' }
     }
@@ -212,7 +212,7 @@ function sanitizeFormattingAnalysis(analysis) {
   const cleanPositives = removeUnreliableVisualFormattingClaims(formattingDetail.positives);
   const cleanPointLossReasons = removeUnreliableVisualFormattingClaims(formattingDetail.pointLossReasons);
   const cleanImprovements = removeUnreliableVisualFormattingClaims(formattingDetail.improvements);
-  const noMajorIssueText = 'No major text-structure issues were detected.';
+  const noMajorIssueText = 'No material issues found.';
   const hasReliablePointLoss = cleanPointLossReasons.some((item) => !/^no major/i.test(item));
   let formattingScore = Number(sanitized.formattingScore);
 
@@ -231,10 +231,13 @@ function sanitizeFormattingAnalysis(analysis) {
       ? cleanPositives
       : ['Section order follows standard finance resume convention.', 'Clear standard section headers are present.'],
     pointLossReasons:
-      sanitized.formattingScore >= 10 || !hasReliablePointLoss ? [noMajorIssueText] : cleanPointLossReasons,
-    improvements: cleanImprovements.length
-      ? cleanImprovements
-      : ['Maintain consistent section ordering, header naming, and date formats.']
+      sanitized.formattingScore >= 10 || !hasReliablePointLoss ? [] : cleanPointLossReasons,
+    improvements:
+      sanitized.formattingScore >= 10
+        ? []
+        : cleanImprovements.length
+          ? cleanImprovements
+          : ['Maintain consistent section ordering, header naming, and date formats.']
   };
 
   return sanitized;
@@ -309,6 +312,8 @@ export default async function handler(req, res) {
           [
             'You are an investment banking resume reviewer evaluating an undergraduate candidate. Be direct, specific, realistic, and recruiting-focused.',
             'Evaluate banking relevance, finance/accounting/valuation exposure, leadership, quantified impact, bullet strength, resume positioning, school/GPA signals if present, transaction/deal relevance if present, and missing signals. Avoid generic career advice.',
+            'Scores should reflect actual resume quality. If a subscore category has no meaningful category-specific issue, it can receive a true 10/10. Do not invent critiques or force point-loss reasons just to avoid a perfect score.',
+            'overallScoreOutOf10 should be precise to one decimal place when appropriate, such as 8.1, 8.4, or 8.7. Do not bucket or round the overall score to only whole numbers or 0.5 increments.',
             'Formatting score calibration: formatting is not content quality. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness.',
             'For formatting, evaluate only reliable text-structure signals visible in extracted text.',
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
@@ -318,12 +323,13 @@ export default async function handler(req, res) {
             'Do not flag punctuation from line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
+            'Do not penalize formatting for bullet wording strength, action verb quality, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership instead.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
-            'For a resume that follows standard section order and has consistent extracted-text structure, formatting should generally be 8.5-10.',
+            'For a resume that follows standard section order and has consistent extracted-text structure, formatting should generally be 8.5-10 and may be 10/10 if no material text-structure issue exists.',
             'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Multiple comparable bullets mix period and no-period endings." Avoid vague claims like sections being too lengthy unless obviously true.',
-            'If no reliable text-structure formatting problems are found, give formatting a high score and say no major text-structure issues were detected.',
+            'If no reliable text-structure formatting problems are found, give formatting a high score or 10/10 and say no material issues found.',
             'Return scoreDetails for ibReadiness, formatting, experience, leadership, and technicalRelevance. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
-            'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10, even for a 9/10. If a subscore is 10, pointLossReasons should contain "No major issues found."',
+            'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10. If a subscore is 10, pointLossReasons must be an empty array and improvements may be an empty array.',
             'For scoreDetails.formatting, pointLossReasons and improvements must only use text-structure reasons. Never include visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, or layout aesthetics.',
             'Avoid vague point-loss reasons such as "could be stronger" or "needs more polish." Name the missing signal, inconsistency, weak evidence, or resume convention issue.',
             'Bullet rewrites should be credible, concise, action-oriented, quantified when possible, and suitable for an IB resume.'

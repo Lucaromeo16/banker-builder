@@ -41,28 +41,25 @@ function renderTextList(items) {
 function getScoreDetail(analysis, config) {
   const detail = analysis?.scoreDetails?.[config.key] || {};
   const score = analysis?.[config.scoreField] ?? detail.score;
+  const numericScore = Number(score);
   const pointLossReasons = normalizeList(detail.pointLossReasons);
   const fallbackPositives = config.key === 'formatting' ? normalizeList(analysis?.formattingFeedback) : normalizeList(analysis?.strengths);
-  const fallbackPointLossReasons =
-    config.key === 'technicalRelevance' || config.key === 'ibReadiness'
-      ? [...normalizeList(analysis?.missingSignals), ...normalizeList(analysis?.weaknesses)]
-      : normalizeList(analysis?.weaknesses);
+
   return {
     score,
     positives: normalizeList(detail.positives).length ? normalizeList(detail.positives) : fallbackPositives,
-    pointLossReasons:
-      Number(score) === 10 && pointLossReasons.length === 0
-        ? ['No major issues found.']
-        : pointLossReasons.length
-          ? pointLossReasons
-          : fallbackPointLossReasons,
-    improvements: normalizeList(detail.improvements).length ? normalizeList(detail.improvements) : normalizeList(analysis?.nextSteps)
+    pointLossReasons: numericScore >= 10 ? ['No material issues found.'] : pointLossReasons,
+    improvements: numericScore >= 10 ? [] : normalizeList(detail.improvements)
   };
 }
 
 function ScoreDetailModal({ analysis, config, onClose }) {
   if (!analysis || !config) return null;
   const detail = getScoreDetail(analysis, config);
+  const numericScore = Number(detail.score);
+  const hasPerfectScore = numericScore >= 10;
+  const hasPointLossReasons = !hasPerfectScore && normalizeList(detail.pointLossReasons).length > 0;
+  const hasImprovements = !hasPerfectScore && normalizeList(detail.improvements).length > 0;
 
   return (
     <div className="resume-score-modal-backdrop" role="presentation" onClick={onClose}>
@@ -89,14 +86,24 @@ function ScoreDetailModal({ analysis, config, onClose }) {
             <h4>What Went Well</h4>
             {renderTextList(detail.positives)}
           </article>
-          <article>
-            <h4>Where Points Were Lost</h4>
-            {renderTextList(detail.pointLossReasons)}
-          </article>
-          <article>
-            <h4>How To Improve Toward 10/10</h4>
-            {renderTextList(detail.improvements)}
-          </article>
+          {hasPerfectScore ? (
+            <article>
+              <h4>No Material Issues</h4>
+              <p>No material issues found.</p>
+            </article>
+          ) : null}
+          {hasPointLossReasons ? (
+            <article>
+              <h4>Where Points Were Lost</h4>
+              {renderTextList(detail.pointLossReasons)}
+            </article>
+          ) : null}
+          {hasImprovements ? (
+            <article>
+              <h4>How To Improve Toward 10/10</h4>
+              {renderTextList(detail.improvements)}
+            </article>
+          ) : null}
         </div>
       </section>
     </div>
