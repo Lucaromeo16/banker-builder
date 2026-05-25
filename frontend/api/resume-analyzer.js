@@ -238,7 +238,133 @@ function averageSubscores(scores) {
   return Number((validScores.reduce((sum, score) => sum + score, 0) / validScores.length).toFixed(1));
 }
 
-function sanitizeFormattingAnalysis(analysis) {
+function countPatternMatches(text, pattern) {
+  return (text.match(pattern) || []).length;
+}
+
+function detectResumeCompetitivenessSignals(resumeText) {
+  const text = normalizeResumeText(resumeText).toLowerCase();
+  const financeSignals = countPatternMatches(
+    text,
+    /\b(investment banking|investment bank|m&a|mergers?|acquisitions?|valuation|dcf|discounted cash flow|comparable compan(?:y|ies)|precedent transaction|financial model(?:ing)?|three-statement|lbo|leveraged buyout|accounting|audit|transaction advisory|tas|due diligence|capital markets?|equity research|private equity|hedge fund|asset management|wealth management|corporate finance|bloomberg|factset|capital iq|wall street prep|biws|cfa|financial statement|portfolio|student investment fund|investment club)\b/g
+  );
+  const businessSignals = countPatternMatches(
+    text,
+    /\b(finance|accounting|economics|business|consulting|strategy|market research|revenue|profit|budget|forecast|analytics?|excel|powerpoint|pitch|client|crm|sales|operations|entrepreneur|startup)\b/g
+  );
+  const genericServiceSignals = countPatternMatches(
+    text,
+    /\b(customer service|retail|cashier|server|barista|restaurant|host|lifeguard|camp counselor|front desk|food service|hospitality)\b/g
+  );
+  const leadershipSignals = countPatternMatches(
+    text,
+    /\b(president|founder|co-founder|executive board|vice president|vp|treasurer|captain|chair|director|managed|led|supervised|founded)\b/g
+  );
+  const quantifiedSignals = countPatternMatches(text, /(?:\$\s?\d|\d+(?:\.\d+)?%|\b\d+\s?(?:k|m|million|billion|clients|customers|members|students|employees|hours|transactions)\b)/g);
+  const highSchoolSignals = countPatternMatches(text, /\b(high school|secondary school)\b/g);
+  const genericStudentSections = countPatternMatches(text, /\b(objective|summary|relevant skills|soft skills)\b/g);
+
+  return {
+    financeSignals,
+    businessSignals,
+    genericServiceSignals,
+    leadershipSignals,
+    quantifiedSignals,
+    highSchoolSignals,
+    genericStudentSections
+  };
+}
+
+function capScore(sanitized, scoreField, detailKey, cap, reason) {
+  const currentScore = clampNumericScore(sanitized[scoreField]);
+  if (currentScore === null || currentScore <= cap) return;
+
+  sanitized[scoreField] = cap;
+  const detail = sanitized.scoreDetails[detailKey] || {};
+  sanitized.scoreDetails[detailKey] = {
+    ...detail,
+    score: cap,
+    pointLossReasons: Array.from(new Set([...normalizeList(detail.pointLossReasons), reason])),
+    improvements: normalizeList(detail.improvements)
+  };
+}
+
+function calibrateWeakIbProfileScores(sanitized, resumeText) {
+  const signals = detectResumeCompetitivenessSignals(resumeText);
+  const hasDirectFinance = signals.financeSignals >= 2;
+  const hasSomeBusinessPreparation = signals.financeSignals >= 1 || signals.businessSignals >= 3;
+  const isGenericStudentProfile =
+    !hasDirectFinance && signals.genericServiceSignals >= 1 && signals.businessSignals <= 2 && signals.quantifiedSignals <= 1;
+  const isLowFinanceBusinessProfile = !hasDirectFinance && hasSomeBusinessPreparation;
+  const isVeryUnderpreparedProfile = !hasDirectFinance && !hasSomeBusinessPreparation;
+
+  if (!isGenericStudentProfile && !isLowFinanceBusinessProfile && !isVeryUnderpreparedProfile) return;
+
+  if (isVeryUnderpreparedProfile || isGenericStudentProfile) {
+    capScore(
+      sanitized,
+      'ibReadinessScore',
+      'ibReadiness',
+      4.5,
+      'IB readiness is capped because the resume shows little direct finance, accounting, valuation, or recruiting preparation.'
+    );
+    capScore(
+      sanitized,
+      'technicalRelevanceScore',
+      'technicalRelevance',
+      3.5,
+      'Technical relevance is capped because generic work, service, or coursework signals do not substitute for finance/accounting/modeling exposure.'
+    );
+    capScore(
+      sanitized,
+      'experienceScore',
+      'experience',
+      signals.quantifiedSignals >= 2 ? 6 : 5.5,
+      'Experience is capped because the roles appear general rather than analytically complex, finance-relevant, or professionally selective for IB recruiting.'
+    );
+    capScore(
+      sanitized,
+      'leadershipScore',
+      'leadership',
+      signals.leadershipSignals >= 2 ? 6.5 : 5,
+      'Leadership is capped because the resume does not show enough selective finance-oriented leadership or clear responsibility beyond general involvement.'
+    );
+  } else if (isLowFinanceBusinessProfile) {
+    capScore(
+      sanitized,
+      'ibReadinessScore',
+      'ibReadiness',
+      6.5,
+      'IB readiness is capped because the resume has some business preparation but limited direct IB, valuation, accounting, or transaction exposure.'
+    );
+    capScore(
+      sanitized,
+      'technicalRelevanceScore',
+      'technicalRelevance',
+      4.5,
+      'Technical relevance is capped because business or analytical claims are not the same as finance/accounting/modeling evidence.'
+    );
+    capScore(
+      sanitized,
+      'experienceScore',
+      'experience',
+      7,
+      'Experience is capped because the resume needs more finance-relevant analytical complexity or selective professional exposure for a higher IB score.'
+    );
+  }
+
+  if (signals.highSchoolSignals || signals.genericStudentSections) {
+    capScore(
+      sanitized,
+      'formattingScore',
+      'formatting',
+      8.5,
+      'Formatting is capped because the resume includes student-resume conventions that are weaker for college IB recruiting, such as high school content or generic summary/skills structure.'
+    );
+  }
+}
+
+function sanitizeFormattingAnalysis(analysis, resumeText = '') {
   const sanitized = {
     ...analysis,
     scoreDetails: {
@@ -284,6 +410,8 @@ function sanitizeFormattingAnalysis(analysis) {
           ? cleanImprovements
           : ['Maintain consistent section ordering, header naming, and date formats.']
   };
+
+  calibrateWeakIbProfileScores(sanitized, resumeText);
 
   resumeSubscoreFields.forEach(([scoreField, detailKey]) => {
     const detail = sanitized.scoreDetails[detailKey] || {};
@@ -376,10 +504,18 @@ export default async function handler(req, res) {
           [
             'You are an investment banking resume reviewer evaluating an undergraduate candidate. Be direct, specific, realistic, and recruiting-focused.',
             'Evaluate banking relevance, finance/accounting/valuation exposure, leadership, quantified impact, bullet strength, resume positioning, school/GPA signals if present, transaction/deal relevance if present, and missing signals. Avoid generic career advice.',
+            'Primary calibration lens: would this candidate realistically be competitive in investment banking recruiting? Do not score a resume highly merely because it is a decent general college resume.',
+            'Do not globally compress scores downward. Strong finance/IB resumes with meaningful finance exposure, polished section order, strong leadership, and technical evidence should still score highly, often around 8.5-9.5 overall with 10/10 formatting when deserved.',
             'Scores should reflect actual resume quality. If a subscore category has no meaningful category-specific issue, it can receive a true 10/10. Do not invent critiques or force point-loss reasons just to avoid a perfect score.',
             'overallScoreOutOf10 should be precise to one decimal place when appropriate, such as 8.1, 8.4, or 8.7. Do not bucket or round the overall score to only whole numbers or 0.5 increments.',
             'Subscores should use 0.5 increments only, such as 8.5, 9.0, 9.5, or 10.0. The overall score should be a one-decimal composite influenced by all six subscores: IB Readiness, Formatting, Experience, Leadership, Technical Relevance, and Spelling & Grammar.',
             'Category boundaries: Formatting is structure/order/organization only. Spelling & Grammar is spelling, grammar, punctuation correctness, sentence clarity, professional writing mechanics, and tense consistency. Experience is work quality/relevance. Leadership is leadership quality/impact. Technical Relevance is finance technicality/modeling/valuation exposure. IB Readiness is overall recruiting readiness.',
+            'IB Readiness anchors: 9-10 means strong IB-ready candidate with meaningful finance exposure and polished recruiting profile; 7-8 means competitive finance/business candidate with some gaps; 5-6 means general business student with limited direct finance preparation; 3-4 means weak/non-finance recruiting profile with little evidence of IB readiness; 1-2 means very underdeveloped profile.',
+            'IB Readiness should heavily reward finance internships, accounting/audit/TAS/valuation exposure, IB exposure, selective finance programs, technical finance coursework/certifications, analytical rigor, recruiting sophistication, finance-oriented leadership, and polished finance resume presentation. It should heavily penalize generic customer service resumes, lack of finance/business exposure, generic extracurriculars, weak or unquantified bullets, and no evidence of finance recruiting preparation.',
+            'Technical Relevance should only reward finance/accounting exposure, valuation/modeling, financial analysis, markets knowledge, Excel/modeling tools, Bloomberg/finance coursework, analytical finance work, and transaction/deal exposure. Generic math skills, teamwork, customer service, or generic data analysis should not materially increase technical score. If there is almost no finance/accounting/technical exposure, Technical Relevance should usually be about 1.5-3.5.',
+            'Experience should reward analytical complexity, business relevance, finance relevance, progression/selectivity, quantified impact, and professional sophistication. Basic retail/customer service roles with weak bullets should not score highly; customer service alone should not exceed mid-range unless highly quantified, leadership-heavy, operationally sophisticated, or clearly impactful.',
+            'Leadership should distinguish passive membership from real leadership responsibility and selective/high-prestige leadership. Reward president, founder, executive board, selective finance programs, investment clubs, student investment funds, and competitive business organizations. Penalize generic membership, unquantified involvement, and weak participation bullets.',
+            'Expected overall calibration: strong finance resumes should land around 8.5-9.5 overall; average business students around 5.5-7; weak/general student resumes around 3.5-5.5.',
             'Formatting score calibration: formatting is not content quality and not writing mechanics. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness. Grammar, spelling, punctuation correctness, sentence clarity, and tense usage belong only in Spelling & Grammar.',
             'For formatting, evaluate only reliable structure signals visible in extracted text.',
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
@@ -388,6 +524,7 @@ export default async function handler(req, res) {
             'Do not evaluate bullet-ending punctuation. Do not mention bullets using periods versus not using periods. Do not deduct formatting points for periods or no periods at the end of bullets. Do not invent exact counts like "two bullets" unless directly and reliably extracted.',
             'Do not flag line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
+            'For weak/general resumes, finance formatting standards are stricter than general student resume standards. When reliably observable from extracted text, formatting may lose points for non-finance resume structure, high school content on a college IB resume, generic objective/summary sections, generic skills-heavy structure, weak hierarchy, or outdated student-resume organization. Do not hallucinate visual issues.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
             'Do not penalize formatting for bullet wording strength, action verb quality, bullet strength, tone, grammar, spelling, tense usage, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership, and put writing mechanics under Spelling & Grammar.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
@@ -442,7 +579,7 @@ export default async function handler(req, res) {
       return res.status(502).json({ code: 'OPENAI_ANALYSIS_FAILED', error: 'OpenAI resume analysis response was empty.' });
     }
 
-    return res.status(200).json(sanitizeFormattingAnalysis(JSON.parse(outputText)));
+    return res.status(200).json(sanitizeFormattingAnalysis(JSON.parse(outputText), cleanedResumeText));
   } catch (error) {
     console.error('[resume-analyzer] Serverless route failed', {
       name: error.name,
