@@ -199,8 +199,11 @@ const bulletPunctuationPattern =
 const grammarFormattingOverlapPattern =
   /\b(spell(?:ing)?|grammar|grammatical|tense|punctuation|sentence|mechanics|writing mechanics|wording|action verb|tone)\b/i;
 
+const highSchoolFormattingOverlapPattern =
+  /\b(high school|secondary school|high-school|sat|act)\b/i;
+
 const reliableFormattingIssuePattern =
-  /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests|chronological|reverse chronological|high school|objective|summary|skills-heavy|student-resume)\b/i;
+  /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests|chronological|reverse chronological|objective|summary|skills-heavy|student-resume|soft skills)\b/i;
 
 const resumeSubscoreFields = [
   ['ibReadinessScore', 'ibReadiness'],
@@ -216,6 +219,7 @@ function removeUnreliableVisualFormattingClaims(items) {
     if (unreliableVisualFormattingPattern.test(item)) return false;
     if (bulletPunctuationPattern.test(item)) return false;
     if (grammarFormattingOverlapPattern.test(item)) return false;
+    if (highSchoolFormattingOverlapPattern.test(item)) return false;
     return true;
   });
 }
@@ -420,13 +424,13 @@ function calibrateWeakIbProfileScores(sanitized, resumeText) {
     );
   }
 
-  if (signals.highSchoolSignals || signals.genericStudentSections) {
+  if (signals.genericStudentSections) {
     capScore(
       sanitized,
       'formattingScore',
       'formatting',
       8.5,
-      'Formatting is capped because the resume includes student-resume conventions that are weaker for college IB recruiting, such as high school content or generic summary/skills structure.'
+      'Formatting is capped because the resume includes generic student-resume structure, such as objective/summary or soft-skills-heavy sections, rather than a cleaner finance resume organization.'
     );
   }
 }
@@ -452,14 +456,6 @@ function applyConcreteIbResumeIssueCalibration(sanitized, resumeText) {
       0.5,
       'IB Readiness lost points because high school content on a college/post-college IB resume can make the recruiting profile look underdeveloped.',
       'Remove high school education, GPA, and extracurriculars unless there is a very specific reason to keep a strong SAT/ACT score.'
-    );
-    addScoreReason(
-      sanitized,
-      'formattingScore',
-      'formatting',
-      0.5,
-      'Formatting lost points because high school content disrupts the standard college IB resume structure.',
-      'Keep the education section focused on college credentials and relevant standardized test scores if appropriate.'
     );
   }
 
@@ -628,7 +624,9 @@ export default async function handler(req, res) {
             'Experience should reward analytical complexity, business relevance, finance relevance, progression/selectivity, quantified impact, and professional sophistication. Basic retail/customer service roles with weak bullets should not score highly; customer service alone should not exceed mid-range unless highly quantified, leadership-heavy, operationally sophisticated, or clearly impactful.',
             'Leadership should distinguish passive membership from real leadership responsibility and selective/high-prestige leadership. Reward president, founder, executive board, selective finance programs, investment clubs, student investment funds, and competitive business organizations. Penalize generic membership, unquantified involvement, and weak participation bullets.',
             'Expected overall calibration: strong finance resumes should land around 8.5-9.5 overall; average business students around 5.5-7; weak/general student resumes around 3.5-5.5.',
+            'High school content category rule: high school education, high school GPA, and high school extracurriculars are primarily IB Readiness/content maturity issues for college/post-college IB recruiting. Do not double-penalize high school content under Formatting unless it creates a separate, true organization problem beyond merely being present.',
             'Formatting score calibration: formatting is not content quality and not writing mechanics. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness. Grammar, spelling, punctuation correctness, sentence clarity, and tense usage belong only in Spelling & Grammar.',
+            'Formatting anchors: 10/10 means standard finance resume structure with clean organization and no material formatting issues; 8.5-9.5 means mostly standard structure with minor issues; 7.0-8.0 means readable with one or two clear formatting/organization issues; 5.0-6.5 means general student resume structure with multiple formatting/organization issues; 3.0-4.5 means poorly structured or hard to scan.',
             'For formatting, evaluate only reliable structure signals visible in extracted text.',
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
@@ -637,8 +635,8 @@ export default async function handler(req, res) {
             'Do not evaluate bullet-ending punctuation. Do not mention bullets using periods versus not using periods. Do not deduct formatting points for periods or no periods at the end of bullets. Do not invent exact counts like "two bullets" unless directly and reliably extracted.',
             'Do not flag line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
-            'For weak/general resumes, finance formatting standards are stricter than general student resume standards. When reliably observable from extracted text, formatting may lose points for non-finance resume structure, high school content on a college IB resume, generic objective/summary sections, generic skills-heavy structure, weak hierarchy, outdated student-resume organization, or clearly non-reverse-chronological section ordering. Do not hallucinate visual issues.',
-            'High school education, high school GPA, and high school extracurriculars generally should not appear on college sophomore/junior/senior/post-college IB resumes. SAT/ACT may be acceptable for undergrads if strong/relevant. If high school content appears and the candidate does not look like a freshman, reflect it under Formatting when it disrupts standard IB structure and under IB Readiness because it can signal an underdeveloped recruiting resume.',
+            'For weak/general resumes, finance formatting standards are stricter than general student resume standards. When reliably observable from extracted text, formatting may lose points for non-finance resume structure, generic objective/summary sections, soft-skill-heavy Skills sections placed as major resume sections, unclear hierarchy, outdated student-resume organization, date/location inconsistency, or clearly non-reverse-chronological section ordering. Do not hallucinate visual issues.',
+            'High school education, high school GPA, and high school extracurriculars generally should not appear on college sophomore/junior/senior/post-college IB resumes. SAT/ACT may be acceptable for undergrads if strong/relevant. If high school content appears and the candidate does not look like a freshman, reflect it under IB Readiness because it can signal an underdeveloped recruiting resume. Do not put high school content under Formatting merely because it is present.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
             'Do not penalize formatting for bullet wording strength, action verb quality, bullet strength, tone, grammar, spelling, tense usage, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership, and put writing mechanics under Spelling & Grammar.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
@@ -650,7 +648,7 @@ export default async function handler(req, res) {
             'Tense consistency rules: current roles should primarily use present tense action verbs; completed roles should primarily use past tense; incoming or future roles may use future-oriented phrasing such as "will support", "incoming", or "expected to join". Do not over-penalize mixed tense caused by role transitions, future internships, or hybrid current responsibilities. Deduct only when tense usage is clearly inconsistent or incorrect.',
             'Return scoreDetails for ibReadiness, formatting, experience, leadership, technicalRelevance, and spellingGrammar. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
             'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10. If a subscore is 10, pointLossReasons must be an empty array and improvements may be an empty array.',
-            'For scoreDetails.formatting, pointLossReasons and improvements must only use structure/order/organization reasons. Never include grammar, spelling, punctuation, tense, sentence clarity, visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, or layout aesthetics.',
+            'For scoreDetails.formatting, pointLossReasons and improvements must only use structure/order/organization reasons. Never include grammar, spelling, punctuation, tense, sentence clarity, visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, layout aesthetics, or high school content by itself.',
             'For scoreDetails.spellingGrammar, include tense consistency when relevant. If there are no material spelling, grammar, punctuation correctness, sentence clarity, writing mechanics, or tense issues, spellingGrammarScore may be 10/10.',
             'Avoid vague point-loss reasons such as "could be stronger" or "needs more polish." Name the missing signal, inconsistency, weak evidence, or resume convention issue.',
             'Bullet rewrites should be credible, concise, action-oriented, quantified when possible, and suitable for an IB resume.'
