@@ -43,6 +43,12 @@ const emptyDraftRequest = {
   tone: 'Professional'
 };
 
+const emptyContactFilters = {
+  firm: '',
+  office: '',
+  group: ''
+};
+
 function readContacts() {
   try {
     return JSON.parse(localStorage.getItem(CONTACTS_STORAGE_KEY) || '[]');
@@ -64,6 +70,14 @@ function groupOptionsForFirmOffice(firm, officeLabel) {
         .flatMap((office) => office.groups || [])
     )
   ].sort();
+}
+
+function uniqueContactValues(contacts, key) {
+  return [...new Set(contacts.map((contact) => contact[key]).filter(Boolean))].sort();
+}
+
+function contactMatchesFilters(contact, filters) {
+  return ['firm', 'office', 'group'].every((key) => !filters[key] || contact[key] === filters[key]);
 }
 
 function createLocalDraft(request) {
@@ -106,6 +120,7 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
   const [form, setForm] = useState(emptyContact);
   const [editingId, setEditingId] = useState(null);
   const [draftRequest, setDraftRequest] = useState(emptyDraftRequest);
+  const [contactFilters, setContactFilters] = useState(emptyContactFilters);
   const [draft, setDraft] = useState(null);
   const [draftLoading, setDraftLoading] = useState(false);
   const [draftError, setDraftError] = useState('');
@@ -177,6 +192,23 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
   const formGroups = groupOptionsForFirmOffice(form.firm, form.office);
   const draftOffices = officeOptionsForFirm(draftRequest.firm);
   const draftGroups = groupOptionsForFirmOffice(draftRequest.firm, draftRequest.office);
+  const filteredContacts = useMemo(
+    () => contacts.filter((contact) => contactMatchesFilters(contact, contactFilters)),
+    [contacts, contactFilters]
+  );
+  const hasActiveContactFilters = Boolean(contactFilters.firm || contactFilters.office || contactFilters.group);
+  const contactFilterOptions = useMemo(() => {
+    const firmMatchedContacts = contactFilters.firm ? contacts.filter((contact) => contact.firm === contactFilters.firm) : contacts;
+    const officeMatchedContacts = contactFilters.office
+      ? firmMatchedContacts.filter((contact) => contact.office === contactFilters.office)
+      : firmMatchedContacts;
+
+    return {
+      firms: uniqueContactValues(contacts, 'firm'),
+      offices: uniqueContactValues(firmMatchedContacts, 'office'),
+      groups: uniqueContactValues(officeMatchedContacts, 'group')
+    };
+  }, [contacts, contactFilters.firm, contactFilters.office]);
 
   const updateForm = (key, value) => {
     setForm((current) => ({
@@ -231,6 +263,48 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
       ...(key === 'office' ? { group: '' } : {})
     }));
   };
+
+  const updateContactFilter = (key, value) => {
+    setContactFilters((current) => ({
+      ...current,
+      [key]: value,
+      ...(key === 'firm' ? { office: '', group: '' } : {}),
+      ...(key === 'office' ? { group: '' } : {})
+    }));
+  };
+
+  const clearContactFilters = () => {
+    setContactFilters(emptyContactFilters);
+  };
+
+  const renderContactFilterBar = () => (
+    <div className="network-filter-bar">
+      <label>
+        <span>Firm</span>
+        <select value={contactFilters.firm} onChange={(event) => updateContactFilter('firm', event.target.value)}>
+          <option value="">All firms</option>
+          {contactFilterOptions.firms.map((firm) => <option key={firm} value={firm}>{firm}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Office</span>
+        <select value={contactFilters.office} onChange={(event) => updateContactFilter('office', event.target.value)}>
+          <option value="">All offices</option>
+          {contactFilterOptions.offices.map((office) => <option key={office} value={office}>{office}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Group</span>
+        <select value={contactFilters.group} onChange={(event) => updateContactFilter('group', event.target.value)}>
+          <option value="">All groups</option>
+          {contactFilterOptions.groups.map((group) => <option key={group} value={group}>{group}</option>)}
+        </select>
+      </label>
+      <button type="button" className="secondary" onClick={clearContactFilters} disabled={!hasActiveContactFilters}>
+        Clear Filters
+      </button>
+    </div>
+  );
 
   const generateDraft = async () => {
     setDraft(null);
@@ -428,8 +502,9 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
 
         <section className="network-section">
           <h3>Contacts Database</h3>
+          {renderContactFilterBar()}
           <div className="contacts-grid">
-            {contacts.length ? contacts.map((contact) => (
+            {filteredContacts.length ? filteredContacts.map((contact) => (
               <article className="contact-card" key={contact.id}>
                 <div className="contact-card-heading">
                   <div>
@@ -450,15 +525,20 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
                   <button type="button" className="text-button" onClick={() => deleteContact(contact.id)}>Delete</button>
                 </div>
               </article>
-            )) : <p className="muted">No contacts yet. Add your first banker contact above.</p>}
+            )) : (
+              <p className="muted">
+                {contacts.length ? 'No contacts match the selected filters.' : 'No contacts yet. Add your first banker contact above.'}
+              </p>
+            )}
           </div>
         </section>
 
         <section className="network-section">
           <h3>Pipeline View</h3>
+          {renderContactFilterBar()}
           <div className="pipeline-board">
             {pipelineStatuses.map((status) => {
-              const stageContacts = contacts.filter((contact) => contact.status === status);
+              const stageContacts = filteredContacts.filter((contact) => contact.status === status);
               return (
                 <article className="pipeline-column" key={status}>
                   <h4>{status} <span>{stageContacts.length}</span></h4>
@@ -478,6 +558,7 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
               );
             })}
           </div>
+          {contacts.length && !filteredContacts.length ? <p className="muted">No pipeline entries match the selected filters.</p> : null}
         </section>
 
         <section className="network-section">
