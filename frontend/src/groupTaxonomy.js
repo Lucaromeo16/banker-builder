@@ -61,9 +61,7 @@ const canonicalGroupSynonyms = {
   ],
   Credit: [
     'Credit',
-    'Structured Finance',
-    'Corporate Banking',
-    'Commercial Banking'
+    'Structured Finance'
   ],
   'M&A': [
     'M&A',
@@ -126,13 +124,29 @@ export const canonicalGroupMap = Object.fromEntries(
 );
 
 export const groupAdjacencyMap = {
-  DCM: ['Capital Markets', 'Credit'],
-  'Leveraged Finance': ['DCM', 'Credit', 'Financial Sponsors'],
-  Restructuring: ['Credit'],
+  DCM: [],
+  'Leveraged Finance': [],
+  Restructuring: [],
   'Financial Sponsors': ['M&A', 'Leveraged Finance'],
-  Technology: ['Technology'],
+  Technology: [],
   Energy: ['Infrastructure', 'Power']
 };
+
+function approvedAdjacentMatch(selectedGroup, canonicalGroup, rawGroup) {
+  const normalized = normalizeGroupName(rawGroup);
+
+  if (!(groupAdjacencyMap[selectedGroup] || []).includes(canonicalGroup)) return false;
+
+  if (selectedGroup === 'Financial Sponsors') {
+    return normalized.includes('sponsor') || normalized.includes('private equity');
+  }
+
+  if (selectedGroup === 'Energy') {
+    return normalized.includes('power') || normalized.includes('infrastructure energy');
+  }
+
+  return false;
+}
 
 export function canonicalGroupForRaw(rawGroup) {
   const normalized = normalizeGroupName(rawGroup);
@@ -177,30 +191,34 @@ export function groupMatchForInterests(rawGroup, interests = []) {
 
   if (!interests.length || hasBroadGroupInterest(interests)) {
     return {
+      rawGroup,
       canonicalGroup,
       eligible: Boolean(canonicalGroup) || isPlausiblyFinanceRelevantGroup(rawGroup),
-      matchType: canonicalGroup ? 'broad-canonical' : 'broad-unknown',
+      matchType: canonicalGroup ? 'generalist' : 'generalist',
+      selectedGroup: 'Generalist',
       score: canonicalGroup ? 1.4 : 0.55
     };
   }
 
   const selected = selectedCanonicalGroups(interests);
   if (!canonicalGroup || !selected.size) {
-    return { canonicalGroup, eligible: false, matchType: 'none', score: 0 };
+    return { rawGroup, canonicalGroup, eligible: false, matchType: 'none', selectedGroup: null, score: 0 };
   }
 
   if (selected.has(canonicalGroup)) {
-    return { canonicalGroup, eligible: true, matchType: 'direct', score: 3 };
+    return { rawGroup, canonicalGroup, eligible: true, matchType: 'direct', selectedGroup: canonicalGroup, score: 3 };
   }
 
-  const isAdjacent = [...selected].some((selectedGroup) =>
-    (groupAdjacencyMap[selectedGroup] || []).includes(canonicalGroup)
+  const selectedAdjacentGroup = [...selected].find((selectedGroup) =>
+    approvedAdjacentMatch(selectedGroup, canonicalGroup, rawGroup)
   );
 
   return {
+    rawGroup,
     canonicalGroup,
-    eligible: isAdjacent,
-    matchType: isAdjacent ? 'adjacent' : 'none',
-    score: isAdjacent ? 1.25 : 0
+    eligible: Boolean(selectedAdjacentGroup),
+    matchType: selectedAdjacentGroup ? 'adjacent' : 'none',
+    selectedGroup: selectedAdjacentGroup || null,
+    score: selectedAdjacentGroup ? 1.25 : 0
   };
 }

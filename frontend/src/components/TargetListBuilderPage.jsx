@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
 import usCities from '../../../data/usCities.json';
@@ -106,6 +106,7 @@ const locationStrengthOptions = [
 const recruitingPriorityOptions = ['Low', 'Medium', 'High'];
 const DEFAULT_RADIUS_MILES = 50;
 const EARTH_RADIUS_MILES = 3958.8;
+const SAVED_TARGET_LISTS_KEY = 'bankerBuilder.savedTargetLists';
 
 const workTypeOptions = undergraduateWorkTypeOptions;
 const experienceFollowUps = undergraduateExperienceFollowUps;
@@ -724,6 +725,10 @@ function opportunityMatchesSelectedGroups(opportunity, interests = []) {
   return groupMatchForInterests(opportunity.group, interests).eligible;
 }
 
+function groupMatchMetadata(group, interests = []) {
+  return groupMatchForInterests(group, interests);
+}
+
 function locationRadiusScore(opportunity, profile, strength) {
   if (!normalizedLocationPreferences(profile).length) return 0.5;
   if (!opportunity.withinSelectedRadius) return strength === 'Open' ? 0.35 : 0;
@@ -909,8 +914,9 @@ function buildTargetList(scoredResults, profile) {
 
   const ranked = candidateResults
     .map((opportunity) => {
+      const groupMatch = groupMatchMetadata(opportunity.group, profile.interests);
       const fitScore =
-        groupInterestScore(opportunity.group, profile.interests) * 4 +
+        groupMatch.score * 4 +
         locationRadiusScore(opportunity, profile, strength) * 2 +
         experienceGroupAffinityScore(profile, opportunity.group) +
         profileFitScore(opportunity) * 2 +
@@ -919,7 +925,14 @@ function buildTargetList(scoredResults, profile) {
         priorityPreferenceScore(opportunity.prestigeStars, profile.prestigePreference) +
         priorityPreferenceScore(opportunity.payStars, profile.payPreference);
 
-      return { ...opportunity, fitScore };
+      return {
+        ...opportunity,
+        fitScore,
+        rawGroup: opportunity.group,
+        canonicalGroup: groupMatch.canonicalGroup,
+        groupMatchType: groupMatch.matchType,
+        selectedGroupMatched: groupMatch.selectedGroup
+      };
     })
     .sort(
       (a, b) =>
@@ -937,6 +950,7 @@ function buildTargetList(scoredResults, profile) {
     bucketed[category].push({
       ...item,
       matchCategory: category,
+      notes: item.notes || '',
       reason: categoryReason(category, item, profile, strength),
       suggestedNextAction: nextActionFor(category, item)
     });
@@ -953,7 +967,53 @@ function buildTargetList(scoredResults, profile) {
   };
 }
 
-function TargetOpportunityCard({ opportunity }) {
+function flattenTargetList(targetList) {
+  if (!targetList) return [];
+  return ['Reach', 'Target', 'Safety'].flatMap((category) =>
+    (targetList[category] || []).map((item) => ({ ...item, matchCategory: item.matchCategory || category }))
+  );
+}
+
+function withUpdatedTargetList(targetList, recommendations) {
+  const bucketed = { Reach: [], Target: [], Safety: [] };
+  recommendations.forEach((item) => {
+    const category = ['Reach', 'Target', 'Safety'].includes(item.matchCategory) ? item.matchCategory : 'Target';
+    bucketed[category].push({ ...item, matchCategory: category });
+  });
+
+  return {
+    ...targetList,
+    Reach: bucketed.Reach,
+    Target: bucketed.Target,
+    Safety: bucketed.Safety,
+    totalCount: recommendations.length
+  };
+}
+
+function readSavedTargetLists() {
+  try {
+    return JSON.parse(localStorage.getItem(SAVED_TARGET_LISTS_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function inputSummaryForProfile(profile) {
+  return {
+    groups: profile.interests,
+    locations: locationPreferencesSummary(profile),
+    locationStrength: normalizedLocationPreferences(profile).length ? profile.locationPreferenceStrength : 'Not applied',
+    maxFirmCount: profile.maxFirmCount || 25,
+    school: schoolDisplayName(profile.school),
+    gpa: profile.gpa
+  };
+}
+
+function csvCell(value) {
+  return `"${String(value ?? '').replace(/"/g, '""')}"`;
+}
+
+function TargetOpportunityCard({ opportunity, onEdit, onRemove }) {
   return (
     <article className={`firm-card ${opportunity.matchCategory.toLowerCase()}`}>
       <div className="firm-heading">
@@ -975,6 +1035,19 @@ function TargetOpportunityCard({ opportunity }) {
         <p className="meta">
           <strong>Next action:</strong> {opportunity.suggestedNextAction}
         </p>
+        {opportunity.notes ? (
+          <p className="meta">
+            <strong>Notes:</strong> {opportunity.notes}
+          </p>
+        ) : null}
+        <div className="target-card-actions">
+          <button type="button" className="text-button" onClick={() => onEdit(opportunity)}>
+            Edit
+          </button>
+          <button type="button" className="text-button" onClick={() => onRemove(opportunity.id)}>
+            Remove
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -988,6 +1061,11 @@ export default function TargetListBuilderPage({ onBack }) {
   const [targetList, setTargetList] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [editingTarget, setEditingTarget] = useState(null);
+  const [showAddTargetForm, setShowAddTargetForm] = useState(false);
+  const [saveListName, setSaveListName] = useState('');
+  const [savedLists, setSavedLists] = useState(() => readSavedTargetLists());
+  const [saveMessage, setSaveMessage] = useState('');
 
   const progressPercent = ((currentStep + 1) / stepTitles.length) * 100;
   const locationOptions = useMemo(
@@ -1009,6 +1087,10 @@ export default function TargetListBuilderPage({ onBack }) {
       .filter((location) => location.toLowerCase().includes(query))
       .slice(0, 8);
   }, [locationOptions, locationSearch]);
+
+  useEffect(() => {
+    localStorage.setItem(SAVED_TARGET_LISTS_KEY, JSON.stringify(savedLists));
+  }, [savedLists]);
 
   const toggleInterest = (interest) => {
     setProfile((prev) => {
@@ -1094,6 +1176,8 @@ export default function TargetListBuilderPage({ onBack }) {
 
   const editInputs = () => {
     setTargetList(null);
+    setEditingTarget(null);
+    setShowAddTargetForm(false);
     setLoading(false);
     setError('');
     setIsLocationSelectorOpen(false);
@@ -1225,6 +1309,109 @@ export default function TargetListBuilderPage({ onBack }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const removeTargetOpportunity = (opportunityId) => {
+    setTargetList((current) => withUpdatedTargetList(current, flattenTargetList(current).filter((item) => item.id !== opportunityId)));
+  };
+
+  const saveTargetEdit = (event) => {
+    event.preventDefault();
+    const target = {
+      ...editingTarget,
+      firm: editingTarget.firm.trim(),
+      office: editingTarget.office.trim(),
+      group: editingTarget.group.trim(),
+      rawGroup: editingTarget.group.trim(),
+      matchCategory: editingTarget.matchCategory || 'Target',
+      notes: editingTarget.notes || ''
+    };
+
+    if (!target.firm || !target.office || !target.group) return;
+
+    setTargetList((current) => {
+      const existing = flattenTargetList(current);
+      const next = existing.some((item) => item.id === target.id)
+        ? existing.map((item) => (item.id === target.id ? target : item))
+        : [{ ...target, id: target.id || `manual-${Date.now()}` }, ...existing];
+      return withUpdatedTargetList(current, next);
+    });
+    setEditingTarget(null);
+    setShowAddTargetForm(false);
+  };
+
+  const startAddTarget = () => {
+    setEditingTarget({
+      id: `manual-${Date.now()}`,
+      firm: '',
+      office: '',
+      group: '',
+      rawGroup: '',
+      canonicalGroup: '',
+      groupMatchType: 'manual',
+      selectedGroupMatched: '',
+      matchCategory: 'Target',
+      reason: 'Manually added target.',
+      suggestedNextAction: 'Add notes and track outreach manually.',
+      notes: '',
+      type: 'Manual'
+    });
+    setShowAddTargetForm(true);
+  };
+
+  const saveCurrentTargetList = () => {
+    if (!targetList) return;
+    const name = saveListName.trim() || `Target List ${new Date().toLocaleDateString()}`;
+    const saved = {
+      id: globalThis.crypto?.randomUUID?.() || `${Date.now()}`,
+      name,
+      createdAt: new Date().toISOString(),
+      inputSummary: inputSummaryForProfile(profile),
+      recommendations: flattenTargetList(targetList),
+      buckets: {
+        Reach: targetList.Reach,
+        Target: targetList.Target,
+        Safety: targetList.Safety
+      },
+      manualEdits: true
+    };
+    setSavedLists((current) => [saved, ...current]);
+    setSaveListName('');
+    setSaveMessage('Target list saved on this device.');
+  };
+
+  const loadSavedTargetList = (savedList) => {
+    setTargetList(withUpdatedTargetList(targetList || { maxFirmCount: savedList.recommendations.length }, savedList.recommendations || flattenTargetList(savedList.buckets)));
+    setSaveMessage(`Loaded ${savedList.name}.`);
+    setEditingTarget(null);
+    setShowAddTargetForm(false);
+  };
+
+  const deleteSavedTargetList = (savedListId) => {
+    setSavedLists((current) => current.filter((item) => item.id !== savedListId));
+  };
+
+  const exportTargetListCsv = () => {
+    const rows = flattenTargetList(targetList);
+    const header = ['Bucket', 'Firm', 'Office', 'Group', 'Match Type', 'Location', 'Recommendation Rationale', 'Notes'];
+    const body = rows.map((item) => [
+      item.matchCategory,
+      item.firm,
+      item.office,
+      item.group,
+      item.groupMatchType || '',
+      item.matchedLocation || item.office || '',
+      item.reason || '',
+      item.notes || ''
+    ]);
+    const csv = [header, ...body].map((row) => row.map(csvCell).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'target-list.csv';
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const renderStep = () => {
@@ -1607,15 +1794,69 @@ export default function TargetListBuilderPage({ onBack }) {
               <span className="feature-eyebrow">Generated recommendations</span>
               <h2>Target List Results</h2>
               <p className="muted">Showing {targetList.totalCount} of up to {targetList.maxFirmCount} firms.</p>
+              <p className="muted">Saved lists are stored on this device for now.</p>
             </div>
-            <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
-              Edit Inputs
-            </button>
+            <div className="target-results-actions">
+              <button type="button" className="secondary" onClick={startAddTarget}>
+                Add Firm/Office
+              </button>
+              <button type="button" className="secondary" onClick={exportTargetListCsv}>
+                Export to Excel
+              </button>
+              <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
+                Edit Inputs
+              </button>
+            </div>
           </div>
           {targetList.isLimitedByLocation ? (
             <p className="limited-results-note">
               Fewer recommendations are shown because your location preference is strict and the current dataset has limited matching firms.
             </p>
+          ) : null}
+          <div className="target-save-panel">
+            <label>
+              <span>List name</span>
+              <input value={saveListName} onChange={(event) => setSaveListName(event.target.value)} placeholder="Summer 2027 NYC DCM targets" />
+            </label>
+            <button type="button" className="primary" onClick={saveCurrentTargetList}>
+              Save List
+            </button>
+            {saveMessage ? <p className="muted">{saveMessage}</p> : null}
+          </div>
+          {editingTarget ? (
+            <form className="target-edit-panel" onSubmit={saveTargetEdit}>
+              <h3>{showAddTargetForm ? 'Add Firm/Office' : 'Edit Recommendation'}</h3>
+              <label>
+                <span>Firm</span>
+                <input value={editingTarget.firm} onChange={(event) => setEditingTarget({ ...editingTarget, firm: event.target.value })} />
+              </label>
+              <label>
+                <span>Office</span>
+                <input value={editingTarget.office} onChange={(event) => setEditingTarget({ ...editingTarget, office: event.target.value })} />
+              </label>
+              <label>
+                <span>Group</span>
+                <input value={editingTarget.group} onChange={(event) => setEditingTarget({ ...editingTarget, group: event.target.value })} />
+              </label>
+              <label>
+                <span>Bucket</span>
+                <select value={editingTarget.matchCategory} onChange={(event) => setEditingTarget({ ...editingTarget, matchCategory: event.target.value })}>
+                  {['Reach', 'Target', 'Safety'].map((category) => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="target-edit-notes">
+                <span>Notes</span>
+                <textarea value={editingTarget.notes || ''} onChange={(event) => setEditingTarget({ ...editingTarget, notes: event.target.value })} />
+              </label>
+              <div className="target-edit-actions">
+                <button type="submit" className="primary">Save</button>
+                <button type="button" className="secondary" onClick={() => { setEditingTarget(null); setShowAddTargetForm(false); }}>
+                  Cancel
+                </button>
+              </div>
+            </form>
           ) : null}
           <div className="results-grid">
             {['Reach', 'Target', 'Safety'].map((category) => (
@@ -1625,12 +1866,34 @@ export default function TargetListBuilderPage({ onBack }) {
                 </h3>
                 <div className="stack">
                   {targetList[category].map((opportunity) => (
-                    <TargetOpportunityCard key={`${category}-${opportunity.id}`} opportunity={opportunity} />
+                    <TargetOpportunityCard
+                      key={`${category}-${opportunity.id}`}
+                      opportunity={opportunity}
+                      onEdit={(item) => { setEditingTarget(item); setShowAddTargetForm(false); }}
+                      onRemove={removeTargetOpportunity}
+                    />
                   ))}
                 </div>
               </div>
             ))}
           </div>
+          {savedLists.length ? (
+            <div className="saved-target-lists">
+              <h3>Saved Lists</h3>
+              {savedLists.map((savedList) => (
+                <article key={savedList.id}>
+                  <div>
+                    <strong>{savedList.name}</strong>
+                    <p>{new Date(savedList.createdAt).toLocaleString()} · {savedList.recommendations?.length || flattenTargetList(savedList.buckets).length} targets</p>
+                  </div>
+                  <div>
+                    <button type="button" className="text-button" onClick={() => loadSavedTargetList(savedList)}>Load</button>
+                    <button type="button" className="text-button" onClick={() => deleteSavedTargetList(savedList.id)}>Delete</button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : null}
         </section>
       </>
     );
