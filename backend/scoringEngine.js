@@ -22,19 +22,22 @@ const workTypeScores = {
   'Search fund internship': 8.2,
   'Corporate finance internship': 6.4,
   'Accounting / audit internship': 6.1,
-  'Wealth management internship': 5.8,
-  'Other finance internship': 6,
+  'Front office finance internship': 6.7,
+  'Middle office finance internship': 5.8,
+  'Back office / operations finance internship': 4.9,
   'Other internship': 4.4,
   'Part-time job': 3.6,
   'Campus job': 3.3,
   None: 1.2
 };
 
-const contactSeniorityMultiplier = {
-  analyst: 1,
-  associate: 1.15,
-  'vp+': 1.35
-};
+const networkingLevels = [
+  { key: 'analyst', label: 'Analyst Contacts', shortLabel: 'Analyst' },
+  { key: 'associate', label: 'Associate Contacts', shortLabel: 'Associate' },
+  { key: 'vpPlus', label: 'VP+ Contacts', shortLabel: 'VP+' }
+];
+
+const postGradHireTypes = new Set(['Lateral Hire', 'MBA Associate']);
 
 const stateRegions = {
   CT: 'Northeast',
@@ -553,19 +556,64 @@ const legacyWorkTypeMap = {
     roleType: 'FP&A'
   },
   'Accounting / audit internship': { experienceType: 'Accounting / Audit Internship', firmTier: 'National / Next Tier', function: 'Audit' },
-  'Wealth management internship': { experienceType: 'Wealth Management Internship', platformTier: 'Large National Platform' },
-  'Other finance internship': { experienceType: 'Other High Finance Internship', industry: 'Asset Management', platformPrestige: 'Mid-Tier Platform' },
+  'Wealth management internship': { experienceType: 'Front Office Finance Internship', institutionType: 'Other Financial Institution' },
+  'Other high finance internship': { experienceType: 'Front Office Finance Internship', institutionType: 'Other Financial Institution' },
+  'Other finance internship': { experienceType: 'Front Office Finance Internship', institutionType: 'Other Financial Institution' },
+  'Commercial banking internship': { experienceType: 'Middle Office Finance Internship', institutionType: 'Regional Bank' },
+  'Real estate / cre internship': { experienceType: 'Front Office Finance Internship', institutionType: 'Other Financial Institution' },
   'Other internship': { experienceType: 'General / Other Experience', generalType: 'Other Internship' },
   'Part-time job': { experienceType: 'General / Other Experience', generalType: 'Part-Time Job' },
   'Campus job': { experienceType: 'General / Other Experience', generalType: 'Campus Job' },
   None: { experienceType: 'General / Other Experience', generalType: 'Other Internship' }
 };
 
+function financeInstitutionAdjustment(institutionType, roleCategory) {
+  const table = {
+    'Front Office Finance Internship': {
+      'Bulge Bracket / Major Global Bank': 0.75,
+      'Elite Boutique': 0.65,
+      'Middle Market Bank': 0.45,
+      'Regional Bank': 0.05,
+      'Regional / Local Boutique': -0.1,
+      'Other Financial Institution': -0.2
+    },
+    'Middle Office Finance Internship': {
+      'Bulge Bracket / Major Global Bank': 0.85,
+      'Elite Boutique': 0.55,
+      'Middle Market Bank': 0.4,
+      'Regional Bank': 0.15,
+      'Regional / Local Boutique': -0.15,
+      'Other Financial Institution': -0.3
+    },
+    'Back Office / Operations Finance Internship': {
+      'Bulge Bracket / Major Global Bank': 0.65,
+      'Elite Boutique': 0.35,
+      'Middle Market Bank': 0.2,
+      'Regional Bank': 0,
+      'Regional / Local Boutique': -0.2,
+      'Other Financial Institution': -0.35
+    }
+  };
+
+  return table[roleCategory]?.[institutionType] ?? 0;
+}
+
 function defaultFollowUpValues(experienceType) {
   return Object.fromEntries((experienceFollowUps[experienceType] || []).map((field) => [field.key, field.options[0]]));
 }
 
 function normalizeExperience(experience = {}) {
+  const legacyFromExperienceType = legacyWorkTypeMap[String(experience.experienceType || '').toLowerCase()];
+  if (legacyFromExperienceType) {
+    return {
+      ...defaultFollowUpValues(legacyFromExperienceType.experienceType),
+      ...legacyFromExperienceType,
+      ...experience,
+      experienceType: legacyFromExperienceType.experienceType,
+      recency: experience.recency || 'Current / most recent'
+    };
+  }
+
   if (experience.experienceType) {
     return {
       ...defaultFollowUpValues(experience.experienceType),
@@ -711,29 +759,22 @@ function scoreSingleExperience(rawExperience, hireType) {
     signals.add('consulting experience');
     score = { MBB: 8.3, 'Tier 2 Strategy Consulting': 7.6, 'Big 4 Consulting': 6.7, 'Middle Market / Boutique Consulting': 6.1, 'Local / Small Consulting Firm': 5.3 }[experience.firmTier] ?? 6.5;
     ['M&A', 'Generalist'].forEach((target) => affinities.add(target));
-  } else if (type === 'Wealth Management Internship') {
-    signals.add('wealth management experience');
-    score = { 'Elite / BB Platform': 6.1, 'Large National Platform': 5.4, 'Regional Platform': 4.8, 'Local RIA / Small Practice': 4.1 }[experience.platformTier] ?? 5;
+  } else if (type === 'Front Office Finance Internship') {
+    signals.add('front office finance experience');
+    score = 6.65 + financeInstitutionAdjustment(experience.institutionType, type);
+    ['DCM', 'Debt Capital Markets', 'ECM', 'Equity Capital Markets', 'Capital Markets', 'Financial Institutions', 'Generalist'].forEach((target) => affinities.add(target));
+  } else if (type === 'Middle Office Finance Internship') {
+    signals.add('middle office finance experience');
+    score = 5.75 + financeInstitutionAdjustment(experience.institutionType, type);
+    ['DCM', 'Debt Capital Markets', 'LevFin', 'Leveraged Finance', 'Financial Institutions'].forEach((target) => affinities.add(target));
+  } else if (type === 'Back Office / Operations Finance Internship') {
+    signals.add('finance operations experience');
+    score = 4.85 + financeInstitutionAdjustment(experience.institutionType, type);
+    affinities.add('Financial Institutions');
   } else if (type === 'Venture Capital Internship') {
     signals.add('venture capital experience');
     score = { 'Top-Tier VC Fund': 8.1, 'Established Institutional VC': 7.3, 'Smaller VC Fund': 6.5, 'Angel / Independent / Tiny Fund': 5.7 }[experience.fundTier] ?? 6.8;
     affinities.add('Technology');
-  } else if (type === 'Other High Finance Internship') {
-    const industry = { 'Hedge Fund': 7.4, 'Equity Research': 7.2, 'Sales & Trading': 6.7, 'Asset Management': 6.5 }[experience.industry] ?? 6.6;
-    const prestige = { 'Elite Platform': 0.8, 'Strong Institutional Platform': 0.45, 'Mid-Tier Platform': 0, 'Small / Unknown Platform': -0.45 }[experience.platformPrestige] ?? 0;
-    score = industry + prestige;
-    signals.add('high finance experience');
-    if (experience.industry === 'Hedge Fund') ['Restructuring', 'Financial Sponsors'].forEach((target) => affinities.add(target));
-    if (experience.industry === 'Equity Research') affinities.add('Financial Institutions');
-    if (experience.industry === 'Sales & Trading') ['DCM', 'Markets'].forEach((target) => affinities.add(target));
-  } else if (type === 'Commercial Banking Internship') {
-    signals.add('commercial banking experience');
-    score = { 'Bulge Bracket / Major Bank': 6.8, 'Super-Regional / Strong National Bank': 6.3, 'Regional Bank': 5.7, 'Local / Community Bank': 5 }[experience.platformTier] ?? 5.8;
-    ['DCM', 'LevFin', 'Financial Institutions'].forEach((target) => affinities.add(target));
-  } else if (type === 'Real Estate / CRE Internship') {
-    signals.add('real estate finance experience');
-    score = { 'Institutional Platform': 6.9, 'Large Brokerage / Advisory Platform': 6.3, 'Regional Firm': 5.7, 'Small / Local Firm': 5 }[experience.platformTier] ?? 5.9;
-    affinities.add('Real Estate');
   } else {
     score = { 'Search Fund Internship': 6.5, 'Entrepreneurship / Startup': 5.9, 'Military Experience': 5.8, 'Leadership Program': 5.3, 'Student Research': 4.8, 'Other Internship': 4.4, 'Part-Time Job': 3.6, 'Campus Job': 3.3 }[experience.generalType] ?? 4.2;
     signals.add(experience.generalType === 'Search Fund Internship' ? 'search fund experience' : 'general work experience');
@@ -819,29 +860,176 @@ function resumeExperienceScore(profile) {
   return clamp(Math.min(primary + incremental, stackCap), 0, 10);
 }
 
+function createDefaultNetworking() {
+  return Object.fromEntries(networkingLevels.map((level) => [level.key, { initialChats: 0, strongRelationships: 0, referrals: 0 }]));
+}
+
+function legacyNetworkingLevelKey(seniority) {
+  if (['vp', 'director', 'md', 'vp+'].includes(seniority)) return 'vpPlus';
+  if (seniority === 'analyst') return 'analyst';
+  return 'associate';
+}
+
+function normalizeNetworkingForScoring(networking = {}) {
+  const source = networking.matrix || networking;
+  const normalized = createDefaultNetworking();
+  const hasMatrixValues = networkingLevels.some(({ key }) => source[key] && typeof source[key] === 'object');
+
+  networkingLevels.forEach(({ key }) => {
+    const level = source[key] || {};
+    normalized[key] = {
+      initialChats: Math.max(0, Number(level.initialChats || 0)),
+      strongRelationships: Math.max(0, Number(level.strongRelationships || 0)),
+      referrals: Math.max(0, Number(level.referrals || 0))
+    };
+  });
+
+  if (!hasMatrixValues) {
+    const fallbackLevel = legacyNetworkingLevelKey(source.strongestContactSeniority);
+    normalized[fallbackLevel] = {
+      initialChats: Math.max(0, Number(source.initialChats || 0) + Number(source.followUps || 0)),
+      strongRelationships: Math.max(0, Number(source.strongRelationships || 0)),
+      referrals: Math.max(0, Number(source.referrals || 0))
+    };
+  }
+
+  return normalized;
+}
+
+function networkingRows(networking = {}) {
+  const normalized = normalizeNetworkingForScoring(networking);
+  return networkingLevels.map((level) => ({ ...level, ...(normalized[level.key] || {}) }));
+}
+
+function networkingTotals(networking = {}) {
+  return networkingRows(networking).reduce(
+    (totals, row) => ({
+      initialChats: totals.initialChats + Number(row.initialChats || 0),
+      strongRelationships: totals.strongRelationships + Number(row.strongRelationships || 0),
+      referrals: totals.referrals + Number(row.referrals || 0)
+    }),
+    { initialChats: 0, strongRelationships: 0, referrals: 0 }
+  );
+}
+
+function networkingStrength(networking = {}, metric) {
+  const weights = {
+    initialChats: { analyst: 0.08, associate: 0.12, vpPlus: 0.18 },
+    strongRelationships: { analyst: 0.52, associate: 0.76, vpPlus: 1.14 },
+    referrals: { analyst: 1.05, associate: 1.55, vpPlus: 2.35 }
+  };
+
+  return networkingRows(networking).reduce((sum, row) => {
+    const count = Number(row[metric] || 0);
+    if (!count) return sum;
+    const diminishingCount = metric === 'initialChats'
+      ? Math.min(count, 8) + Math.min(Math.max(count - 8, 0), 12) * 0.25
+      : 1 + Math.min(Math.max(count - 1, 0), 2) * 0.45 + Math.min(Math.max(count - 3, 0), 3) * 0.18;
+    return sum + diminishingCount * (weights[metric]?.[row.key] || 0);
+  }, 0);
+}
+
+function bestNetworkingLevelWith(networking = {}, metric) {
+  const rows = networkingRows(networking);
+  if (Number(rows.find((row) => row.key === 'vpPlus')?.[metric] || 0) > 0) return 'vpPlus';
+  if (Number(rows.find((row) => row.key === 'associate')?.[metric] || 0) > 0) return 'associate';
+  if (Number(rows.find((row) => row.key === 'analyst')?.[metric] || 0) > 0) return 'analyst';
+  return null;
+}
+
 function networkingScore(networking) {
-  const calls = Number(networking.initialChats || 0);
-  const followUps = Number(networking.followUps || 0);
-  const relationships = Number(networking.strongRelationships || 0);
-  const referrals = Number(networking.referrals || 0);
-  // Networking diminishing returns: quality relationships and first referral beat raw call volume.
-  const callPoints = Math.min(calls, 15) * 0.36 + Math.min(Math.max(calls - 15, 0), 15) * 0.1;
-  const followUpPoints = Math.min(followUps, 12) * 0.32 + Math.min(Math.max(followUps - 12, 0), 10) * 0.08;
-  const relationshipPoints = Math.min(relationships, 3) * 2.2 + Math.min(Math.max(relationships - 3, 0), 2) * 0.75;
-  const referralPoints = (referrals > 0 ? 2.7 : 0) + Math.min(Math.max(referrals - 1, 0), 2) * 0.85;
+  const chatStrength = networkingStrength(networking, 'initialChats');
+  const relationshipStrength = networkingStrength(networking, 'strongRelationships');
+  const referralStrength = networkingStrength(networking, 'referrals');
+  return clamp(((chatStrength + relationshipStrength * 2.15 + referralStrength * 2.65) / 11.8) * 10);
+}
 
-  const seniority = { analyst: 1, associate: 1.04, 'vp+': 1.12 }[networking.strongestContactSeniority] ?? 1;
+function networkingConversionBoost(networking = {}, scores, adjustedCompetitiveness) {
+  const hasCredibleBaseline = scores.gpaScore >= 4 && scores.experience >= 4.8;
+  if (!hasCredibleBaseline) return 0;
 
-  return clamp(((callPoints + followUpPoints + relationshipPoints + referralPoints) * seniority / 18) * 10);
+  const referralStrength = networkingStrength(networking, 'referrals');
+  const relationshipStrength = networkingStrength(networking, 'strongRelationships');
+  const referralBoost = referralStrength > 0 ? Math.min(0.9, 0.22 + referralStrength * 0.2) : 0;
+  const relationshipBoost = relationshipStrength > 0 ? Math.min(0.42, 0.1 + relationshipStrength * 0.11) : 0;
+  const competitivenessDampener = adjustedCompetitiveness >= 8.8 ? 0.62 : adjustedCompetitiveness >= 8 ? 0.8 : 1;
+  return Math.min(1.05, referralBoost + relationshipBoost) * competitivenessDampener;
+}
+
+function networkingLikelihoodFloor(networking = {}, scores, adjustedCompetitiveness) {
+  const plausibleCandidate = scores.gpaScore >= 4.4 && scores.experience >= 4.8;
+  if (!plausibleCandidate) return 3;
+
+  const bestReferral = bestNetworkingLevelWith(networking, 'referrals');
+  const bestRelationship = bestNetworkingLevelWith(networking, 'strongRelationships');
+  const floorByCompetitiveness = (values) => {
+    if (adjustedCompetitiveness >= 8.8) return values.hyper;
+    if (adjustedCompetitiveness >= 8) return values.elite;
+    if (adjustedCompetitiveness >= 7) return values.competitive;
+    return values.accessible;
+  };
+
+  if (bestReferral) {
+    const floors = {
+      analyst: { hyper: 9, elite: 13, competitive: 19, accessible: 26 },
+      associate: { hyper: 11, elite: 16, competitive: 24, accessible: 32 },
+      vpPlus: { hyper: 14, elite: 21, competitive: 31, accessible: 40 }
+    };
+    const floor = floorByCompetitiveness(floors[bestReferral]);
+    return scores.experience < 5.8 ? Math.min(floor, 18) : floor;
+  }
+
+  if (bestRelationship) {
+    const floors = {
+      analyst: { hyper: 6, elite: 9, competitive: 14, accessible: 19 },
+      associate: { hyper: 8, elite: 12, competitive: 18, accessible: 24 },
+      vpPlus: { hyper: 10, elite: 15, competitive: 23, accessible: 30 }
+    };
+    const floor = floorByCompetitiveness(floors[bestRelationship]);
+    return scores.experience < 5.8 ? Math.min(floor, 14) : floor;
+  }
+
+  return 3;
 }
 
 function hasZeroNetworking(networking = {}) {
-  return (
-    Number(networking.initialChats || 0) === 0 &&
-    Number(networking.followUps || 0) === 0 &&
-    Number(networking.strongRelationships || 0) === 0 &&
-    Number(networking.referrals || 0) === 0
-  );
+  const totals = networkingTotals(networking);
+  return totals.initialChats === 0 && totals.strongRelationships === 0 && totals.referrals === 0;
+}
+
+function certificationScore(profile, hireType, targetGroup, experienceResult) {
+  if (!postGradHireTypes.has(hireType)) return 0;
+
+  const certifications = new Set(Array.isArray(profile.certifications) ? profile.certifications : []);
+  if (!certifications.size) return 0;
+
+  let boost = 0;
+  if (certifications.has('CFA Charterholder')) boost += 0.55;
+  else if (certifications.has('CFA Level II')) boost += 0.45;
+  else if (certifications.has('CFA Level I')) boost += 0.24;
+
+  if (certifications.has('CPA')) boost += 0.34;
+  if (certifications.has('FRM')) boost += 0.32;
+  if (certifications.has('CMA')) boost += 0.16;
+
+  const seriesCount = ['Series 7', 'Series 63', 'Series 79'].filter((certification) => certifications.has(certification)).length;
+  boost += Math.min(seriesCount * 0.12, 0.28);
+  if (certifications.has('Other Relevant Certification')) boost += 0.1;
+
+  const signalText = (experienceResult?.signals || []).join(' ').toLowerCase();
+  const groupText = String(targetGroup || '').toLowerCase();
+  if (certifications.has('CPA') && ['accounting', 'audit', 'tas', 'valuation'].some((signal) => signalText.includes(signal))) boost += 0.12;
+  if (
+    (certifications.has('CFA Charterholder') || certifications.has('CFA Level II') || certifications.has('CFA Level I')) &&
+    (signalText.includes('public markets') || signalText.includes('asset management') || ['financial institutions', 'technology', 'healthcare', 'industrials', 'consumer'].some((term) => groupText.includes(term)))
+  ) {
+    boost += 0.12;
+  }
+  if (certifications.has('FRM') && (signalText.includes('risk') || groupText.includes('financial institutions') || groupText.includes('levfin') || groupText.includes('credit'))) {
+    boost += 0.12;
+  }
+
+  return Math.min(boost, 0.85);
 }
 
 function zeroNetworkingAdjustment(profile, opportunity, scores) {
@@ -1160,6 +1348,7 @@ function profileScores(
   const academic = clamp(schoolScore * schoolWeight + gpaScore * (1 - schoolWeight) + honorsBoost + graduationHonorsBoost + gmatBoost);
   const networking = networkingScore(profile.networking);
   const extracurricular = extracurricularScoreForHireType(profile, hireType);
+  const certificationBoost = certificationScore(profile, hireType, targetGroup, experienceResult);
   // Hyper-elite group amplification: top groups compress merely good profiles and reward pedigree, GPA, and elite internships.
   const effectiveWeights = hyperElite
     ? {
@@ -1180,7 +1369,8 @@ function profileScores(
       experience * effectiveWeights.experience +
       networking * effectiveWeights.networking +
       extracurricular * effectiveWeights.extracurricular +
-      eliteReadinessBoost
+      eliteReadinessBoost +
+      certificationBoost
   );
 
   return {
@@ -1190,6 +1380,7 @@ function profileScores(
     experience,
     networking,
     extracurricular,
+    certificationBoost,
     total,
     experienceResult,
     hyperElite
@@ -1227,7 +1418,7 @@ function hireTypeDifficultyAdjustment(hireType, profile) {
 
   if (hireType === 'Undergrad Full-Time') {
     if (experience < 7) adjustment += 0.35;
-    if (profile.networking?.referrals <= 0) adjustment += 0.25;
+    if (networkingTotals(profile.networking).referrals <= 0) adjustment += 0.25;
     if (experience >= 8.5) adjustment -= 0.18;
   }
 
@@ -1341,7 +1532,8 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
   const regionalBoost = regionalAlignmentBoost(profile, opportunity, scores, adjustedCompetitiveness);
   const zeroNetworking = hasZeroNetworking(profile.networking);
   const zeroNetworkingEffect = zeroNetworkingAdjustment(profile, opportunity, scores);
-  const boostedTotal = clamp(scores.total + regionalBoost.points - zeroNetworkingEffect.penalty);
+  const relationshipBoost = networkingConversionBoost(profile.networking, scores, adjustedCompetitiveness);
+  const boostedTotal = clamp(scores.total + regionalBoost.points + relationshipBoost - zeroNetworkingEffect.penalty);
   const delta = boostedTotal - adjustedCompetitiveness;
   const unboostedDelta = scores.total - adjustedCompetitiveness;
   const likelihoodSlope = scores.hyperElite ? 1.35 : 1.15;
@@ -1354,9 +1546,11 @@ export function scoreInterviewOdds({ profile, firmName, office, group, hireType 
     scores.experienceResult.eliteIb && profile.gpa >= 3.5 && scores.networking >= 3.2 && scores.extracurricular >= 4.5
       ? scores.hyperElite ? 48 : 58
       : 3;
+  const relationshipFloor = networkingLikelihoodFloor(profile.networking, scores, adjustedCompetitiveness);
   const likelihood = Math.round(
     Math.max(
       eliteIbFloor,
+      relationshipFloor,
       Math.min(gpaCap, noNetworkingCap, zeroNetworkingEffect.cap, weakExperienceCap, 92, Math.min(rawLikelihood, unboostedLikelihood + 7))
     )
   );

@@ -2385,6 +2385,48 @@ li {
   background: rgba(15, 23, 42, 0.28);
 }
 
+.credential-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.credential-panel .section-heading {
+  align-items: baseline;
+}
+
+.credential-panel .section-heading p {
+  margin: 0;
+}
+
+.certification-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.networking-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.networking-depth-card {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  background: var(--card-subtle);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.networking-depth-card h3 {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: 1rem;
+}
+
 .checkbox-field {
   align-self: end;
   display: flex;
@@ -4013,7 +4055,8 @@ li {
   .results-grid,
   .intro-list,
   .choice-grid,
-  .review-grid {
+  .review-grid,
+  .networking-matrix {
     grid-template-columns: 1fr;
   }
 

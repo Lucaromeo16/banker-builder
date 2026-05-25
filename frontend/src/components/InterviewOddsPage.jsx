@@ -136,12 +136,6 @@ const genericLeadershipActivityTypes = new Set([
 ]);
 const meaningfulLeadershipLevels = new Set(['president', 'vp', 'VP', 'treasurer', 'finance chair', 'committee lead']);
 
-const contactSeniorityMultiplier = {
-  analyst: 1,
-  associate: 1.15,
-  'vp+': 1.35
-};
-
 const stateRegions = {
   CT: 'Northeast',
   MA: 'Northeast',
@@ -431,16 +425,27 @@ const experienceFollowUps = {
   ]
 };
 
-const seniorityOptions = [
-  { value: 'analyst', label: 'Analyst' },
-  { value: 'associate', label: 'Associate' },
-  { value: 'vp', label: 'VP' },
-  { value: 'director', label: 'Director' },
-  { value: 'md', label: 'Managing Director' }
+const networkingLevels = [
+  { key: 'analyst', label: 'Analyst Contacts', shortLabel: 'Analyst' },
+  { key: 'associate', label: 'Associate Contacts', shortLabel: 'Associate' },
+  { key: 'vpPlus', label: 'VP+ Contacts', shortLabel: 'VP+' }
 ];
 
 const graduationHonorsOptions = ['None', 'Cum Laude', 'Magna Cum Laude', 'Summa Cum Laude'];
 const gmatOptions = ['', '600-649', '650-699', '700-729', '730-759', '760+'];
+const certificationOptions = [
+  'CFA Level I',
+  'CFA Level II',
+  'CFA Charterholder',
+  'CPA',
+  'FRM',
+  'CMA',
+  'Series 7',
+  'Series 63',
+  'Series 79',
+  'Other Relevant Certification'
+];
+const postGradHireTypes = new Set(['Lateral Hire', 'MBA Associate']);
 const baseStepDefinitions = [
   { key: 'opportunity', title: 'Bank + Office Selection' },
   { key: 'hireType', title: 'Hire Type' },
@@ -494,6 +499,9 @@ const createWorkExperience = (hireType = 'Summer Analyst') => {
   };
 };
 
+const createDefaultNetworking = () =>
+  Object.fromEntries(networkingLevels.map((level) => [level.key, { initialChats: 0, strongRelationships: 0, referrals: 0 }]));
+
 function defaultFollowUpValues(experienceType) {
   return defaultExperienceFollowUpValues(experienceType, experienceFollowUps);
 }
@@ -504,16 +512,11 @@ const defaultProfile = {
   honorsCollege: false,
   graduationHonors: 'None',
   gmatRange: '',
+  certifications: [],
   workType: 'None',
   workExperiences: [createWorkExperience()],
   activities: [createActivity()],
-  networking: {
-    initialChats: 0,
-    followUps: 0,
-    strongRelationships: 0,
-    referrals: 0,
-    strongestContactSeniority: 'analyst'
-  }
+  networking: createDefaultNetworking()
 };
 
 function createOpportunitiesFromOffices(offices = []) {
@@ -881,82 +884,182 @@ function structuredExperienceScore(profile, hireType, targetGroup) {
   };
 }
 
-function normalizeNetworkingForScoring(networking = {}) {
-  const seniority = ['vp', 'director', 'md'].includes(networking.strongestContactSeniority)
-    ? 'vp+'
-    : networking.strongestContactSeniority;
-
-  return {
-    ...networking,
-    strongestContactSeniority: seniority || 'associate'
-  };
+function legacyNetworkingLevelKey(seniority) {
+  if (['vp', 'director', 'md', 'vp+'].includes(seniority)) return 'vpPlus';
+  if (seniority === 'analyst') return 'analyst';
+  return 'associate';
 }
 
-function normalizeProfileForScoring(profile) {
+function normalizeNetworkingForScoring(networking = {}) {
+  const source = networking.matrix || networking;
+  const normalized = createDefaultNetworking();
+  const hasMatrixValues = networkingLevels.some(({ key }) => source[key] && typeof source[key] === 'object');
+
+  networkingLevels.forEach(({ key }) => {
+    const level = source[key] || {};
+    normalized[key] = {
+      initialChats: Math.max(0, Number(level.initialChats || 0)),
+      strongRelationships: Math.max(0, Number(level.strongRelationships || 0)),
+      referrals: Math.max(0, Number(level.referrals || 0))
+    };
+  });
+
+  if (!hasMatrixValues) {
+    const fallbackLevel = legacyNetworkingLevelKey(source.strongestContactSeniority);
+    normalized[fallbackLevel] = {
+      initialChats: Math.max(0, Number(source.initialChats || 0) + Number(source.followUps || 0)),
+      strongRelationships: Math.max(0, Number(source.strongRelationships || 0)),
+      referrals: Math.max(0, Number(source.referrals || 0))
+    };
+  }
+
+  return normalized;
+}
+
+function normalizeProfileForScoring(profile, hireType) {
+  const isPostGrad = postGradHireTypes.has(hireType);
   return {
     ...profile,
+    certifications: isPostGrad ? (Array.isArray(profile.certifications) ? profile.certifications : []) : [],
     networking: normalizeNetworkingForScoring(profile.networking)
   };
 }
 
+function networkingRows(networking = {}) {
+  const normalized = normalizeNetworkingForScoring(networking);
+  return networkingLevels.map((level) => ({ ...level, ...(normalized[level.key] || {}) }));
+}
+
+function networkingTotals(networking = {}) {
+  return networkingRows(networking).reduce(
+    (totals, row) => ({
+      initialChats: totals.initialChats + Number(row.initialChats || 0),
+      strongRelationships: totals.strongRelationships + Number(row.strongRelationships || 0),
+      referrals: totals.referrals + Number(row.referrals || 0)
+    }),
+    { initialChats: 0, strongRelationships: 0, referrals: 0 }
+  );
+}
+
+function networkingStrength(networking = {}, metric) {
+  const weights = {
+    initialChats: { analyst: 0.08, associate: 0.12, vpPlus: 0.18 },
+    strongRelationships: { analyst: 0.52, associate: 0.76, vpPlus: 1.14 },
+    referrals: { analyst: 1.05, associate: 1.55, vpPlus: 2.35 }
+  };
+
+  return networkingRows(networking).reduce((sum, row) => {
+    const count = Number(row[metric] || 0);
+    if (!count) return sum;
+    const diminishingCount = metric === 'initialChats'
+      ? Math.min(count, 8) + Math.min(Math.max(count - 8, 0), 12) * 0.25
+      : 1 + Math.min(Math.max(count - 1, 0), 2) * 0.45 + Math.min(Math.max(count - 3, 0), 3) * 0.18;
+    return sum + diminishingCount * (weights[metric]?.[row.key] || 0);
+  }, 0);
+}
+
+function bestNetworkingLevelWith(networking = {}, metric) {
+  const rows = networkingRows(networking);
+  if (Number(rows.find((row) => row.key === 'vpPlus')?.[metric] || 0) > 0) return 'vpPlus';
+  if (Number(rows.find((row) => row.key === 'associate')?.[metric] || 0) > 0) return 'associate';
+  if (Number(rows.find((row) => row.key === 'analyst')?.[metric] || 0) > 0) return 'analyst';
+  return null;
+}
+
 function networkingScore(networking) {
-  const calls = Number(networking.initialChats || 0);
-  const followUps = Number(networking.followUps || 0);
-  const relationships = Number(networking.strongRelationships || 0);
-  const referrals = Number(networking.referrals || 0);
-  // Networking diminishing returns: quality relationships and first referral beat raw call volume.
-  const callPoints = Math.min(calls, 15) * 0.36 + Math.min(Math.max(calls - 15, 0), 15) * 0.1;
-  const followUpPoints = Math.min(followUps, 12) * 0.32 + Math.min(Math.max(followUps - 12, 0), 10) * 0.08;
-  const relationshipPoints = (relationships > 0 ? 3.1 : 0) + Math.min(Math.max(relationships - 1, 0), 2) * 1.25 + Math.min(Math.max(relationships - 3, 0), 2) * 0.5;
-  const referralPoints = (referrals > 0 ? 4.4 : 0) + Math.min(Math.max(referrals - 1, 0), 2) * 0.75;
-
-  const seniority = { analyst: 1, associate: 1.04, 'vp+': 1.12 }[networking.strongestContactSeniority] ?? 1;
-
-  return clamp(((callPoints + followUpPoints + relationshipPoints + referralPoints) * seniority / 18) * 10);
+  const chatStrength = networkingStrength(networking, 'initialChats');
+  const relationshipStrength = networkingStrength(networking, 'strongRelationships');
+  const referralStrength = networkingStrength(networking, 'referrals');
+  // Relationship depth and referrals intentionally beat raw cold-call volume.
+  return clamp(((chatStrength + relationshipStrength * 2.15 + referralStrength * 2.65) / 11.8) * 10);
 }
 
 function networkingConversionBoost(networking = {}, scores, adjustedCompetitiveness) {
-  const referrals = Number(networking.referrals || 0);
-  const relationships = Number(networking.strongRelationships || 0);
   const hasCredibleBaseline = scores.gpaScore >= 4 && scores.experience >= 4.8;
   if (!hasCredibleBaseline) return 0;
 
-  const referralBoost = referrals > 0 ? 0.48 + Math.min(referrals - 1, 2) * 0.12 : 0;
-  const relationshipBoost = relationships > 0 ? 0.24 + Math.min(relationships - 1, 2) * 0.08 : 0;
-  const competitivenessDampener = adjustedCompetitiveness >= 8.8 ? 0.62 : adjustedCompetitiveness >= 8 ? 0.78 : 1;
-  return Math.min(0.85, referralBoost + relationshipBoost) * competitivenessDampener;
+  const referralStrength = networkingStrength(networking, 'referrals');
+  const relationshipStrength = networkingStrength(networking, 'strongRelationships');
+  const referralBoost = referralStrength > 0 ? Math.min(0.9, 0.22 + referralStrength * 0.2) : 0;
+  const relationshipBoost = relationshipStrength > 0 ? Math.min(0.42, 0.1 + relationshipStrength * 0.11) : 0;
+  const competitivenessDampener = adjustedCompetitiveness >= 8.8 ? 0.62 : adjustedCompetitiveness >= 8 ? 0.8 : 1;
+  return Math.min(1.05, referralBoost + relationshipBoost) * competitivenessDampener;
 }
 
 function networkingLikelihoodFloor(networking = {}, scores, adjustedCompetitiveness) {
-  const referrals = Number(networking.referrals || 0);
-  const relationships = Number(networking.strongRelationships || 0);
-  const plausibleCandidate = scores.gpaScore >= 4 && scores.experience >= 4.8;
+  const plausibleCandidate = scores.gpaScore >= 4.4 && scores.experience >= 4.8;
   if (!plausibleCandidate) return 3;
 
-  if (referrals > 0) {
-    if (adjustedCompetitiveness >= 8.8) return 10;
-    if (adjustedCompetitiveness >= 8) return 14;
-    if (adjustedCompetitiveness >= 7) return 20;
-    return 28;
+  const bestReferral = bestNetworkingLevelWith(networking, 'referrals');
+  const bestRelationship = bestNetworkingLevelWith(networking, 'strongRelationships');
+  const floorByCompetitiveness = (values) => {
+    if (adjustedCompetitiveness >= 8.8) return values.hyper;
+    if (adjustedCompetitiveness >= 8) return values.elite;
+    if (adjustedCompetitiveness >= 7) return values.competitive;
+    return values.accessible;
+  };
+
+  if (bestReferral) {
+    const floors = {
+      analyst: { hyper: 9, elite: 13, competitive: 19, accessible: 26 },
+      associate: { hyper: 11, elite: 16, competitive: 24, accessible: 32 },
+      vpPlus: { hyper: 14, elite: 21, competitive: 31, accessible: 40 }
+    };
+    const floor = floorByCompetitiveness(floors[bestReferral]);
+    return scores.experience < 5.8 ? Math.min(floor, 18) : floor;
   }
 
-  if (relationships > 0) {
-    if (adjustedCompetitiveness >= 8.8) return 7;
-    if (adjustedCompetitiveness >= 8) return 10;
-    if (adjustedCompetitiveness >= 7) return 15;
-    return 20;
+  if (bestRelationship) {
+    const floors = {
+      analyst: { hyper: 6, elite: 9, competitive: 14, accessible: 19 },
+      associate: { hyper: 8, elite: 12, competitive: 18, accessible: 24 },
+      vpPlus: { hyper: 10, elite: 15, competitive: 23, accessible: 30 }
+    };
+    const floor = floorByCompetitiveness(floors[bestRelationship]);
+    return scores.experience < 5.8 ? Math.min(floor, 14) : floor;
   }
 
   return 3;
 }
 
 function hasZeroNetworking(networking = {}) {
-  return (
-    Number(networking.initialChats || 0) === 0 &&
-    Number(networking.followUps || 0) === 0 &&
-    Number(networking.strongRelationships || 0) === 0 &&
-    Number(networking.referrals || 0) === 0
-  );
+  const totals = networkingTotals(networking);
+  return totals.initialChats === 0 && totals.strongRelationships === 0 && totals.referrals === 0;
+}
+
+function certificationScore(profile, hireType, targetGroup, experienceResult) {
+  if (!postGradHireTypes.has(hireType)) return 0;
+
+  const certifications = new Set(Array.isArray(profile.certifications) ? profile.certifications : []);
+  if (!certifications.size) return 0;
+
+  let boost = 0;
+  if (certifications.has('CFA Charterholder')) boost += 0.55;
+  else if (certifications.has('CFA Level II')) boost += 0.45;
+  else if (certifications.has('CFA Level I')) boost += 0.24;
+
+  if (certifications.has('CPA')) boost += 0.34;
+  if (certifications.has('FRM')) boost += 0.32;
+  if (certifications.has('CMA')) boost += 0.16;
+
+  const seriesCount = ['Series 7', 'Series 63', 'Series 79'].filter((certification) => certifications.has(certification)).length;
+  boost += Math.min(seriesCount * 0.12, 0.28);
+  if (certifications.has('Other Relevant Certification')) boost += 0.1;
+
+  const signalText = (experienceResult?.signals || []).join(' ').toLowerCase();
+  const groupText = String(targetGroup || '').toLowerCase();
+  if (certifications.has('CPA') && ['accounting', 'audit', 'tas', 'valuation'].some((signal) => signalText.includes(signal))) boost += 0.12;
+  if (
+    (certifications.has('CFA Charterholder') || certifications.has('CFA Level II') || certifications.has('CFA Level I')) &&
+    (signalText.includes('public markets') || signalText.includes('asset management') || ['financial institutions', 'technology', 'healthcare', 'industrials', 'consumer'].some((term) => groupText.includes(term)))
+  ) {
+    boost += 0.12;
+  }
+  if (certifications.has('FRM') && (signalText.includes('risk') || groupText.includes('financial institutions') || groupText.includes('levfin') || groupText.includes('credit'))) {
+    boost += 0.12;
+  }
+
+  return Math.min(boost, 0.85);
 }
 
 function zeroNetworkingAdjustment(profile, opportunity, scores) {
@@ -1186,6 +1289,7 @@ function profileScores(profile, competitiveness, weights, hireType, targetGroup,
   const academic = clamp(schoolScore * schoolWeight + gpaScore * (1 - schoolWeight) + honorsBoost + graduationHonorsBoost + gmatBoost);
   const networking = networkingScore(profile.networking);
   const extracurricular = extracurricularScoreForHireType(profile, hireType);
+  const certificationBoost = certificationScore(profile, hireType, targetGroup, experienceResult);
   // Hyper-elite group amplification: top groups compress merely good profiles and reward pedigree, GPA, and elite internships.
   const effectiveWeights = hyperElite
     ? {
@@ -1205,10 +1309,11 @@ function profileScores(profile, competitiveness, weights, hireType, targetGroup,
       experience * effectiveWeights.experience +
       networking * effectiveWeights.networking +
       extracurricular * effectiveWeights.extracurricular +
-      eliteReadinessBoost
+      eliteReadinessBoost +
+      certificationBoost
   );
 
-  return { schoolScore, gpaScore, academic, experience, networking, extracurricular, total, experienceResult, hyperElite };
+  return { schoolScore, gpaScore, academic, experience, networking, extracurricular, certificationBoost, total, experienceResult, hyperElite };
 }
 
 function hireTypeDifficultyAdjustment(hireType, profile) {
@@ -1219,7 +1324,7 @@ function hireTypeDifficultyAdjustment(hireType, profile) {
 
   if (hireType === 'Undergrad Full-Time') {
     if (experience < 7) adjustment += 0.35;
-    if (profile.networking?.referrals <= 0) adjustment += 0.25;
+    if (networkingTotals(profile.networking).referrals <= 0) adjustment += 0.25;
     if (experience >= 8.5) adjustment -= 0.18;
   }
 
@@ -1351,7 +1456,8 @@ function scoreInterviewOddsLocally({ profile, firmName, office, group, hireType 
 function cloneProfile(profile) {
   return {
     ...profile,
-    networking: { ...profile.networking },
+    networking: normalizeNetworkingForScoring(profile.networking),
+    certifications: Array.isArray(profile.certifications) ? [...profile.certifications] : [],
     activities: (profile.activities || []).map((activity) => ({ ...activity })),
     workExperiences: (profile.workExperiences || []).map((experience) => ({ ...experience }))
   };
@@ -1384,18 +1490,19 @@ function buildNeedleProjection(scoringPayload, opportunities, currentResult) {
     }
   };
 
-  if ((baseProfile.networking?.initialChats || 0) < 8 || (baseProfile.networking?.followUps || 0) < 6) {
+  const baseNetworkingTotals = networkingTotals(baseProfile.networking);
+
+  if (baseNetworkingTotals.initialChats < 8) {
     addScenario('Secure 2 additional meaningful conversations with this office', (profile) => {
-      profile.networking.initialChats = (profile.networking.initialChats || 0) + 2;
-      profile.networking.followUps = (profile.networking.followUps || 0) + 2;
+      profile.networking.associate.initialChats = (profile.networking.associate.initialChats || 0) + 2;
       return profile;
     });
   }
 
-  if ((baseProfile.networking?.referrals || 0) < 1) {
+  if (baseNetworkingTotals.referrals < 1) {
     addScenario('Convert one contact into a referral', (profile) => {
-      profile.networking.referrals = 1;
-      profile.networking.strongRelationships = Math.max(profile.networking.strongRelationships || 0, 1);
+      profile.networking.associate.referrals = 1;
+      profile.networking.associate.strongRelationships = Math.max(profile.networking.associate.strongRelationships || 0, 1);
       return profile;
     });
   }
@@ -1607,14 +1714,29 @@ export default function InterviewOddsPage({ onBack }) {
     setResult(null);
   };
 
-  const setNetworking = (key, value) => {
+  const setNetworkingLevel = (levelKey, metricKey, value) => {
     setProfile((prev) => ({
       ...prev,
       networking: {
-        ...prev.networking,
-        [key]: value
+        ...normalizeNetworkingForScoring(prev.networking),
+        [levelKey]: {
+          ...normalizeNetworkingForScoring(prev.networking)[levelKey],
+          [metricKey]: value
+        }
       }
     }));
+  };
+
+  const toggleCertification = (certification) => {
+    setProfile((prev) => {
+      const certifications = new Set(Array.isArray(prev.certifications) ? prev.certifications : []);
+      if (certifications.has(certification)) {
+        certifications.delete(certification);
+      } else {
+        certifications.add(certification);
+      }
+      return { ...prev, certifications: Array.from(certifications) };
+    });
   };
 
   const addActivity = () => {
@@ -1664,7 +1786,8 @@ export default function InterviewOddsPage({ onBack }) {
     setSelection((prev) => ({ ...prev, hireType }));
     setProfile((prev) => ({
       ...prev,
-      workExperiences: [createWorkExperience(hireType)]
+      workExperiences: [createWorkExperience(hireType)],
+      certifications: postGradHireTypes.has(hireType) ? (prev.certifications || []) : []
     }));
     setResult(null);
   };
@@ -1703,7 +1826,13 @@ export default function InterviewOddsPage({ onBack }) {
   const startOver = () => {
     setShowIntro(true);
     setCurrentStep(0);
-    setProfile(defaultProfile);
+    setProfile({
+      ...defaultProfile,
+      workExperiences: [createWorkExperience()],
+      activities: [createActivity()],
+      networking: createDefaultNetworking(),
+      certifications: []
+    });
     setResult(null);
     setLoading(false);
     setError('');
@@ -1740,7 +1869,7 @@ export default function InterviewOddsPage({ onBack }) {
 
     const normalizedWorkExperiences = (profile.workExperiences || []).map((experience) => coerceExperienceForHireType(experience, selection.hireType));
     const profilePayload = {
-      ...normalizeProfileForScoring(profile),
+      ...normalizeProfileForScoring(profile, selection.hireType),
       school: schoolForPayload(profile.school),
       workExperiences: normalizedWorkExperiences,
       workType: normalizedWorkExperiences[0]?.experienceType || 'None'
@@ -1933,6 +2062,29 @@ export default function InterviewOddsPage({ onBack }) {
               </label>
             ) : null}
           </div>
+          {postGradHireTypes.has(selection.hireType) ? (
+            <div className="credential-panel">
+              <div className="section-heading">
+                <h3>Post-Grad Certifications</h3>
+                <p className="muted">Optional credentials only add upside when relevant.</p>
+              </div>
+              <div className="certification-grid">
+                {certificationOptions.map((certification) => {
+                  const selected = (profile.certifications || []).includes(certification);
+                  return (
+                    <button
+                      type="button"
+                      key={certification}
+                      className={selected ? 'choice-card selected' : 'choice-card'}
+                      onClick={() => toggleCertification(certification)}
+                    >
+                      {certification}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
         </>
       );
     }
@@ -2081,31 +2233,31 @@ export default function InterviewOddsPage({ onBack }) {
     }
 
     if (currentStepKey === 'networking') {
+      const normalizedNetworking = normalizeNetworkingForScoring(profile.networking);
       return (
         <>
           <h2>Networking Info</h2>
-          <div className="grid">
-            <NumberField label="Initial chats" value={profile.networking.initialChats} onChange={(value) => setNetworking('initialChats', value)} />
-            <NumberField label="Follow-ups" value={profile.networking.followUps} onChange={(value) => setNetworking('followUps', value)} />
-            <NumberField
-              label="Strong relationships"
-              value={profile.networking.strongRelationships}
-              onChange={(value) => setNetworking('strongRelationships', value)}
-            />
-            <NumberField label="Referrals" value={profile.networking.referrals} onChange={(value) => setNetworking('referrals', value)} />
-            <label>
-              <span>Strongest contact seniority</span>
-              <select
-                value={profile.networking.strongestContactSeniority}
-                onChange={(e) => setNetworking('strongestContactSeniority', e.target.value)}
-              >
-                {seniorityOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+          <div className="networking-matrix">
+            {networkingLevels.map((level) => (
+              <article className="networking-depth-card" key={level.key}>
+                <h3>{level.label}</h3>
+                <NumberField
+                  label="Initial chats"
+                  value={normalizedNetworking[level.key]?.initialChats || 0}
+                  onChange={(value) => setNetworkingLevel(level.key, 'initialChats', value)}
+                />
+                <NumberField
+                  label="Strong relationships"
+                  value={normalizedNetworking[level.key]?.strongRelationships || 0}
+                  onChange={(value) => setNetworkingLevel(level.key, 'strongRelationships', value)}
+                />
+                <NumberField
+                  label="Referrals"
+                  value={normalizedNetworking[level.key]?.referrals || 0}
+                  onChange={(value) => setNetworkingLevel(level.key, 'referrals', value)}
+                />
+              </article>
+            ))}
           </div>
         </>
       );
@@ -2127,6 +2279,7 @@ export default function InterviewOddsPage({ onBack }) {
             {['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType) ? <p>Honors College: {profile.honorsCollege ? 'Yes' : 'No'}</p> : null}
             {selection.hireType === 'Lateral Hire' ? <p>Graduation Honors: {profile.graduationHonors}</p> : null}
             {selection.hireType === 'MBA Associate' ? <p>GMAT: {profile.gmatRange || 'Not provided'}</p> : null}
+            {postGradHireTypes.has(selection.hireType) ? <p>Certifications: {(profile.certifications || []).join(', ') || 'None selected'}</p> : null}
           </section>
           {['Summer Analyst', 'Undergrad Full-Time'].includes(selection.hireType) ? (
             <section>
@@ -2144,11 +2297,11 @@ export default function InterviewOddsPage({ onBack }) {
           </section>
           <section>
             <h3>Networking</h3>
-            <p>
-              {profile.networking.initialChats} chats · {profile.networking.followUps} follow-ups ·{' '}
-              {profile.networking.strongRelationships} strong relationships · {profile.networking.referrals} referrals
-            </p>
-            <p>{profile.networking.strongestContactSeniority}</p>
+            {networkingRows(profile.networking).map((row) => (
+              <p key={row.key}>
+                {row.shortLabel}: {row.initialChats} chats · {row.strongRelationships} strong relationships · {row.referrals} referrals
+              </p>
+            ))}
           </section>
         </div>
       </>
