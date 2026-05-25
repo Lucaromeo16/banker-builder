@@ -339,6 +339,15 @@ const grammarFormattingOverlapPattern =
 const reliableFormattingIssuePattern =
   /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests)\b/i;
 
+const resumeSubscoreFields = [
+  ['ibReadinessScore', 'ibReadiness'],
+  ['formattingScore', 'formatting'],
+  ['experienceScore', 'experience'],
+  ['leadershipScore', 'leadership'],
+  ['technicalRelevanceScore', 'technicalRelevance'],
+  ['spellingGrammarScore', 'spellingGrammar']
+];
+
 function removeUnreliableVisualFormattingClaims(items) {
   return normalizeList(items).filter((item) => {
     if (unreliableVisualFormattingPattern.test(item)) return false;
@@ -346,6 +355,24 @@ function removeUnreliableVisualFormattingClaims(items) {
     if (grammarFormattingOverlapPattern.test(item)) return false;
     return true;
   });
+}
+
+function clampNumericScore(score) {
+  const numericScore = Number(score);
+  if (!Number.isFinite(numericScore)) return null;
+  return Math.max(1, Math.min(10, numericScore));
+}
+
+function roundScoreToHalf(score) {
+  const clampedScore = clampNumericScore(score);
+  if (clampedScore === null) return null;
+  return Math.max(1, Math.min(10, Math.round(clampedScore * 2) / 2));
+}
+
+function averageSubscores(scores) {
+  const validScores = scores.map(clampNumericScore).filter((score) => score !== null);
+  if (!validScores.length) return null;
+  return Number((validScores.reduce((sum, score) => sum + score, 0) / validScores.length).toFixed(1));
 }
 
 function sanitizeFormattingAnalysis(analysis) {
@@ -394,6 +421,25 @@ function sanitizeFormattingAnalysis(analysis) {
           ? cleanImprovements
           : ['Maintain consistent section ordering, header naming, and date formats.']
   };
+
+  resumeSubscoreFields.forEach(([scoreField, detailKey]) => {
+    const detail = sanitized.scoreDetails[detailKey] || {};
+    const roundedScore = roundScoreToHalf(sanitized[scoreField] ?? detail.score);
+    if (roundedScore === null) return;
+
+    sanitized[scoreField] = roundedScore;
+    sanitized.scoreDetails[detailKey] = {
+      ...detail,
+      score: roundedScore,
+      pointLossReasons: roundedScore >= 10 ? [] : detail.pointLossReasons,
+      improvements: roundedScore >= 10 ? [] : detail.improvements
+    };
+  });
+
+  const calculatedOverall = averageSubscores(resumeSubscoreFields.map(([scoreField]) => sanitized[scoreField]));
+  if (calculatedOverall !== null) {
+    sanitized.overallScoreOutOf10 = calculatedOverall;
+  }
 
   return sanitized;
 }
@@ -627,6 +673,7 @@ app.post('/api/resume-analyzer', async (req, res) => {
             'Evaluate banking relevance, finance/accounting/valuation exposure, leadership, quantified impact, bullet strength, resume positioning, school/GPA signals if present, transaction/deal relevance if present, and missing signals. Avoid generic career advice.',
             'Scores should reflect actual resume quality. If a subscore category has no meaningful category-specific issue, it can receive a true 10/10. Do not invent critiques or force point-loss reasons just to avoid a perfect score.',
             'overallScoreOutOf10 should be precise to one decimal place when appropriate, such as 8.1, 8.4, or 8.7. Do not bucket or round the overall score to only whole numbers or 0.5 increments.',
+            'Subscores should use 0.5 increments only, such as 8.5, 9.0, 9.5, or 10.0. The overall score should be a one-decimal composite influenced by all six subscores: IB Readiness, Formatting, Experience, Leadership, Technical Relevance, and Spelling & Grammar.',
             'Category boundaries: Formatting is structure/order/organization only. Spelling & Grammar is spelling, grammar, punctuation correctness, sentence clarity, professional writing mechanics, and tense consistency. Experience is work quality/relevance. Leadership is leadership quality/impact. Technical Relevance is finance technicality/modeling/valuation exposure. IB Readiness is overall recruiting readiness.',
             'Formatting score calibration: formatting is not content quality and not writing mechanics. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness. Grammar, spelling, punctuation correctness, sentence clarity, and tense usage belong only in Spelling & Grammar.',
             'For formatting, evaluate only reliable structure signals visible in extracted text.',

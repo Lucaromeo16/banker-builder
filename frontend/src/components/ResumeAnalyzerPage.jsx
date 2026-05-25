@@ -19,10 +19,41 @@ const SUBSCORE_CONFIGS = [
   { key: 'spellingGrammar', label: 'Spelling & Grammar', scoreField: 'spellingGrammarScore' }
 ];
 
-function clampScore(score) {
+function clampNumericScore(score) {
   const numericScore = Number(score);
-  if (!Number.isFinite(numericScore)) return 'N/A';
-  return Math.max(1, Math.min(10, numericScore)).toFixed(1);
+  if (!Number.isFinite(numericScore)) return null;
+  return Math.max(1, Math.min(10, numericScore));
+}
+
+function formatOverallScore(score) {
+  const clampedScore = clampNumericScore(score);
+  if (clampedScore === null) return 'N/A';
+  return clampedScore.toFixed(1);
+}
+
+function formatSubscore(score) {
+  const clampedScore = clampNumericScore(score);
+  if (clampedScore === null) return 'N/A';
+  return (Math.round(clampedScore * 2) / 2).toFixed(1);
+}
+
+function roundScoreToHalfNumber(score) {
+  const clampedScore = clampNumericScore(score);
+  if (clampedScore === null) return null;
+  return Math.round(clampedScore * 2) / 2;
+}
+
+function getCompositeOverallScore(source) {
+  const subscoreValues = SUBSCORE_CONFIGS
+    .map((config) => roundScoreToHalfNumber(source?.[config.scoreField]))
+    .filter((score) => score !== null);
+
+  if (subscoreValues.length !== SUBSCORE_CONFIGS.length) {
+    return source?.overallScoreOutOf10;
+  }
+
+  const total = subscoreValues.reduce((sum, score) => sum + score, 0);
+  return Number((total / subscoreValues.length).toFixed(1));
 }
 
 function normalizeList(value) {
@@ -80,7 +111,7 @@ function ScoreDetailModal({ analysis, config, onClose }) {
           <div>
             <span className="feature-eyebrow">Score detail</span>
             <h3 id="resume-score-modal-title">{config.label}</h3>
-            <strong>{clampScore(detail.score)}/10</strong>
+            <strong>{formatSubscore(detail.score)}/10</strong>
           </div>
           <button type="button" className="text-button" onClick={onClose} aria-label="Close score details">
             x
@@ -370,7 +401,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
       createdAt: new Date().toISOString(),
       fileName: uploadedFile?.name || 'Resume.pdf',
       scores: {
-        overallScoreOutOf10: analysis.overallScoreOutOf10,
+        overallScoreOutOf10: getCompositeOverallScore(analysis),
         ibReadinessScore: analysis.ibReadinessScore,
         formattingScore: analysis.formattingScore,
         experienceScore: analysis.experienceScore,
@@ -517,25 +548,26 @@ export default function ResumeAnalyzerPage({ onBack }) {
           {savedConfirmation ? <p className="resume-save-confirmation">{savedConfirmation}</p> : null}
 
           <div className="resume-score-grid">
-            <article className="resume-score-card featured">
-              <span>Overall Score</span>
-              <strong>{clampScore(analysis.overallScoreOutOf10)}/10</strong>
-            </article>
-            {SUBSCORE_CONFIGS.map((config, index) => (
+            {SUBSCORE_CONFIGS.map((config) => (
               <button
                 type="button"
                 key={config.key}
-                className={index === 0 ? 'resume-score-card resume-score-card-button featured' : 'resume-score-card resume-score-card-button'}
+                className="resume-score-card resume-score-card-button resume-subscore-card"
                 onClick={() => setActiveScoreDetailKey(config.key)}
                 aria-label={`View ${config.label} score details`}
               >
                 <span>{config.label}</span>
-                <strong>{clampScore(analysis[config.scoreField])}/10</strong>
+                <strong>{formatSubscore(analysis[config.scoreField])}/10</strong>
                 <small>
                   View details <b aria-hidden="true">&gt;</b>
                 </small>
               </button>
             ))}
+            <article className="resume-score-card resume-overall-card featured">
+              <span>Overall Score</span>
+              <strong>{formatOverallScore(getCompositeOverallScore(analysis))}/10</strong>
+              <p>Composite resume quality score</p>
+            </article>
           </div>
 
           <div className="resume-result-grid">
@@ -614,15 +646,15 @@ export default function ResumeAnalyzerPage({ onBack }) {
                 <dl>
                   <div>
                     <dt>Overall</dt>
-                    <dd>{clampScore(item.scores?.overallScoreOutOf10)}/10</dd>
+                    <dd>{formatOverallScore(getCompositeOverallScore(item.scores))}/10</dd>
                   </div>
                   <div>
                     <dt>IB Readiness</dt>
-                    <dd>{clampScore(item.scores?.ibReadinessScore)}/10</dd>
+                    <dd>{formatSubscore(item.scores?.ibReadinessScore)}/10</dd>
                   </div>
                   <div>
                     <dt>Formatting</dt>
-                    <dd>{clampScore(item.scores?.formattingScore)}/10</dd>
+                    <dd>{formatSubscore(item.scores?.formattingScore)}/10</dd>
                   </div>
                 </dl>
                 <div className="resume-saved-actions">
