@@ -10,6 +10,7 @@ import {
   undergraduateExperienceFollowUps,
   undergraduateWorkTypeOptions
 } from '../experienceTaxonomy';
+import { groupMatchForInterests } from '../groupTaxonomy';
 
 const stepTitles = [
   'IB Interest',
@@ -183,24 +184,6 @@ const resumeProfileWeights = {
   academic: 0.4,
   experience: 0.36,
   extracurricular: 0.24
-};
-
-const interestToGroups = {
-  'M&A': ['M&A'],
-  'Restructuring': ['Restructuring'],
-  'Debt Capital Markets': ['Financial Institutions', 'Financial Sponsors', 'Generalist'],
-  'Equity Capital Markets': ['Technology', 'Healthcare', 'Generalist'],
-  'Leveraged Finance': ['Financial Sponsors', 'M&A'],
-  'Public Finance': ['Financial Institutions', 'Generalist'],
-  'Financial Sponsors': ['Financial Sponsors'],
-  'Healthcare': ['Healthcare', 'Healthcare Services'],
-  'Technology': ['Technology'],
-  'Industrials': ['Industrials'],
-  'Consumer/Retail': ['Consumer & Retail'],
-  'FIG': ['Financial Institutions'],
-  'Real Estate': ['Real Estate', 'Generalist'],
-  'Energy': ['Energy'],
-  'Generalist': ['Generalist', 'M&A']
 };
 
 const createActivity = () => ({
@@ -734,64 +717,11 @@ function opportunityWithinRadius(opportunity, profile) {
 }
 
 function groupInterestScore(group, interests) {
-  if (interests.includes('Not sure yet')) {
-    return ['Generalist', 'M&A', 'Healthcare', 'Technology', 'Industrials', 'Consumer & Retail', 'Financial Institutions'].includes(group)
-      ? 2
-      : 0.75;
-  }
-
-  const normalizedGroup = normalizedGroupValue(group);
-  const aliases = selectedGroupAliases(interests);
-  return aliases.has(normalizedGroup) ? 3 : 0;
-}
-
-function normalizedGroupValue(value) {
-  return String(value || '')
-    .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function interestGroupAliases(interest) {
-  const aliasMap = {
-    'Debt Capital Markets': ['DCM', 'Debt Capital Markets'],
-    'Equity Capital Markets': ['ECM', 'Equity Capital Markets'],
-    'Leveraged Finance': ['Leveraged Finance', 'LevFin'],
-    'Financial Sponsors': ['Financial Sponsors'],
-    'M&A': ['M&A', 'M&A Advisory', 'Middle Market M&A', 'Cross-Border M&A'],
-    'Consumer/Retail': ['Consumer/Retail', 'Consumer & Retail', 'Consumer'],
-    FIG: ['FIG', 'Financial Institutions'],
-    Restructuring: ['Restructuring', 'Financial Restructuring', 'RX'],
-    Healthcare: ['Healthcare', 'Healthcare Services', 'Healthcare M&A', 'Healthcare IT', 'Biopharma', 'Biotech', 'MedTech', 'Life Sciences'],
-    Technology: ['Technology', 'Software', 'SaaS', 'Internet', 'Media & Technology', 'Vertical Software', 'Cybersecurity', 'AI / ML'],
-    Industrials: ['Industrials', 'Diversified Industrials', 'Manufacturing', 'Aerospace & Defense', 'Automotive', 'Transportation & Logistics'],
-    'Real Estate': ['Real Estate'],
-    Energy: ['Energy', 'Energy Transition', 'Power', 'Power & Utilities'],
-    'Public Finance': ['Public Finance']
-  };
-
-  const directGroups = (interestToGroups[interest] || []).filter((group) => interest === 'Generalist' || group !== 'Generalist');
-  return [...new Set(aliasMap[interest] || directGroups)];
-}
-
-function selectedGroupAliases(interests = []) {
-  return new Set(interests.flatMap(interestGroupAliases).map(normalizedGroupValue).filter(Boolean));
-}
-
-function hasBroadGroupInterest(interests = []) {
-  return interests.includes('Not sure yet') || interests.includes('Generalist');
+  return groupMatchForInterests(group, interests).score;
 }
 
 function opportunityMatchesSelectedGroups(opportunity, interests = []) {
-  if (!interests.length || hasBroadGroupInterest(interests)) return true;
-  const aliases = selectedGroupAliases(interests);
-  if (!aliases.size) return true;
-  const group = normalizedGroupValue(opportunity.group);
-  if (!group) return false;
-
-  return aliases.has(group);
+  return groupMatchForInterests(opportunity.group, interests).eligible;
 }
 
 function locationRadiusScore(opportunity, profile, strength) {
