@@ -328,18 +328,87 @@ function getSectionKey(line) {
   return '';
 }
 
-function dateSortValue(line) {
-  const yearMatches = [...line.matchAll(/\b(20\d{2}|19\d{2})\b/g)].map((match) => Number(match[1]));
-  if (!yearMatches.length) return null;
-  if (/\b(present|current)\b/i.test(line)) return 3000;
-  return Math.max(...yearMatches);
+const monthIndexByName = {
+  jan: 1,
+  january: 1,
+  feb: 2,
+  february: 2,
+  mar: 3,
+  march: 3,
+  apr: 4,
+  april: 4,
+  may: 5,
+  jun: 6,
+  june: 6,
+  jul: 7,
+  july: 7,
+  aug: 8,
+  august: 8,
+  sep: 9,
+  sept: 9,
+  september: 9,
+  oct: 10,
+  october: 10,
+  nov: 11,
+  november: 11,
+  dec: 12,
+  december: 12
+};
+
+function parseResumeDatePart(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (!normalized) return null;
+  if (/\b(present|current|incoming)\b/.test(normalized)) {
+    return { value: 999999, active: true };
+  }
+
+  const yearMatch = normalized.match(/\b(20\d{2}|19\d{2})\b/);
+  if (!yearMatch) return null;
+
+  const monthMatch = normalized.match(
+    /\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/
+  );
+  const month = monthMatch ? monthIndexByName[monthMatch[1]] || 12 : 12;
+  return { value: Number(yearMatch[1]) * 100 + month, active: false };
+}
+
+function parseResumeDateRange(line) {
+  const normalizedLine = String(line || '').replace(/\s+/g, ' ').trim();
+  if (!/\b(20\d{2}|19\d{2}|present|current|incoming)\b/i.test(normalizedLine)) return null;
+
+  const rangeParts = normalizedLine.split(/\s+(?:-|–|—|to)\s+/i);
+  if (rangeParts.length >= 2) {
+    const start = parseResumeDatePart(rangeParts[0]);
+    const end = parseResumeDatePart(rangeParts.slice(1).join(' '));
+    if (start && end) return { start: start.value, end: end.value, active: end.active };
+  }
+
+  const dateMatches = [
+    ...normalizedLine.matchAll(
+      /\b(?:(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+)?(20\d{2}|19\d{2}|present|current|incoming)\b/gi
+    )
+  ];
+  if (dateMatches.length < 2) return null;
+
+  const start = parseResumeDatePart(dateMatches[0][0]);
+  const end = parseResumeDatePart(dateMatches[dateMatches.length - 1][0]);
+  if (!start || !end) return null;
+  return { start: start.value, end: end.value, active: end.active };
+}
+
+function chronologyEntryIsBefore(previous, current) {
+  if (previous.active && current.active) return false;
+  if (previous.active) return false;
+  if (current.active) return true;
+  if (current.end > previous.end) return true;
+  if (current.end === previous.end && current.start > previous.start) return true;
+  return false;
 }
 
 function hasClearlyOutOfOrderDates(resumeText) {
-  const sectionDates = {
+  const sectionEntries = {
     experience: [],
-    leadership: [],
-    education: []
+    leadership: []
   };
   let currentSection = '';
 
@@ -350,13 +419,13 @@ function hasClearlyOutOfOrderDates(resumeText) {
       return;
     }
 
-    if (!sectionDates[currentSection]) return;
-    const sortValue = dateSortValue(line);
-    if (sortValue !== null) sectionDates[currentSection].push(sortValue);
+    if (!sectionEntries[currentSection]) return;
+    const dateRange = parseResumeDateRange(line);
+    if (dateRange) sectionEntries[currentSection].push(dateRange);
   });
 
-  return Object.values(sectionDates).some((dates) =>
-    dates.length >= 3 && dates.some((date, index) => index > 0 && date > dates[index - 1])
+  return Object.values(sectionEntries).some((entries) =>
+    entries.length >= 3 && entries.some((entry, index) => index > 0 && chronologyEntryIsBefore(entries[index - 1], entry))
   );
 }
 
@@ -631,7 +700,7 @@ export default async function handler(req, res) {
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
             'Formatting checks may include only: standard finance resume section ordering, clear section hierarchy, consistent section naming, date/location formatting consistency, company/title/location/date line consistency, resume organization, and standard one-page finance structure.',
-            'Formatting should also evaluate reverse-chronological ordering when dates are clear: Work Experience, Leadership/Activities/Extracurriculars, and Education entries should generally run from most recent to oldest. If dates are clearly out of order within a section, flag it under Formatting with evidence. Do not guess when PDF extraction makes ordering ambiguous.',
+            'Formatting should also evaluate reverse-chronological ordering when dates are clear: Work Experience and Leadership/Activities/Extracurriculars entries should generally run from most recent to oldest within their own section. Use end-date priority: Present, Current, or Incoming roles come first, then completed roles by most recent end date, then start date only as a tiebreaker. Do not compare chronology across unrelated sections. Do not flag overlapping roles, multi-position organizations, concurrent experiences, or active roles with older start dates unless the ordering is clearly incorrect.',
             'Do not evaluate bullet-ending punctuation. Do not mention bullets using periods versus not using periods. Do not deduct formatting points for periods or no periods at the end of bullets. Do not invent exact counts like "two bullets" unless directly and reliably extracted.',
             'Do not flag line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
