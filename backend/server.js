@@ -318,6 +318,62 @@ function countResumeWords(text) {
   return normalizeResumeText(text).split(/\s+/).filter(Boolean).length;
 }
 
+function normalizeList(value) {
+  if (Array.isArray(value)) return value.filter((item) => typeof item === 'string' && item.trim()).map((item) => item.trim());
+  if (typeof value === 'string' && value.trim()) return [value.trim()];
+  return [];
+}
+
+const unreliableVisualFormattingPattern =
+  /\b(spacing|align(?:ment|ed)?|bold(?:ing)?|font(?:s| size)?|margin|margins|white\s*space|visual(?:ly)?|layout|aesthetic|aesthetics|indent(?:ation)?|density|styling|style)\b/i;
+
+function removeUnreliableVisualFormattingClaims(items) {
+  return normalizeList(items).filter((item) => !unreliableVisualFormattingPattern.test(item));
+}
+
+function sanitizeFormattingAnalysis(analysis) {
+  const sanitized = {
+    ...analysis,
+    scoreDetails: {
+      ...(analysis.scoreDetails || {})
+    }
+  };
+  const formattingDetail = {
+    ...(sanitized.scoreDetails.formatting || {})
+  };
+
+  const cleanFeedback = removeUnreliableVisualFormattingClaims(sanitized.formattingFeedback);
+  const cleanPositives = removeUnreliableVisualFormattingClaims(formattingDetail.positives);
+  const cleanPointLossReasons = removeUnreliableVisualFormattingClaims(formattingDetail.pointLossReasons);
+  const cleanImprovements = removeUnreliableVisualFormattingClaims(formattingDetail.improvements);
+  const noMajorIssueText = 'No major text-structure issues were detected.';
+  const hasReliablePointLoss = cleanPointLossReasons.some((item) => !/^no major/i.test(item));
+  let formattingScore = Number(sanitized.formattingScore);
+
+  if (!Number.isFinite(formattingScore)) formattingScore = Number(formattingDetail.score) || 9;
+  if (!hasReliablePointLoss && formattingScore < 8.5) formattingScore = 9;
+
+  sanitized.formattingScore = Math.max(1, Math.min(10, formattingScore));
+  sanitized.formattingFeedback = cleanFeedback.length
+    ? cleanFeedback
+    : ['Section order and text structure follow standard finance resume conventions.', noMajorIssueText];
+
+  sanitized.scoreDetails.formatting = {
+    ...formattingDetail,
+    score: sanitized.formattingScore,
+    positives: cleanPositives.length
+      ? cleanPositives
+      : ['Section order follows standard finance resume convention.', 'Clear standard section headers are present.'],
+    pointLossReasons:
+      sanitized.formattingScore >= 10 || !hasReliablePointLoss ? [noMajorIssueText] : cleanPointLossReasons,
+    improvements: cleanImprovements.length
+      ? cleanImprovements
+      : ['Maintain consistent section ordering, header naming, date formats, and bullet punctuation.']
+  };
+
+  return sanitized;
+}
+
 function getResumeTextQuality(text) {
   const cleanedText = normalizeResumeText(text);
   const characters = cleanedText.length;
@@ -378,7 +434,7 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
       body: JSON.stringify({
         model,
         instructions:
-          'Extract clean resume text from the uploaded PDF. Preserve section headings, line breaks, bullet ordering, and obvious spacing cues as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
+          'Extract clean resume text from the uploaded PDF. Preserve section headings, line breaks, and bullet ordering as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
         input: [
           {
             role: 'user',
@@ -546,15 +602,19 @@ app.post('/api/resume-analyzer', async (req, res) => {
             'You are an investment banking resume reviewer evaluating an undergraduate candidate. Be direct, specific, realistic, and recruiting-focused.',
             'Evaluate banking relevance, finance/accounting/valuation exposure, leadership, quantified impact, bullet strength, resume positioning, school/GPA signals if present, transaction/deal relevance if present, and missing signals. Avoid generic career advice.',
             'Formatting score calibration: formatting is not content quality. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness.',
-            'For formatting, evaluate primarily: section order, formatting consistency, and standard finance resume convention fit.',
+            'For formatting, evaluate only reliable text-structure signals visible in extracted text.',
+            'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
-            'Formatting consistency checks should include date formatting, location formatting, bullet formatting, period usage after bullets, dash/en dash/date separators, capitalization, and section header consistency.',
-            'Resume convention fit checks should include one-page expectation, readable structure, clear section hierarchy, bullets grouped under correct roles, contact info visible, and education visible near top.',
+            'Text-based formatting consistency checks may include only: date formatting, role/company/location line structure, bullet punctuation, bullet symbol usage, capitalization of section headers, and naming conventions.',
+            'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
+            'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
-            'A resume that follows standard IB order and is internally consistent should generally receive an 8-10 formatting score.',
+            'For a resume that follows standard section order and has consistent extracted-text structure, formatting should generally be 8.5-10.',
             'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Bullet punctuation is mostly consistent, but two bullets use periods while others do not." Avoid vague claims like sections being too lengthy unless obviously true.',
+            'If no reliable text-structure formatting problems are found, give formatting a high score and say no major text-structure issues were detected.',
             'Return scoreDetails for ibReadiness, formatting, experience, leadership, and technicalRelevance. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
             'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10, even for a 9/10. If a subscore is 10, pointLossReasons should contain "No major issues found."',
+            'For scoreDetails.formatting, pointLossReasons and improvements must only use text-structure reasons. Never include visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, or layout aesthetics.',
             'Avoid vague point-loss reasons such as "could be stronger" or "needs more polish." Name the missing signal, inconsistency, weak evidence, or resume convention issue.',
             'Bullet rewrites should be credible, concise, action-oriented, quantified when possible, and suitable for an IB resume.'
           ].join(' '),
@@ -596,7 +656,7 @@ app.post('/api/resume-analyzer', async (req, res) => {
       return res.status(502).json({ code: 'OPENAI_ANALYSIS_FAILED', error: 'OpenAI resume analyzer response was empty.' });
     }
 
-    return res.json(JSON.parse(outputText));
+    return res.json(sanitizeFormattingAnalysis(JSON.parse(outputText)));
   } catch (error) {
     return res.status(500).json({ code: 'ANALYSIS_FAILED', error: 'Failed to analyze resume.', details: error.message });
   }

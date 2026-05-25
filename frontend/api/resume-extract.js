@@ -128,7 +128,7 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
       body: JSON.stringify({
         model,
         instructions:
-          'Extract clean resume text from the uploaded PDF. Preserve section headings, line breaks, bullet ordering, and obvious spacing cues as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
+          'Extract clean resume text from the uploaded PDF. Preserve section headings, line breaks, and bullet ordering as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
         input: [
           {
             role: 'user',
