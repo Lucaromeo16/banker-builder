@@ -327,8 +327,15 @@ function normalizeList(value) {
 const unreliableVisualFormattingPattern =
   /\b(spacing|align(?:ment|ed)?|bold(?:ing)?|font(?:s| size)?|margin|margins|white\s*space|visual(?:ly)?|layout|aesthetic|aesthetics|indent(?:ation)?|density|styling|style)\b/i;
 
+const bulletPunctuationPattern = /\b(bullet|bullets).*\b(punctuation|periods?|ending|end\b)/i;
+const strongPunctuationEvidencePattern = /\b(repeated|multiple|several|many|mixed|inconsistent across|some .+ others|while others|comparable bullets)\b/i;
+
 function removeUnreliableVisualFormattingClaims(items) {
-  return normalizeList(items).filter((item) => !unreliableVisualFormattingPattern.test(item));
+  return normalizeList(items).filter((item) => {
+    if (unreliableVisualFormattingPattern.test(item)) return false;
+    if (bulletPunctuationPattern.test(item) && !strongPunctuationEvidencePattern.test(item)) return false;
+    return true;
+  });
 }
 
 function sanitizeFormattingAnalysis(analysis) {
@@ -368,7 +375,7 @@ function sanitizeFormattingAnalysis(analysis) {
       sanitized.formattingScore >= 10 || !hasReliablePointLoss ? [noMajorIssueText] : cleanPointLossReasons,
     improvements: cleanImprovements.length
       ? cleanImprovements
-      : ['Maintain consistent section ordering, header naming, date formats, and bullet punctuation.']
+      : ['Maintain consistent section ordering, header naming, and date formats.']
   };
 
   return sanitized;
@@ -605,12 +612,14 @@ app.post('/api/resume-analyzer', async (req, res) => {
             'For formatting, evaluate only reliable text-structure signals visible in extracted text.',
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
-            'Text-based formatting consistency checks may include only: date formatting, role/company/location line structure, bullet punctuation, bullet symbol usage, capitalization of section headers, and naming conventions.',
+            'Text-based formatting consistency checks may include only: date formatting, role/company/location line structure, bullet symbol usage, capitalization of section headers, naming conventions, and bullet-ending punctuation only when there is strong evidence.',
+            'Bullets do not need periods at the end. Consistently using no periods is acceptable. Consistently using periods is acceptable. Only flag bullet-ending punctuation if there is a clear, repeated inconsistency across comparable bullets.',
+            'Do not flag punctuation from line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
             'For a resume that follows standard section order and has consistent extracted-text structure, formatting should generally be 8.5-10.',
-            'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Bullet punctuation is mostly consistent, but two bullets use periods while others do not." Avoid vague claims like sections being too lengthy unless obviously true.',
+            'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Multiple comparable bullets mix period and no-period endings." Avoid vague claims like sections being too lengthy unless obviously true.',
             'If no reliable text-structure formatting problems are found, give formatting a high score and say no major text-structure issues were detected.',
             'Return scoreDetails for ibReadiness, formatting, experience, leadership, and technicalRelevance. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
             'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10, even for a 9/10. If a subscore is 10, pointLossReasons should contain "No major issues found."',
