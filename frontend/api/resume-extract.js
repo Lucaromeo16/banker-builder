@@ -168,7 +168,7 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
         error: {
           status: 502,
           code: 'PDF_EXTRACTION_FAILED',
-          message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.',
+          message: 'We couldn’t process this PDF. Please upload a readable PDF resume.',
           details
         }
       };
@@ -181,7 +181,7 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
         error: {
           status: 502,
           code: 'PDF_EXTRACTION_FAILED',
-          message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.'
+          message: 'We couldn’t process this PDF. Please upload a readable PDF resume.'
         }
       };
     }
@@ -204,8 +204,8 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
           code: quality.code,
           message:
             quality.code === 'CORRUPTED_TEXT'
-              ? 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.'
-              : 'Extracted text is too short. Try uploading a screenshot or pasting the text.'
+              ? 'We couldn’t process this PDF. Please upload a readable PDF resume.'
+              : 'Extracted text is too short. Please upload a readable PDF resume.'
         }
       };
     }
@@ -228,7 +228,7 @@ async function extractPdfResumeText({ dataUrl, fileName }) {
       error: {
         status: 422,
         code: 'PDF_EXTRACTION_FAILED',
-        message: 'We couldn’t process this PDF. Try uploading a screenshot or pasting the text.',
+        message: 'We couldn’t process this PDF. Please upload a readable PDF resume.',
         details: error.message
       }
     };
@@ -243,8 +243,7 @@ export default async function handler(req, res) {
 
   try {
     const { fileName, mimeType, dataUrl } = parseBody(req);
-    const supportedImageTypes = ['image/png', 'image/jpeg'];
-    const supportedFileTypes = ['application/pdf', ...supportedImageTypes];
+    const supportedFileTypes = ['application/pdf'];
 
     console.log('[resume-extract] Vercel API request received', {
       route: 'POST /api/resume-extract',
@@ -258,7 +257,7 @@ export default async function handler(req, res) {
     if (!supportedFileTypes.includes(mimeType) || typeof dataUrl !== 'string') {
       return res.status(400).json({
         code: 'UNSUPPORTED_FILE_TYPE',
-        error: 'Unsupported file type. Upload a PDF, PNG, JPG, or JPEG resume.'
+        error: 'Please upload a PDF resume.'
       });
     }
 
@@ -274,105 +273,10 @@ export default async function handler(req, res) {
 
       return res.status(200).json(extractedPdf);
     }
-
-    if (!dataUrl.startsWith('data:image/')) {
-      return res.status(400).json({
-        code: 'UNSUPPORTED_FILE_TYPE',
-        error: 'Invalid payload: upload a PNG, JPG, or JPEG image.'
-      });
-    }
-
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({
-        code: 'MISSING_OPENAI_API_KEY',
-        error: 'OPENAI_API_KEY is not configured on the serverless API route.'
-      });
-    }
-
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-        instructions:
-          'Extract resume text from the uploaded resume image. Preserve section headings, line breaks, bullet ordering, and obvious spacing cues as plain text. Return only valid JSON that matches the schema. Do not critique the resume.',
-        input: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'input_text',
-                text: JSON.stringify({
-                  fileName: fileName || 'resume image',
-                  task: 'Extract the resume content faithfully for later investment banking resume analysis.'
-                })
-              },
-              {
-                type: 'input_image',
-                image_url: dataUrl
-              }
-            ]
-          }
-        ],
-        text: {
-          format: {
-            type: 'json_schema',
-            name: 'resume_extraction',
-            strict: true,
-            schema: resumeExtractionSchema
-          }
-        },
-        max_output_tokens: 1800
-      })
+    return res.status(400).json({
+      code: 'UNSUPPORTED_FILE_TYPE',
+      error: 'Please upload a PDF resume.'
     });
-
-    if (!response.ok) {
-      const details = await response.text();
-      console.error('[resume-extract] OpenAI OCR request failed', {
-        status: response.status,
-        statusText: response.statusText,
-        details
-      });
-      return res.status(502).json({
-        code: 'OPENAI_EXTRACTION_FAILED',
-        error: 'OpenAI resume extraction request failed.',
-        details
-      });
-    }
-
-    const data = await response.json();
-    const outputText = extractResponseText(data);
-    if (!outputText) {
-      return res.status(502).json({
-        code: 'EXTRACTED_TEXT_TOO_SHORT',
-        error: 'OpenAI resume extraction response was empty.'
-      });
-    }
-
-    const extracted = JSON.parse(outputText);
-    extracted.resumeText = normalizeResumeText(extracted.resumeText);
-    const quality = getResumeTextQuality(extracted.resumeText);
-
-    console.log('[resume-extract] Image OCR completed', {
-      extractedLength: extracted.resumeText.length,
-      extractedWords: countResumeWords(extracted.resumeText),
-      qualityCode: quality.code || 'OK'
-    });
-
-    if (!quality.ok) {
-      return res.status(422).json({
-        code: quality.code,
-        error:
-          quality.code === 'CORRUPTED_TEXT'
-            ? 'Extracted text appears corrupted. Try a clearer image or paste the text.'
-            : 'Extracted text is too short. Try a clearer image or paste the text.'
-      });
-    }
-
-    return res.status(200).json(extracted);
   } catch (error) {
     console.error('[resume-extract] Serverless route failed', {
       name: error.name,
