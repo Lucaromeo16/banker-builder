@@ -218,6 +218,7 @@ const resumeAnalysisSchema = {
     'experienceScore',
     'leadershipScore',
     'technicalRelevanceScore',
+    'spellingGrammarScore',
     'formattingFeedback',
     'scoreDetails',
     'strengths',
@@ -234,6 +235,7 @@ const resumeAnalysisSchema = {
     experienceScore: { type: 'number', minimum: 1, maximum: 10 },
     leadershipScore: { type: 'number', minimum: 1, maximum: 10 },
     technicalRelevanceScore: { type: 'number', minimum: 1, maximum: 10 },
+    spellingGrammarScore: { type: 'number', minimum: 1, maximum: 10 },
     formattingFeedback: {
       type: 'array',
       minItems: 2,
@@ -243,13 +245,14 @@ const resumeAnalysisSchema = {
     scoreDetails: {
       type: 'object',
       additionalProperties: false,
-      required: ['ibReadiness', 'formatting', 'experience', 'leadership', 'technicalRelevance'],
+      required: ['ibReadiness', 'formatting', 'experience', 'leadership', 'technicalRelevance', 'spellingGrammar'],
       properties: {
         ibReadiness: resumeScoreDetailSchema,
         formatting: resumeScoreDetailSchema,
         experience: resumeScoreDetailSchema,
         leadership: resumeScoreDetailSchema,
-        technicalRelevance: resumeScoreDetailSchema
+        technicalRelevance: resumeScoreDetailSchema,
+        spellingGrammar: resumeScoreDetailSchema
       }
     },
     strengths: {
@@ -330,10 +333,17 @@ const unreliableVisualFormattingPattern =
 const bulletPunctuationPattern =
   /\b(bullet|bullets).*\b(punctuation|periods?|ending|endings|end\b)|\b(periods?|no-period|no period|punctuation).*\b(bullet|bullets)\b/i;
 
+const grammarFormattingOverlapPattern =
+  /\b(spell(?:ing)?|grammar|grammatical|tense|punctuation|sentence|mechanics|writing mechanics|wording|action verb|tone)\b/i;
+
+const reliableFormattingIssuePattern =
+  /\b(section order|order|hierarch|section naming|header|date|location|company|title|role line|organization|organized|one-page|one page|contact|education|work experience|leadership|additional|skills|certifications|interests)\b/i;
+
 function removeUnreliableVisualFormattingClaims(items) {
   return normalizeList(items).filter((item) => {
     if (unreliableVisualFormattingPattern.test(item)) return false;
     if (bulletPunctuationPattern.test(item)) return false;
+    if (grammarFormattingOverlapPattern.test(item)) return false;
     return true;
   });
 }
@@ -351,14 +361,18 @@ function sanitizeFormattingAnalysis(analysis) {
 
   const cleanFeedback = removeUnreliableVisualFormattingClaims(sanitized.formattingFeedback);
   const cleanPositives = removeUnreliableVisualFormattingClaims(formattingDetail.positives);
-  const cleanPointLossReasons = removeUnreliableVisualFormattingClaims(formattingDetail.pointLossReasons);
-  const cleanImprovements = removeUnreliableVisualFormattingClaims(formattingDetail.improvements);
-  const noMajorIssueText = 'No material issues found.';
+  const cleanPointLossReasons = removeUnreliableVisualFormattingClaims(formattingDetail.pointLossReasons).filter((item) =>
+    reliableFormattingIssuePattern.test(item)
+  );
+  const cleanImprovements = removeUnreliableVisualFormattingClaims(formattingDetail.improvements).filter((item) =>
+    reliableFormattingIssuePattern.test(item)
+  );
+  const noMajorIssueText = 'No material formatting concerns detected.';
   const hasReliablePointLoss = cleanPointLossReasons.some((item) => !/^no major/i.test(item));
   let formattingScore = Number(sanitized.formattingScore);
 
   if (!Number.isFinite(formattingScore)) formattingScore = Number(formattingDetail.score) || 9;
-  if (!hasReliablePointLoss && formattingScore < 8.5) formattingScore = 9;
+  if (!hasReliablePointLoss && formattingScore < 10) formattingScore = 10;
 
   sanitized.formattingScore = Math.max(1, Math.min(10, formattingScore));
   sanitized.formattingFeedback = cleanFeedback.length
@@ -613,23 +627,27 @@ app.post('/api/resume-analyzer', async (req, res) => {
             'Evaluate banking relevance, finance/accounting/valuation exposure, leadership, quantified impact, bullet strength, resume positioning, school/GPA signals if present, transaction/deal relevance if present, and missing signals. Avoid generic career advice.',
             'Scores should reflect actual resume quality. If a subscore category has no meaningful category-specific issue, it can receive a true 10/10. Do not invent critiques or force point-loss reasons just to avoid a perfect score.',
             'overallScoreOutOf10 should be precise to one decimal place when appropriate, such as 8.1, 8.4, or 8.7. Do not bucket or round the overall score to only whole numbers or 0.5 increments.',
-            'Formatting score calibration: formatting is not content quality. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness.',
-            'For formatting, evaluate only reliable text-structure signals visible in extracted text.',
+            'Category boundaries: Formatting is structure/order/organization only. Spelling & Grammar is spelling, grammar, punctuation correctness, sentence clarity, professional writing mechanics, and tense consistency. Experience is work quality/relevance. Leadership is leadership quality/impact. Technical Relevance is finance technicality/modeling/valuation exposure. IB Readiness is overall recruiting readiness.',
+            'Formatting score calibration: formatting is not content quality and not writing mechanics. Content quality belongs in Experience, Leadership, Technical Relevance, and IB Readiness. Grammar, spelling, punctuation correctness, sentence clarity, and tense usage belong only in Spelling & Grammar.',
+            'For formatting, evaluate only reliable structure signals visible in extracted text.',
             'Evaluate section order: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests. Treat the final additional section name flexibly and do not score it harshly.',
             'Preferred finance/IB section order is: name/contact, Education, Work Experience, Leadership/Activities/Involvement/Extracurriculars or adjacent section, then Additional/Skills/Certifications/Interests/Other. Treat the final additional section name flexibly.',
-            'Text-based formatting consistency checks may include only: date formatting, company/title/location/date line consistency, section header consistency, capitalization of section headers, naming conventions, and standard resume section structure.',
+            'Formatting checks may include only: standard finance resume section ordering, clear section hierarchy, consistent section naming, date/location formatting consistency, company/title/location/date line consistency, resume organization, and standard one-page finance structure.',
             'Do not evaluate bullet-ending punctuation. Do not mention bullets using periods versus not using periods. Do not deduct formatting points for periods or no periods at the end of bullets. Do not invent exact counts like "two bullets" unless directly and reliably extracted.',
             'Do not flag line wrapping, OCR artifacts, PDF extraction artifacts, or isolated ambiguous cases.',
             'Resume convention structure checks may include only: contact info appears at top, education is near top, work experience appears before leadership/additional sections, clear section headers exist, and the resume is organized into standard sections.',
             'Do not evaluate or mention bullet spacing, visual alignment, font size, bolding, margins, whitespace, exact visual density, section header visual styling, or layout aesthetics. The PDF extraction path does not preserve those visual details reliably.',
-            'Do not penalize formatting for bullet wording strength, action verb quality, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership instead.',
+            'Do not penalize formatting for bullet wording strength, action verb quality, bullet strength, tone, grammar, spelling, tense usage, subjective directness, or section density unless extreme. Put bullet quality, action verb, and wording strength critiques under Experience or Leadership, and put writing mechanics under Spelling & Grammar.',
             'Do not harshly penalize strong sections being somewhat lengthy, leadership sections with several bullets, additional-section naming flexibility, or normal one-page finance resume density.',
-            'For a resume that follows standard section order and has consistent extracted-text structure, formatting should generally be 8.5-10 and may be 10/10 if no material text-structure issue exists.',
+            'For a resume that follows standard section order, has clear hierarchy, and has consistent extracted-text structure, formatting should be 10/10 if no material formatting issue exists.',
             'formattingFeedback must be specific and evidence-based. Good examples: "Date formatting is consistent across roles"; "Section order follows standard finance resume convention"; "Company, title, location, and date lines follow a consistent structure." Avoid bullet-ending punctuation comments and vague claims like sections being too lengthy unless obviously true.',
-            'If no reliable text-structure formatting problems are found, give formatting a high score or 10/10 and say no material issues found.',
-            'Return scoreDetails for ibReadiness, formatting, experience, leadership, and technicalRelevance. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
+            'If no reliable structure formatting problems are found, give formatting 10/10 and say: "No material formatting concerns detected." Do not provide pointLossReasons or improvements for a 10/10 formatting score.',
+            'Spelling & Grammar must evaluate spelling, grammar, sentence clarity, punctuation correctness, professional writing mechanics, and tense consistency. It must not evaluate resume ordering, section hierarchy, finance relevance, or content strength. Punctuation correctness excludes bullet-ending period/no-period style; do not treat consistently omitted bullet-ending periods as an error.',
+            'Tense consistency rules: current roles should primarily use present tense action verbs; completed roles should primarily use past tense; incoming or future roles may use future-oriented phrasing such as "will support", "incoming", or "expected to join". Do not over-penalize mixed tense caused by role transitions, future internships, or hybrid current responsibilities. Deduct only when tense usage is clearly inconsistent or incorrect.',
+            'Return scoreDetails for ibReadiness, formatting, experience, leadership, technicalRelevance, and spellingGrammar. Each scoreDetails item must use the exact same numeric score as the corresponding top-level score field.',
             'For each scoreDetails item, positives, pointLossReasons, and improvements must be specific and evidence-based. If a subscore is less than 10, pointLossReasons must explain exactly what prevented a 10/10. If a subscore is 10, pointLossReasons must be an empty array and improvements may be an empty array.',
-            'For scoreDetails.formatting, pointLossReasons and improvements must only use text-structure reasons. Never include visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, or layout aesthetics.',
+            'For scoreDetails.formatting, pointLossReasons and improvements must only use structure/order/organization reasons. Never include grammar, spelling, punctuation, tense, sentence clarity, visual spacing, alignment, bolding, font, margin, whitespace, visual density, section header styling, or layout aesthetics.',
+            'For scoreDetails.spellingGrammar, include tense consistency when relevant. If there are no material spelling, grammar, punctuation correctness, sentence clarity, writing mechanics, or tense issues, spellingGrammarScore may be 10/10.',
             'Avoid vague point-loss reasons such as "could be stronger" or "needs more polish." Name the missing signal, inconsistency, weak evidence, or resume convention issue.',
             'Bullet rewrites should be credible, concise, action-oriented, quantified when possible, and suitable for an IB resume.'
           ].join(' '),

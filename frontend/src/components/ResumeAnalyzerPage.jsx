@@ -7,10 +7,16 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ?
 
 const SUBSCORE_CONFIGS = [
   { key: 'ibReadiness', label: 'IB Readiness', scoreField: 'ibReadinessScore' },
-  { key: 'formatting', label: 'Formatting', scoreField: 'formattingScore' },
+  {
+    key: 'formatting',
+    label: 'Formatting',
+    scoreField: 'formattingScore',
+    perfectMessage: 'No material formatting concerns detected.'
+  },
   { key: 'experience', label: 'Experience', scoreField: 'experienceScore' },
   { key: 'leadership', label: 'Leadership', scoreField: 'leadershipScore' },
-  { key: 'technicalRelevance', label: 'Technical Relevance', scoreField: 'technicalRelevanceScore' }
+  { key: 'technicalRelevance', label: 'Technical Relevance', scoreField: 'technicalRelevanceScore' },
+  { key: 'spellingGrammar', label: 'Spelling & Grammar', scoreField: 'spellingGrammarScore' }
 ];
 
 function clampScore(score) {
@@ -48,7 +54,7 @@ function getScoreDetail(analysis, config) {
   return {
     score,
     positives: normalizeList(detail.positives).length ? normalizeList(detail.positives) : fallbackPositives,
-    pointLossReasons: numericScore >= 10 ? ['No material issues found.'] : pointLossReasons,
+    pointLossReasons: numericScore >= 10 ? [config.perfectMessage || 'No material issues found.'] : pointLossReasons,
     improvements: numericScore >= 10 ? [] : normalizeList(detail.improvements)
   };
 }
@@ -89,7 +95,7 @@ function ScoreDetailModal({ analysis, config, onClose }) {
           {hasPerfectScore ? (
             <article>
               <h4>No Material Issues</h4>
-              <p>No material issues found.</p>
+              {renderTextList(detail.pointLossReasons)}
             </article>
           ) : null}
           {hasPointLossReasons ? (
@@ -369,7 +375,8 @@ export default function ResumeAnalyzerPage({ onBack }) {
         formattingScore: analysis.formattingScore,
         experienceScore: analysis.experienceScore,
         leadershipScore: analysis.leadershipScore,
-        technicalRelevanceScore: analysis.technicalRelevanceScore
+        technicalRelevanceScore: analysis.technicalRelevanceScore,
+        spellingGrammarScore: analysis.spellingGrammarScore
       },
       strengths: normalizeList(analysis.strengths),
       weaknesses: normalizeList(analysis.weaknesses),
