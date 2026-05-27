@@ -81,13 +81,18 @@ export default function HireVuePrepPage({ onBack }) {
   const [timer, setTimer] = useState(PREP_SECONDS);
   const [stream, setStream] = useState(null);
   const [recordedBlob, setRecordedBlob] = useState(null);
+  const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
+  const [recordedVideoUrl, setRecordedVideoUrl] = useState('');
+  const [showPlayback, setShowPlayback] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [error, setError] = useState('');
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [permissionStatus, setPermissionStatus] = useState('');
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
+  const audioRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const audioChunksRef = useRef([]);
   const stopHandledRef = useRef(false);
 
   useEffect(() => {
@@ -110,9 +115,11 @@ export default function HireVuePrepPage({ onBack }) {
   useEffect(
     () => () => {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+      if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
       stream?.getTracks().forEach((track) => track.stop());
+      if (recordedVideoUrl) URL.revokeObjectURL(recordedVideoUrl);
     },
-    [stream]
+    [stream, recordedVideoUrl]
   );
 
   const startSession = async (event) => {
@@ -124,6 +131,12 @@ export default function HireVuePrepPage({ onBack }) {
     setError('');
     setFeedback(null);
     setRecordedBlob(null);
+    setRecordedAudioBlob(null);
+    setShowPlayback(false);
+    setRecordedVideoUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return '';
+    });
     stopHandledRef.current = false;
     try {
       const nextStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -142,19 +155,53 @@ export default function HireVuePrepPage({ onBack }) {
   const startRecording = () => {
     if (!stream) return;
     chunksRef.current = [];
+    audioChunksRef.current = [];
     stopHandledRef.current = false;
+    const audioTracks = stream.getAudioTracks();
+    if (!audioTracks.length) {
+      setError('We could not detect microphone audio. Please check microphone permission and retry.');
+      return;
+    }
     const recorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm' });
+    const audioStream = new MediaStream(audioTracks);
+    const audioMimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+    const audioRecorder = new MediaRecorder(audioStream, { mimeType: audioMimeType });
     recorder.ondataavailable = (event) => {
       if (event.data.size > 0) chunksRef.current.push(event.data);
+    };
+    audioRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) audioChunksRef.current.push(event.data);
     };
     recorder.onstop = () => {
       if (stopHandledRef.current) return;
       stopHandledRef.current = true;
       const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'video/webm' });
+      const playbackUrl = URL.createObjectURL(blob);
       setRecordedBlob(blob);
+      setRecordedVideoUrl((current) => {
+        if (current) URL.revokeObjectURL(current);
+        return playbackUrl;
+      });
+      setShowPlayback(false);
       setStage('review');
     };
+    audioRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunksRef.current, { type: audioRecorder.mimeType || audioMimeType });
+      console.info('[hirevue] audio recording finalized', {
+        type: audioBlob.type,
+        size: audioBlob.size,
+        audioChunks: audioChunksRef.current.length
+      });
+      setRecordedAudioBlob(audioBlob);
+    };
     mediaRecorderRef.current = recorder;
+    audioRecorderRef.current = audioRecorder;
+    console.info('[hirevue] recording started', {
+      videoMimeType: recorder.mimeType,
+      audioMimeType: audioRecorder.mimeType,
+      audioTracks: audioTracks.length
+    });
+    audioRecorder.start();
     recorder.start();
     setTimer(ANSWER_SECONDS);
     setStage('recording');
@@ -163,6 +210,7 @@ export default function HireVuePrepPage({ onBack }) {
   const stopRecording = () => {
     if (mediaRecorderRef.current?.state === 'recording') {
       mediaRecorderRef.current.stop();
+      if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
     } else {
       setStage('review');
     }
@@ -170,29 +218,53 @@ export default function HireVuePrepPage({ onBack }) {
 
   const evaluateAnswer = async () => {
     if (!recordedBlob) return;
+    if (!recordedAudioBlob || recordedAudioBlob.size < 500) {
+      setError('We couldn’t analyze the audio. Please retry the recording.');
+      console.error('[hirevue] audio extraction failed or produced an empty blob', {
+        hasVideoBlob: Boolean(recordedBlob),
+        videoBlobType: recordedBlob?.type,
+        videoBlobSize: recordedBlob?.size,
+        hasAudioBlob: Boolean(recordedAudioBlob),
+        audioBlobType: recordedAudioBlob?.type,
+        audioBlobSize: recordedAudioBlob?.size
+      });
+      return;
+    }
     setIsEvaluating(true);
     setError('');
     try {
-      const dataUrl = await blobToDataUrl(recordedBlob);
+      console.info('[hirevue] sending speech-only evaluation payload', {
+        videoBlobType: recordedBlob.type,
+        videoBlobSize: recordedBlob.size,
+        audioBlobType: recordedAudioBlob.type,
+        audioBlobSize: recordedAudioBlob.size,
+        audioExists: recordedAudioBlob.size > 0
+      });
+      const audioDataUrl = await blobToDataUrl(recordedAudioBlob);
       const response = await fetch('/api/hirevue-evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           setup,
           question: question.prompt,
-          mimeType: recordedBlob.type || 'video/webm',
-          dataUrl,
+          mimeType: recordedAudioBlob.type || 'audio/webm',
+          dataUrl: audioDataUrl,
           durationSeconds: ANSWER_SECONDS - timer
         })
       });
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
-        throw new Error(payload.error || 'HireVue evaluation failed.');
+        console.error('[hirevue] evaluation API failed', {
+          status: response.status,
+          error: payload.error,
+          details: payload.details
+        });
+        throw new Error(payload.error || 'We couldn’t analyze the audio. Please retry the recording.');
       }
       setFeedback(await response.json());
       setStage('feedback');
     } catch (evaluationError) {
-      setError(evaluationError.message || 'HireVue evaluation failed.');
+      setError(evaluationError.message || 'We couldn’t analyze the audio. Please retry the recording.');
     } finally {
       setIsEvaluating(false);
     }
@@ -201,6 +273,12 @@ export default function HireVuePrepPage({ onBack }) {
   const retryQuestion = () => {
     setFeedback(null);
     setRecordedBlob(null);
+    setRecordedAudioBlob(null);
+    setRecordedVideoUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return '';
+    });
+    setShowPlayback(false);
     setTimer(PREP_SECONDS);
     stopHandledRef.current = false;
     setStage('prep');
@@ -212,6 +290,12 @@ export default function HireVuePrepPage({ onBack }) {
     setUsedPrompts((current) => [...current, next.prompt]);
     setFeedback(null);
     setRecordedBlob(null);
+    setRecordedAudioBlob(null);
+    setRecordedVideoUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return '';
+    });
+    setShowPlayback(false);
     setTimer(PREP_SECONDS);
     stopHandledRef.current = false;
     setStage('prep');
@@ -222,6 +306,12 @@ export default function HireVuePrepPage({ onBack }) {
     setStream(null);
     setQuestion(null);
     setRecordedBlob(null);
+    setRecordedAudioBlob(null);
+    setRecordedVideoUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return '';
+    });
+    setShowPlayback(false);
     setFeedback(null);
     setUsedPrompts([]);
     setTimer(PREP_SECONDS);
@@ -309,6 +399,13 @@ export default function HireVuePrepPage({ onBack }) {
           {stage === 'prep' ? <div className="hirevue-overlay">Recording starts automatically when prep time ends.</div> : null}
         </div>
 
+        {stage === 'review' && showPlayback && recordedVideoUrl ? (
+          <div className="hirevue-playback-card">
+            <h3>Your Recording</h3>
+            <video src={recordedVideoUrl} controls playsInline className="hirevue-playback-video" />
+          </div>
+        ) : null}
+
         {stage === 'prep' ? (
           <div className="hirevue-actions">
             <button type="button" className="primary" onClick={startRecording}>Begin Recording Now</button>
@@ -317,12 +414,15 @@ export default function HireVuePrepPage({ onBack }) {
 
         {stage === 'recording' ? (
           <div className="hirevue-actions">
-            <button type="button" className="secondary" onClick={stopRecording}>Stop and Submit</button>
+            <button type="button" className="secondary" onClick={stopRecording}>Stop Recording</button>
           </div>
         ) : null}
 
         {stage === 'review' ? (
           <div className="hirevue-actions">
+            <button type="button" className="secondary" onClick={() => setShowPlayback((current) => !current)} disabled={!recordedVideoUrl}>
+              {showPlayback ? 'Hide Recording' : 'Watch Recording'}
+            </button>
             <button type="button" className="primary" onClick={evaluateAnswer} disabled={isEvaluating}>{isEvaluating ? 'Evaluating...' : 'Generate AI Feedback'}</button>
             <button type="button" className="secondary" onClick={retryQuestion}>Retry Question</button>
           </div>

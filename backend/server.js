@@ -1325,6 +1325,13 @@ app.post('/api/interview-question', async (req, res) => {
 app.post('/api/hirevue-evaluate', async (req, res) => {
   try {
     const { setup, question, dataUrl, mimeType, durationSeconds } = req.body;
+    console.info('[hirevue-evaluate] route hit', {
+      hasSetup: Boolean(setup),
+      hasQuestion: Boolean(question),
+      mimeType,
+      durationSeconds,
+      payloadChars: typeof dataUrl === 'string' ? dataUrl.length : 0
+    });
     if (!setup || !question || !dataUrl) {
       return res.status(400).json({ error: 'Invalid payload: setup, question, and recording are required.' });
     }
@@ -1332,33 +1339,66 @@ app.post('/api/hirevue-evaluate', async (req, res) => {
       return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
     }
 
-    const decodedRecording = dataUrlToBuffer(dataUrl, ['video/webm']);
+    const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav']);
     if (!decodedRecording) {
-      return res.status(400).json({ error: 'Invalid recording payload.' });
+      console.error('[hirevue-evaluate] invalid audio payload', { mimeType });
+      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
     }
+    console.info('[hirevue-evaluate] audio payload decoded', {
+      requestMimeType: mimeType,
+      decodedMimeType: decodedRecording.mimeType,
+      bytes: decodedRecording.buffer.length,
+      audioExists: decodedRecording.buffer.length > 0
+    });
     if (decodedRecording.buffer.length < 1000) {
-      return res.status(400).json({ error: 'Recording was too short to evaluate.' });
+      console.error('[hirevue-evaluate] audio payload too small', { bytes: decodedRecording.buffer.length });
+      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
     }
 
     const formData = new FormData();
     formData.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
-    formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'video/webm' }), 'hirevue-response.webm');
+    formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), 'hirevue-response.webm');
 
+    console.info('[hirevue-evaluate] transcription request starting', {
+      model: process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe',
+      mimeType: mimeType || decodedRecording.mimeType || 'audio/webm',
+      bytes: decodedRecording.buffer.length
+    });
     const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
       method: 'POST',
       headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
       body: formData
     });
+    console.info('[hirevue-evaluate] transcription response', { status: transcriptionResponse.status, ok: transcriptionResponse.ok });
     if (!transcriptionResponse.ok) {
       const details = await transcriptionResponse.text();
-      return res.status(502).json({ error: 'OpenAI transcription failed.', details });
+      console.error('[hirevue-evaluate] OpenAI transcription failed', {
+        status: transcriptionResponse.status,
+        details: details.slice(0, 800)
+      });
+      return res.status(502).json({ error: 'We couldn’t analyze the audio. Please retry the recording.', details });
     }
     const transcription = await transcriptionResponse.json();
     const transcript = String(transcription.text || '').trim();
     if (transcript.length < 20) {
-      return res.status(400).json({ error: 'The response transcript was too short to evaluate.' });
+      console.error('[hirevue-evaluate] transcript too short', { transcriptLength: transcript.length });
+      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
     }
 
+    const evaluationContext = {
+      setup: {
+        firm: setup.firm,
+        group: setup.group,
+        hireType: setup.hireType
+      },
+      question,
+      transcript,
+      durationSeconds
+    };
+    console.info('[hirevue-evaluate] feedback request starting', {
+      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+      transcriptLength: transcript.length
+    });
     const evaluationResponse = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
@@ -1368,8 +1408,8 @@ app.post('/api/hirevue-evaluate', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You evaluate investment banking HireVue-style first-round video responses. Be realistic, concise, and grounded in the transcript. Evaluate communication clarity, structure, confidence heuristics, professionalism, conciseness, filler-word usage, pacing based on transcript length and duration, and executive presence signals that can be inferred from verbal delivery. Do not claim psychological or emotion detection. Do not claim visual certainty about eye contact or camera framing unless video frames were explicitly analyzed; instead give practical camera-framing guidance where relevant.',
-        input: [{ role: 'user', content: [{ type: 'input_text', text: JSON.stringify({ setup, question, transcript, durationSeconds }) }] }],
+          'You evaluate investment banking HireVue-style first-round responses using transcript text only. Be realistic, concise, and grounded only in the words spoken. Evaluate answer structure, clarity, conciseness, relevance to the question, professionalism/confidence based on wording, and filler or repetitive language only if detectable from the transcript. Do not evaluate or mention eye contact, facial expression, body language, lighting, camera framing, appearance, or visual delivery.',
+        input: [{ role: 'user', content: [{ type: 'input_text', text: JSON.stringify(evaluationContext) }] }],
         text: {
           format: {
             type: 'json_schema',
@@ -1381,19 +1421,25 @@ app.post('/api/hirevue-evaluate', async (req, res) => {
         max_output_tokens: 1200
       })
     });
+    console.info('[hirevue-evaluate] feedback response', { status: evaluationResponse.status, ok: evaluationResponse.ok });
     if (!evaluationResponse.ok) {
       const details = await evaluationResponse.text();
-      return res.status(502).json({ error: 'OpenAI HireVue evaluation failed.', details });
+      console.error('[hirevue-evaluate] OpenAI feedback request failed', {
+        status: evaluationResponse.status,
+        details: details.slice(0, 800)
+      });
+      return res.status(502).json({ error: 'We couldn’t analyze the audio. Please retry the recording.', details });
     }
     const evaluationData = await evaluationResponse.json();
     const outputText = extractResponseText(evaluationData);
     if (!outputText) {
-      return res.status(502).json({ error: 'OpenAI HireVue evaluation response was empty.' });
+      console.error('[hirevue-evaluate] feedback response empty');
+      return res.status(502).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
     }
     return res.json({ ...JSON.parse(outputText), transcript });
   } catch (error) {
     console.error('[hirevue-evaluate] Failed to evaluate response', error);
-    return res.status(500).json({ error: 'Failed to evaluate HireVue response.', details: error.message });
+    return res.status(500).json({ error: 'We couldn’t analyze the audio. Please retry the recording.', details: error.message });
   }
 });
 
