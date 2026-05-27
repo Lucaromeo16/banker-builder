@@ -42,8 +42,7 @@ const baseQuestions = [
 const initialSetup = {
   firm: '',
   group: 'M&A',
-  hireType: 'Summer Analyst',
-  office: ''
+  hireType: 'Summer Analyst'
 };
 
 function formatTime(seconds) {
@@ -75,10 +74,6 @@ function blobToDataUrl(blob) {
 
 export default function HireVuePrepPage({ onBack }) {
   const firms = useMemo(() => Array.from(new Set(ibOffices.map((office) => office.firm))).sort(), []);
-  const offices = useMemo(
-    () => Array.from(new Set(ibOffices.filter((office) => !initialSetup.firm || office.firm === initialSetup.firm).map((office) => `${office.city}, ${office.state}`))).sort(),
-    []
-  );
   const [setup, setSetup] = useState(initialSetup);
   const [stage, setStage] = useState('setup');
   const [question, setQuestion] = useState(null);
@@ -274,15 +269,6 @@ export default function HireVuePrepPage({ onBack }) {
                   <option value={hireType} key={hireType}>{hireType}</option>
                 ))}
               </select>
-            </label>
-            <label>
-              Office <span className="muted">(optional)</span>
-              <input value={setup.office} onChange={(event) => setSetup((current) => ({ ...current, office: event.target.value }))} placeholder="New York, NY" list="hirevue-offices" />
-              <datalist id="hirevue-offices">
-                {offices.map((office) => (
-                  <option value={office} key={office} />
-                ))}
-              </datalist>
             </label>
             {permissionStatus ? <p className="error">{permissionStatus}</p> : null}
             {error ? <p className="error">{error}</p> : null}
