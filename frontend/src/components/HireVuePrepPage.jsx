@@ -94,11 +94,15 @@ export default function HireVuePrepPage({ onBack }) {
   const chunksRef = useRef([]);
   const audioChunksRef = useRef([]);
   const stopHandledRef = useRef(false);
+  const streamRef = useRef(null);
+  const recordedVideoUrlRef = useRef('');
+  const isStartingRecordingRef = useRef(false);
 
   useEffect(() => {
     if (videoRef.current && stream) {
       videoRef.current.srcObject = stream;
     }
+    streamRef.current = stream;
   }, [stream, stage]);
 
   useEffect(() => {
@@ -112,15 +116,59 @@ export default function HireVuePrepPage({ onBack }) {
     return () => window.clearInterval(intervalId);
   }, [stage, timer]);
 
+  useEffect(() => {
+    recordedVideoUrlRef.current = recordedVideoUrl;
+  }, [recordedVideoUrl]);
+
   useEffect(
     () => () => {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
       if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
-      stream?.getTracks().forEach((track) => track.stop());
-      if (recordedVideoUrl) URL.revokeObjectURL(recordedVideoUrl);
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      if (recordedVideoUrlRef.current) URL.revokeObjectURL(recordedVideoUrlRef.current);
     },
-    [stream, recordedVideoUrl]
+    []
   );
+
+  const hasLiveMediaStream = (candidateStream) =>
+    Boolean(candidateStream) &&
+    candidateStream.getVideoTracks().some((track) => track.readyState === 'live') &&
+    candidateStream.getAudioTracks().some((track) => track.readyState === 'live');
+
+  const resetRecordingState = ({ clearFeedback = true } = {}) => {
+    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+    if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
+    mediaRecorderRef.current = null;
+    audioRecorderRef.current = null;
+    chunksRef.current = [];
+    audioChunksRef.current = [];
+    stopHandledRef.current = false;
+    setRecordedBlob(null);
+    setRecordedAudioBlob(null);
+    setRecordedVideoUrl((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return '';
+    });
+    setShowPlayback(false);
+    setIsEvaluating(false);
+    setError('');
+    if (clearFeedback) setFeedback(null);
+  };
+
+  const ensureLiveStream = async () => {
+    if (hasLiveMediaStream(streamRef.current)) return streamRef.current;
+    try {
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      const nextStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      streamRef.current = nextStream;
+      setStream(nextStream);
+      setPermissionStatus('');
+      return nextStream;
+    } catch {
+      setPermissionStatus('Camera and microphone permission are required for HireVue Prep.');
+      return null;
+    }
+  };
 
   const startSession = async (event) => {
     event.preventDefault();
@@ -128,18 +176,10 @@ export default function HireVuePrepPage({ onBack }) {
       setError('Select or type a firm to begin.');
       return;
     }
-    setError('');
-    setFeedback(null);
-    setRecordedBlob(null);
-    setRecordedAudioBlob(null);
-    setShowPlayback(false);
-    setRecordedVideoUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return '';
-    });
-    stopHandledRef.current = false;
+    resetRecordingState();
     try {
       const nextStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      streamRef.current = nextStream;
       setStream(nextStream);
       const nextQuestion = pickQuestion(setup, usedPrompts);
       setQuestion(nextQuestion);
@@ -152,68 +192,87 @@ export default function HireVuePrepPage({ onBack }) {
     }
   };
 
-  const startRecording = () => {
-    if (!stream) return;
+  const startRecording = async () => {
+    if (isStartingRecordingRef.current) return;
+    if (mediaRecorderRef.current?.state === 'recording' || audioRecorderRef.current?.state === 'recording') return;
+    isStartingRecordingRef.current = true;
+    resetRecordingState();
+    const activeStream = await ensureLiveStream();
+    if (!activeStream) {
+      isStartingRecordingRef.current = false;
+      return;
+    }
     chunksRef.current = [];
     audioChunksRef.current = [];
     stopHandledRef.current = false;
-    const audioTracks = stream.getAudioTracks();
+    const audioTracks = activeStream.getAudioTracks().filter((track) => track.readyState === 'live');
     if (!audioTracks.length) {
       setError('We could not detect microphone audio. Please check microphone permission and retry.');
+      isStartingRecordingRef.current = false;
       return;
     }
-    const recorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm' });
-    const audioStream = new MediaStream(audioTracks);
-    const audioMimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-    const audioRecorder = new MediaRecorder(audioStream, { mimeType: audioMimeType });
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) chunksRef.current.push(event.data);
-    };
-    audioRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) audioChunksRef.current.push(event.data);
-    };
-    recorder.onstop = () => {
-      if (stopHandledRef.current) return;
-      stopHandledRef.current = true;
-      const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'video/webm' });
-      const playbackUrl = URL.createObjectURL(blob);
-      setRecordedBlob(blob);
-      setRecordedVideoUrl((current) => {
-        if (current) URL.revokeObjectURL(current);
-        return playbackUrl;
+    try {
+      const recorder = new MediaRecorder(activeStream, { mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus') ? 'video/webm;codecs=vp8,opus' : 'video/webm' });
+      const audioStream = new MediaStream(audioTracks);
+      const audioMimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      const audioRecorder = new MediaRecorder(audioStream, { mimeType: audioMimeType });
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) chunksRef.current.push(event.data);
+      };
+      audioRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+      };
+      recorder.onstop = () => {
+        if (stopHandledRef.current) return;
+        stopHandledRef.current = true;
+        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'video/webm' });
+        const playbackUrl = URL.createObjectURL(blob);
+        setRecordedBlob(blob);
+        setRecordedVideoUrl((current) => {
+          if (current) URL.revokeObjectURL(current);
+          return playbackUrl;
+        });
+        setShowPlayback(false);
+        mediaRecorderRef.current = null;
+        setStage('review');
+      };
+      audioRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: audioRecorder.mimeType || audioMimeType });
+        console.info('[hirevue] audio recording finalized', {
+          type: audioBlob.type,
+          size: audioBlob.size,
+          audioChunks: audioChunksRef.current.length
+        });
+        setRecordedAudioBlob(audioBlob);
+        audioRecorderRef.current = null;
+      };
+      mediaRecorderRef.current = recorder;
+      audioRecorderRef.current = audioRecorder;
+      console.info('[hirevue] recording started', {
+        videoMimeType: recorder.mimeType,
+        audioMimeType: audioRecorder.mimeType,
+        audioTracks: audioTracks.length
       });
-      setShowPlayback(false);
-      setStage('review');
-    };
-    audioRecorder.onstop = () => {
-      const audioBlob = new Blob(audioChunksRef.current, { type: audioRecorder.mimeType || audioMimeType });
-      console.info('[hirevue] audio recording finalized', {
-        type: audioBlob.type,
-        size: audioBlob.size,
-        audioChunks: audioChunksRef.current.length
-      });
-      setRecordedAudioBlob(audioBlob);
-    };
-    mediaRecorderRef.current = recorder;
-    audioRecorderRef.current = audioRecorder;
-    console.info('[hirevue] recording started', {
-      videoMimeType: recorder.mimeType,
-      audioMimeType: audioRecorder.mimeType,
-      audioTracks: audioTracks.length
-    });
-    audioRecorder.start();
-    recorder.start();
-    setTimer(ANSWER_SECONDS);
-    setStage('recording');
+      audioRecorder.start();
+      recorder.start();
+      setTimer(ANSWER_SECONDS);
+      setStage('recording');
+      isStartingRecordingRef.current = false;
+    } catch (recordingError) {
+      console.error('[hirevue] recording failed to start', recordingError);
+      mediaRecorderRef.current = null;
+      audioRecorderRef.current = null;
+      isStartingRecordingRef.current = false;
+      setError('We could not start recording. Please retry the question.');
+      setStage('prep');
+    }
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current?.state === 'recording') {
-      mediaRecorderRef.current.stop();
-      if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
-    } else {
-      setStage('review');
-    }
+    const wasRecording = mediaRecorderRef.current?.state === 'recording' || audioRecorderRef.current?.state === 'recording';
+    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+    if (audioRecorderRef.current?.state === 'recording') audioRecorderRef.current.stop();
+    if (!wasRecording && recordedBlob) setStage('review');
   };
 
   const evaluateAnswer = async () => {
@@ -271,47 +330,29 @@ export default function HireVuePrepPage({ onBack }) {
   };
 
   const retryQuestion = () => {
-    setFeedback(null);
-    setRecordedBlob(null);
-    setRecordedAudioBlob(null);
-    setRecordedVideoUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return '';
-    });
-    setShowPlayback(false);
+    resetRecordingState();
     setTimer(PREP_SECONDS);
-    stopHandledRef.current = false;
     setStage('prep');
+    if (!hasLiveMediaStream(streamRef.current)) {
+      ensureLiveStream();
+    }
   };
 
   const nextQuestion = () => {
     const next = pickQuestion(setup, usedPrompts);
     setQuestion(next);
     setUsedPrompts((current) => [...current, next.prompt]);
-    setFeedback(null);
-    setRecordedBlob(null);
-    setRecordedAudioBlob(null);
-    setRecordedVideoUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return '';
-    });
-    setShowPlayback(false);
+    resetRecordingState();
     setTimer(PREP_SECONDS);
-    stopHandledRef.current = false;
     setStage('prep');
   };
 
   const endSession = () => {
     stream?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
     setStream(null);
     setQuestion(null);
-    setRecordedBlob(null);
-    setRecordedAudioBlob(null);
-    setRecordedVideoUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return '';
-    });
-    setShowPlayback(false);
+    resetRecordingState();
     setFeedback(null);
     setUsedPrompts([]);
     setTimer(PREP_SECONDS);
