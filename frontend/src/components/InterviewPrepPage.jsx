@@ -1,9 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  defaultExperienceFollowUpValues,
-  undergraduateExperienceFollowUps,
-  undergraduateWorkTypeOptions
-} from '../experienceTaxonomy';
 
 const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const targetGroupOptions = [
@@ -34,91 +29,35 @@ const targetGroupOptions = [
 ];
 const bankTierOptions = ['Bulge Bracket', 'Elite Boutique', 'Middle Market', 'Regional Boutique', 'General / Mixed'];
 
-const workExperienceOptions = undergraduateWorkTypeOptions;
-const experienceFollowUps = undergraduateExperienceFollowUps;
-
-const leadershipActivityOptions = [
-  'Social Fraternity/Sorority',
-  'Finance Club',
-  'Student Investment Fund',
-  'Varsity Athletics',
-  'Entrepreneurship / Startup',
-  'Student Government',
-  'Honors / Scholars Program',
-  'Nonprofit / Volunteering',
-  'Other Leadership'
-];
-
-const leadershipLevelOptions = [
-  'Member / Participant',
-  'Committee / Analyst',
-  'VP / Director',
-  'President / Founder / Captain'
-];
-
 const emptyPrepProfile = {
   recruitingGoal: '',
   targetGroups: [],
   targetBankTier: '',
-  workExperiences: [],
-  leadershipActivities: []
+  practiceMode: 'resume-aware',
+  resumeText: '',
+  resumeFileName: ''
 };
 const prepProfileSessionKey = 'bankerBuilderInterviewPrepProfile';
 
-const legacyExperienceMap = {
-  'Investment Banking': { experienceType: 'Investment Banking Internship', firmTier: 'Middle Market' },
-  'Private Equity': { experienceType: 'Private Equity Internship', fundTier: 'Middle Market' },
-  'Big 4 Audit': { experienceType: 'Accounting / Audit Internship', firmTier: 'Big 4', function: 'Audit' },
-  'TAS / Valuation': { experienceType: 'TAS / Business Valuation Internship', firmTier: 'Big 4' },
-  Consulting: { experienceType: 'Consulting Internship', firmTier: 'Big 4 Consulting' },
-  'Corporate Finance': {
-    experienceType: 'Corporate Finance / Corporate Accounting Internship',
-    companyPrestige: 'Large Private / Mid-Market',
-    roleType: 'FP&A'
-  },
-  'Search Fund': { experienceType: 'General / Other Experience', generalType: 'Search Fund Internship' },
-  Other: { experienceType: 'General / Other Experience', generalType: 'Other Internship' }
-};
-
-function defaultFollowUpValues(experienceType) {
-  return defaultExperienceFollowUpValues(experienceType, experienceFollowUps);
-}
-
-function createPrepExperience(experienceType, overrides = {}) {
-  return {
-    id: overrides.id || `exp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    experienceType,
-    ...defaultFollowUpValues(experienceType),
-    ...overrides
-  };
-}
-
-function createLeadershipActivity(activityType, overrides = {}) {
-  return {
-    id: overrides.id || `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    activityType,
-    leadershipLevel: 'Member / Participant',
-    ...overrides
-  };
-}
-
 function normalizePrepProfile(profile) {
   if (!profile) return null;
-  const legacyExperiences = Array.isArray(profile.workExperienceBackground)
-    ? profile.workExperienceBackground
-        .filter((background) => background !== 'No Relevant Experience' && background !== 'Student Investment Fund')
-        .map((background) => createPrepExperience(legacyExperienceMap[background]?.experienceType || 'General / Other Experience', legacyExperienceMap[background]))
-    : [];
-  const legacyLeadership = Array.isArray(profile.workExperienceBackground) && profile.workExperienceBackground.includes('Student Investment Fund')
-    ? [createLeadershipActivity('Student Investment Fund', { leadershipLevel: 'Committee / Analyst' })]
-    : [];
-
   return {
     ...emptyPrepProfile,
     ...profile,
     targetGroups: Array.isArray(profile.targetGroups) ? profile.targetGroups : [],
-    workExperiences: Array.isArray(profile.workExperiences) ? profile.workExperiences : legacyExperiences,
-    leadershipActivities: Array.isArray(profile.leadershipActivities) ? profile.leadershipActivities : legacyLeadership
+    practiceMode: profile.practiceMode === 'generic' ? 'generic' : 'resume-aware',
+    resumeText: typeof profile.resumeText === 'string' ? profile.resumeText : '',
+    resumeFileName: typeof profile.resumeFileName === 'string' ? profile.resumeFileName : ''
+  };
+}
+
+function getProfileForSessionStorage(profile) {
+  const normalized = normalizePrepProfile(profile);
+  if (!normalized) return null;
+  return {
+    ...normalized,
+    resumeText: '',
+    resumeFileName: normalized.practiceMode === 'resume-aware' ? normalized.resumeFileName : ''
   };
 }
 
@@ -126,7 +65,9 @@ function readStoredPrepProfile() {
   if (typeof window === 'undefined') return null;
   try {
     const storedProfile = window.sessionStorage.getItem(prepProfileSessionKey);
-    return storedProfile ? normalizePrepProfile(JSON.parse(storedProfile)) : null;
+    if (!storedProfile) return null;
+    const normalized = normalizePrepProfile(JSON.parse(storedProfile));
+    return normalized?.practiceMode === 'resume-aware' && !normalized.resumeText ? null : normalized;
   } catch {
     return null;
   }
@@ -642,22 +583,6 @@ function isGroupSpecificQuestion(question) {
   return Boolean(question.isGroupSpecific || getQuestionGroupTags(question).length);
 }
 
-function getSelectedExperienceTags(prepProfile) {
-  return (prepProfile?.workExperiences || []).flatMap((experience) => [
-    experience.experienceType,
-    experience.firmTier,
-    experience.fundTier,
-    experience.function,
-    experience.roleType,
-    experience.institutionType,
-    experience.generalType
-  ]).filter(Boolean);
-}
-
-function getSelectedLeadershipTags(prepProfile) {
-  return (prepProfile?.leadershipActivities || []).map((activity) => activity.activityType).filter(Boolean);
-}
-
 function getExpandedTargetGroups(prepProfile) {
   const selectedGroups = new Set(prepProfile?.targetGroups || []);
   if (selectedGroups.has('Capital Markets')) {
@@ -682,16 +607,14 @@ function hasOverlap(values, selectedValues) {
 }
 
 function questionMatchesExperience(question, prepProfile) {
-  if (question.noRelevantExperienceOnly) return !(prepProfile?.workExperiences || []).length;
+  if (question.noRelevantExperienceOnly) return prepProfile?.practiceMode === 'generic';
   const experienceTags = getQuestionExperienceTags(question);
-  if (!experienceTags.length) return true;
-  return hasOverlap(experienceTags, new Set(getSelectedExperienceTags(prepProfile)));
+  return !experienceTags.length;
 }
 
 function questionMatchesLeadership(question, prepProfile) {
   const leadershipTags = question.leadershipTags || [];
-  if (!leadershipTags.length) return true;
-  return hasOverlap(leadershipTags, new Set(getSelectedLeadershipTags(prepProfile)));
+  return !leadershipTags.length;
 }
 
 function questionMatchesPracticeType(question, categoryId) {
@@ -709,16 +632,9 @@ function getPrimaryProfileGroup(prepProfile) {
   return selectedGroups.find((group) => group !== 'Generalist') || 'Generalist';
 }
 
-function getExperienceSummary(prepProfile) {
-  const experience = prepProfile?.workExperiences?.[0];
-  if (!experience) return '';
-  const detail = experience.roleType || experience.function || experience.firmTier || experience.fundTier || experience.institutionType || experience.generalType || '';
-  return detail ? `${experience.experienceType} (${detail})` : experience.experienceType;
-}
-
 function createGeneratedQuestion(categoryId, prepProfile) {
   const primaryGroup = getPrimaryProfileGroup(prepProfile);
-  const experienceSummary = getExperienceSummary(prepProfile);
+  const isResumeAware = prepProfile?.practiceMode === 'resume-aware' && Boolean(prepProfile?.resumeText);
   const categoryTitle = categoryId === 'mixed' ? 'Mixed Mock Interview' : questionBanks[categoryId]?.title || 'Interview Prep';
   const sharedFields = {
     categoryId,
@@ -734,14 +650,6 @@ function createGeneratedQuestion(categoryId, prepProfile) {
     keywords: [primaryGroup.toLowerCase(), 'banking', 'profile']
   };
 
-  const experienceClause = experienceSummary ? ` and how does your ${experienceSummary} background support that interest` : '';
-  const primaryExperienceType = prepProfile?.workExperiences?.[0]?.experienceType || '';
-  const transitionPrompt =
-    primaryExperienceType === 'Middle Office Finance Internship'
-      ? 'Why are you interested in transitioning from a middle-office risk or treasury background into investment banking?'
-      : primaryExperienceType === 'Back Office / Operations Finance Internship'
-        ? 'How would you explain the move from operations or control-focused finance work into investment banking?'
-        : null;
   const generatedPrompts = {
     technical: {
       'Financial Sponsors': 'How would you evaluate debt capacity for a sponsor-backed LBO?',
@@ -755,7 +663,7 @@ function createGeneratedQuestion(categoryId, prepProfile) {
       Energy: 'How would commodity prices affect cash flow and valuation for an energy company?'
     },
     fit: {
-      default: transitionPrompt || `Why are you interested in ${primaryGroup} banking${experienceClause}?`
+      default: primaryGroup === 'Generalist' ? 'Why investment banking?' : `Why are you interested in ${primaryGroup} banking?`
     },
     markets: {
       'Financial Sponsors': 'What market trend matters most for private equity sponsors right now?',
@@ -769,12 +677,14 @@ function createGeneratedQuestion(categoryId, prepProfile) {
       Energy: 'How are energy transition and commodity prices affecting deal activity?'
     },
     behavioral: {
-      default: experienceSummary
-        ? `Tell me about a time your ${experienceSummary} experience prepared you for ${primaryGroup} banking.`
-        : `Tell me about a time your leadership or extracurricular background prepared you for ${primaryGroup} banking.`
+      default: isResumeAware
+        ? 'Walk me through one experience from your resume that best prepared you for investment banking.'
+        : 'Tell me about a time you worked on a team.'
     },
     mixed: {
-      default: `Why are you targeting ${primaryGroup}, and what evidence from your background supports that choice?`
+      default: isResumeAware
+        ? `Why are you targeting ${primaryGroup}, and what evidence from your resume supports that choice?`
+        : `Why are you targeting ${primaryGroup === 'Generalist' ? 'investment banking' : primaryGroup}, and how have you prepared?`
     }
   };
 
@@ -811,12 +721,11 @@ function getQuestionRelevanceScore(question, prepProfile) {
   if (!prepProfile) return 1;
   let score = 1;
   if (hasOverlap(getQuestionGroupTags(question), getExpandedTargetGroups(prepProfile))) score += 5;
-  if (hasOverlap(getQuestionExperienceTags(question), new Set(getSelectedExperienceTags(prepProfile)))) score += 4;
-  if (hasOverlap(question.leadershipTags || [], new Set(getSelectedLeadershipTags(prepProfile)))) score += 3;
   if (hasOverlap(getQuestionBankTierTags(question), new Set([prepProfile.targetBankTier]))) score += 3;
-  if (!(prepProfile.workExperiences || []).length && /why|story|prepared|transferable/i.test(question.prompt)) {
+  if (prepProfile.practiceMode === 'generic' && /why|story|team|conflict|prepared|transferable/i.test(question.prompt)) {
     score += 2;
   }
+  if (prepProfile.practiceMode === 'resume-aware' && /resume|experience|prepared|background/i.test(question.prompt)) score += 2;
   if (prepProfile.targetBankTier !== 'General / Mixed' && /firm|platform|bank|tier/i.test(question.prompt)) score += 1;
   if (prepProfile.recruitingGoal === 'MBA Associate' && /lead|story|transition|why/i.test(question.prompt)) score += 1;
   if (prepProfile.recruitingGoal === 'Lateral' && /deal|experience|transaction|technical/i.test(question.prompt)) score += 1;
@@ -837,6 +746,15 @@ function toggleArrayValue(values, value) {
   return values.includes(value) ? values.filter((currentValue) => currentValue !== value) : [...values, value];
 }
 
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 const aiQuestionCategoryIds = ['fit', 'behavioral', 'markets'];
 
 function pickMixedQuestionCategory() {
@@ -847,6 +765,8 @@ export default function InterviewPrepPage({ onBack }) {
   const [prepProfile, setPrepProfile] = useState(() => readStoredPrepProfile());
   const [setupDraft, setSetupDraft] = useState(() => readStoredPrepProfile() || emptyPrepProfile);
   const [setupError, setSetupError] = useState('');
+  const [resumeUploadStatus, setResumeUploadStatus] = useState('');
+  const [resumeUploading, setResumeUploading] = useState(false);
   const [editingPrepProfile, setEditingPrepProfile] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -949,7 +869,7 @@ export default function InterviewPrepPage({ onBack }) {
       return await generateAiQuestion(effectiveCategoryId, previousPrompt);
     } catch (error) {
       console.error('[interview-question] Falling back to local generated question', error);
-      setQuestionError('AI question generation was unavailable, so a profile-specific backup question was used.');
+      setQuestionError('AI question generation was unavailable, so a backup question was used.');
       return createGeneratedQuestion(effectiveCategoryId, prepProfile);
     }
   };
@@ -970,48 +890,48 @@ export default function InterviewPrepPage({ onBack }) {
     }
   };
 
-  const toggleSetupExperience = (experienceType) => {
-    setSetupDraft((current) => {
-      const existingExperiences = current.workExperiences || [];
-      const hasExperience = existingExperiences.some((experience) => experience.experienceType === experienceType);
-      return {
+  const handleResumeUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      setSetupDraft((current) => ({ ...current, resumeText: '', resumeFileName: '' }));
+      setResumeUploadStatus('');
+      setSetupError('Please upload a PDF resume.');
+      return;
+    }
+    setSetupError('');
+    setResumeUploading(true);
+    setResumeUploadStatus('Processing PDF...');
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      const response = await fetch('/api/resume-extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: file.name,
+          mimeType: 'application/pdf',
+          dataUrl
+        })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.resumeText) {
+        throw new Error(payload.error || 'We could not process that PDF. Please retry the upload.');
+      }
+      setSetupDraft((current) => ({
         ...current,
-        workExperiences: hasExperience
-          ? existingExperiences.filter((experience) => experience.experienceType !== experienceType)
-          : [...existingExperiences, createPrepExperience(experienceType)]
-      };
-    });
-  };
-
-  const updateSetupExperience = (experienceId, key, value) => {
-    setSetupDraft((current) => ({
-      ...current,
-      workExperiences: (current.workExperiences || []).map((experience) =>
-        experience.id === experienceId ? { ...experience, [key]: value } : experience
-      )
-    }));
-  };
-
-  const toggleSetupLeadershipActivity = (activityType) => {
-    setSetupDraft((current) => {
-      const existingActivities = current.leadershipActivities || [];
-      const hasActivity = existingActivities.some((activity) => activity.activityType === activityType);
-      return {
-        ...current,
-        leadershipActivities: hasActivity
-          ? existingActivities.filter((activity) => activity.activityType !== activityType)
-          : [...existingActivities, createLeadershipActivity(activityType)]
-      };
-    });
-  };
-
-  const updateSetupLeadershipActivity = (activityId, value) => {
-    setSetupDraft((current) => ({
-      ...current,
-      leadershipActivities: (current.leadershipActivities || []).map((activity) =>
-        activity.id === activityId ? { ...activity, leadershipLevel: value } : activity
-      )
-    }));
+        practiceMode: 'resume-aware',
+        resumeText: payload.resumeText,
+        resumeFileName: file.name
+      }));
+      setResumeUploadStatus(`${file.name} uploaded for this session.`);
+    } catch (error) {
+      setSetupDraft((current) => ({ ...current, resumeText: '', resumeFileName: '' }));
+      setResumeUploadStatus('');
+      setSetupError(error.message || 'We could not process that PDF. Please retry the upload.');
+    } finally {
+      setResumeUploading(false);
+      event.target.value = '';
+    }
   };
 
   const completePrepSetup = (event) => {
@@ -1020,17 +940,27 @@ export default function InterviewPrepPage({ onBack }) {
       setSetupError('Choose a recruiting goal, target groups, and target bank tier to personalize your practice.');
       return;
     }
+    if (setupDraft.practiceMode === 'resume-aware' && !setupDraft.resumeText) {
+      setSetupError('Upload a PDF resume or switch to Generic Practice.');
+      return;
+    }
     const normalizedProfile = normalizePrepProfile(setupDraft);
     setPrepProfile(normalizedProfile);
-    window.sessionStorage.setItem(prepProfileSessionKey, JSON.stringify(normalizedProfile));
+    window.sessionStorage.setItem(prepProfileSessionKey, JSON.stringify(getProfileForSessionStorage(normalizedProfile)));
     setEditingPrepProfile(false);
     setSetupError('');
+    setResumeUploadStatus('');
   };
 
   const editPrepProfile = () => {
     setSetupDraft(normalizePrepProfile(prepProfile) || emptyPrepProfile);
     setEditingPrepProfile(true);
     setSetupError('');
+    setResumeUploadStatus(
+      prepProfile?.practiceMode === 'resume-aware' && prepProfile?.resumeText
+        ? `${prepProfile.resumeFileName || 'Resume'} uploaded for this session.`
+        : ''
+    );
   };
 
   const goBackToPrep = () => {
@@ -1124,7 +1054,19 @@ export default function InterviewPrepPage({ onBack }) {
     } catch (error) {
       console.error('[interview-feedback] Feedback request failed', {
         endpoint: feedbackEndpoint,
-        payload,
+        payload: {
+          category: payload.category,
+          questionPreview: payload.question.slice(0, 90),
+          answerLength: payload.userAnswer.length,
+          followUpContext: Boolean(payload.followUpContext),
+          prepProfile: {
+            recruitingGoal: prepProfile?.recruitingGoal,
+            targetGroups: prepProfile?.targetGroups,
+            targetBankTier: prepProfile?.targetBankTier,
+            practiceMode: prepProfile?.practiceMode,
+            hasResumeText: Boolean(prepProfile?.resumeText)
+          }
+        },
         error
       });
       const isNetworkFailure = error instanceof TypeError || /load failed|failed to fetch|networkerror/i.test(error.message || '');
@@ -1356,85 +1298,51 @@ export default function InterviewPrepPage({ onBack }) {
             </section>
 
             <section>
-              <h3>Work Experience Background</h3>
-              <div className="setup-chip-grid">
-                {workExperienceOptions.map((experienceType) => (
+              <h3>Practice Mode</h3>
+              <div className="choice-grid compact">
+                {[
+                  {
+                    value: 'resume-aware',
+                    title: 'Resume-Aware Practice',
+                    description: 'Upload a PDF resume so some prompts can reference your actual background.'
+                  },
+                  {
+                    value: 'generic',
+                    title: 'Generic Practice',
+                    description: 'Practice broad interview questions without resume personalization.'
+                  }
+                ].map((mode) => (
                   <button
                     type="button"
-                    className={(setupDraft.workExperiences || []).some((experience) => experience.experienceType === experienceType) ? 'chip selected' : 'chip'}
-                    key={experienceType}
-                    onClick={() => toggleSetupExperience(experienceType)}
+                    className={setupDraft.practiceMode === mode.value ? 'choice-card selected' : 'choice-card'}
+                    key={mode.value}
+                    onClick={() => {
+                      setSetupError('');
+                      setResumeUploadStatus('');
+                      setSetupDraft((current) => ({
+                        ...current,
+                        practiceMode: mode.value,
+                        resumeText: mode.value === 'generic' ? '' : current.resumeText,
+                        resumeFileName: mode.value === 'generic' ? '' : current.resumeFileName
+                      }));
+                    }}
                   >
-                    {experienceType}
+                    <strong>{mode.title}</strong>
+                    <span>{mode.description}</span>
                   </button>
                 ))}
               </div>
-              {(setupDraft.workExperiences || []).length ? (
-                <div className="setup-follow-up-list">
-                  {setupDraft.workExperiences.map((experience) => (
-                    <div className="setup-follow-up-card" key={experience.id}>
-                      <strong>{experience.experienceType}</strong>
-                      <div className="setup-follow-up-grid">
-                        {(experienceFollowUps[experience.experienceType] || []).map((followUp) => (
-                          <label key={followUp.key}>
-                            {followUp.label}
-                            <select
-                              value={experience[followUp.key] || followUp.options[0]}
-                              onChange={(event) => updateSetupExperience(experience.id, followUp.key, event.target.value)}
-                            >
-                              {followUp.options.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="muted">Leave blank if you do not have relevant work experience yet.</p>
-              )}
-            </section>
 
-            <section>
-              <h3>Leadership / Extracurricular Background</h3>
-              <div className="setup-chip-grid">
-                {leadershipActivityOptions.map((activityType) => (
-                  <button
-                    type="button"
-                    className={(setupDraft.leadershipActivities || []).some((activity) => activity.activityType === activityType) ? 'chip selected' : 'chip'}
-                    key={activityType}
-                    onClick={() => toggleSetupLeadershipActivity(activityType)}
-                  >
-                    {activityType}
-                  </button>
-                ))}
-              </div>
-              {(setupDraft.leadershipActivities || []).length ? (
-                <div className="setup-follow-up-list">
-                  {setupDraft.leadershipActivities.map((activity) => (
-                    <div className="setup-follow-up-card" key={activity.id}>
-                      <strong>{activity.activityType}</strong>
-                      <div className="setup-follow-up-grid">
-                        <label>
-                          Leadership Level
-                          <select value={activity.leadershipLevel} onChange={(event) => updateSetupLeadershipActivity(activity.id, event.target.value)}>
-                            {leadershipLevelOptions.map((option) => (
-                              <option key={option} value={option}>
-                                {option}
-                              </option>
-                            ))}
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              {setupDraft.practiceMode === 'resume-aware' ? (
+                <label className="file-upload-panel">
+                  Upload PDF Resume
+                  <input type="file" accept="application/pdf,.pdf" onChange={handleResumeUpload} disabled={resumeUploading} />
+                  <span className="muted">
+                    {resumeUploadStatus || 'PDF only. Extracted text is used internally for this session and is not shown.'}
+                  </span>
+                </label>
               ) : (
-                <p className="muted">Optional, but helpful for behavioral question personalization.</p>
+                <p className="muted">Generic mode will use only your recruiting goal, selected groups, and target bank tier.</p>
               )}
             </section>
 
@@ -1473,7 +1381,11 @@ export default function InterviewPrepPage({ onBack }) {
             <div>
               <span className="feature-eyebrow">{selectedCategory.title}</span>
               <h2>Building your next question...</h2>
-              <p className="muted">Tailoring the prompt to your groups, experience, and recruiting goal.</p>
+              <p className="muted">
+                {prepProfile.practiceMode === 'resume-aware'
+                  ? 'Balancing general prompts with resume-aware personalization.'
+                  : 'Building a broad practice prompt from your goal, groups, and bank tier.'}
+              </p>
             </div>
           </div>
         </section>
@@ -1637,7 +1549,7 @@ export default function InterviewPrepPage({ onBack }) {
           <div>
             <h2>Interview Prep</h2>
             <p className="muted">
-              {prepProfile.recruitingGoal} · {prepProfile.targetBankTier} · {prepProfile.targetGroups.slice(0, 3).join(', ')}
+              {prepProfile.practiceMode === 'resume-aware' ? 'Resume-Aware Practice' : 'Generic Practice'} · {prepProfile.recruitingGoal} · {prepProfile.targetBankTier} · {prepProfile.targetGroups.slice(0, 3).join(', ')}
               {prepProfile.targetGroups.length > 3 ? ` +${prepProfile.targetGroups.length - 3} more` : ''}
             </p>
           </div>

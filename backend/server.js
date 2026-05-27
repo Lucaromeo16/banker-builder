@@ -1141,8 +1141,8 @@ app.post('/api/interview-feedback', async (req, res) => {
       recruitingGoal: prepProfile?.recruitingGoal,
       targetGroups: prepProfile?.targetGroups,
       targetBankTier: prepProfile?.targetBankTier,
-      workExperiences: prepProfile?.workExperiences,
-      leadershipActivities: prepProfile?.leadershipActivities,
+      practiceMode: prepProfile?.practiceMode,
+      hasResumeText: Boolean(prepProfile?.resumeText),
       isFollowUp: Boolean(followUpContext),
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
@@ -1167,7 +1167,7 @@ app.post('/api/interview-feedback', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are an investment banking interviewer evaluating a candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. Use the provided prep profile to tailor feedback to the candidate’s recruiting goal, selected target groups, target bank tier, structured work experience background, and leadership/extracurricular background. Do not penalize the candidate for not mentioning unrelated groups they did not target. If followUpContext is present, evaluate the answer as a direct follow-up to the parent question and parent answer, while still scoring it like a normal interview response. Reward credible links between their background and their selected groups, such as audit/TAS experience connecting to M&A diligence and valuation, DCM candidates discussing rates and credit, restructuring candidates discussing liquidity and capital structure, or student investment fund leadership supporting market judgment. The 10/10 example response must sound like something a strong candidate with this profile could actually say in a real interview.',
+          'You are an investment banking interviewer evaluating a candidate. Be strict but fair, constructive, specific, realistic, and concise. Score based on interview readiness, structure, technical accuracy where relevant, specificity, and credibility. Use the provided prep profile only within its limits: recruiting goal, selected target groups, target bank tier, and practice mode. If practiceMode is resume-aware and resumeText is provided, you may reference only resume details explicitly present in that text; do not invent companies, roles, metrics, internships, leadership experiences, deals, skills, or industries. If practiceMode is generic, do not pretend to know anything about the candidate’s background and keep examples broadly applicable. Do not penalize the candidate for not mentioning unrelated groups they did not target. Technical feedback should be driven primarily by the selected target groups, not by resume content. If followUpContext is present, evaluate the answer as a direct follow-up to the parent question and parent answer, while still scoring it like a normal interview response. The 10/10 example response must sound like something a strong candidate with this profile mode could actually say in a real interview.',
         input: [
           {
             role: 'user',
@@ -1247,8 +1247,8 @@ app.post('/api/interview-question', async (req, res) => {
       previousPromptPreview: typeof previousPrompt === 'string' ? previousPrompt.slice(0, 90) : undefined,
       targetGroups: prepProfile?.targetGroups,
       targetBankTier: prepProfile?.targetBankTier,
-      workExperiences: prepProfile?.workExperiences,
-      leadershipActivities: prepProfile?.leadershipActivities,
+      practiceMode: prepProfile?.practiceMode,
+      hasResumeText: Boolean(prepProfile?.resumeText),
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
@@ -1270,7 +1270,7 @@ app.post('/api/interview-question', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category using the candidate prep profile. Fit questions should focus on why banking, why the selected group, why the target bank tier, or transitions from their background. Behavioral questions should use their work experience and leadership context. Market questions should match selected product or coverage groups. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
+          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, and resumeText when present. Preserve a realistic phone-screen balance: some general questions, some selected-group questions, occasional resume-specific questions in resume-aware mode, and occasional experience deep dives. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText; do not invent or infer details. Technical questions must be tailored strongly to selected target groups only, not heavily to resume content. For M&A use valuation/accretion/deal rationale; DCM use rates, bonds, credit; LevFin use leverage, debt capacity, credit metrics; Restructuring use distressed debt, liquidity, capital structure; Financial Sponsors use LBOs, exits, and private equity clients. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
         input: [
           {
             role: 'user',

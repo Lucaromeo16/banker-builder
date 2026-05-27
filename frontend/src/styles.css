@@ -801,6 +801,21 @@ textarea {
   font-size: 0.9rem;
 }
 
+.file-upload-panel {
+  display: grid;
+  gap: 10px;
+  border: 1px dashed rgba(96, 165, 250, 0.42);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.58);
+  color: #FFFFFF;
+  font-weight: 850;
+  padding: 14px;
+}
+
+.file-upload-panel input {
+  color: var(--text-secondary);
+}
+
 .voice-answer-panel {
   display: grid;
   justify-items: center;
