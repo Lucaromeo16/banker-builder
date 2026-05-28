@@ -1408,9 +1408,12 @@ export default function InterviewPrepPage({ onBack }) {
   const [showTextInput, setShowTextInput] = useState(false);
   const [isTranscribingAnswer, setIsTranscribingAnswer] = useState(false);
   const [recordingPhase, setRecordingPhase] = useState('idle');
+  const [capturedAudioUrl, setCapturedAudioUrl] = useState('');
+  const [audioDebugInfo, setAudioDebugInfo] = useState({});
   const mediaRecorderRef = useRef(null);
   const audioStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const capturedAudioUrlRef = useRef('');
   const isStartingRecordingRef = useRef(false);
   const discardNextRecordingRef = useRef(false);
   const questionQueuesRef = useRef({});
@@ -1418,6 +1421,7 @@ export default function InterviewPrepPage({ onBack }) {
   const generatedQuestionHistoryRef = useRef({});
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
+  const audioDebugEnabled = import.meta.env.DEV;
   const recordingIsTransitioning = recordingPhase === 'starting' || recordingPhase === 'stopping' || recordingPhase === 'analyzing';
   const voiceControlsDisabled = feedbackLoading || isTranscribingAnswer || recordingIsTransitioning || (!speechSupported && !isRecording);
   const voiceStatusLabel =
@@ -1443,8 +1447,13 @@ export default function InterviewPrepPage({ onBack }) {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
       audioStreamRef.current?.getTracks().forEach((track) => track.stop());
       audioStreamRef.current = null;
+      if (capturedAudioUrlRef.current) URL.revokeObjectURL(capturedAudioUrlRef.current);
     };
   }, []);
+
+  const updateAudioDebugInfo = (nextInfo) => {
+    setAudioDebugInfo((current) => ({ ...current, ...nextInfo, updatedAt: new Date().toLocaleTimeString() }));
+  };
 
   const resetVoiceAnswerState = (showFallback = !speechSupported) => {
     if (mediaRecorderRef.current?.state === 'recording') {
@@ -1456,11 +1465,25 @@ export default function InterviewPrepPage({ onBack }) {
     audioStreamRef.current = null;
     audioChunksRef.current = [];
     isStartingRecordingRef.current = false;
+    if (capturedAudioUrlRef.current) {
+      URL.revokeObjectURL(capturedAudioUrlRef.current);
+      capturedAudioUrlRef.current = '';
+    }
+    setCapturedAudioUrl('');
     setAnswer('');
     setShowTextInput(showFallback);
     setIsRecording(false);
     setIsTranscribingAnswer(false);
     setRecordingPhase('idle');
+    updateAudioDebugInfo({
+      reset: true,
+      streamActive: false,
+      audioTrackCount: 0,
+      recorderState: 'reset',
+      chunksCount: 0,
+      finalBlobSize: 0,
+      finalBlobType: ''
+    });
     setSpeechMessage(showFallback && !speechSupported ? 'Audio recording is not supported in this browser. Please type your answer.' : '');
   };
 
@@ -1828,6 +1851,12 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const transcribeAndEvaluateAudio = async (audioBlob) => {
+    updateAudioDebugInfo({
+      finalBlobType: audioBlob?.type || '',
+      finalBlobSize: audioBlob?.size || 0,
+      transcriptionPayloadFields: 'mimeType,dataUrl',
+      transcriptionOpenAIFileField: 'file'
+    });
     console.info('[interview-audio] recording finalized', {
       type: audioBlob?.type,
       size: audioBlob?.size
@@ -1843,8 +1872,8 @@ export default function InterviewPrepPage({ onBack }) {
       setIsRecording(false);
       setIsTranscribingAnswer(false);
       setFeedbackLoading(false);
-      setSpeechMessage('Transcription failed. Please try again or use Type Instead.');
-      setFeedbackError('We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
+      setSpeechMessage('No audio was captured. Please check microphone permissions and try again.');
+      setFeedbackError('No audio was captured. Please check microphone permissions and try again.');
       return;
     }
     console.info('[interview-transcribe] sending shared transcription payload', {
@@ -1869,6 +1898,13 @@ export default function InterviewPrepPage({ onBack }) {
         })
       });
       const payload = await response.json().catch(() => ({}));
+      updateAudioDebugInfo({
+        transcriptionStatus: response.status,
+        transcriptionOk: response.ok,
+        transcriptionError: payload.error || '',
+        transcriptionDetails: payload.details ? String(payload.details).slice(0, 240) : '',
+        transcriptLength: payload.transcript?.length || 0
+      });
       console.info('[interview-transcribe] API response received', {
         status: response.status,
         ok: response.ok,
@@ -1964,6 +2000,19 @@ export default function InterviewPrepPage({ onBack }) {
       audioStreamRef.current = nextStream;
       audioChunksRef.current = [];
       const audioTracks = nextStream.getAudioTracks().filter((track) => track.readyState === 'live');
+      updateAudioDebugInfo({
+        reset: false,
+        streamActive: nextStream.active,
+        audioTrackCount: nextStream.getAudioTracks().length,
+        liveAudioTrackCount: audioTracks.length,
+        audioTrackEnabled: nextStream.getAudioTracks()[0]?.enabled || false,
+        audioTrackReadyState: nextStream.getAudioTracks()[0]?.readyState || '',
+        chunksCount: 0,
+        finalBlobSize: 0,
+        finalBlobType: '',
+        transcriptionStatus: '',
+        transcriptionError: ''
+      });
       if (!audioTracks.length) {
         throw new Error('We could not detect microphone audio. Please check microphone permission and retry.');
       }
@@ -1972,10 +2021,42 @@ export default function InterviewPrepPage({ onBack }) {
       const recorder = audioMimeType ? new MediaRecorder(audioStream, { mimeType: audioMimeType }) : new MediaRecorder(audioStream);
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) audioChunksRef.current.push(event.data);
+        updateAudioDebugInfo({
+          recorderState: recorder.state,
+          latestChunkSize: event.data.size,
+          chunksCount: audioChunksRef.current.length,
+          totalChunkBytes: audioChunksRef.current.reduce((sum, chunk) => sum + chunk.size, 0)
+        });
+        console.info('[interview-audio] dataavailable', {
+          chunkSize: event.data.size,
+          chunksCount: audioChunksRef.current.length,
+          recorderState: recorder.state
+        });
+      };
+      recorder.onerror = (event) => {
+        console.error('[interview-audio] recorder error', event.error || event);
+        updateAudioDebugInfo({
+          recorderError: event.error?.message || event.error?.name || 'Recorder error',
+          recorderState: recorder.state
+        });
       };
       recorder.onstop = () => {
         const shouldDiscard = discardNextRecordingRef.current;
         const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || audioMimeType });
+        if (capturedAudioUrlRef.current) URL.revokeObjectURL(capturedAudioUrlRef.current);
+        const nextAudioUrl = audioBlob.size > 0 ? URL.createObjectURL(audioBlob) : '';
+        capturedAudioUrlRef.current = nextAudioUrl;
+        setCapturedAudioUrl(nextAudioUrl);
+        updateAudioDebugInfo({
+          streamActive: nextStream.active,
+          recorderState: recorder.state,
+          chunksCount: audioChunksRef.current.length,
+          totalChunkBytes: audioChunksRef.current.reduce((sum, chunk) => sum + chunk.size, 0),
+          finalBlobSize: audioBlob.size,
+          finalBlobType: audioBlob.type,
+          audioCaptured: audioBlob.size > 0,
+          discarded: shouldDiscard
+        });
         console.info('[interview-audio] recorder stopped', {
           discarded: shouldDiscard,
           mimeType: recorder.mimeType || audioMimeType,
@@ -1994,6 +2075,14 @@ export default function InterviewPrepPage({ onBack }) {
           setRecordingPhase('idle');
           return;
         }
+        if (audioBlob.size <= 0) {
+          setRecordingPhase('idle');
+          setFeedbackLoading(false);
+          setIsTranscribingAnswer(false);
+          setSpeechMessage('No audio was captured. Please check microphone permissions and try again.');
+          setFeedbackError('No audio was captured. Please check microphone permissions and try again.');
+          return;
+        }
         transcribeAndEvaluateAudio(audioBlob);
       };
       mediaRecorderRef.current = recorder;
@@ -2001,9 +2090,14 @@ export default function InterviewPrepPage({ onBack }) {
         audioMimeType: recorder.mimeType || audioMimeType || 'browser-default',
         audioTracks: audioTracks.length
       });
+      updateAudioDebugInfo({
+        recorderState: recorder.state,
+        selectedMimeType: recorder.mimeType || audioMimeType || 'browser-default'
+      });
       recorder.start(1000);
       setIsRecording(true);
       setRecordingPhase('recording');
+      updateAudioDebugInfo({ recorderState: recorder.state });
       setSpeechMessage('Listening...');
     } catch (error) {
       console.error('[interview-audio] Failed to start recording', error);
@@ -2021,6 +2115,11 @@ export default function InterviewPrepPage({ onBack }) {
     if (mediaRecorderRef.current?.state === 'recording') {
       setRecordingPhase('stopping');
       setSpeechMessage('Finalizing recording...');
+      updateAudioDebugInfo({
+        recorderState: mediaRecorderRef.current.state,
+        stopRequested: true,
+        chunksCountBeforeStop: audioChunksRef.current.length
+      });
       try {
         mediaRecorderRef.current.requestData();
       } catch {
@@ -2273,6 +2372,59 @@ export default function InterviewPrepPage({ onBack }) {
                 ) : null}
               </div>
             </section>
+
+            {capturedAudioUrl ? (
+              <section className="audio-capture-confirmation">
+                <strong>Audio captured</strong>
+                <audio controls src={capturedAudioUrl} />
+              </section>
+            ) : null}
+
+            {audioDebugEnabled ? (
+              <details className="audio-debug-panel">
+                <summary>Audio capture debug</summary>
+                <dl>
+                  <div>
+                    <dt>Stream active</dt>
+                    <dd>{String(Boolean(audioDebugInfo.streamActive))}</dd>
+                  </div>
+                  <div>
+                    <dt>Audio tracks</dt>
+                    <dd>{audioDebugInfo.audioTrackCount ?? 0} total / {audioDebugInfo.liveAudioTrackCount ?? 0} live</dd>
+                  </div>
+                  <div>
+                    <dt>Track enabled</dt>
+                    <dd>{String(Boolean(audioDebugInfo.audioTrackEnabled))} {audioDebugInfo.audioTrackReadyState ? `(${audioDebugInfo.audioTrackReadyState})` : ''}</dd>
+                  </div>
+                  <div>
+                    <dt>Recorder state</dt>
+                    <dd>{audioDebugInfo.recorderState || recordingPhase}</dd>
+                  </div>
+                  <div>
+                    <dt>Chunks</dt>
+                    <dd>{audioDebugInfo.chunksCount ?? 0} chunks / {audioDebugInfo.totalChunkBytes ?? 0} bytes</dd>
+                  </div>
+                  <div>
+                    <dt>Final blob</dt>
+                    <dd>{audioDebugInfo.finalBlobSize ?? 0} bytes / {audioDebugInfo.finalBlobType || 'none'}</dd>
+                  </div>
+                  <div>
+                    <dt>Transcription</dt>
+                    <dd>{audioDebugInfo.transcriptionStatus || 'not sent'} {audioDebugInfo.transcriptionOk === false ? 'failed' : ''}</dd>
+                  </div>
+                  <div>
+                    <dt>Payload</dt>
+                    <dd>{audioDebugInfo.transcriptionPayloadFields || 'none'} → {audioDebugInfo.transcriptionOpenAIFileField || 'file'}</dd>
+                  </div>
+                  {audioDebugInfo.transcriptionError ? (
+                    <div>
+                      <dt>Error</dt>
+                      <dd>{audioDebugInfo.transcriptionError}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </details>
+            ) : null}
 
             {showTextInput ? (
               <label className="typed-answer-fallback">

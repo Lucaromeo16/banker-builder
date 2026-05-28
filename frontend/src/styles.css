@@ -832,6 +832,52 @@ textarea {
   box-shadow: 0 0 34px rgba(59, 130, 246, 0.16);
 }
 
+.audio-capture-confirmation,
+.audio-debug-panel {
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.62);
+  padding: 12px;
+}
+
+.audio-capture-confirmation {
+  display: grid;
+  gap: 10px;
+}
+
+.audio-capture-confirmation strong,
+.audio-debug-panel summary {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.audio-capture-confirmation audio {
+  width: 100%;
+}
+
+.audio-debug-panel dl {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.audio-debug-panel dl div {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.4fr) 1fr;
+  gap: 10px;
+}
+
+.audio-debug-panel dt {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.audio-debug-panel dd {
+  color: var(--text-primary);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .mic-button {
   position: relative;
   display: inline-grid;
