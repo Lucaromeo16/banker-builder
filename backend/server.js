@@ -1239,7 +1239,7 @@ app.post('/api/interview-feedback', async (req, res) => {
 
 app.post('/api/interview-question', async (req, res) => {
   try {
-    const { categoryId, categoryTitle, previousPrompt, prepProfile } = req.body;
+    const { categoryId, categoryTitle, previousPrompt, prepProfile, questionPlan } = req.body;
     console.log('[interview-question] Request received', {
       route: 'POST /api/interview-question',
       categoryId,
@@ -1249,6 +1249,14 @@ app.post('/api/interview-question', async (req, res) => {
       targetBankTier: prepProfile?.targetBankTier,
       practiceMode: prepProfile?.practiceMode,
       hasResumeText: Boolean(prepProfile?.resumeText),
+      questionPlan: questionPlan
+        ? {
+            tailoringLevel: questionPlan.tailoringLevel,
+            topic: questionPlan.topic,
+            groupType: questionPlan.groupType,
+            promptPreview: typeof questionPlan.prompt === 'string' ? questionPlan.prompt.slice(0, 90) : undefined
+          }
+        : null,
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
@@ -1270,7 +1278,7 @@ app.post('/api/interview-question', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, and resumeText when present. Preserve a realistic phone-screen balance: some general questions, some selected-group questions, occasional resume-specific questions in resume-aware mode, and occasional experience deep dives. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText; do not invent or infer details. Technical questions must be tailored strongly to selected target groups only, not heavily to resume content. For M&A use valuation/accretion/deal rationale; DCM use rates, bonds, credit; LevFin use leverage, debt capacity, credit metrics; Restructuring use distressed debt, liquidity, capital structure; Financial Sponsors use LBOs, exits, and private equity clients. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
+          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category and questionPlan. Keep questions one sentence whenever possible, direct, and banker-like. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, and resumeText when present. Respect the questionPlan tailoringLevel: generic means broad and no background reference; light means broad with only a general internship/class/leadership framing; specific means occasional resume-aware reference to one explicit resume detail only. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText; do not invent or infer details. Technical questions must be tailored strongly to selected target groups only, not heavily to resume content. For M&A use valuation/accretion/deal rationale; DCM use rates, bonds, credit; LevFin use leverage, debt capacity, credit metrics; Restructuring use distressed debt, liquidity, capital structure; Financial Sponsors use LBOs, exits, and private equity clients. Market questions for Summer Analyst candidates should usually be basic market awareness, not MBA-level strategy. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
         input: [
           {
             role: 'user',
@@ -1281,7 +1289,8 @@ app.post('/api/interview-question', async (req, res) => {
                   categoryId,
                   categoryTitle,
                   previousPrompt: previousPrompt || '',
-                  prepProfile
+                  prepProfile,
+                  questionPlan: questionPlan || null
                 })
               }
             ]

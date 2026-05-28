@@ -534,11 +534,103 @@ const allPracticeQuestions = Object.entries(questionBanks).flatMap(([categoryId,
     categoryTitle: bank.title,
     applicablePracticeTypes: question.applicablePracticeTypes || [categoryId],
     difficulty: question.difficulty || 'Core',
+    difficultyLevel: question.difficultyLevel || 'beginner',
+    topic: question.topic || 'core',
+    groupType: question.groupType || 'general',
     concepts: bank.concepts,
     structureHint: bank.structureHint,
     followUps: bank.followUps
   }))
 );
+
+const productGroups = new Set(['M&A', 'Restructuring', 'LevFin', 'Financial Sponsors', 'ECM', 'DCM', 'Capital Markets', 'Strategic Advisory']);
+const coverageGroups = new Set([
+  'Technology',
+  'Software',
+  'Healthcare',
+  'FIG',
+  'Real Estate',
+  'Industrials',
+  'Energy',
+  'Consumer & Retail',
+  'Business Services',
+  'Media & Telecom',
+  'Aerospace & Defense',
+  'Power & Utilities',
+  'Infrastructure',
+  'Natural Resources',
+  'Generalist'
+]);
+const recentQuestionStorageKey = 'bankerBuilderInterviewPrepRecentQuestions';
+const maxRecentQuestions = 28;
+
+const technicalSupplementalQuestions = [
+  { prompt: 'How would you think about synergies in an acquisition?', allowedGroups: ['M&A', 'Strategic Advisory'], groupType: 'product', difficultyLevel: 'beginner', topic: 'synergies' },
+  { prompt: 'What are precedent transactions and when would you use them?', allowedGroups: ['M&A', 'Strategic Advisory'], groupType: 'product', difficultyLevel: 'beginner', topic: 'transaction comps' },
+  { prompt: 'At a high level, what are the main pieces of a merger model?', allowedGroups: ['M&A'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'merger model' },
+  { prompt: 'What is purchase accounting in an M&A context?', allowedGroups: ['M&A'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'purchase accounting' },
+  { prompt: 'What matters most when analyzing a company’s capital structure?', allowedGroups: ['Restructuring'], groupType: 'product', difficultyLevel: 'beginner', topic: 'capital structure' },
+  { prompt: 'How would you think about debt priority in a restructuring?', allowedGroups: ['Restructuring'], groupType: 'product', difficultyLevel: 'beginner', topic: 'debt priority' },
+  { prompt: 'What liquidity metrics would you look at for a distressed company?', allowedGroups: ['Restructuring'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'liquidity' },
+  { prompt: 'What is a recovery waterfall?', allowedGroups: ['Restructuring'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'recovery waterfall' },
+  { prompt: 'How would you estimate debt capacity for an acquisition financing?', allowedGroups: ['LevFin'], groupType: 'product', difficultyLevel: 'beginner', topic: 'debt capacity' },
+  { prompt: 'What leverage and coverage ratios matter most in LevFin?', allowedGroups: ['LevFin'], groupType: 'product', difficultyLevel: 'beginner', topic: 'credit metrics' },
+  { prompt: 'What makes refinancing risk higher for a leveraged borrower?', allowedGroups: ['LevFin'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'refinancing risk' },
+  { prompt: 'Walk me through the basic drivers of LBO returns.', allowedGroups: ['Financial Sponsors'], groupType: 'product', difficultyLevel: 'beginner', topic: 'lbo returns' },
+  { prompt: 'What exit options does a private equity sponsor usually consider?', allowedGroups: ['Financial Sponsors'], groupType: 'product', difficultyLevel: 'beginner', topic: 'sponsor exits' },
+  { prompt: 'Why does leverage matter so much in a sponsor-backed transaction?', allowedGroups: ['Financial Sponsors'], groupType: 'product', difficultyLevel: 'beginner', topic: 'leverage' },
+  { prompt: 'What makes an IPO window attractive?', allowedGroups: ['ECM', 'Capital Markets'], groupType: 'product', difficultyLevel: 'beginner', topic: 'ipo market' },
+  { prompt: 'How does an equity offering dilute existing shareholders?', allowedGroups: ['ECM', 'Capital Markets'], groupType: 'product', difficultyLevel: 'beginner', topic: 'dilution' },
+  { prompt: 'What is a follow-on equity offering?', allowedGroups: ['ECM'], groupType: 'product', difficultyLevel: 'beginner', topic: 'follow-ons' },
+  { prompt: 'What is a convertible bond and why might a company issue one?', allowedGroups: ['ECM', 'Capital Markets'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'convertibles' },
+  { prompt: 'What factors affect credit spreads?', allowedGroups: ['DCM', 'Capital Markets'], groupType: 'product', difficultyLevel: 'beginner', topic: 'credit spreads' },
+  { prompt: 'How do ratings affect bond issuance?', allowedGroups: ['DCM'], groupType: 'product', difficultyLevel: 'beginner', topic: 'ratings' },
+  { prompt: 'Why might a company refinance debt before maturity?', allowedGroups: ['DCM', 'Capital Markets'], groupType: 'product', difficultyLevel: 'beginner', topic: 'refinancing' },
+  { prompt: 'What does investor demand mean in a capital markets transaction?', allowedGroups: ['Capital Markets', 'ECM', 'DCM'], groupType: 'product', difficultyLevel: 'beginner', topic: 'investor demand' },
+  { prompt: 'How would you evaluate a company’s capital allocation choices?', allowedGroups: ['Strategic Advisory'], groupType: 'product', difficultyLevel: 'beginner', topic: 'capital allocation' },
+  { prompt: 'What are strategic alternatives?', allowedGroups: ['Strategic Advisory'], groupType: 'product', difficultyLevel: 'beginner', topic: 'strategic alternatives' },
+  { prompt: 'What is shareholder activism at a basic level?', allowedGroups: ['Strategic Advisory'], groupType: 'product', difficultyLevel: 'intermediate', topic: 'activism' },
+  { prompt: 'What SaaS metrics would you focus on when evaluating a software company?', allowedGroups: ['Technology', 'Software', 'FinTech'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'saas metrics' },
+  { prompt: 'How would you think about growth versus profitability for a software company?', allowedGroups: ['Technology', 'Software'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'software valuation' },
+  { prompt: 'What healthcare-specific risks can affect valuation?', allowedGroups: ['Healthcare'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'healthcare risks' },
+  { prompt: 'How are biotech and healthcare services companies different from a banking perspective?', allowedGroups: ['Healthcare'], groupType: 'coverage', difficultyLevel: 'intermediate', topic: 'healthcare subsectors' },
+  { prompt: 'Why are banks often valued using book value or tangible book value?', allowedGroups: ['FIG'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'bank valuation' },
+  { prompt: 'What is net interest margin?', allowedGroups: ['FIG'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'nim' },
+  { prompt: 'What is a cap rate?', allowedGroups: ['Real Estate'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'cap rates' },
+  { prompt: 'What are NOI and FFO?', allowedGroups: ['Real Estate'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'real estate metrics' },
+  { prompt: 'How do commodity prices affect energy company valuation?', allowedGroups: ['Energy', 'Natural Resources'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'commodity prices' },
+  { prompt: 'What is the difference between upstream and midstream energy companies?', allowedGroups: ['Energy'], groupType: 'coverage', difficultyLevel: 'intermediate', topic: 'energy subsectors' },
+  { prompt: 'What operating metrics matter for a consumer or retail company?', allowedGroups: ['Consumer & Retail'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'retail metrics' },
+  { prompt: 'Why are industrials companies often cyclical?', allowedGroups: ['Industrials'], groupType: 'coverage', difficultyLevel: 'beginner', topic: 'cyclicality' }
+];
+
+const behavioralQuestionMix = [
+  { prompt: 'Tell me about a time you led a team.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you faced conflict.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you worked under pressure.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you failed.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you balanced competing priorities.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you received difficult feedback.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you had to learn something quickly.', tailoringLevel: 'generic' },
+  { prompt: 'Tell me about a time you had to manage competing priorities during an internship, class project, or leadership role.', tailoringLevel: 'light' },
+  { prompt: 'Tell me about a time you had to persuade a team to take your recommendation seriously.', tailoringLevel: 'light' },
+  { prompt: 'Tell me about an experience where you had to be detail-oriented under a deadline.', tailoringLevel: 'light' }
+];
+
+const marketQuestionMix = [
+  { prompt: 'What is a recent deal you have been following?', difficultyLevel: 'beginner', tailoringLevel: 'generic' },
+  { prompt: 'What is one market trend you are paying attention to?', difficultyLevel: 'beginner', tailoringLevel: 'generic' },
+  { prompt: 'How do higher interest rates affect M&A activity?', difficultyLevel: 'beginner', tailoringLevel: 'generic', allowedGroups: ['M&A', 'Strategic Advisory'] },
+  { prompt: 'How do higher interest rates affect valuation?', difficultyLevel: 'beginner', tailoringLevel: 'generic' },
+  { prompt: 'What is happening in the IPO market?', difficultyLevel: 'beginner', tailoringLevel: 'generic', allowedGroups: ['ECM', 'Capital Markets'] },
+  { prompt: 'What sector has been active recently and why?', difficultyLevel: 'beginner', tailoringLevel: 'generic' },
+  { prompt: 'What does the current rate environment mean for companies raising capital?', difficultyLevel: 'beginner', tailoringLevel: 'generic', allowedGroups: ['DCM', 'ECM', 'Capital Markets', 'LevFin'] },
+  { prompt: 'How do higher rates affect debt issuance?', difficultyLevel: 'beginner', tailoringLevel: 'group', allowedGroups: ['DCM'] },
+  { prompt: 'Why might higher rates increase restructuring activity?', difficultyLevel: 'beginner', tailoringLevel: 'group', allowedGroups: ['Restructuring'] },
+  { prompt: 'What is one technology deal or trend you have been following?', difficultyLevel: 'beginner', tailoringLevel: 'group', allowedGroups: ['Technology', 'Software', 'FinTech'] },
+  { prompt: 'What trend matters most for private equity sponsors right now?', difficultyLevel: 'intermediate', tailoringLevel: 'group', allowedGroups: ['Financial Sponsors'] },
+  { prompt: 'How would a tougher financing market affect sponsor exits?', difficultyLevel: 'advanced', tailoringLevel: 'advanced', allowedGroups: ['Financial Sponsors', 'LevFin'] }
+];
 
 function getQuestionsForCategory(categoryId) {
   if (categoryId === 'mixed') {
@@ -558,6 +650,23 @@ function getQuestionsForCategory(categoryId) {
   }));
 }
 
+function makeQueueQuestion(question, categoryId) {
+  const category = questionBanks[categoryId] || questionBanks[question.categoryId] || {};
+  return {
+    ...question,
+    categoryId: question.categoryId || categoryId,
+    categoryTitle: question.categoryTitle || category.title || 'Interview Prep',
+    applicablePracticeTypes: question.applicablePracticeTypes || [categoryId],
+    difficulty: question.difficulty || 'Core',
+    difficultyLevel: question.difficultyLevel || 'beginner',
+    topic: question.topic || 'core',
+    groupType: question.groupType || 'general',
+    concepts: question.concepts || category.concepts || ['banking'],
+    structureHint: question.structureHint || category.structureHint || 'Answer directly, then support your answer with one or two concrete points.',
+    followUps: question.followUps || category.followUps || ['Can you make that answer more specific?']
+  };
+}
+
 function isGeneralPrepProfile(prepProfile) {
   return (
     !prepProfile ||
@@ -568,19 +677,11 @@ function isGeneralPrepProfile(prepProfile) {
 }
 
 function getQuestionGroupTags(question) {
-  return question.groupTags || question.targetGroups || [];
+  return question.allowedGroups || question.groupTags || question.targetGroups || [];
 }
 
 function getQuestionExperienceTags(question) {
   return question.experienceTags || question.workExperienceBackgrounds || [];
-}
-
-function getQuestionBankTierTags(question) {
-  return question.bankTierTags || [];
-}
-
-function isGroupSpecificQuestion(question) {
-  return Boolean(question.isGroupSpecific || getQuestionGroupTags(question).length);
 }
 
 function getExpandedTargetGroups(prepProfile) {
@@ -617,14 +718,30 @@ function questionMatchesLeadership(question, prepProfile) {
   return !leadershipTags.length;
 }
 
-function questionMatchesPracticeType(question, categoryId) {
-  return categoryId === 'mixed' || (question.applicablePracticeTypes || [question.categoryId]).includes(categoryId);
-}
-
 function questionMatchesSelectedGroups(question, prepProfile) {
   const groupTags = getQuestionGroupTags(question);
   if (!groupTags.length || isGeneralPrepProfile(prepProfile)) return true;
   return hasOverlap(groupTags, getExpandedTargetGroups(prepProfile));
+}
+
+function questionIsBlocked(question, prepProfile) {
+  const blockedGroups = question.blockedGroups || [];
+  return blockedGroups.length ? hasOverlap(blockedGroups, getExpandedTargetGroups(prepProfile)) : false;
+}
+
+function getCandidateLevel(prepProfile) {
+  return ['Summer Analyst', 'Undergrad Full-Time'].includes(prepProfile?.recruitingGoal) ? 'undergrad' : 'experienced';
+}
+
+function isAdvancedQuestionAllowed(question, prepProfile) {
+  return question.difficultyLevel !== 'advanced' || getCandidateLevel(prepProfile) !== 'undergrad';
+}
+
+function getSelectedGroupType(prepProfile) {
+  const groups = prepProfile?.targetGroups || [];
+  if (groups.some((group) => productGroups.has(group))) return 'product';
+  if (groups.some((group) => coverageGroups.has(group))) return 'coverage';
+  return 'general';
 }
 
 function getPrimaryProfileGroup(prepProfile) {
@@ -696,50 +813,130 @@ function createGeneratedQuestion(categoryId, prepProfile) {
   };
 }
 
-function getPersonalizedQuestionsForCategory(categoryId, prepProfile) {
-  const baseQuestions = getQuestionsForCategory(categoryId).filter((question) => questionMatchesPracticeType(question, categoryId));
-  const contextFilteredQuestions = baseQuestions.filter(
-    (question) => questionMatchesExperience(question, prepProfile) && questionMatchesLeadership(question, prepProfile)
-  );
-
-  if (isGeneralPrepProfile(prepProfile)) {
-    return contextFilteredQuestions;
+function readRecentQuestions() {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = window.localStorage.getItem(recentQuestionStorageKey);
+    const parsed = stored ? JSON.parse(stored) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
-
-  const alignedOrBroadQuestions = contextFilteredQuestions.filter((question) => questionMatchesSelectedGroups(question, prepProfile));
-  const alignedGroupQuestions = alignedOrBroadQuestions.filter((question) => isGroupSpecificQuestion(question));
-  const minimumRelevantQuestions = categoryId === 'markets' ? 6 : 8;
-  const generatedQuestion = createGeneratedQuestion(categoryId, prepProfile);
-
-  // Never backfill with unrelated group-specific prompts. If static coverage is thin, add a profile-built prompt.
-  return alignedOrBroadQuestions.length >= minimumRelevantQuestions && alignedGroupQuestions.length
-    ? alignedOrBroadQuestions
-    : [...alignedOrBroadQuestions, generatedQuestion];
 }
 
-function getQuestionRelevanceScore(question, prepProfile) {
-  if (!prepProfile) return 1;
-  let score = 1;
-  if (hasOverlap(getQuestionGroupTags(question), getExpandedTargetGroups(prepProfile))) score += 5;
-  if (hasOverlap(getQuestionBankTierTags(question), new Set([prepProfile.targetBankTier]))) score += 3;
-  if (prepProfile.practiceMode === 'generic' && /why|story|team|conflict|prepared|transferable/i.test(question.prompt)) {
-    score += 2;
-  }
-  if (prepProfile.practiceMode === 'resume-aware' && /resume|experience|prepared|background/i.test(question.prompt)) score += 2;
-  if (prepProfile.targetBankTier !== 'General / Mixed' && /firm|platform|bank|tier/i.test(question.prompt)) score += 1;
-  if (prepProfile.recruitingGoal === 'MBA Associate' && /lead|story|transition|why/i.test(question.prompt)) score += 1;
-  if (prepProfile.recruitingGoal === 'Lateral' && /deal|experience|transaction|technical/i.test(question.prompt)) score += 1;
-  return score;
+function rememberRecentQuestion(question) {
+  if (typeof window === 'undefined' || !question?.prompt) return;
+  const recent = readRecentQuestions().filter((prompt) => prompt !== question.prompt);
+  window.localStorage.setItem(recentQuestionStorageKey, JSON.stringify([question.prompt, ...recent].slice(0, maxRecentQuestions)));
 }
 
-function pickQuestion(categoryId, previousPrompt = '', prepProfile = null) {
-  const questions = getPersonalizedQuestionsForCategory(categoryId, prepProfile);
-  const availableQuestions = questions.length > 1 ? questions.filter((question) => question.prompt !== previousPrompt) : questions;
-  const weightedQuestions = availableQuestions.flatMap((question) =>
-    Array.from({ length: getQuestionRelevanceScore(question, prepProfile) }, () => question)
+function shuffleQuestions(questions) {
+  return [...questions]
+    .map((question) => ({ question, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ question }) => question);
+}
+
+function uniqueQuestions(questions) {
+  const seen = new Set();
+  return questions.filter((question) => {
+    if (!question?.prompt || seen.has(question.prompt)) return false;
+    seen.add(question.prompt);
+    return true;
+  });
+}
+
+function avoidRecentQuestions(questions, categoryId) {
+  if (categoryId !== 'technical' && categoryId !== 'mixed') return questions;
+  const recent = new Set(readRecentQuestions());
+  const fresh = questions.filter((question) => !recent.has(question.prompt));
+  return fresh.length >= Math.min(4, questions.length) ? fresh : questions;
+}
+
+function buildTechnicalQueue(prepProfile) {
+  const base = [
+    ...getQuestionsForCategory('technical'),
+    ...technicalSupplementalQuestions.map((question) => makeQueueQuestion({ ...question, categoryId: 'technical', categoryTitle: questionBanks.technical.title }, 'technical'))
+  ];
+  const selectedGroupType = getSelectedGroupType(prepProfile);
+  const expandedGroups = getExpandedTargetGroups(prepProfile);
+  const directMatches = base.filter(
+    (question) =>
+      questionMatchesSelectedGroups(question, prepProfile) &&
+      !questionIsBlocked(question, prepProfile) &&
+      isAdvancedQuestionAllowed(question, prepProfile)
   );
-  const question = weightedQuestions[Math.floor(Math.random() * weightedQuestions.length)] || availableQuestions[0];
-  return question ? { ...question, sourceType: question.sourceType || 'static' } : question;
+  const coreQuestions = base.filter(
+    (question) =>
+      !getQuestionGroupTags(question).length &&
+      !questionIsBlocked(question, prepProfile) &&
+      isAdvancedQuestionAllowed(question, prepProfile)
+  );
+  const selectedGroupSpecific = directMatches.filter((question) => getQuestionGroupTags(question).length);
+  const groupTypeMatches = selectedGroupSpecific.filter((question) => question.groupType === selectedGroupType || question.groupType === 'general');
+  const queue = selectedGroupSpecific.length
+    ? [...groupTypeMatches, ...selectedGroupSpecific.filter((question) => !groupTypeMatches.includes(question)), ...coreQuestions]
+    : [...coreQuestions, ...base.filter((question) => getQuestionGroupTags(question).some((group) => expandedGroups.has(group))).slice(0, 4)];
+  return shuffleQuestions(avoidRecentQuestions(uniqueQuestions(queue), 'technical'));
+}
+
+function buildBehavioralQueue(prepProfile) {
+  const staticBroad = getQuestionsForCategory('behavioral')
+    .filter((question) => questionMatchesExperience(question, prepProfile) && questionMatchesLeadership(question, prepProfile))
+    .filter((question) => !/resume|student investment fund|finance club|athletics|built something from scratch/i.test(question.prompt));
+  const generic = behavioralQuestionMix.filter((question) => question.tailoringLevel === 'generic').map((question) => makeQueueQuestion(question, 'behavioral'));
+  const light = behavioralQuestionMix.filter((question) => question.tailoringLevel === 'light').map((question) => makeQueueQuestion(question, 'behavioral'));
+  const specificSlots =
+    prepProfile?.practiceMode === 'resume-aware' && prepProfile?.resumeText
+      ? [
+          makeQueueQuestion({ prompt: 'Tell me about one experience from your resume that you would want an interviewer to ask about.', sourceType: 'ai_slot', tailoringLevel: 'specific' }, 'behavioral')
+        ]
+      : [];
+  return uniqueQuestions(shuffleQuestions([...generic, ...staticBroad, ...generic, ...light, ...specificSlots]));
+}
+
+function buildFitQueue(prepProfile) {
+  const primaryGroup = getPrimaryProfileGroup(prepProfile);
+  const mandatory = [
+    makeQueueQuestion({ prompt: 'Why investment banking?', mandatory: true }, 'fit'),
+    makeQueueQuestion({ prompt: 'Why this group?', mandatory: true, groupTags: primaryGroup === 'Generalist' ? [] : [primaryGroup] }, 'fit'),
+    makeQueueQuestion({ prompt: 'Why this bank?', mandatory: true }, 'fit')
+  ];
+  const eligible = getQuestionsForCategory('fit')
+    .filter((question) => questionMatchesExperience(question, prepProfile) && questionMatchesLeadership(question, prepProfile))
+    .filter((question) => questionMatchesSelectedGroups(question, prepProfile) && !questionIsBlocked(question, prepProfile))
+    .filter((question) => !mandatory.some((mandatoryQuestion) => mandatoryQuestion.prompt === question.prompt))
+    .filter((question) => !/office|connect .* experience|transition from|corporate development|TAS|audit/i.test(question.prompt) || prepProfile?.practiceMode === 'resume-aware');
+  const resumeSlot =
+    prepProfile?.practiceMode === 'resume-aware' && prepProfile?.resumeText
+      ? [makeQueueQuestion({ prompt: 'Tell me about one experience on your resume that explains your interest in banking.', sourceType: 'ai_slot', tailoringLevel: 'specific' }, 'fit')]
+      : [];
+  return uniqueQuestions([...mandatory, ...shuffleQuestions([...eligible, ...resumeSlot])]);
+}
+
+function buildMarketQueue(prepProfile) {
+  const eligible = marketQuestionMix
+    .map((question) => makeQueueQuestion(question, 'markets'))
+    .filter((question) => questionMatchesSelectedGroups(question, prepProfile) && !questionIsBlocked(question, prepProfile))
+    .filter((question) => isAdvancedQuestionAllowed(question, prepProfile));
+  const basic = eligible.filter((question) => question.tailoringLevel === 'generic');
+  const tailored = eligible.filter((question) => question.tailoringLevel === 'group');
+  const advanced = eligible.filter((question) => question.tailoringLevel === 'advanced');
+  return uniqueQuestions(shuffleQuestions([...basic, ...basic, ...tailored, ...advanced]));
+}
+
+function buildQuestionQueue(categoryId, prepProfile) {
+  if (categoryId === 'technical') return buildTechnicalQueue(prepProfile);
+  if (categoryId === 'behavioral') return buildBehavioralQueue(prepProfile);
+  if (categoryId === 'fit') return buildFitQueue(prepProfile);
+  if (categoryId === 'markets') return buildMarketQueue(prepProfile);
+  const mixedBlocks = [
+    ...buildFitQueue(prepProfile).slice(0, 3),
+    ...buildTechnicalQueue(prepProfile).slice(0, 6),
+    ...buildBehavioralQueue(prepProfile).slice(0, 5),
+    ...buildMarketQueue(prepProfile).slice(0, 4)
+  ];
+  return shuffleQuestions(avoidRecentQuestions(uniqueQuestions(mixedBlocks), 'mixed'));
 }
 
 function toggleArrayValue(values, value) {
@@ -753,12 +950,6 @@ function fileToDataUrl(file) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-}
-
-const aiQuestionCategoryIds = ['fit', 'behavioral', 'markets'];
-
-function pickMixedQuestionCategory() {
-  return Math.random() < 0.4 ? 'technical' : aiQuestionCategoryIds[Math.floor(Math.random() * aiQuestionCategoryIds.length)];
 }
 
 export default function InterviewPrepPage({ onBack }) {
@@ -785,6 +976,7 @@ export default function InterviewPrepPage({ onBack }) {
   const transcriptBufferRef = useRef('');
   const interimTranscriptRef = useRef('');
   const shouldCommitTranscriptRef = useRef(false);
+  const questionQueuesRef = useRef({});
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
 
@@ -827,7 +1019,7 @@ export default function InterviewPrepPage({ onBack }) {
     setSpeechMessage(showFallback && !speechSupported ? 'Voice recording is not supported in this browser. Please type your answer.' : '');
   };
 
-  const generateAiQuestion = async (categoryId, previousPrompt = '') => {
+  const generateAiQuestion = async (categoryId, previousPrompt = '', questionPlan = null) => {
     const response = await fetch('/api/interview-question', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -835,7 +1027,8 @@ export default function InterviewPrepPage({ onBack }) {
         categoryId,
         categoryTitle: questionBanks[categoryId]?.title || 'Mixed Mock Interview',
         previousPrompt,
-        prepProfile
+        prepProfile,
+        questionPlan
       })
     });
 
@@ -852,25 +1045,43 @@ export default function InterviewPrepPage({ onBack }) {
 
     const data = await response.json();
     return {
-      ...createGeneratedQuestion(categoryId, prepProfile),
+      ...(questionPlan ? makeQueueQuestion(questionPlan, categoryId) : createGeneratedQuestion(categoryId, prepProfile)),
       prompt: data.question,
       sourceType: 'ai_generated',
       generatedFromProfile: true
     };
   };
 
-  const loadPracticeQuestion = async (categoryId, previousPrompt = '') => {
-    const effectiveCategoryId = categoryId === 'mixed' ? pickMixedQuestionCategory() : categoryId;
-    if (effectiveCategoryId === 'technical') {
-      return pickQuestion('technical', previousPrompt, prepProfile);
+  const resolveQueuedQuestion = async (queuedQuestion, previousPrompt = '') => {
+    if (!queuedQuestion) return null;
+    if (queuedQuestion.sourceType === 'ai_slot') {
+      return generateAiQuestion(queuedQuestion.categoryId, previousPrompt, queuedQuestion);
     }
+    return { ...queuedQuestion, sourceType: queuedQuestion.sourceType || 'static' };
+  };
 
+  const loadPracticeQuestion = async (categoryId, previousPrompt = '') => {
+    if (!questionQueuesRef.current[categoryId]?.length) {
+      questionQueuesRef.current[categoryId] = buildQuestionQueue(categoryId, prepProfile);
+    }
+    let nextQuestion = questionQueuesRef.current[categoryId].shift();
+    if (nextQuestion?.prompt === previousPrompt && questionQueuesRef.current[categoryId].length) {
+      questionQueuesRef.current[categoryId].push(nextQuestion);
+      nextQuestion = questionQueuesRef.current[categoryId].shift();
+    }
     try {
-      return await generateAiQuestion(effectiveCategoryId, previousPrompt);
+      const resolvedQuestion = await resolveQueuedQuestion(nextQuestion, previousPrompt);
+      if (resolvedQuestion) {
+        rememberRecentQuestion(resolvedQuestion);
+        return resolvedQuestion;
+      }
+      const fallback = createGeneratedQuestion(categoryId === 'mixed' ? 'technical' : categoryId, prepProfile);
+      rememberRecentQuestion(fallback);
+      return fallback;
     } catch (error) {
       console.error('[interview-question] Falling back to local generated question', error);
       setQuestionError('AI question generation was unavailable, so a backup question was used.');
-      return createGeneratedQuestion(effectiveCategoryId, prepProfile);
+      return createGeneratedQuestion(nextQuestion?.categoryId || categoryId, prepProfile);
     }
   };
 
@@ -883,6 +1094,7 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
     setQuestionError('');
     setQuestionLoading(true);
+    questionQueuesRef.current[categoryId] = buildQuestionQueue(categoryId, prepProfile);
     try {
       setCurrentQuestion(await loadPracticeQuestion(categoryId));
     } finally {
