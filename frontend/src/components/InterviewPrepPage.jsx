@@ -1009,8 +1009,8 @@ const resumeExperienceTierTargets = {
 
 const resumeExperienceTierBaseWeights = {
   1: 6,
-  2: 3.5,
-  3: 1.8
+  2: 4.2,
+  3: 2.6
 };
 
 function countUsedResumeExperiences(usedExperienceIds = []) {
@@ -1029,6 +1029,32 @@ function getWeightedResumeExperience(experiences) {
     if (cursor <= 0) return experience;
   }
   return experiences.at(-1) || null;
+}
+
+function getCoverageForcedResumePool(enriched, usedExperienceIds = []) {
+  const usedCountsById = countUsedResumeExperiences(usedExperienceIds);
+  const usedItems = usedExperienceIds
+    .map((id) => enriched.find((experience) => experience.id === id))
+    .filter(Boolean);
+  const usedTiers = new Set(usedItems.map((experience) => experience.tier));
+  const unused = enriched.filter((experience) => !usedCountsById[experience.id]);
+  const unusedSecondary = unused.filter((experience) => experience.tier >= 2);
+  const unusedTier2 = unused.filter((experience) => experience.tier === 2);
+  const unusedTier3 = unused.filter((experience) => experience.tier === 3);
+  const turnNumber = usedExperienceIds.length + 1;
+
+  if (turnNumber >= 3 && !usedTiers.has(2) && unusedTier2.length) return unusedTier2;
+  if (turnNumber >= 4 && !usedTiers.has(3) && unusedTier3.length) return unusedTier3;
+  if (turnNumber % 3 === 0 && unusedSecondary.length) return unusedSecondary;
+  if (turnNumber % 5 === 0 && unusedTier3.length) return unusedTier3;
+
+  const recentOrganizations = usedItems.slice(-2).map((experience) => experience.organization).filter(Boolean);
+  if (recentOrganizations.length === 2 && recentOrganizations[0] === recentOrganizations[1]) {
+    const differentOrganization = unused.filter((experience) => experience.organization !== recentOrganizations[0]);
+    if (differentOrganization.length) return differentOrganization;
+  }
+
+  return null;
 }
 
 function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
@@ -1072,6 +1098,7 @@ function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
     .filter((tier) => tierNeed[tier] > 0)
     .sort((a, b) => tierNeed[b] - tierNeed[a])[0];
 
+  const forcedCoveragePool = getCoverageForcedResumePool(enriched, usedExperienceIds);
   const candidates = enriched.map((experience) => {
     const priorUses = usedCountsById[experience.id] || 0;
     const organizationUses = usedOrganizationCounts[experience.organization] || 0;
@@ -1079,8 +1106,8 @@ function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
     const tierGapBoost = underusedTier && experience.tier === underusedTier ? 1.75 : 1;
     const typeRotationBoost = experience.type === preferredType ? 1.25 : 1;
     const subtypeRotationBoost = usedSubtypes.at(-1) && experience.subtype !== usedSubtypes.at(-1) ? 1.15 : 1;
-    const unusedBoost = isUnused ? 2.4 : 0.55 / (priorUses + 1);
-    const organizationPenalty = organizationUses ? 1 / (organizationUses + 1.2) : 1;
+    const unusedBoost = isUnused ? 3.4 : 0.4 / (priorUses + 1);
+    const organizationPenalty = organizationUses ? 1 / ((organizationUses + 1.4) * (organizationUses + 1)) : 1;
     const relevanceBoost = 1 + Math.min(experience.relevanceScore, 8) / 18;
     return {
       ...experience,
@@ -1094,6 +1121,12 @@ function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
         relevanceBoost
     };
   });
+
+  const forcedIds = new Set((forcedCoveragePool || []).map((experience) => experience.id));
+  const forcedCandidates = forcedIds.size ? candidates.filter((experience) => forcedIds.has(experience.id)) : [];
+  if (forcedCandidates.length) {
+    return getWeightedResumeExperience(forcedCandidates.sort((a, b) => b.selectionWeight - a.selectionWeight));
+  }
 
   const unusedCandidates = candidates.filter((experience) => !usedCountsById[experience.id]);
   const pool = unusedCandidates.length ? unusedCandidates : candidates;
@@ -1336,6 +1369,17 @@ function fileToDataUrl(file) {
   });
 }
 
+function getSupportedInterviewAudioMimeType() {
+  if (typeof MediaRecorder === 'undefined') return '';
+  return [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus',
+    'audio/ogg'
+  ].find((mimeType) => MediaRecorder.isTypeSupported(mimeType)) || '';
+}
+
 export default function InterviewPrepPage({ onBack }) {
   const [prepProfile, setPrepProfile] = useState(() => readStoredPrepProfile());
   const [setupDraft, setSetupDraft] = useState(() => readStoredPrepProfile() || emptyPrepProfile);
@@ -1360,6 +1404,8 @@ export default function InterviewPrepPage({ onBack }) {
   const mediaRecorderRef = useRef(null);
   const audioStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const isStartingRecordingRef = useRef(false);
+  const discardNextRecordingRef = useRef(false);
   const questionQueuesRef = useRef({});
   const usedResumeExperienceIdsRef = useRef({});
   const generatedQuestionHistoryRef = useRef({});
@@ -1382,11 +1428,15 @@ export default function InterviewPrepPage({ onBack }) {
   }, []);
 
   const resetVoiceAnswerState = (showFallback = !speechSupported) => {
-    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+    if (mediaRecorderRef.current?.state === 'recording') {
+      discardNextRecordingRef.current = true;
+      mediaRecorderRef.current.stop();
+    }
     mediaRecorderRef.current = null;
     audioStreamRef.current?.getTracks().forEach((track) => track.stop());
     audioStreamRef.current = null;
     audioChunksRef.current = [];
+    isStartingRecordingRef.current = false;
     setAnswer('');
     setShowTextInput(showFallback);
     setIsRecording(false);
@@ -1455,8 +1505,8 @@ export default function InterviewPrepPage({ onBack }) {
                 resumeExperience.tier === 1
                   ? 'This is a high-priority resume experience; ask a realistic banker-style deep dive.'
                   : resumeExperience.tier === 2
-                    ? 'This is a secondary but meaningful experience; ask about transferable skills or what it taught the candidate.'
-                    : 'This is a supporting resume experience; keep the question broad, realistic, and focused on transferable skills.'
+                    ? 'This is a secondary but meaningful experience; ask a simple question about what the candidate learned, transferable skills, communication, teamwork, or attention to detail.'
+                    : 'This is a supporting resume experience; keep the question broad, realistic, and simple, such as what the candidate learned or how they balanced responsibilities.'
             }
           : null
       });
@@ -1758,7 +1808,16 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const transcribeAndEvaluateAudio = async (audioBlob) => {
+    console.info('[interview-audio] recording finalized', {
+      type: audioBlob?.type,
+      size: audioBlob?.size
+    });
     if (!audioBlob || audioBlob.size < 500) {
+      console.error('[interview-audio] empty or invalid audio blob', {
+        hasBlob: Boolean(audioBlob),
+        type: audioBlob?.type,
+        size: audioBlob?.size
+      });
       setFeedbackError('We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       return;
     }
@@ -1777,6 +1836,12 @@ export default function InterviewPrepPage({ onBack }) {
         })
       });
       const payload = await response.json().catch(() => ({}));
+      console.info('[interview-transcribe] API response received', {
+        status: response.status,
+        ok: response.ok,
+        hasTranscript: Boolean(payload.transcript),
+        error: payload.error
+      });
       if (!response.ok || !payload.transcript) {
         throw new Error(payload.error || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       }
@@ -1838,6 +1903,7 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const handleStartRecording = async () => {
+    if (isStartingRecordingRef.current || mediaRecorderRef.current?.state === 'recording') return;
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
       setSpeechSupported(false);
       setSpeechMessage('Audio recording is not available in this browser. You can still type your answer below.');
@@ -1846,27 +1912,55 @@ export default function InterviewPrepPage({ onBack }) {
     }
 
     try {
-      resetVoiceAnswerState(false);
+      isStartingRecordingRef.current = true;
+      mediaRecorderRef.current = null;
+      audioStreamRef.current?.getTracks().forEach((track) => track.stop());
+      audioStreamRef.current = null;
+      audioChunksRef.current = [];
+      discardNextRecordingRef.current = false;
+      setAnswer('');
+      setShowTextInput(false);
+      setIsTranscribingAnswer(false);
       setFeedback(null);
       setFeedbackError('');
       const nextStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioStreamRef.current = nextStream;
       audioChunksRef.current = [];
-      const audioMimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
-      const recorder = new MediaRecorder(nextStream, { mimeType: audioMimeType });
+      const audioTracks = nextStream.getAudioTracks().filter((track) => track.readyState === 'live');
+      if (!audioTracks.length) {
+        throw new Error('We could not detect microphone audio. Please check microphone permission and retry.');
+      }
+      const audioStream = new MediaStream(audioTracks);
+      const audioMimeType = getSupportedInterviewAudioMimeType();
+      const recorder = audioMimeType ? new MediaRecorder(audioStream, { mimeType: audioMimeType }) : new MediaRecorder(audioStream);
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) audioChunksRef.current.push(event.data);
       };
       recorder.onstop = () => {
+        const shouldDiscard = discardNextRecordingRef.current;
         const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || audioMimeType });
+        console.info('[interview-audio] recorder stopped', {
+          discarded: shouldDiscard,
+          mimeType: recorder.mimeType || audioMimeType,
+          blobType: audioBlob.type,
+          blobSize: audioBlob.size,
+          chunkCount: audioChunksRef.current.length,
+          audioTracks: audioTracks.length
+        });
         audioStreamRef.current?.getTracks().forEach((track) => track.stop());
         audioStreamRef.current = null;
         mediaRecorderRef.current = null;
         audioChunksRef.current = [];
+        discardNextRecordingRef.current = false;
         setIsRecording(false);
+        if (shouldDiscard) return;
         transcribeAndEvaluateAudio(audioBlob);
       };
       mediaRecorderRef.current = recorder;
+      console.info('[interview-audio] recording started', {
+        audioMimeType: recorder.mimeType || audioMimeType || 'browser-default',
+        audioTracks: audioTracks.length
+      });
       recorder.start();
       setIsRecording(true);
       setSpeechMessage('Listening...');
@@ -1874,13 +1968,20 @@ export default function InterviewPrepPage({ onBack }) {
       console.error('[interview-audio] Failed to start recording', error);
       setIsRecording(false);
       setSpeechMessage('Microphone access failed. Please try again or use Type Instead.');
-      setFeedbackError('We couldn’t access your microphone. Please try again or use Type Instead.');
+      setFeedbackError(error.message || 'We couldn’t access your microphone. Please try again or use Type Instead.');
+    } finally {
+      isStartingRecordingRef.current = false;
     }
   };
 
   const handleStopRecording = () => {
     if (mediaRecorderRef.current?.state === 'recording') {
       setSpeechMessage('Analyzing your answer...');
+      try {
+        mediaRecorderRef.current.requestData();
+      } catch {
+        // Some browsers do not support manual data flushing before stop.
+      }
       mediaRecorderRef.current.stop();
     } else {
       setIsRecording(false);
