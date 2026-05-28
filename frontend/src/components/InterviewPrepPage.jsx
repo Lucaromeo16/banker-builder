@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000' : '');
-
 const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const targetGroupOptions = [
   'M&A',
@@ -1862,7 +1860,7 @@ export default function InterviewPrepPage({ onBack }) {
       finalBlobSize: audioBlob?.size || 0,
       transcriptionPayloadFields: 'file',
       transcriptionOpenAIFileField: 'file',
-      transcriptionFileName: 'answer.webm'
+      transcriptionFileName: 'interview-answer.webm'
     });
     console.info('[interview-audio] recording finalized', {
       type: audioBlob?.type,
@@ -1887,7 +1885,7 @@ export default function InterviewPrepPage({ onBack }) {
       blobType: audioBlob.type,
       blobSize: audioBlob.size,
       browserPayloadFields: ['file'],
-      fileName: 'answer.webm',
+      fileName: 'interview-answer.webm',
       backendOpenAIFileField: 'file'
     });
     setIsTranscribingAnswer(true);
@@ -1897,14 +1895,27 @@ export default function InterviewPrepPage({ onBack }) {
     setSpeechMessage('Transcribing...');
     try {
       const formData = new FormData();
-      formData.append('file', audioBlob, 'answer.webm');
-      const transcriptionUrl = `${API_BASE_URL}/api/audio-transcribe`;
+      formData.append('file', audioBlob, 'interview-answer.webm');
+      const transcriptionUrl = '/api/audio-transcribe';
       updateAudioDebugInfo({ transcriptionUrl });
+      console.info('Interview Prep transcription request starting', {
+        url: transcriptionUrl,
+        method: 'POST',
+        formDataKey: 'file',
+        fileName: 'interview-answer.webm',
+        blobType: audioBlob.type,
+        blobSize: audioBlob.size
+      });
       const response = await fetch(transcriptionUrl, {
         method: 'POST',
         body: formData
       });
       const payload = await response.json().catch(() => ({}));
+      console.info('Interview Prep transcription response received', {
+        status: response.status,
+        ok: response.ok,
+        error: payload.error
+      });
       updateAudioDebugInfo({
         transcriptionStatus: response.status,
         transcriptionOk: response.ok,
