@@ -35,7 +35,8 @@ const emptyPrepProfile = {
   targetBankTier: '',
   practiceMode: 'resume-aware',
   resumeText: '',
-  resumeFileName: ''
+  resumeFileName: '',
+  resumeContext: null
 };
 const prepProfileSessionKey = 'bankerBuilderInterviewPrepProfile';
 
@@ -47,7 +48,8 @@ function normalizePrepProfile(profile) {
     targetGroups: Array.isArray(profile.targetGroups) ? profile.targetGroups : [],
     practiceMode: profile.practiceMode === 'generic' ? 'generic' : 'resume-aware',
     resumeText: typeof profile.resumeText === 'string' ? profile.resumeText : '',
-    resumeFileName: typeof profile.resumeFileName === 'string' ? profile.resumeFileName : ''
+    resumeFileName: typeof profile.resumeFileName === 'string' ? profile.resumeFileName : '',
+    resumeContext: profile.resumeContext || (profile.resumeText ? buildResumeContext(profile.resumeText) : null)
   };
 }
 
@@ -57,6 +59,7 @@ function getProfileForSessionStorage(profile) {
   return {
     ...normalized,
     resumeText: '',
+    resumeContext: null,
     resumeFileName: normalized.practiceMode === 'resume-aware' ? normalized.resumeFileName : ''
   };
 }
@@ -71,6 +74,119 @@ function readStoredPrepProfile() {
   } catch {
     return null;
   }
+}
+
+function normalizeResumeLine(line) {
+  return line.replace(/\s+/g, ' ').trim();
+}
+
+function sectionKeyFromLine(line) {
+  const normalized = normalizeResumeLine(line).toLowerCase();
+  if (/^(education|academic background)$/.test(normalized)) return 'education';
+  if (/^(work experience|professional experience|experience|employment|relevant experience)$/.test(normalized)) return 'workExperience';
+  if (/^(leadership|leadership experience|activities|involvement|extracurriculars|campus involvement|leadership & activities|leadership and activities)$/.test(normalized)) return 'leadership';
+  if (/^(additional|skills|certifications|interests|additional information|technical skills)$/.test(normalized)) return 'additional';
+  return null;
+}
+
+function splitResumeSections(resumeText) {
+  const sections = {
+    education: [],
+    workExperience: [],
+    leadership: [],
+    additional: []
+  };
+  let currentSection = 'additional';
+  resumeText
+    .replace(/\s+(EDUCATION|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EXPERIENCE|EMPLOYMENT|LEADERSHIP|ACTIVITIES|INVOLVEMENT|EXTRACURRICULARS|ADDITIONAL|SKILLS|CERTIFICATIONS|INTERESTS)\s+/g, '\n$1\n')
+    .split(/\n|(?=\s*[•●▪-]\s+)/)
+    .map(normalizeResumeLine)
+    .filter(Boolean)
+    .forEach((line) => {
+      const nextSection = sectionKeyFromLine(line);
+      if (nextSection) {
+        currentSection = nextSection;
+        return;
+      }
+      sections[currentSection].push(line);
+    });
+  return sections;
+}
+
+function looksLikeExperienceHeader(line) {
+  return (
+    /\b(20\d{2}|19\d{2}|present|current|incoming|summer|fall|spring|winter)\b/i.test(line) &&
+    !/^[•●▪-]/.test(line) &&
+    line.length < 180
+  );
+}
+
+function parseExperienceHeader(line) {
+  const clean = normalizeResumeLine(line).replace(/\s+[|•]\s+/g, ' - ');
+  const dateMatch = clean.match(/\b((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+)?(?:20\d{2}|19\d{2})\s*(?:[-–—]|to)\s*(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+)?(?:20\d{2}|19\d{2}|Present|Current)|\b(?:Present|Current|Incoming)\b/i);
+  const dates = dateMatch?.[0] || '';
+  const beforeDate = dates ? clean.slice(0, dateMatch.index).trim() : clean;
+  const pieces = beforeDate
+    .split(/\s+-\s+|\s+\|\s+|,\s+(?=[A-Z])/)
+    .map(normalizeResumeLine)
+    .filter(Boolean);
+  return {
+    organization: pieces[0] || beforeDate || 'Resume experience',
+    title: pieces.slice(1).join(' - '),
+    dates
+  };
+}
+
+function strongestThemesFromText(text) {
+  const themes = [];
+  [
+    ['valuation', /\bvaluation|DCF|comps|precedent|model/i],
+    ['financial analysis', /\bfinancial analysis|forecast|budget|revenue|margin|EBITDA/i],
+    ['client service', /\bclient|customer|stakeholder/i],
+    ['leadership', /\bled|lead|managed|captain|president|chair|founder/i],
+    ['research', /\bresearch|market|industry|competitive/i],
+    ['operations', /\boperations|process|workflow|compliance|audit/i]
+  ].forEach(([theme, pattern]) => {
+    if (pattern.test(text)) themes.push(theme);
+  });
+  return themes.slice(0, 3);
+}
+
+function parseResumeItems(lines, type) {
+  const items = [];
+  lines.forEach((line) => {
+    const cleaned = normalizeResumeLine(line);
+    if (!cleaned) return;
+    if (looksLikeExperienceHeader(cleaned) || (!items.length && !/^[•●▪-]/.test(cleaned))) {
+      if (looksLikeExperienceHeader(cleaned)) {
+        const parsed = parseExperienceHeader(cleaned);
+        items.push({ id: `${type}-${items.length}`, type, ...parsed, bullets: [], strongestThemes: [] });
+      } else if (!items.length) {
+        items.push({ id: `${type}-${items.length}`, type, organization: cleaned, title: '', dates: '', bullets: [], strongestThemes: [] });
+      }
+      return;
+    }
+    const current = items[items.length - 1];
+    if (current && current.bullets.length < 5) current.bullets.push(cleaned.replace(/^[•●▪-]\s*/, ''));
+  });
+  return items
+    .map((item) => ({
+      ...item,
+      strongestThemes: strongestThemesFromText(`${item.organization} ${item.title} ${item.bullets.join(' ')}`)
+    }))
+    .filter((item) => item.organization && item.organization.length > 2)
+    .slice(0, 8);
+}
+
+function buildResumeContext(resumeText) {
+  if (!resumeText) return null;
+  const sections = splitResumeSections(resumeText);
+  return {
+    education: sections.education.slice(0, 8),
+    workExperience: parseResumeItems(sections.workExperience, 'work'),
+    leadership: parseResumeItems(sections.leadership, 'leadership'),
+    additional: sections.additional.slice(0, 10)
+  };
 }
 
 const questionBanks = {
@@ -825,6 +941,32 @@ function getPrimaryProfileGroup(prepProfile) {
   return selectedGroups.find((group) => group !== 'Generalist') || 'Generalist';
 }
 
+function getResumeExperiences(prepProfile) {
+  const context = prepProfile?.resumeContext || (prepProfile?.resumeText ? buildResumeContext(prepProfile.resumeText) : null);
+  return [
+    ...(context?.workExperience || []),
+    ...(context?.leadership || [])
+  ].filter((item) => item.organization);
+}
+
+function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
+  const experiences = getResumeExperiences(prepProfile);
+  if (!experiences.length) return null;
+  const used = new Set(usedExperienceIds);
+  const unused = experiences.filter((experience) => !used.has(experience.id));
+  const pool = unused.length ? unused : experiences;
+  const usedTypes = usedExperienceIds
+    .map((id) => experiences.find((experience) => experience.id === id)?.type)
+    .filter(Boolean);
+  const preferredType = usedTypes.at(-1) === 'work' ? 'leadership' : 'work';
+  return pool.find((experience) => experience.type === preferredType) || pool[0];
+}
+
+function experienceLabel(experience) {
+  if (!experience) return '';
+  return [experience.organization, experience.title].filter(Boolean).join(' - ');
+}
+
 function createGeneratedQuestion(categoryId, prepProfile) {
   const primaryGroup = getPrimaryProfileGroup(prepProfile);
   const isResumeAware = prepProfile?.practiceMode === 'resume-aware' && Boolean(prepProfile?.resumeText);
@@ -1081,6 +1223,8 @@ export default function InterviewPrepPage({ onBack }) {
   const interimTranscriptRef = useRef('');
   const shouldCommitTranscriptRef = useRef(false);
   const questionQueuesRef = useRef({});
+  const usedResumeExperienceIdsRef = useRef({});
+  const generatedQuestionHistoryRef = useRef({});
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
 
@@ -1124,6 +1268,7 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const generateAiQuestion = async (categoryId, previousPrompt = '', questionPlan = null) => {
+    const generatedHistory = generatedQuestionHistoryRef.current[categoryId] || [];
     const response = await fetch('/api/interview-question', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1132,7 +1277,8 @@ export default function InterviewPrepPage({ onBack }) {
         categoryTitle: questionBanks[categoryId]?.title || 'Mixed Mock Interview',
         previousPrompt,
         prepProfile,
-        questionPlan
+        questionPlan,
+        generatedQuestionHistory: generatedHistory.slice(-8)
       })
     });
 
@@ -1159,16 +1305,79 @@ export default function InterviewPrepPage({ onBack }) {
   const resolveQueuedQuestion = async (queuedQuestion, previousPrompt = '') => {
     if (!queuedQuestion) return null;
     if (queuedQuestion.sourceType === 'ai_slot') {
-      return generateAiQuestion(queuedQuestion.categoryId, previousPrompt, queuedQuestion);
+      const usedIds = usedResumeExperienceIdsRef.current[queuedQuestion.categoryId] || [];
+      const resumeExperience =
+        prepProfile?.practiceMode === 'resume-aware' && queuedQuestion.tailoringLevel === 'specific'
+          ? chooseResumeExperience(prepProfile, usedIds)
+          : null;
+      const resolved = await generateAiQuestion(queuedQuestion.categoryId, previousPrompt, {
+        ...queuedQuestion,
+        resumeExperience: resumeExperience
+          ? {
+              id: resumeExperience.id,
+              type: resumeExperience.type,
+              organization: resumeExperience.organization,
+              title: resumeExperience.title,
+              dates: resumeExperience.dates,
+              bullets: resumeExperience.bullets.slice(0, 3),
+              strongestThemes: resumeExperience.strongestThemes
+            }
+          : null
+      });
+      if (resumeExperience) {
+        usedResumeExperienceIdsRef.current[queuedQuestion.categoryId] = [...usedIds, resumeExperience.id];
+      }
+      return resolved;
     }
     return { ...queuedQuestion, sourceType: queuedQuestion.sourceType || 'static' };
   };
 
+  const createAiFallbackQuestionPlan = (categoryId) => {
+    const effectiveCategoryId = categoryId === 'mixed'
+      ? ['fit', 'behavioral', 'markets', 'technical'][Math.floor(Math.random() * 4)]
+      : categoryId;
+    if (effectiveCategoryId === 'technical') {
+      const topic = getPrimaryProfileGroup(prepProfile) === 'Generalist' ? 'universal core accounting or valuation' : `${getPrimaryProfileGroup(prepProfile)} technical fundamentals`;
+      return makeQueueQuestion({
+        prompt: `Generate one simple ${topic} technical question.`,
+        sourceType: 'ai_slot',
+        tailoringLevel: 'generic',
+        questionCategory: `ai-technical-${Date.now()}`,
+        topic,
+        difficultyLevel: 'beginner'
+      }, 'technical');
+    }
+    if (effectiveCategoryId === 'fit') {
+      return makeQueueQuestion({
+        prompt: 'Generate one simple fit question that is not Why IB, Why this bank, or Why this group.',
+        sourceType: 'ai_slot',
+        tailoringLevel: prepProfile?.practiceMode === 'resume-aware' ? 'specific' : 'generic',
+        questionCategory: `ai-fit-${Date.now()}`
+      }, 'fit');
+    }
+    if (effectiveCategoryId === 'behavioral') {
+      return makeQueueQuestion({
+        prompt: 'Generate one realistic behavioral interview question.',
+        sourceType: 'ai_slot',
+        tailoringLevel: prepProfile?.practiceMode === 'resume-aware' ? 'light' : 'generic',
+        questionCategory: `ai-behavioral-${Date.now()}`
+      }, 'behavioral');
+    }
+    return makeQueueQuestion({
+      prompt: 'Generate one simple analyst-level market or deal discussion question.',
+      sourceType: 'ai_slot',
+      tailoringLevel: 'generic',
+      questionCategory: `ai-market-${Date.now()}`
+    }, 'markets');
+  };
+
   const loadPracticeQuestion = async (categoryId, previousPrompt = '') => {
-    if (!questionQueuesRef.current[categoryId]?.length) {
+    if (!questionQueuesRef.current[categoryId]) {
       questionQueuesRef.current[categoryId] = buildQuestionQueue(categoryId, prepProfile);
     }
-    let nextQuestion = questionQueuesRef.current[categoryId].shift();
+    let nextQuestion = questionQueuesRef.current[categoryId].length
+      ? questionQueuesRef.current[categoryId].shift()
+      : createAiFallbackQuestionPlan(categoryId);
     if (nextQuestion?.prompt === previousPrompt && questionQueuesRef.current[categoryId].length) {
       questionQueuesRef.current[categoryId].push(nextQuestion);
       nextQuestion = questionQueuesRef.current[categoryId].shift();
@@ -1177,6 +1386,12 @@ export default function InterviewPrepPage({ onBack }) {
       const resolvedQuestion = await resolveQueuedQuestion(nextQuestion, previousPrompt);
       if (resolvedQuestion) {
         rememberRecentQuestion(resolvedQuestion);
+        if (resolvedQuestion.sourceType === 'ai_generated') {
+          generatedQuestionHistoryRef.current[categoryId] = [
+            ...(generatedQuestionHistoryRef.current[categoryId] || []),
+            resolvedQuestion.prompt
+          ].slice(-12);
+        }
         return resolvedQuestion;
       }
       const fallback = createGeneratedQuestion(categoryId === 'mixed' ? 'technical' : categoryId, prepProfile);
@@ -1199,6 +1414,8 @@ export default function InterviewPrepPage({ onBack }) {
     setQuestionError('');
     setQuestionLoading(true);
     questionQueuesRef.current[categoryId] = buildQuestionQueue(categoryId, prepProfile);
+    usedResumeExperienceIdsRef.current[categoryId] = [];
+    generatedQuestionHistoryRef.current[categoryId] = [];
     try {
       setCurrentQuestion(await loadPracticeQuestion(categoryId));
     } finally {
@@ -1210,7 +1427,7 @@ export default function InterviewPrepPage({ onBack }) {
     const file = event.target.files?.[0];
     if (!file) return;
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-      setSetupDraft((current) => ({ ...current, resumeText: '', resumeFileName: '' }));
+      setSetupDraft((current) => ({ ...current, resumeText: '', resumeContext: null, resumeFileName: '' }));
       setResumeUploadStatus('');
       setSetupError('Please upload a PDF resume.');
       return;
@@ -1237,11 +1454,12 @@ export default function InterviewPrepPage({ onBack }) {
         ...current,
         practiceMode: 'resume-aware',
         resumeText: payload.resumeText,
+        resumeContext: buildResumeContext(payload.resumeText),
         resumeFileName: file.name
       }));
       setResumeUploadStatus(`${file.name} uploaded for this session.`);
     } catch (error) {
-      setSetupDraft((current) => ({ ...current, resumeText: '', resumeFileName: '' }));
+      setSetupDraft((current) => ({ ...current, resumeText: '', resumeContext: null, resumeFileName: '' }));
       setResumeUploadStatus('');
       setSetupError(error.message || 'We could not process that PDF. Please retry the upload.');
     } finally {
@@ -1639,6 +1857,7 @@ export default function InterviewPrepPage({ onBack }) {
                         ...current,
                         practiceMode: mode.value,
                         resumeText: mode.value === 'generic' ? '' : current.resumeText,
+                        resumeContext: mode.value === 'generic' ? null : current.resumeContext,
                         resumeFileName: mode.value === 'generic' ? '' : current.resumeFileName
                       }));
                     }}

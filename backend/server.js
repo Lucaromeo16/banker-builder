@@ -1239,7 +1239,7 @@ app.post('/api/interview-feedback', async (req, res) => {
 
 app.post('/api/interview-question', async (req, res) => {
   try {
-    const { categoryId, categoryTitle, previousPrompt, prepProfile, questionPlan } = req.body;
+    const { categoryId, categoryTitle, previousPrompt, prepProfile, questionPlan, generatedQuestionHistory } = req.body;
     console.log('[interview-question] Request received', {
       route: 'POST /api/interview-question',
       categoryId,
@@ -1254,9 +1254,18 @@ app.post('/api/interview-question', async (req, res) => {
             tailoringLevel: questionPlan.tailoringLevel,
             topic: questionPlan.topic,
             groupType: questionPlan.groupType,
+            questionCategory: questionPlan.questionCategory,
+            resumeExperience: questionPlan.resumeExperience
+              ? {
+                  type: questionPlan.resumeExperience.type,
+                  organization: questionPlan.resumeExperience.organization,
+                  title: questionPlan.resumeExperience.title
+                }
+              : null,
             promptPreview: typeof questionPlan.prompt === 'string' ? questionPlan.prompt.slice(0, 90) : undefined
           }
         : null,
+      generatedQuestionCount: Array.isArray(generatedQuestionHistory) ? generatedQuestionHistory.length : 0,
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY),
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
     });
@@ -1278,7 +1287,7 @@ app.post('/api/interview-question', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category and questionPlan. Keep questions one sentence whenever possible, direct, and banker-like. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, and resumeText when present. Respect questionPlan.questionCategory and do not duplicate mandatory categories such as whyIB, whyBank, or whyGroup. Respect questionPlan.tailoringLevel: generic means broad and no background reference; light means broad with only a general internship/class/leadership framing; specific means occasional resume-aware reference to one explicit resume detail only. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText; do not invent or infer details. Technical questions should not be freely generated unless a questionPlan explicitly requests one; technical content must be selected-group driven. Market questions for Summer Analyst candidates should usually be basic market awareness, not MBA-level strategy. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt.',
+          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category and questionPlan. Keep questions one sentence whenever possible, direct, and banker-like. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, resumeContext, and resumeText when present. Respect questionPlan.questionCategory and do not duplicate mandatory categories such as whyIB, whyBank, or whyGroup. If questionPlan.resumeExperience is provided, use that specific explicit resume item for any resume-specific question; do not switch back to the first or most recent resume item. Respect questionPlan.tailoringLevel: generic means broad and no background reference; light means broad with only a general internship/class/leadership framing; specific means occasional resume-aware reference to one explicit resume detail only. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText or resumeContext; do not invent or infer details. Technical questions should not be freely generated unless a questionPlan explicitly requests one; technical content must be selected-group driven. Market questions for Summer Analyst candidates should usually be basic market awareness, not MBA-level strategy. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt or any item in generatedQuestionHistory.',
         input: [
           {
             role: 'user',
@@ -1290,7 +1299,8 @@ app.post('/api/interview-question', async (req, res) => {
                   categoryTitle,
                   previousPrompt: previousPrompt || '',
                   prepProfile,
-                  questionPlan: questionPlan || null
+                  questionPlan: questionPlan || null,
+                  generatedQuestionHistory: Array.isArray(generatedQuestionHistory) ? generatedQuestionHistory.slice(-8) : []
                 })
               }
             ]
