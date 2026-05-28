@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000' : '');
+
 const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const targetGroupOptions = [
   'M&A',
@@ -1413,6 +1415,7 @@ export default function InterviewPrepPage({ onBack }) {
   const mediaRecorderRef = useRef(null);
   const audioStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const recordedAudioBlobRef = useRef(null);
   const capturedAudioUrlRef = useRef('');
   const isStartingRecordingRef = useRef(false);
   const discardNextRecordingRef = useRef(false);
@@ -1431,8 +1434,10 @@ export default function InterviewPrepPage({ onBack }) {
         ? 'Listening...'
         : recordingPhase === 'stopping'
           ? 'Finalizing recording...'
-          : recordingPhase === 'analyzing' || feedbackLoading || isTranscribingAnswer
-            ? 'Analyzing your answer...'
+          : isTranscribingAnswer
+            ? 'Transcribing...'
+            : recordingPhase === 'analyzing' || feedbackLoading
+              ? 'Evaluating...'
             : 'Start speaking';
 
   useEffect(() => {
@@ -1464,6 +1469,7 @@ export default function InterviewPrepPage({ onBack }) {
     audioStreamRef.current?.getTracks().forEach((track) => track.stop());
     audioStreamRef.current = null;
     audioChunksRef.current = [];
+    recordedAudioBlobRef.current = null;
     isStartingRecordingRef.current = false;
     if (capturedAudioUrlRef.current) {
       URL.revokeObjectURL(capturedAudioUrlRef.current);
@@ -1888,11 +1894,13 @@ export default function InterviewPrepPage({ onBack }) {
     setRecordingPhase('analyzing');
     setFeedbackLoading(true);
     setFeedbackError('');
-    setSpeechMessage('Analyzing your answer...');
+    setSpeechMessage('Transcribing...');
     try {
       const formData = new FormData();
       formData.append('file', audioBlob, 'answer.webm');
-      const response = await fetch('/api/audio-transcribe', {
+      const transcriptionUrl = `${API_BASE_URL}/api/audio-transcribe`;
+      updateAudioDebugInfo({ transcriptionUrl });
+      const response = await fetch(transcriptionUrl, {
         method: 'POST',
         body: formData
       });
@@ -1915,10 +1923,15 @@ export default function InterviewPrepPage({ onBack }) {
         throw new Error(payload.error || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       }
       setAnswer(payload.transcript);
+      setSpeechMessage('Evaluating...');
       const evaluated = await submitAnswerForFeedback(payload.transcript);
       setSpeechMessage(evaluated ? 'Answer analyzed.' : 'Evaluation failed. Please try again.');
     } catch (error) {
       console.error('[interview-transcribe] Audio transcription/evaluation failed', error);
+      updateAudioDebugInfo({
+        transcriptionError: error.message || 'Transcription request failed',
+        transcriptionOk: false
+      });
       setFeedbackLoading(false);
       setFeedbackError(error.message || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       setSpeechMessage('Transcription failed. Please try again or use Type Instead.');
@@ -2044,6 +2057,7 @@ export default function InterviewPrepPage({ onBack }) {
         const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || audioMimeType });
         if (capturedAudioUrlRef.current) URL.revokeObjectURL(capturedAudioUrlRef.current);
         const nextAudioUrl = audioBlob.size > 0 ? URL.createObjectURL(audioBlob) : '';
+        recordedAudioBlobRef.current = audioBlob;
         capturedAudioUrlRef.current = nextAudioUrl;
         setCapturedAudioUrl(nextAudioUrl);
         updateAudioDebugInfo({
@@ -2410,6 +2424,10 @@ export default function InterviewPrepPage({ onBack }) {
                   <div>
                     <dt>Transcription</dt>
                     <dd>{audioDebugInfo.transcriptionStatus || 'not sent'} {audioDebugInfo.transcriptionOk === false ? 'failed' : ''}</dd>
+                  </div>
+                  <div>
+                    <dt>Route</dt>
+                    <dd>{audioDebugInfo.transcriptionUrl || 'not sent'}</dd>
                   </div>
                   <div>
                     <dt>Payload</dt>
