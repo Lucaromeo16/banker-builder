@@ -949,17 +949,155 @@ function getResumeExperiences(prepProfile) {
   ].filter((item) => item.organization);
 }
 
+function getResumeExperienceText(experience) {
+  return `${experience.organization || ''} ${experience.title || ''} ${experience.dates || ''} ${experience.bullets?.join(' ') || ''}`.toLowerCase();
+}
+
+function getResumeExperienceSubtype(experience) {
+  const text = getResumeExperienceText(experience);
+  if (/\b(investment banking|m&a|merger|acquisition|valuation|capital markets|private equity|transaction|deal|financial model|dcf|comps|leveraged finance|restructuring|equity research|asset management)\b/i.test(text)) {
+    return 'finance';
+  }
+  if (/\b(accounting|audit|tax|advisory|assurance|valuation|consulting|due diligence|transaction services|business valuation)\b/i.test(text)) {
+    return 'accounting-advisory';
+  }
+  if (/\b(intern|analyst|associate|consultant|professional|corporate|bank|credit|risk|treasury|finance)\b/i.test(text)) {
+    return 'professional';
+  }
+  if (/\b(client|customer|service|operations|support|assistant|campus job|student worker|desk|link|ambassador)\b/i.test(text)) {
+    return 'client-operations';
+  }
+  if (/\b(president|founder|chair|director|captain|treasurer|executive board|vp|vice president)\b/i.test(text)) {
+    return 'leadership';
+  }
+  if (/\b(scholars|honors|fellowship|program|cohort)\b/i.test(text)) {
+    return 'scholars-program';
+  }
+  if (/\b(fraternity|sorority|club|association|society|student|volunteer|member|campus)\b/i.test(text)) {
+    return 'extracurricular';
+  }
+  return experience.type === 'work' ? 'professional' : 'supporting';
+}
+
+function scoreResumeExperience(experience, prepProfile) {
+  const text = getResumeExperienceText(experience);
+  const selectedGroups = (prepProfile?.targetGroups || []).map((group) => group.toLowerCase());
+  let score = 0;
+  if (experience.type === 'work') score += 2;
+  if (experience.type === 'leadership') score += 1.5;
+  if (/\b(investment banking|m&a|merger|acquisition|valuation|capital markets|private equity|transaction|deal|financial model|dcf|comps)\b/i.test(text)) score += 5;
+  if (/\b(accounting|audit|advisory|consulting|finance|financial|bank|credit|risk|client|operations|analyst|intern)\b/i.test(text)) score += 3;
+  if (/\b(president|founder|captain|chair|director|vp|treasurer|managed|led|leadership)\b/i.test(text)) score += 3;
+  if (/\b(scholars|honors|program|campus|student|assistant|link|ambassador|member)\b/i.test(text)) score += 1;
+  if (selectedGroups.some((group) => group !== 'generalist' && text.includes(group))) score += 2;
+  return score;
+}
+
+function tierResumeExperience(experience, prepProfile) {
+  const score = scoreResumeExperience(experience, prepProfile);
+  const subtype = getResumeExperienceSubtype(experience);
+  if (score >= 7 || subtype === 'finance' || (subtype === 'leadership' && score >= 5.5)) return 1;
+  if (score >= 4 || ['accounting-advisory', 'professional', 'client-operations', 'leadership'].includes(subtype)) return 2;
+  return 3;
+}
+
+const resumeExperienceTierTargets = {
+  1: 0.55,
+  2: 0.3,
+  3: 0.15
+};
+
+const resumeExperienceTierBaseWeights = {
+  1: 6,
+  2: 3.5,
+  3: 1.8
+};
+
+function countUsedResumeExperiences(usedExperienceIds = []) {
+  return usedExperienceIds.reduce((counts, id) => ({
+    ...counts,
+    [id]: (counts[id] || 0) + 1
+  }), {});
+}
+
+function getWeightedResumeExperience(experiences) {
+  const totalWeight = experiences.reduce((sum, experience) => sum + Math.max(experience.selectionWeight || 0, 0), 0);
+  if (!totalWeight) return experiences[0] || null;
+  let cursor = Math.random() * totalWeight;
+  for (const experience of experiences) {
+    cursor -= Math.max(experience.selectionWeight || 0, 0);
+    if (cursor <= 0) return experience;
+  }
+  return experiences.at(-1) || null;
+}
+
 function chooseResumeExperience(prepProfile, usedExperienceIds = []) {
   const experiences = getResumeExperiences(prepProfile);
   if (!experiences.length) return null;
-  const used = new Set(usedExperienceIds);
-  const unused = experiences.filter((experience) => !used.has(experience.id));
-  const pool = unused.length ? unused : experiences;
+  const usedCountsById = countUsedResumeExperiences(usedExperienceIds);
+  const enriched = experiences.map((experience) => ({
+    ...experience,
+    subtype: getResumeExperienceSubtype(experience),
+    tier: tierResumeExperience(experience, prepProfile),
+    relevanceScore: scoreResumeExperience(experience, prepProfile)
+  }));
   const usedTypes = usedExperienceIds
-    .map((id) => experiences.find((experience) => experience.id === id)?.type)
+    .map((id) => enriched.find((experience) => experience.id === id)?.type)
     .filter(Boolean);
+  const usedSubtypes = usedExperienceIds
+    .map((id) => enriched.find((experience) => experience.id === id)?.subtype)
+    .filter(Boolean);
+  const usedTiers = usedExperienceIds
+    .map((id) => enriched.find((experience) => experience.id === id)?.tier)
+    .filter(Boolean);
+  const usedOrganizations = usedExperienceIds
+    .map((id) => enriched.find((experience) => experience.id === id)?.organization)
+    .filter(Boolean);
+  const usedOrganizationCounts = usedOrganizations.reduce((counts, organization) => ({
+    ...counts,
+    [organization]: (counts[organization] || 0) + 1
+  }), {});
+  const tierCounts = [1, 2, 3].reduce((counts, tier) => ({
+    ...counts,
+    [tier]: usedTiers.filter((usedTier) => usedTier === tier).length
+  }), {});
   const preferredType = usedTypes.at(-1) === 'work' ? 'leadership' : 'work';
-  return pool.find((experience) => experience.type === preferredType) || pool[0];
+  const totalUsed = usedTiers.length || 1;
+  const availableTiers = [1, 2, 3].filter((tier) => enriched.some((experience) => experience.tier === tier));
+  const tierNeed = availableTiers.reduce((needs, tier) => ({
+    ...needs,
+    [tier]: resumeExperienceTierTargets[tier] - ((tierCounts[tier] || 0) / totalUsed)
+  }), {});
+  const underusedTier = availableTiers
+    .filter((tier) => tierNeed[tier] > 0)
+    .sort((a, b) => tierNeed[b] - tierNeed[a])[0];
+
+  const candidates = enriched.map((experience) => {
+    const priorUses = usedCountsById[experience.id] || 0;
+    const organizationUses = usedOrganizationCounts[experience.organization] || 0;
+    const isUnused = priorUses === 0;
+    const tierGapBoost = underusedTier && experience.tier === underusedTier ? 1.75 : 1;
+    const typeRotationBoost = experience.type === preferredType ? 1.25 : 1;
+    const subtypeRotationBoost = usedSubtypes.at(-1) && experience.subtype !== usedSubtypes.at(-1) ? 1.15 : 1;
+    const unusedBoost = isUnused ? 2.4 : 0.55 / (priorUses + 1);
+    const organizationPenalty = organizationUses ? 1 / (organizationUses + 1.2) : 1;
+    const relevanceBoost = 1 + Math.min(experience.relevanceScore, 8) / 18;
+    return {
+      ...experience,
+      selectionWeight:
+        resumeExperienceTierBaseWeights[experience.tier] *
+        tierGapBoost *
+        typeRotationBoost *
+        subtypeRotationBoost *
+        unusedBoost *
+        organizationPenalty *
+        relevanceBoost
+    };
+  });
+
+  const unusedCandidates = candidates.filter((experience) => !usedCountsById[experience.id]);
+  const pool = unusedCandidates.length ? unusedCandidates : candidates;
+  return getWeightedResumeExperience(pool.sort((a, b) => b.selectionWeight - a.selectionWeight));
 }
 
 function experienceLabel(experience) {
@@ -1215,13 +1353,13 @@ export default function InterviewPrepPage({ onBack }) {
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [feedbackError, setFeedbackError] = useState('');
   const [isRecording, setIsRecording] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(true);
+  const [speechSupported, setSpeechSupported] = useState(() => typeof navigator !== 'undefined' && Boolean(navigator.mediaDevices?.getUserMedia) && typeof MediaRecorder !== 'undefined');
   const [speechMessage, setSpeechMessage] = useState('');
   const [showTextInput, setShowTextInput] = useState(false);
-  const recognitionRef = useRef(null);
-  const transcriptBufferRef = useRef('');
-  const interimTranscriptRef = useRef('');
-  const shouldCommitTranscriptRef = useRef(false);
+  const [isTranscribingAnswer, setIsTranscribingAnswer] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioStreamRef = useRef(null);
+  const audioChunksRef = useRef([]);
   const questionQueuesRef = useRef({});
   const usedResumeExperienceIdsRef = useRef({});
   const generatedQuestionHistoryRef = useRef({});
@@ -1229,42 +1367,31 @@ export default function InterviewPrepPage({ onBack }) {
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const supportsSpeech = Boolean(SpeechRecognition);
-    setSpeechSupported(supportsSpeech);
-    if (!supportsSpeech) {
+    const supportsAudioRecording = Boolean(navigator.mediaDevices?.getUserMedia) && typeof MediaRecorder !== 'undefined';
+    setSpeechSupported(supportsAudioRecording);
+    if (!supportsAudioRecording) {
       setShowTextInput(true);
-      setSpeechMessage('Voice recording is not supported in this browser. Please type your answer.');
+      setSpeechMessage('Audio recording is not supported in this browser. Please type your answer.');
     }
 
     return () => {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.abort();
-        } catch {
-          // Ignore cleanup errors if recognition has already ended.
-        }
-        recognitionRef.current = null;
-      }
+      if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+      audioStreamRef.current?.getTracks().forEach((track) => track.stop());
+      audioStreamRef.current = null;
     };
   }, []);
 
   const resetVoiceAnswerState = (showFallback = !speechSupported) => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.abort();
-      } catch {
-        // Ignore cleanup errors if recognition has already ended.
-      }
-      recognitionRef.current = null;
-    }
-    transcriptBufferRef.current = '';
-    interimTranscriptRef.current = '';
-    shouldCommitTranscriptRef.current = false;
+    if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+    mediaRecorderRef.current = null;
+    audioStreamRef.current?.getTracks().forEach((track) => track.stop());
+    audioStreamRef.current = null;
+    audioChunksRef.current = [];
     setAnswer('');
     setShowTextInput(showFallback);
     setIsRecording(false);
-    setSpeechMessage(showFallback && !speechSupported ? 'Voice recording is not supported in this browser. Please type your answer.' : '');
+    setIsTranscribingAnswer(false);
+    setSpeechMessage(showFallback && !speechSupported ? 'Audio recording is not supported in this browser. Please type your answer.' : '');
   };
 
   const generateAiQuestion = async (categoryId, previousPrompt = '', questionPlan = null) => {
@@ -1305,7 +1432,8 @@ export default function InterviewPrepPage({ onBack }) {
   const resolveQueuedQuestion = async (queuedQuestion, previousPrompt = '') => {
     if (!queuedQuestion) return null;
     if (queuedQuestion.sourceType === 'ai_slot') {
-      const usedIds = usedResumeExperienceIdsRef.current[queuedQuestion.categoryId] || [];
+      const experienceHistoryKey = selectedCategoryId === 'mixed' ? 'mixed' : queuedQuestion.categoryId;
+      const usedIds = usedResumeExperienceIdsRef.current[experienceHistoryKey] || [];
       const resumeExperience =
         prepProfile?.practiceMode === 'resume-aware' && queuedQuestion.tailoringLevel === 'specific'
           ? chooseResumeExperience(prepProfile, usedIds)
@@ -1320,12 +1448,20 @@ export default function InterviewPrepPage({ onBack }) {
               title: resumeExperience.title,
               dates: resumeExperience.dates,
               bullets: resumeExperience.bullets.slice(0, 3),
-              strongestThemes: resumeExperience.strongestThemes
+              strongestThemes: resumeExperience.strongestThemes,
+              tier: resumeExperience.tier,
+              subtype: resumeExperience.subtype,
+              selectionGuidance:
+                resumeExperience.tier === 1
+                  ? 'This is a high-priority resume experience; ask a realistic banker-style deep dive.'
+                  : resumeExperience.tier === 2
+                    ? 'This is a secondary but meaningful experience; ask about transferable skills or what it taught the candidate.'
+                    : 'This is a supporting resume experience; keep the question broad, realistic, and focused on transferable skills.'
             }
           : null
       });
       if (resumeExperience) {
-        usedResumeExperienceIdsRef.current[queuedQuestion.categoryId] = [...usedIds, resumeExperience.id];
+        usedResumeExperienceIdsRef.current[experienceHistoryKey] = [...usedIds, resumeExperience.id];
       }
       return resolved;
     }
@@ -1509,8 +1645,7 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const submitAnswerForFeedback = async (answerText) => {
     setFeedback(null);
     setFeedbackError('');
     setFeedbackLoading(true);
@@ -1519,7 +1654,7 @@ export default function InterviewPrepPage({ onBack }) {
     const payload = {
       category: currentQuestion.categoryTitle,
       question: currentQuestion.prompt,
-      userAnswer: answer,
+      userAnswer: answerText,
       followUpContext: currentQuestion.isFollowUp
         ? {
             parentQuestion: currentQuestion.parentQuestion,
@@ -1574,17 +1709,19 @@ export default function InterviewPrepPage({ onBack }) {
         whatWasMissing: data.whatWasMissing,
         suggestedStructure: data.improvedAnswerStructure,
         exampleResponse: data.tenOutOfTenExampleResponse,
-        followUpQuestion: data.followUpQuestion
+        followUpQuestion: data.followUpQuestion,
+        transcript: answerText
       });
       setLastAnsweredQuestion({
         question: currentQuestion.prompt,
-        answer,
+        answer: answerText,
         categoryTitle: currentQuestion.categoryTitle,
         categoryId: currentQuestion.categoryId,
         concepts: currentQuestion.concepts,
         structureHint: currentQuestion.structureHint,
         followUps: currentQuestion.followUps
       });
+      return true;
     } catch (error) {
       console.error('[interview-feedback] Feedback request failed', {
         endpoint: feedbackEndpoint,
@@ -1606,10 +1743,53 @@ export default function InterviewPrepPage({ onBack }) {
       const isNetworkFailure = error instanceof TypeError || /load failed|failed to fetch|networkerror/i.test(error.message || '');
       const baseMessage = isNetworkFailure
         ? 'AI backend is not reachable. Start the backend server and try again.'
-        : 'AI feedback could not be generated. Please try again.';
+        : 'We couldn’t evaluate your answer. Please try again.';
       setFeedbackError(import.meta.env.DEV && error.message && !isNetworkFailure ? `${baseMessage} ${error.message}` : baseMessage);
+      return false;
     } finally {
       setFeedbackLoading(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!answer.trim()) return;
+    await submitAnswerForFeedback(answer.trim());
+  };
+
+  const transcribeAndEvaluateAudio = async (audioBlob) => {
+    if (!audioBlob || audioBlob.size < 500) {
+      setFeedbackError('We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
+      return;
+    }
+    setIsTranscribingAnswer(true);
+    setFeedbackLoading(true);
+    setFeedbackError('');
+    setSpeechMessage('Analyzing your answer...');
+    try {
+      const dataUrl = await fileToDataUrl(audioBlob);
+      const response = await fetch('/api/interview-transcribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dataUrl,
+          mimeType: audioBlob.type || 'audio/webm'
+        })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.transcript) {
+        throw new Error(payload.error || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
+      }
+      setAnswer(payload.transcript);
+      const evaluated = await submitAnswerForFeedback(payload.transcript);
+      setSpeechMessage(evaluated ? 'Answer analyzed.' : 'Evaluation failed. Please try again.');
+    } catch (error) {
+      console.error('[interview-transcribe] Audio transcription/evaluation failed', error);
+      setFeedbackLoading(false);
+      setFeedbackError(error.message || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
+      setSpeechMessage('Transcription failed. Please try again or use Type Instead.');
+    } finally {
+      setIsTranscribingAnswer(false);
     }
   };
 
@@ -1657,108 +1837,54 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
   };
 
-  const handleStartRecording = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
+  const handleStartRecording = async () => {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
       setSpeechSupported(false);
-      setSpeechMessage('Speech recognition is not available in this browser. You can still type your answer below.');
+      setSpeechMessage('Audio recording is not available in this browser. You can still type your answer below.');
       setShowTextInput(true);
       return;
     }
 
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.abort();
-      } catch {
-        // Some browsers throw if recognition is already inactive.
-      }
-      recognitionRef.current = null;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    transcriptBufferRef.current = '';
-    interimTranscriptRef.current = '';
-    shouldCommitTranscriptRef.current = false;
-
-    recognition.onstart = () => {
+    try {
+      resetVoiceAnswerState(false);
+      setFeedback(null);
+      setFeedbackError('');
+      const nextStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioStreamRef.current = nextStream;
+      audioChunksRef.current = [];
+      const audioMimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm';
+      const recorder = new MediaRecorder(nextStream, { mimeType: audioMimeType });
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+      };
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || audioMimeType });
+        audioStreamRef.current?.getTracks().forEach((track) => track.stop());
+        audioStreamRef.current = null;
+        mediaRecorderRef.current = null;
+        audioChunksRef.current = [];
+        setIsRecording(false);
+        transcribeAndEvaluateAudio(audioBlob);
+      };
+      mediaRecorderRef.current = recorder;
+      recorder.start();
       setIsRecording(true);
       setSpeechMessage('Listening...');
-    };
-
-    recognition.onresult = (event) => {
-      let finalTranscript = '';
-      let interimTranscript = '';
-
-      for (let index = event.resultIndex; index < event.results.length; index += 1) {
-        const transcript = event.results[index][0].transcript;
-        if (event.results[index].isFinal) {
-          finalTranscript += transcript;
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-
-      if (finalTranscript.trim()) {
-        transcriptBufferRef.current = `${transcriptBufferRef.current}${transcriptBufferRef.current.trim() ? ' ' : ''}${finalTranscript.trim()}`;
-      }
-
-      if (interimTranscript.trim()) {
-        interimTranscriptRef.current = interimTranscript.trim();
-        setSpeechMessage('Listening...');
-      } else {
-        interimTranscriptRef.current = '';
-        setSpeechMessage('Listening...');
-      }
-    };
-
-    recognition.onerror = (event) => {
+    } catch (error) {
+      console.error('[interview-audio] Failed to start recording', error);
       setIsRecording(false);
-      recognitionRef.current = null;
-      if (shouldCommitTranscriptRef.current) return;
-      setSpeechMessage(event.error === 'no-speech' ? 'No speech was captured. Try again or type instead.' : 'Speech recognition stopped. You can start again or type instead.');
-    };
-
-    recognition.onend = () => {
-      setIsRecording(false);
-      const committedTranscript = `${transcriptBufferRef.current} ${interimTranscriptRef.current}`.trim();
-      recognitionRef.current = null;
-      if (shouldCommitTranscriptRef.current && committedTranscript) {
-        setAnswer((currentAnswer) =>
-          `${currentAnswer}${currentAnswer.trim() ? ' ' : ''}${committedTranscript}`
-        );
-        setShowTextInput(true);
-        setSpeechMessage('Transcription ready. You can edit your answer before submitting.');
-      } else {
-        setSpeechMessage((currentMessage) =>
-          currentMessage.startsWith('Listening') ? 'Recording stopped. No speech was captured.' : currentMessage
-        );
-      }
-      transcriptBufferRef.current = '';
-      interimTranscriptRef.current = '';
-      shouldCommitTranscriptRef.current = false;
-    };
-
-    recognitionRef.current = recognition;
-    recognition.start();
+      setSpeechMessage('Microphone access failed. Please try again or use Type Instead.');
+      setFeedbackError('We couldn’t access your microphone. Please try again or use Type Instead.');
+    }
   };
 
   const handleStopRecording = () => {
-    if (recognitionRef.current) {
-      shouldCommitTranscriptRef.current = true;
-      setSpeechMessage('Finalizing transcription...');
-      try {
-        recognitionRef.current.stop();
-      } catch {
-        recognitionRef.current = null;
-        setIsRecording(false);
-        setSpeechMessage('Recording stopped. Try again or type instead.');
-      }
+    if (mediaRecorderRef.current?.state === 'recording') {
+      setSpeechMessage('Analyzing your answer...');
+      mediaRecorderRef.current.stop();
+    } else {
+      setIsRecording(false);
     }
-    setIsRecording(false);
   };
 
   if (!prepProfile || editingPrepProfile) {
@@ -1962,8 +2088,8 @@ export default function InterviewPrepPage({ onBack }) {
                 type="button"
                 className={isRecording ? 'mic-button recording' : 'mic-button'}
                 onClick={isRecording ? handleStopRecording : handleStartRecording}
-                disabled={!speechSupported && !isRecording}
-                aria-label={isRecording ? 'Stop listening' : 'Start speaking'}
+                disabled={feedbackLoading || isTranscribingAnswer || (!speechSupported && !isRecording)}
+                aria-label={isRecording ? 'Stop speaking' : 'Start speaking'}
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="mic-icon">
                   <path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v6a3.5 3.5 0 0 0 3.5 3.5Z" />
@@ -1973,21 +2099,35 @@ export default function InterviewPrepPage({ onBack }) {
                 </svg>
               </button>
               <div className="voice-answer-copy">
-                <strong>{isRecording ? 'Listening...' : answer.trim() ? 'Transcription ready' : 'Start speaking'}</strong>
+                <strong>
+                  {isRecording
+                    ? 'Listening...'
+                    : feedbackLoading || isTranscribingAnswer
+                      ? 'Analyzing your answer...'
+                      : 'Start speaking'}
+                </strong>
                 <span>
                   {speechSupported
-                    ? speechMessage || 'Answer out loud like you would in an interview.'
-                    : 'Voice recording is not supported in this browser. Please type your answer.'}
+                    ? speechMessage || 'Answer out loud like you would in an interview. When you stop, Banker Builder will evaluate it automatically.'
+                    : 'Audio recording is not supported in this browser. Please type your answer.'}
                 </span>
               </div>
               <div className="voice-answer-actions">
                 {isRecording ? (
                   <button type="button" className="secondary" onClick={handleStopRecording}>
-                    Stop listening
+                    Stop speaking
                   </button>
                 ) : null}
                 {!showTextInput ? (
-                  <button type="button" className="secondary" onClick={() => setShowTextInput(true)}>
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={() => {
+                      resetVoiceAnswerState(true);
+                      setSpeechMessage('Type your answer, then submit for evaluation.');
+                    }}
+                    disabled={feedbackLoading || isTranscribingAnswer}
+                  >
                     Type instead
                   </button>
                 ) : null}
@@ -2003,13 +2143,15 @@ export default function InterviewPrepPage({ onBack }) {
                   placeholder="Type your answer as if you were speaking to an interviewer..."
                   rows="8"
                 />
-                {answer.trim() ? <span className="muted">You can edit your answer before submitting.</span> : null}
+                {answer.trim() ? <span className="muted">Typed fallback answers are evaluated when you submit.</span> : null}
               </label>
             ) : null}
             <div className="practice-actions">
-              <button type="submit" className="primary" disabled={!answer.trim() || feedbackLoading}>
-                {feedbackLoading ? 'Analyzing...' : 'Submit Answer'}
-              </button>
+              {showTextInput ? (
+                <button type="submit" className="primary" disabled={!answer.trim() || feedbackLoading}>
+                  {feedbackLoading ? 'Analyzing...' : 'Submit Typed Answer'}
+                </button>
+              ) : null}
               <button type="button" className="secondary" onClick={handleTryAgain}>
                 Try Again
               </button>
@@ -2053,6 +2195,13 @@ export default function InterviewPrepPage({ onBack }) {
                 <h3>Suggested Improved Answer Structure</h3>
                 <p>{feedback.suggestedStructure}</p>
               </div>
+
+              {feedback.transcript ? (
+                <details className="feedback-note">
+                  <summary>Transcript</summary>
+                  <p>{feedback.transcript}</p>
+                </details>
+              ) : null}
 
               <div className="feedback-note example-response">
                 <h3>10/10 Example Response</h3>

@@ -782,6 +782,49 @@ function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
   };
 }
 
+async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-transcribe]' }) {
+  const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav']);
+  if (!decodedRecording || decodedRecording.buffer.length < 1000) {
+    console.error(`${logPrefix} invalid or empty audio payload`, {
+      requestMimeType: mimeType,
+      decodedMimeType: decodedRecording?.mimeType,
+      bytes: decodedRecording?.buffer.length || 0
+    });
+    return { error: { status: 400, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' } };
+  }
+
+  const formData = new FormData();
+  formData.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
+  formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), 'interview-answer.webm');
+
+  console.info(`${logPrefix} transcription request starting`, {
+    model: process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe',
+    mimeType: mimeType || decodedRecording.mimeType || 'audio/webm',
+    bytes: decodedRecording.buffer.length
+  });
+  const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: formData
+  });
+  console.info(`${logPrefix} transcription response`, { status: transcriptionResponse.status, ok: transcriptionResponse.ok });
+  if (!transcriptionResponse.ok) {
+    const details = await transcriptionResponse.text();
+    console.error(`${logPrefix} OpenAI transcription failed`, {
+      status: transcriptionResponse.status,
+      details: details.slice(0, 800)
+    });
+    return { error: { status: 502, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', details } };
+  }
+  const transcription = await transcriptionResponse.json();
+  const transcript = String(transcription.text || '').trim();
+  if (transcript.length < 10) {
+    console.error(`${logPrefix} transcript too short`, { transcriptLength: transcript.length });
+    return { error: { status: 400, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' } };
+  }
+  return { transcript };
+}
+
 async function extractPdfResumeText({ dataUrl, fileName }) {
   const decoded = dataUrlToBuffer(dataUrl, ['application/pdf']);
   if (!decoded) {
@@ -1237,6 +1280,31 @@ app.post('/api/interview-feedback', async (req, res) => {
   }
 });
 
+app.post('/api/interview-transcribe', async (req, res) => {
+  try {
+    const { dataUrl, mimeType } = req.body;
+    console.info('[interview-transcribe] route hit', {
+      mimeType,
+      payloadChars: typeof dataUrl === 'string' ? dataUrl.length : 0,
+      hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY)
+    });
+    if (!dataUrl) {
+      return res.status(400).json({ error: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' });
+    }
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
+    }
+    const result = await transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix: '[interview-transcribe]' });
+    if (result.error) {
+      return res.status(result.error.status).json({ error: result.error.message, details: result.error.details });
+    }
+    return res.json({ transcript: result.transcript });
+  } catch (error) {
+    console.error('[interview-transcribe] Failed to transcribe answer', error);
+    return res.status(500).json({ error: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', details: error.message });
+  }
+});
+
 app.post('/api/interview-question', async (req, res) => {
   try {
     const { categoryId, categoryTitle, previousPrompt, prepProfile, questionPlan, generatedQuestionHistory } = req.body;
@@ -1259,7 +1327,8 @@ app.post('/api/interview-question', async (req, res) => {
               ? {
                   type: questionPlan.resumeExperience.type,
                   organization: questionPlan.resumeExperience.organization,
-                  title: questionPlan.resumeExperience.title
+                  title: questionPlan.resumeExperience.title,
+                  tier: questionPlan.resumeExperience.tier
                 }
               : null,
             promptPreview: typeof questionPlan.prompt === 'string' ? questionPlan.prompt.slice(0, 90) : undefined
@@ -1287,7 +1356,7 @@ app.post('/api/interview-question', async (req, res) => {
       body: JSON.stringify({
         model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
         instructions:
-          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category and questionPlan. Keep questions one sentence whenever possible, direct, and banker-like. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, resumeContext, and resumeText when present. Respect questionPlan.questionCategory and do not duplicate mandatory categories such as whyIB, whyBank, or whyGroup. If questionPlan.resumeExperience is provided, use that specific explicit resume item for any resume-specific question; do not switch back to the first or most recent resume item. Respect questionPlan.tailoringLevel: generic means broad and no background reference; light means broad with only a general internship/class/leadership framing; specific means occasional resume-aware reference to one explicit resume detail only. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText or resumeContext; do not invent or infer details. Technical questions should not be freely generated unless a questionPlan explicitly requests one; technical content must be selected-group driven. Market questions for Summer Analyst candidates should usually be basic market awareness, not MBA-level strategy. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt or any item in generatedQuestionHistory.',
+          'You are a realistic investment banking interviewer. Generate exactly one concise interview question for the requested practice category and questionPlan. Keep questions one sentence whenever possible, direct, and banker-like. Use only the candidate prep profile provided: recruiting goal, selected target groups, target bank tier, practice mode, resumeContext, and resumeText when present. Respect questionPlan.questionCategory and do not duplicate mandatory categories such as whyIB, whyBank, or whyGroup. If questionPlan.resumeExperience is provided, use that specific explicit resume item for any resume-specific question; do not switch back to the first, most recent, or most finance-relevant resume item. Tier 1 experiences can support deeper banking motivation questions, Tier 2 experiences should usually be framed around transferable skills or professional learning, and Tier 3 experiences should be broad supporting-experience questions rather than obscure trivia. Respect questionPlan.tailoringLevel: generic means broad and no background reference; light means broad with only a general internship/class/leadership framing; specific means occasional resume-aware reference to one explicit resume detail only. Do not make every question hyper-specific. If practiceMode is generic, generate broad interview questions only and do not pretend to know the candidate’s background. If practiceMode is resume-aware, you may reference only companies, roles, responsibilities, metrics, skills, activities, or experiences explicitly present in resumeText or resumeContext; do not invent or infer details. Technical questions should not be freely generated unless a questionPlan explicitly requests one; technical content must be selected-group driven. Market questions for Summer Analyst candidates should usually be basic market awareness, not MBA-level strategy. Do not ask about an unselected group or industry unless the profile selected Generalist. Avoid generic AI wording and overly academic phrasing. Do not repeat the previous prompt or any item in generatedQuestionHistory.',
         input: [
           {
             role: 'user',
