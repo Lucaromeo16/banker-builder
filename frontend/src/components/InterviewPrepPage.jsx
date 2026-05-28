@@ -1372,12 +1372,18 @@ function fileToDataUrl(file) {
 function getSupportedInterviewAudioMimeType() {
   if (typeof MediaRecorder === 'undefined') return '';
   return [
-    'audio/webm;codecs=opus',
     'audio/webm',
+    'audio/webm;codecs=opus',
+    'video/webm',
+    'video/webm;codecs=vp8,opus',
     'audio/mp4',
     'audio/ogg;codecs=opus',
     'audio/ogg'
   ].find((mimeType) => MediaRecorder.isTypeSupported(mimeType)) || '';
+}
+
+function isSupportedRecordedAudioBlob(blob) {
+  return Boolean(blob?.type) && /^(audio|video)\/(webm|mp4|ogg)/i.test(blob.type);
 }
 
 export default function InterviewPrepPage({ onBack }) {
@@ -1401,6 +1407,7 @@ export default function InterviewPrepPage({ onBack }) {
   const [speechMessage, setSpeechMessage] = useState('');
   const [showTextInput, setShowTextInput] = useState(false);
   const [isTranscribingAnswer, setIsTranscribingAnswer] = useState(false);
+  const [recordingPhase, setRecordingPhase] = useState('idle');
   const mediaRecorderRef = useRef(null);
   const audioStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -1411,6 +1418,18 @@ export default function InterviewPrepPage({ onBack }) {
   const generatedQuestionHistoryRef = useRef({});
 
   const selectedCategory = categoryCards.find((category) => category.id === selectedCategoryId);
+  const recordingIsTransitioning = recordingPhase === 'starting' || recordingPhase === 'stopping' || recordingPhase === 'analyzing';
+  const voiceControlsDisabled = feedbackLoading || isTranscribingAnswer || recordingIsTransitioning || (!speechSupported && !isRecording);
+  const voiceStatusLabel =
+    recordingPhase === 'starting'
+      ? 'Starting microphone...'
+      : recordingPhase === 'recording'
+        ? 'Listening...'
+        : recordingPhase === 'stopping'
+          ? 'Finalizing recording...'
+          : recordingPhase === 'analyzing' || feedbackLoading || isTranscribingAnswer
+            ? 'Analyzing your answer...'
+            : 'Start speaking';
 
   useEffect(() => {
     const supportsAudioRecording = Boolean(navigator.mediaDevices?.getUserMedia) && typeof MediaRecorder !== 'undefined';
@@ -1441,6 +1460,7 @@ export default function InterviewPrepPage({ onBack }) {
     setShowTextInput(showFallback);
     setIsRecording(false);
     setIsTranscribingAnswer(false);
+    setRecordingPhase('idle');
     setSpeechMessage(showFallback && !speechSupported ? 'Audio recording is not supported in this browser. Please type your answer.' : '');
   };
 
@@ -1812,16 +1832,23 @@ export default function InterviewPrepPage({ onBack }) {
       type: audioBlob?.type,
       size: audioBlob?.size
     });
-    if (!audioBlob || audioBlob.size < 500) {
+    if (!audioBlob || audioBlob.size <= 0 || !isSupportedRecordedAudioBlob(audioBlob)) {
       console.error('[interview-audio] empty or invalid audio blob', {
         hasBlob: Boolean(audioBlob),
         type: audioBlob?.type,
-        size: audioBlob?.size
+        size: audioBlob?.size,
+        supportedType: isSupportedRecordedAudioBlob(audioBlob)
       });
+      setRecordingPhase('idle');
+      setIsRecording(false);
+      setIsTranscribingAnswer(false);
+      setFeedbackLoading(false);
+      setSpeechMessage('Transcription failed. Please try again or use Type Instead.');
       setFeedbackError('We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       return;
     }
     setIsTranscribingAnswer(true);
+    setRecordingPhase('analyzing');
     setFeedbackLoading(true);
     setFeedbackError('');
     setSpeechMessage('Analyzing your answer...');
@@ -1840,7 +1867,8 @@ export default function InterviewPrepPage({ onBack }) {
         status: response.status,
         ok: response.ok,
         hasTranscript: Boolean(payload.transcript),
-        error: payload.error
+        error: payload.error,
+        details: payload.details
       });
       if (!response.ok || !payload.transcript) {
         throw new Error(payload.error || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
@@ -1853,8 +1881,10 @@ export default function InterviewPrepPage({ onBack }) {
       setFeedbackLoading(false);
       setFeedbackError(error.message || 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       setSpeechMessage('Transcription failed. Please try again or use Type Instead.');
+      setRecordingPhase('idle');
     } finally {
       setIsTranscribingAnswer(false);
+      setRecordingPhase((current) => (current === 'analyzing' ? 'idle' : current));
     }
   };
 
@@ -1903,7 +1933,7 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const handleStartRecording = async () => {
-    if (isStartingRecordingRef.current || mediaRecorderRef.current?.state === 'recording') return;
+    if (isStartingRecordingRef.current || recordingPhase === 'starting' || recordingPhase === 'stopping' || recordingPhase === 'analyzing' || mediaRecorderRef.current?.state === 'recording') return;
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
       setSpeechSupported(false);
       setSpeechMessage('Audio recording is not available in this browser. You can still type your answer below.');
@@ -1913,6 +1943,7 @@ export default function InterviewPrepPage({ onBack }) {
 
     try {
       isStartingRecordingRef.current = true;
+      setRecordingPhase('starting');
       mediaRecorderRef.current = null;
       audioStreamRef.current?.getTracks().forEach((track) => track.stop());
       audioStreamRef.current = null;
@@ -1953,7 +1984,10 @@ export default function InterviewPrepPage({ onBack }) {
         audioChunksRef.current = [];
         discardNextRecordingRef.current = false;
         setIsRecording(false);
-        if (shouldDiscard) return;
+        if (shouldDiscard) {
+          setRecordingPhase('idle');
+          return;
+        }
         transcribeAndEvaluateAudio(audioBlob);
       };
       mediaRecorderRef.current = recorder;
@@ -1961,12 +1995,14 @@ export default function InterviewPrepPage({ onBack }) {
         audioMimeType: recorder.mimeType || audioMimeType || 'browser-default',
         audioTracks: audioTracks.length
       });
-      recorder.start();
+      recorder.start(1000);
       setIsRecording(true);
+      setRecordingPhase('recording');
       setSpeechMessage('Listening...');
     } catch (error) {
       console.error('[interview-audio] Failed to start recording', error);
       setIsRecording(false);
+      setRecordingPhase('idle');
       setSpeechMessage('Microphone access failed. Please try again or use Type Instead.');
       setFeedbackError(error.message || 'We couldn’t access your microphone. Please try again or use Type Instead.');
     } finally {
@@ -1975,8 +2011,10 @@ export default function InterviewPrepPage({ onBack }) {
   };
 
   const handleStopRecording = () => {
+    if (recordingPhase === 'stopping' || recordingPhase === 'analyzing') return;
     if (mediaRecorderRef.current?.state === 'recording') {
-      setSpeechMessage('Analyzing your answer...');
+      setRecordingPhase('stopping');
+      setSpeechMessage('Finalizing recording...');
       try {
         mediaRecorderRef.current.requestData();
       } catch {
@@ -1985,6 +2023,7 @@ export default function InterviewPrepPage({ onBack }) {
       mediaRecorderRef.current.stop();
     } else {
       setIsRecording(false);
+      setRecordingPhase('idle');
     }
   };
 
@@ -2185,13 +2224,13 @@ export default function InterviewPrepPage({ onBack }) {
 
           <form className="answer-form" onSubmit={handleSubmit}>
             <section className={isRecording ? 'voice-answer-panel recording' : 'voice-answer-panel'}>
-              <button
-                type="button"
-                className={isRecording ? 'mic-button recording' : 'mic-button'}
-                onClick={isRecording ? handleStopRecording : handleStartRecording}
-                disabled={feedbackLoading || isTranscribingAnswer || (!speechSupported && !isRecording)}
-                aria-label={isRecording ? 'Stop speaking' : 'Start speaking'}
-              >
+	              <button
+	                type="button"
+	                className={isRecording ? 'mic-button recording' : 'mic-button'}
+	                onClick={isRecording ? handleStopRecording : handleStartRecording}
+	                disabled={voiceControlsDisabled}
+	                aria-label={isRecording ? 'Stop speaking' : 'Start speaking'}
+	              >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="mic-icon">
                   <path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v6a3.5 3.5 0 0 0 3.5 3.5Z" />
                   <path d="M5 11.5a7 7 0 0 0 14 0" />
@@ -2199,26 +2238,20 @@ export default function InterviewPrepPage({ onBack }) {
                   <path d="M8.5 22h7" />
                 </svg>
               </button>
-              <div className="voice-answer-copy">
-                <strong>
-                  {isRecording
-                    ? 'Listening...'
-                    : feedbackLoading || isTranscribingAnswer
-                      ? 'Analyzing your answer...'
-                      : 'Start speaking'}
-                </strong>
+	              <div className="voice-answer-copy">
+	                <strong>{voiceStatusLabel}</strong>
                 <span>
                   {speechSupported
                     ? speechMessage || 'Answer out loud like you would in an interview. When you stop, Banker Builder will evaluate it automatically.'
                     : 'Audio recording is not supported in this browser. Please type your answer.'}
                 </span>
               </div>
-              <div className="voice-answer-actions">
-                {isRecording ? (
-                  <button type="button" className="secondary" onClick={handleStopRecording}>
-                    Stop speaking
-                  </button>
-                ) : null}
+	              <div className="voice-answer-actions">
+	                {isRecording ? (
+	                  <button type="button" className="secondary" onClick={handleStopRecording} disabled={recordingPhase === 'stopping' || recordingPhase === 'analyzing'}>
+	                    {recordingPhase === 'stopping' ? 'Finalizing...' : 'Stop speaking'}
+	                  </button>
+	                ) : null}
                 {!showTextInput ? (
                   <button
                     type="button"
@@ -2227,7 +2260,7 @@ export default function InterviewPrepPage({ onBack }) {
                       resetVoiceAnswerState(true);
                       setSpeechMessage('Type your answer, then submit for evaluation.');
                     }}
-                    disabled={feedbackLoading || isTranscribingAnswer}
+	                    disabled={feedbackLoading || isTranscribingAnswer || recordingIsTransitioning}
                   >
                     Type instead
                   </button>
