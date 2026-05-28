@@ -1372,10 +1372,10 @@ function fileToDataUrl(file) {
 function getSupportedInterviewAudioMimeType() {
   if (typeof MediaRecorder === 'undefined') return '';
   return [
-    'audio/webm',
     'audio/webm;codecs=opus',
-    'video/webm',
+    'audio/webm',
     'video/webm;codecs=vp8,opus',
+    'video/webm',
     'audio/mp4',
     'audio/ogg;codecs=opus',
     'audio/ogg'
@@ -1847,6 +1847,12 @@ export default function InterviewPrepPage({ onBack }) {
       setFeedbackError('We couldn’t clearly transcribe your answer. Please try again or use Type Instead.');
       return;
     }
+    console.info('[interview-transcribe] sending shared transcription payload', {
+      blobType: audioBlob.type,
+      blobSize: audioBlob.size,
+      browserPayloadFields: ['mimeType', 'dataUrl'],
+      backendOpenAIFileField: 'file'
+    });
     setIsTranscribingAnswer(true);
     setRecordingPhase('analyzing');
     setFeedbackLoading(true);
@@ -1854,7 +1860,7 @@ export default function InterviewPrepPage({ onBack }) {
     setSpeechMessage('Analyzing your answer...');
     try {
       const dataUrl = await fileToDataUrl(audioBlob);
-      const response = await fetch('/api/interview-transcribe', {
+      const response = await fetch('/api/audio-transcribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

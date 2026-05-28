@@ -782,25 +782,34 @@ function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
   };
 }
 
-async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-transcribe]' }) {
-  const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav']);
+async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-transcribe]', fileName = 'recorded-response.webm', emptyMessage = 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', minimumTranscriptLength = 10 }) {
+  const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/mp4', 'video/mp4', 'audio/mpeg', 'audio/wav']);
   if (!decodedRecording || decodedRecording.buffer.length < 1000) {
     console.error(`${logPrefix} invalid or empty audio payload`, {
       requestMimeType: mimeType,
       decodedMimeType: decodedRecording?.mimeType,
       bytes: decodedRecording?.buffer.length || 0
     });
-    return { error: { status: 400, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' } };
+    return { error: { status: 400, message: emptyMessage } };
   }
+
+  console.info(`${logPrefix} audio payload decoded`, {
+    requestMimeType: mimeType,
+    decodedMimeType: decodedRecording.mimeType,
+    bytes: decodedRecording.buffer.length,
+    audioExists: decodedRecording.buffer.length > 0
+  });
 
   const formData = new FormData();
   formData.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
-  formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), 'interview-answer.webm');
+  formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), fileName);
 
   console.info(`${logPrefix} transcription request starting`, {
     model: process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe',
     mimeType: mimeType || decodedRecording.mimeType || 'audio/webm',
-    bytes: decodedRecording.buffer.length
+    bytes: decodedRecording.buffer.length,
+    formDataFileField: 'file',
+    fileName
   });
   const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST',
@@ -814,13 +823,13 @@ async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-t
       status: transcriptionResponse.status,
       details: details.slice(0, 800)
     });
-    return { error: { status: 502, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', details } };
+    return { error: { status: 502, message: emptyMessage, details } };
   }
   const transcription = await transcriptionResponse.json();
   const transcript = String(transcription.text || '').trim();
-  if (transcript.length < 10) {
+  if (transcript.length < minimumTranscriptLength) {
     console.error(`${logPrefix} transcript too short`, { transcriptLength: transcript.length });
-    return { error: { status: 400, message: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' } };
+    return { error: { status: 400, message: emptyMessage } };
   }
   return { transcript };
 }
@@ -1280,10 +1289,10 @@ app.post('/api/interview-feedback', async (req, res) => {
   }
 });
 
-app.post('/api/interview-transcribe', async (req, res) => {
+async function handleAudioTranscribe(req, res) {
   try {
     const { dataUrl, mimeType } = req.body;
-    console.info('[interview-transcribe] route hit', {
+    console.info('[audio-transcribe] route hit', {
       mimeType,
       payloadChars: typeof dataUrl === 'string' ? dataUrl.length : 0,
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY)
@@ -1294,16 +1303,25 @@ app.post('/api/interview-transcribe', async (req, res) => {
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
     }
-    const result = await transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix: '[interview-transcribe]' });
+    const result = await transcribeAudioDataUrl({
+      dataUrl,
+      mimeType,
+      logPrefix: '[audio-transcribe]',
+      fileName: 'hirevue-response.webm'
+    });
     if (result.error) {
       return res.status(result.error.status).json({ error: result.error.message, details: result.error.details });
     }
     return res.json({ transcript: result.transcript });
   } catch (error) {
-    console.error('[interview-transcribe] Failed to transcribe answer', error);
+    console.error('[audio-transcribe] Failed to transcribe answer', error);
     return res.status(500).json({ error: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', details: error.message });
   }
-});
+}
+
+app.post('/api/audio-transcribe', handleAudioTranscribe);
+
+app.post('/api/interview-transcribe', handleAudioTranscribe);
 
 app.post('/api/interview-question', async (req, res) => {
   try {
@@ -1427,51 +1445,21 @@ app.post('/api/hirevue-evaluate', async (req, res) => {
       return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
     }
 
-    const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'audio/ogg', 'audio/mp4', 'audio/mpeg', 'audio/wav']);
-    if (!decodedRecording) {
-      console.error('[hirevue-evaluate] invalid audio payload', { mimeType });
-      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
-    }
-    console.info('[hirevue-evaluate] audio payload decoded', {
-      requestMimeType: mimeType,
-      decodedMimeType: decodedRecording.mimeType,
-      bytes: decodedRecording.buffer.length,
-      audioExists: decodedRecording.buffer.length > 0
+    const transcriptionResult = await transcribeAudioDataUrl({
+      dataUrl,
+      mimeType,
+      logPrefix: '[hirevue-evaluate]',
+      fileName: 'hirevue-response.webm',
+      emptyMessage: 'We couldn’t analyze the audio. Please retry the recording.',
+      minimumTranscriptLength: 20
     });
-    if (decodedRecording.buffer.length < 1000) {
-      console.error('[hirevue-evaluate] audio payload too small', { bytes: decodedRecording.buffer.length });
-      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
-    }
-
-    const formData = new FormData();
-    formData.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
-    formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), 'hirevue-response.webm');
-
-    console.info('[hirevue-evaluate] transcription request starting', {
-      model: process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe',
-      mimeType: mimeType || decodedRecording.mimeType || 'audio/webm',
-      bytes: decodedRecording.buffer.length
-    });
-    const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-      body: formData
-    });
-    console.info('[hirevue-evaluate] transcription response', { status: transcriptionResponse.status, ok: transcriptionResponse.ok });
-    if (!transcriptionResponse.ok) {
-      const details = await transcriptionResponse.text();
-      console.error('[hirevue-evaluate] OpenAI transcription failed', {
-        status: transcriptionResponse.status,
-        details: details.slice(0, 800)
+    if (transcriptionResult.error) {
+      return res.status(transcriptionResult.error.status).json({
+        error: transcriptionResult.error.message,
+        details: transcriptionResult.error.details
       });
-      return res.status(502).json({ error: 'We couldn’t analyze the audio. Please retry the recording.', details });
     }
-    const transcription = await transcriptionResponse.json();
-    const transcript = String(transcription.text || '').trim();
-    if (transcript.length < 20) {
-      console.error('[hirevue-evaluate] transcript too short', { transcriptLength: transcript.length });
-      return res.status(400).json({ error: 'We couldn’t analyze the audio. Please retry the recording.' });
-    }
+    const transcript = transcriptionResult.transcript;
 
     const evaluationContext = {
       setup: {
