@@ -782,32 +782,93 @@ function dataUrlToBuffer(dataUrl, expectedMimeTypes) {
   };
 }
 
-async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-transcribe]', fileName = 'recorded-response.webm', emptyMessage = 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', minimumTranscriptLength = 10 }) {
-  const decodedRecording = dataUrlToBuffer(dataUrl, ['audio/webm', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/mp4', 'video/mp4', 'audio/mpeg', 'audio/wav']);
-  if (!decodedRecording || decodedRecording.buffer.length < 1000) {
+const supportedAudioMimeTypes = ['audio/webm', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/mp4', 'video/mp4', 'audio/mpeg', 'audio/wav'];
+
+function parseMultipartHeaderParams(headerValue = '') {
+  return Object.fromEntries(
+    headerValue
+      .split(';')
+      .slice(1)
+      .map((segment) => segment.trim().split('='))
+      .filter(([key, value]) => key && value)
+      .map(([key, value]) => [key, value.replace(/^"|"$/g, '')])
+  );
+}
+
+function bufferIndexOf(buffer, search, offset = 0) {
+  return buffer.indexOf(search, offset);
+}
+
+async function parseMultipartFileUpload(req) {
+  const contentType = req.headers['content-type'] || '';
+  const boundaryMatch = contentType.match(/boundary=([^;]+)/i);
+  if (!boundaryMatch) return null;
+
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  const body = Buffer.concat(chunks);
+  const boundary = Buffer.from(`--${boundaryMatch[1]}`);
+  let cursor = bufferIndexOf(body, boundary);
+
+  while (cursor !== -1) {
+    let partStart = cursor + boundary.length;
+    if (body[partStart] === 45 && body[partStart + 1] === 45) break;
+    if (body[partStart] === 13 && body[partStart + 1] === 10) partStart += 2;
+
+    const headerEnd = bufferIndexOf(body, Buffer.from('\r\n\r\n'), partStart);
+    if (headerEnd === -1) break;
+
+    const headersText = body.slice(partStart, headerEnd).toString('latin1');
+    const nextBoundary = bufferIndexOf(body, boundary, headerEnd + 4);
+    if (nextBoundary === -1) break;
+
+    const headers = Object.fromEntries(
+      headersText.split('\r\n').map((line) => {
+        const separatorIndex = line.indexOf(':');
+        if (separatorIndex === -1) return null;
+        return [line.slice(0, separatorIndex).trim().toLowerCase(), line.slice(separatorIndex + 1).trim()];
+      }).filter(Boolean)
+    );
+    const disposition = headers['content-disposition'] || '';
+    const dispositionParams = parseMultipartHeaderParams(disposition);
+    const dataStart = headerEnd + 4;
+    const dataEnd = body[nextBoundary - 2] === 13 && body[nextBoundary - 1] === 10 ? nextBoundary - 2 : nextBoundary;
+    if (dispositionParams.name === 'file') {
+      return {
+        fieldName: dispositionParams.name,
+        filename: dispositionParams.filename || 'answer.webm',
+        mimeType: headers['content-type'] || 'audio/webm',
+        buffer: body.slice(dataStart, dataEnd)
+      };
+    }
+    cursor = nextBoundary;
+  }
+  return null;
+}
+
+async function transcribeAudioBuffer({ buffer, mimeType, logPrefix = '[audio-transcribe]', fileName = 'recorded-response.webm', emptyMessage = 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', minimumTranscriptLength = 10 }) {
+  if (!buffer || buffer.length < 1000) {
     console.error(`${logPrefix} invalid or empty audio payload`, {
-      requestMimeType: mimeType,
-      decodedMimeType: decodedRecording?.mimeType,
-      bytes: decodedRecording?.buffer.length || 0
+      mimeType,
+      bytes: buffer?.length || 0
     });
     return { error: { status: 400, message: emptyMessage } };
   }
 
   console.info(`${logPrefix} audio payload decoded`, {
-    requestMimeType: mimeType,
-    decodedMimeType: decodedRecording.mimeType,
-    bytes: decodedRecording.buffer.length,
-    audioExists: decodedRecording.buffer.length > 0
+    mimeType,
+    bytes: buffer.length,
+    audioExists: buffer.length > 0
   });
 
   const formData = new FormData();
   formData.append('model', process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe');
-  formData.append('file', new Blob([decodedRecording.buffer], { type: mimeType || decodedRecording.mimeType || 'audio/webm' }), fileName);
+  formData.append('file', new Blob([buffer], { type: mimeType || 'audio/webm' }), fileName);
 
   console.info(`${logPrefix} transcription request starting`, {
     model: process.env.OPENAI_TRANSCRIBE_MODEL || 'gpt-4o-mini-transcribe',
-    mimeType: mimeType || decodedRecording.mimeType || 'audio/webm',
-    bytes: decodedRecording.buffer.length,
+    mimeType: mimeType || 'audio/webm',
+    bytes: buffer.length,
     formDataFileField: 'file',
     fileName
   });
@@ -832,6 +893,22 @@ async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-t
     return { error: { status: 400, message: emptyMessage } };
   }
   return { transcript };
+}
+
+async function transcribeAudioDataUrl({ dataUrl, mimeType, logPrefix = '[audio-transcribe]', fileName = 'recorded-response.webm', emptyMessage = 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.', minimumTranscriptLength = 10 }) {
+  const decodedRecording = dataUrlToBuffer(dataUrl, supportedAudioMimeTypes);
+  if (!decodedRecording) {
+    console.error(`${logPrefix} invalid data URL payload`, { requestMimeType: mimeType });
+    return { error: { status: 400, message: emptyMessage } };
+  }
+  return transcribeAudioBuffer({
+    buffer: decodedRecording.buffer,
+    mimeType: mimeType || decodedRecording.mimeType,
+    logPrefix,
+    fileName,
+    emptyMessage,
+    minimumTranscriptLength
+  });
 }
 
 async function extractPdfResumeText({ dataUrl, fileName }) {
@@ -1291,24 +1368,50 @@ app.post('/api/interview-feedback', async (req, res) => {
 
 async function handleAudioTranscribe(req, res) {
   try {
-    const { dataUrl, mimeType } = req.body;
+    const requestContentType = req.headers['content-type'] || '';
+    const isMultipart = requestContentType.includes('multipart/form-data');
+    const { dataUrl, mimeType } = isMultipart ? {} : req.body;
     console.info('[audio-transcribe] route hit', {
+      contentType: requestContentType.split(';')[0],
       mimeType,
       payloadChars: typeof dataUrl === 'string' ? dataUrl.length : 0,
       hasOpenAIKey: Boolean(process.env.OPENAI_API_KEY)
     });
-    if (!dataUrl) {
-      return res.status(400).json({ error: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' });
-    }
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: 'OPENAI_API_KEY is not configured on the backend.' });
     }
-    const result = await transcribeAudioDataUrl({
-      dataUrl,
-      mimeType,
-      logPrefix: '[audio-transcribe]',
-      fileName: 'hirevue-response.webm'
-    });
+
+    let result;
+    if (isMultipart) {
+      const uploadedFile = await parseMultipartFileUpload(req);
+      console.info('[audio-transcribe] multipart file parsed', {
+        filePresent: Boolean(uploadedFile),
+        fieldName: uploadedFile?.fieldName,
+        fileName: uploadedFile?.filename,
+        fileType: uploadedFile?.mimeType,
+        fileSize: uploadedFile?.buffer.length || 0
+      });
+      if (!uploadedFile) {
+        return res.status(400).json({ error: 'No audio file was received for transcription.' });
+      }
+      result = await transcribeAudioBuffer({
+        buffer: uploadedFile.buffer,
+        mimeType: uploadedFile.mimeType,
+        logPrefix: '[audio-transcribe]',
+        fileName: uploadedFile.filename || 'answer.webm'
+      });
+    } else {
+      if (!dataUrl) {
+        return res.status(400).json({ error: 'We couldn’t clearly transcribe your answer. Please try again or use Type Instead.' });
+      }
+      result = await transcribeAudioDataUrl({
+        dataUrl,
+        mimeType,
+        logPrefix: '[audio-transcribe]',
+        fileName: 'hirevue-response.webm'
+      });
+    }
+
     if (result.error) {
       return res.status(result.error.status).json({ error: result.error.message, details: result.error.details });
     }

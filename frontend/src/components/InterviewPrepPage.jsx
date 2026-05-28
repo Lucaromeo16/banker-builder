@@ -1854,8 +1854,9 @@ export default function InterviewPrepPage({ onBack }) {
     updateAudioDebugInfo({
       finalBlobType: audioBlob?.type || '',
       finalBlobSize: audioBlob?.size || 0,
-      transcriptionPayloadFields: 'mimeType,dataUrl',
-      transcriptionOpenAIFileField: 'file'
+      transcriptionPayloadFields: 'file',
+      transcriptionOpenAIFileField: 'file',
+      transcriptionFileName: 'answer.webm'
     });
     console.info('[interview-audio] recording finalized', {
       type: audioBlob?.type,
@@ -1879,7 +1880,8 @@ export default function InterviewPrepPage({ onBack }) {
     console.info('[interview-transcribe] sending shared transcription payload', {
       blobType: audioBlob.type,
       blobSize: audioBlob.size,
-      browserPayloadFields: ['mimeType', 'dataUrl'],
+      browserPayloadFields: ['file'],
+      fileName: 'answer.webm',
       backendOpenAIFileField: 'file'
     });
     setIsTranscribingAnswer(true);
@@ -1888,14 +1890,11 @@ export default function InterviewPrepPage({ onBack }) {
     setFeedbackError('');
     setSpeechMessage('Analyzing your answer...');
     try {
-      const dataUrl = await fileToDataUrl(audioBlob);
+      const formData = new FormData();
+      formData.append('file', audioBlob, 'answer.webm');
       const response = await fetch('/api/audio-transcribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          dataUrl,
-          mimeType: audioBlob.type || 'audio/webm'
-        })
+        body: formData
       });
       const payload = await response.json().catch(() => ({}));
       updateAudioDebugInfo({
