@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import AuthPage from './auth/AuthPage';
+import { useAuth } from './auth/AuthContext';
 import AdminDashboardPage from './components/AdminDashboardPage';
 import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
@@ -25,11 +27,13 @@ const navItems = [
 ];
 
 export default function App() {
+  const { user, loading, profileLoading, isAuthReady, authError, signOut } = useAuth();
   const isAdminRoute = typeof window !== 'undefined' && window.location.pathname === '/admin';
   const [mode, setMode] = useState('home');
   const [networkingPrefill, setNetworkingPrefill] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef(null);
+  const userEmail = user?.email ?? 'Account';
 
   const goHome = () => {
     setMode('home');
@@ -54,7 +58,7 @@ export default function App() {
     };
 
     const handleResize = () => {
-      if (window.innerWidth >= 900) setMobileMenuOpen(false);
+      if (window.innerWidth >= 1100) setMobileMenuOpen(false);
     };
 
     document.addEventListener('pointerdown', handlePointerDown);
@@ -64,6 +68,22 @@ export default function App() {
       window.removeEventListener('resize', handleResize);
     };
   }, [mobileMenuOpen]);
+
+  if (!isAuthReady || loading || profileLoading) {
+    return (
+      <main className="auth-shell">
+        <section className="auth-card auth-loading-card">
+          <span className="auth-eyebrow">Banker Builder</span>
+          <h1>Loading your workspace...</h1>
+          <p>Checking your session and preparing your recruiting dashboard.</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage />;
+  }
 
   if (isAdminRoute) {
     return <AdminDashboardPage />;
@@ -99,11 +119,19 @@ export default function App() {
                 {item.label}
               </button>
             ))}
+            <div className="account-controls">
+              <span title={userEmail}>{userEmail}</span>
+              <button type="button" onClick={signOut}>
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
       <main className="container">
+        {authError ? <div className="auth-banner error">{authError}</div> : null}
+
         {mode !== 'home' ? (
           <header className="header page-header">
             <h1>Banker Builder</h1>
