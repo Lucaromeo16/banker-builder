@@ -60,16 +60,18 @@ textarea {
 }
 
 .navbar-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  max-width: 1100px;
+  gap: 16px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 13px 24px;
+  padding: 12px 20px;
 }
 
 .site-title {
+  flex: 0 0 auto;
   border: none;
   background: transparent;
   color: #FFFFFF;
@@ -78,6 +80,7 @@ textarea {
   font-weight: 900;
   letter-spacing: 0;
   padding: 0;
+  white-space: nowrap;
   transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
@@ -89,9 +92,10 @@ textarea {
 .nav-links {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 4px;
   justify-content: flex-end;
+  min-width: 0;
 }
 
 .nav-link {
@@ -100,9 +104,11 @@ textarea {
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 750;
-  padding: 0.5rem 0.78rem;
+  min-height: 38px;
+  padding: 0.46rem 0.56rem;
+  white-space: nowrap;
   transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }
 
@@ -118,10 +124,126 @@ textarea {
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.14);
 }
 
+.mobile-menu-button {
+  display: none;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.mobile-menu-button span {
+  display: block;
+  width: 19px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.mobile-menu-button:hover,
+.mobile-menu-button.open {
+  border-color: rgba(96, 165, 250, 0.58);
+  background: rgba(59, 130, 246, 0.18);
+  box-shadow: 0 0 22px rgba(59, 130, 246, 0.16);
+}
+
+.mobile-menu-button.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-button.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-button.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 36px 24px 68px;
+}
+
+@media (max-width: 1180px) {
+  .navbar-inner {
+    max-width: 100%;
+    gap: 10px;
+    padding-inline: 14px;
+  }
+
+  .site-title {
+    font-size: 1.02rem;
+  }
+
+  .nav-links {
+    gap: 2px;
+  }
+
+  .nav-link {
+    font-size: 0.76rem;
+    padding-inline: 0.42rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar-inner {
+    min-height: 64px;
+    padding: 10px 16px;
+  }
+
+  .site-title {
+    font-size: 1.08rem;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 16px;
+    left: 16px;
+    z-index: 1001;
+    display: none;
+    max-height: calc(100vh - 92px);
+    overflow: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    border: 1px solid rgba(96, 165, 250, 0.18);
+    border-radius: 16px;
+    background: rgba(10, 18, 36, 0.98);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34), 0 0 28px rgba(59, 130, 246, 0.12);
+    padding: 10px;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-link {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    padding: 0.68rem 0.82rem;
+    text-align: left;
+  }
 }
 
 .header {
@@ -4280,14 +4402,7 @@ li {
 
 @media (max-width: 640px) {
   .navbar-inner {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px 16px;
-  }
-
-  .nav-links {
-    justify-content: flex-start;
+    padding: 10px 16px;
   }
 
   .container {

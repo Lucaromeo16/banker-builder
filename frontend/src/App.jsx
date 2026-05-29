@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AdminDashboardPage from './components/AdminDashboardPage';
 import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
@@ -28,19 +28,42 @@ export default function App() {
   const isAdminRoute = typeof window !== 'undefined' && window.location.pathname === '/admin';
   const [mode, setMode] = useState('home');
   const [networkingPrefill, setNetworkingPrefill] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navRef = useRef(null);
 
   const goHome = () => {
     setMode('home');
+    setMobileMenuOpen(false);
   };
 
   const selectMode = (nextMode) => {
     setMode(nextMode);
+    setMobileMenuOpen(false);
   };
 
   const addNetworkingContact = (office) => {
     setNetworkingPrefill(office);
     setMode('networking-hub');
+    setMobileMenuOpen(false);
   };
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (!mobileMenuOpen || navRef.current?.contains(event.target)) return;
+      setMobileMenuOpen(false);
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth >= 900) setMobileMenuOpen(false);
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mobileMenuOpen]);
 
   if (isAdminRoute) {
     return <AdminDashboardPage />;
@@ -48,12 +71,24 @@ export default function App() {
 
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar" ref={navRef}>
         <div className="navbar-inner">
           <button type="button" className="site-title" onClick={() => selectMode('home')}>
             Banker Builder
           </button>
-          <div className="nav-links" aria-label="Primary navigation">
+          <button
+            type="button"
+            className={mobileMenuOpen ? 'mobile-menu-button open' : 'mobile-menu-button'}
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMobileMenuOpen((current) => !current)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+          <div id="primary-navigation" className={mobileMenuOpen ? 'nav-links open' : 'nav-links'} aria-label="Primary navigation">
             {navItems.map((item) => (
               <button
                 type="button"
