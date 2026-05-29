@@ -2166,8 +2166,12 @@ export default function InterviewPrepPage({ onBack }) {
         <section className="panel interview-setup-panel">
           <div className="networking-header">
             <div>
-              <span className="feature-eyebrow">Interview Prep setup</span>
+              <div className="beta-title-row">
+                <span className="feature-eyebrow">Interview Prep setup</span>
+                <span className="beta-badge">Beta</span>
+              </div>
               <h2>Personalize your practice</h2>
+              <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
               <p>Answer a few quick questions so practice prompts and feedback match your recruiting path.</p>
             </div>
           </div>
@@ -2551,7 +2555,11 @@ export default function InterviewPrepPage({ onBack }) {
       <section className="panel">
         <div className="target-results-header">
           <div>
-            <h2>Interview Prep</h2>
+            <div className="beta-title-row">
+              <h2>Interview Prep</h2>
+              <span className="beta-badge">Beta</span>
+            </div>
+            <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
             <p className="muted">
               {prepProfile.practiceMode === 'resume-aware' ? 'Resume-Aware Practice' : 'Generic Practice'} · {prepProfile.recruitingGoal} · {prepProfile.targetBankTier} · {prepProfile.targetGroups.slice(0, 3).join(', ')}
               {prepProfile.targetGroups.length > 3 ? ` +${prepProfile.targetGroups.length - 3} more` : ''}

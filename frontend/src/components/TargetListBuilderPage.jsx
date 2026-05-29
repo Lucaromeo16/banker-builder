@@ -1791,9 +1791,13 @@ export default function TargetListBuilderPage({ onBack }) {
         <section className="panel results">
           <div className="target-results-header">
             <div>
-              <span className="feature-eyebrow">Generated recommendations</span>
+              <div className="beta-title-row">
+                <span className="feature-eyebrow">Generated recommendations</span>
+                <span className="beta-badge">Beta</span>
+              </div>
               <h2>Target List Results</h2>
               <p className="muted">Showing {targetList.totalCount} of up to {targetList.maxFirmCount} firms.</p>
+              <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
               <p className="muted">Saved lists are stored on this device for now.</p>
             </div>
             <div className="target-results-actions">
@@ -1904,6 +1908,17 @@ export default function TargetListBuilderPage({ onBack }) {
       <button type="button" className="back-button" onClick={onBack}>
         Back to Home
       </button>
+
+      <section className="panel beta-page-header">
+        <div>
+          <div className="beta-title-row">
+            <span className="feature-eyebrow">Target list builder</span>
+            <span className="beta-badge">Beta</span>
+          </div>
+          <h2>Target List Builder</h2>
+          <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
+        </div>
+      </section>
 
       <section className="panel survey-card">
         <div className="survey-progress">

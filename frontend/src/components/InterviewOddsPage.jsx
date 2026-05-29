@@ -2317,11 +2317,15 @@ export default function InterviewOddsPage({ onBack }) {
 
         <section className="panel intro-panel">
           <div className="intro-content">
-            <span className="feature-eyebrow">Firm-specific recruiting model</span>
+            <div className="beta-title-row">
+              <span className="feature-eyebrow">Firm-specific recruiting model</span>
+              <span className="beta-badge">Beta</span>
+            </div>
             <h2>Interview Odds Calculator</h2>
             <p className="intro-subtitle">
               Estimate your likelihood of receiving an interview at a specific investment bank, office, and group based on your profile.
             </p>
+            <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
 
             <div className="intro-copy">
               <p>This tool models recruiting competitiveness across firms, offices, and groups.</p>

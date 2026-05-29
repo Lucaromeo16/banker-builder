@@ -3,6 +3,7 @@ const features = [
     mode: 'interview',
     eyebrow: 'Probability model',
     title: 'Interview Odds Calculator',
+    beta: true,
     description: 'Select a firm, office, and group, then estimate your likelihood of receiving an interview.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -17,6 +18,7 @@ const features = [
     mode: 'target-list',
     eyebrow: 'Resume strategy',
     title: 'Target List Builder',
+    beta: true,
     description: 'Enter your full profile once and generate a Reach / Target / Safety list of banks and offices.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -33,6 +35,7 @@ const features = [
     mode: 'interview-prep',
     eyebrow: 'Mock interview',
     title: 'Interview Prep',
+    beta: true,
     description: 'Practice technical, behavioral, fit, and market questions with structured feedback.',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -166,8 +169,14 @@ export default function HomePage({ onSelectMode }) {
         {features.map((feature) => (
           <button type="button" className="feature-card" key={feature.mode} onClick={() => onSelectMode(feature.mode)}>
             <span className="feature-icon">{feature.icon}</span>
-            <span className="feature-eyebrow">{feature.eyebrow}</span>
-            <strong>{feature.title}</strong>
+            <span className="feature-card-meta">
+              <span className="feature-eyebrow">{feature.eyebrow}</span>
+              {feature.beta ? <span className="beta-badge">Beta</span> : null}
+            </span>
+            <strong>
+              {feature.title}
+            </strong>
+            {feature.beta ? <span className="beta-microcopy">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</span> : null}
             <span>{feature.description}</span>
           </button>
         ))}
