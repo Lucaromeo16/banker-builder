@@ -234,6 +234,33 @@ textarea {
   text-align: center;
 }
 
+.auth-confirmed-card {
+  display: grid;
+  gap: 18px;
+  text-align: center;
+}
+
+.auth-confirmed-card .auth-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.auth-confirmation-mark {
+  display: inline-flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  border: 1px solid rgba(52, 211, 153, 0.36);
+  border-radius: 999px;
+  background: rgba(6, 78, 59, 0.24);
+  color: #A7F3D0;
+  font-size: 0.9rem;
+  font-weight: 950;
+  box-shadow: 0 0 28px rgba(16, 185, 129, 0.16);
+}
+
 .auth-heading {
   display: grid;
   gap: 10px;

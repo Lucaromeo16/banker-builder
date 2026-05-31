@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import AuthConfirmedPage from './auth/AuthConfirmedPage';
 import AuthPage from './auth/AuthPage';
 import { useAuth } from './auth/AuthContext';
 import AdminDashboardPage from './components/AdminDashboardPage';
@@ -28,7 +29,9 @@ const navItems = [
 
 export default function App() {
   const { user, loading, profileLoading, isAuthReady, authError, signOut } = useAuth();
-  const isAdminRoute = typeof window !== 'undefined' && window.location.pathname === '/admin';
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const isAdminRoute = currentPath === '/admin';
+  const isAuthConfirmationRoute = currentPath === '/auth/confirmed' || currentPath === '/auth/callback';
   const [mode, setMode] = useState('home');
   const [networkingPrefill, setNetworkingPrefill] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -68,6 +71,10 @@ export default function App() {
       window.removeEventListener('resize', handleResize);
     };
   }, [mobileMenuOpen]);
+
+  if (isAuthConfirmationRoute) {
+    return <AuthConfirmedPage />;
+  }
 
   if (!isAuthReady || loading || profileLoading) {
     return (
