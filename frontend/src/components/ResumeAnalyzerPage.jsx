@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useAuth } from '../auth/AuthContext';
 
 const MIN_RESUME_TEXT_LENGTH = 200;
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
@@ -185,6 +186,44 @@ function loadSavedAnalyses() {
   }
 }
 
+function buildSavedAnalysisFromResult(analysis, fileName) {
+  return {
+    id: analysis.savedAnalysisId || `resume-analysis-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    fileName: fileName || 'Resume.pdf',
+    storageProvider: 'local',
+    scores: {
+      overallScoreOutOf10: getCompositeOverallScore(analysis),
+      ibReadinessScore: analysis.ibReadinessScore,
+      formattingScore: analysis.formattingScore,
+      experienceScore: analysis.experienceScore,
+      leadershipScore: analysis.leadershipScore,
+      technicalRelevanceScore: analysis.technicalRelevanceScore,
+      spellingGrammarScore: analysis.spellingGrammarScore
+    },
+    strengths: normalizeList(analysis.strengths),
+    weaknesses: normalizeList(analysis.weaknesses),
+    missingSignals: normalizeList(analysis.missingSignals),
+    formattingFeedback: normalizeList(analysis.formattingFeedback),
+    scoreDetails: analysis.scoreDetails || {},
+    positioningAdvice: analysis.suggestedResumePositioning || '',
+    suggestedBulletRewrites: normalizeList(analysis.recommendedBulletRewrites),
+    rawAnalysisResult: analysis
+  };
+}
+
+function mapResumeAnalysisRow(row) {
+  const rawAnalysisResult = row.analysis_json || {};
+  return {
+    ...buildSavedAnalysisFromResult(rawAnalysisResult, row.file_name),
+    id: row.id,
+    createdAt: row.created_at,
+    fileName: row.file_name || 'Resume.pdf',
+    storageProvider: 'supabase',
+    rawAnalysisResult
+  };
+}
+
 function userMessageForResumeError(payload, fallbackMessage) {
   if (payload?.code === 'NETWORK_ERROR') return 'Backend route unreachable. Please refresh and try again.';
   if (payload?.code === 'MISSING_OPENAI_API_KEY') return 'Resume analysis is not configured yet. Add an OpenAI API key and try again.';
@@ -231,6 +270,7 @@ async function postJson(pathname, body) {
 }
 
 export default function ResumeAnalyzerPage({ onBack }) {
+  const { user, supabase } = useAuth();
   const [resumeText, setResumeText] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -241,6 +281,8 @@ export default function ResumeAnalyzerPage({ onBack }) {
   const [error, setError] = useState('');
   const [savedAnalyses, setSavedAnalyses] = useState(loadSavedAnalyses);
   const [savedConfirmation, setSavedConfirmation] = useState('');
+  const [savedAnalysesLoading, setSavedAnalysesLoading] = useState(false);
+  const [savedAnalysesError, setSavedAnalysesError] = useState('');
   const [activeScoreDetailKey, setActiveScoreDetailKey] = useState('');
   const fileInputRef = useRef(null);
 
@@ -254,8 +296,47 @@ export default function ResumeAnalyzerPage({ onBack }) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    window.localStorage.setItem(SAVED_ANALYSES_STORAGE_KEY, JSON.stringify(savedAnalyses));
+    const localOnlyAnalyses = savedAnalyses.filter((item) => item.storageProvider !== 'supabase');
+    window.localStorage.setItem(SAVED_ANALYSES_STORAGE_KEY, JSON.stringify(localOnlyAnalyses));
   }, [savedAnalyses]);
+
+  useEffect(() => {
+    if (!supabase || !user) return undefined;
+
+    let isMounted = true;
+
+    const loadSupabaseSavedAnalyses = async () => {
+      setSavedAnalysesLoading(true);
+      setSavedAnalysesError('');
+
+      const { data, error: loadError } = await supabase
+        .from('resume_analyses')
+        .select('id, file_name, analysis_json, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (!isMounted) return;
+
+      if (loadError) {
+        setSavedAnalysesError('Saved analyses could not be loaded. Local saved analyses are still available.');
+        setSavedAnalysesLoading(false);
+        return;
+      }
+
+      const supabaseAnalyses = (data || []).map(mapResumeAnalysisRow);
+      setSavedAnalyses((current) => [
+        ...supabaseAnalyses,
+        ...current.filter((item) => item.storageProvider !== 'supabase' && !supabaseAnalyses.some((saved) => saved.id === item.id))
+      ]);
+      setSavedAnalysesLoading(false);
+    };
+
+    loadSupabaseSavedAnalyses();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [supabase, user]);
 
   useEffect(() => {
     if (!activeScoreDetailKey) return undefined;
@@ -394,46 +475,73 @@ export default function ResumeAnalyzerPage({ onBack }) {
     }
   };
 
-  const saveAnalysis = () => {
+  const saveAnalysis = async () => {
     if (!analysis) return;
-    const savedAnalysis = {
-      id: analysis.savedAnalysisId || `resume-analysis-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      fileName: uploadedFile?.name || 'Resume.pdf',
-      scores: {
-        overallScoreOutOf10: getCompositeOverallScore(analysis),
-        ibReadinessScore: analysis.ibReadinessScore,
-        formattingScore: analysis.formattingScore,
-        experienceScore: analysis.experienceScore,
-        leadershipScore: analysis.leadershipScore,
-        technicalRelevanceScore: analysis.technicalRelevanceScore,
-        spellingGrammarScore: analysis.spellingGrammarScore
-      },
-      strengths: normalizeList(analysis.strengths),
-      weaknesses: normalizeList(analysis.weaknesses),
-      missingSignals: normalizeList(analysis.missingSignals),
-      formattingFeedback: normalizeList(analysis.formattingFeedback),
-      scoreDetails: analysis.scoreDetails || {},
-      positioningAdvice: analysis.suggestedResumePositioning || '',
-      suggestedBulletRewrites: normalizeList(analysis.recommendedBulletRewrites),
-      rawAnalysisResult: analysis
-    };
+    setSavedConfirmation('');
+    setSavedAnalysesError('');
 
-    setSavedAnalyses((current) => [savedAnalysis, ...current.filter((item) => item.id !== savedAnalysis.id)]);
-    setAnalysis((current) => ({ ...current, savedAnalysisId: savedAnalysis.id }));
-    setSavedConfirmation('Analysis saved on this device.');
+    if (!user) {
+      setSavedAnalysesError('Sign in to save resume analyses.');
+      return;
+    }
+
+    const fileName = uploadedFile?.name || 'Resume.pdf';
+
+    if (supabase) {
+      const { data, error: saveError } = await supabase
+        .from('resume_analyses')
+        .insert({
+          user_id: user.id,
+          file_name: fileName,
+          analysis_json: analysis
+        })
+        .select('id, file_name, analysis_json, created_at')
+        .single();
+
+      if (!saveError && data) {
+        const savedAnalysis = mapResumeAnalysisRow(data);
+        setSavedAnalyses((current) => [savedAnalysis, ...current.filter((item) => item.id !== savedAnalysis.id)]);
+        setAnalysis((current) => ({ ...current, savedAnalysisId: savedAnalysis.id }));
+        setSavedConfirmation('Analysis saved to your Banker Builder account.');
+        return;
+      }
+
+      setSavedAnalysesError('Could not save to your account. Saved locally on this device instead.');
+    }
+
+    const localSavedAnalysis = buildSavedAnalysisFromResult(analysis, fileName);
+    setSavedAnalyses((current) => [localSavedAnalysis, ...current.filter((item) => item.id !== localSavedAnalysis.id)]);
+    setAnalysis((current) => ({ ...current, savedAnalysisId: localSavedAnalysis.id }));
+    setSavedConfirmation('Analysis saved locally on this device.');
   };
 
-  const deleteSavedAnalysis = (id) => {
-    setSavedAnalyses((current) => current.filter((item) => item.id !== id));
-    if (analysis?.savedAnalysisId === id) {
+  const deleteSavedAnalysis = async (item) => {
+    setSavedAnalysesError('');
+
+    if (item.storageProvider === 'supabase' && supabase && user) {
+      const { error: deleteError } = await supabase.from('resume_analyses').delete().eq('id', item.id).eq('user_id', user.id);
+
+      if (deleteError) {
+        setSavedAnalysesError('Saved analysis could not be deleted. Please try again.');
+        return;
+      }
+    }
+
+    setSavedAnalyses((current) => current.filter((savedItem) => savedItem.id !== item.id));
+    if (analysis?.savedAnalysisId === item.id) {
       setAnalysis((current) => ({ ...current, savedAnalysisId: undefined }));
       setSavedConfirmation('');
     }
   };
 
   const viewSavedAnalysis = (item) => {
-    setAnalysis({ ...item.rawAnalysisResult, savedAnalysisId: item.id });
+    const rawAnalysisResult = item.rawAnalysisResult || item.analysis_json;
+    if (!rawAnalysisResult) {
+      setSavedAnalysesError('Saved analysis could not be loaded. Please try another saved analysis.');
+      return;
+    }
+
+    setAnalysis({ ...rawAnalysisResult, savedAnalysisId: item.id });
     setActiveScoreDetailKey('');
     setUploadedFile({
       name: item.fileName,
@@ -444,6 +552,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
     setError('');
     setParseWarning('');
     setSavedConfirmation('');
+    setSavedAnalysesError('');
   };
 
   return (
@@ -539,13 +648,14 @@ export default function ResumeAnalyzerPage({ onBack }) {
           <div className="resume-results-actions">
             <div>
               <h3>Results</h3>
-              <p className="muted">Saved analyses are stored on this device for now.</p>
+              <p className="muted">Saved analyses sync to your Banker Builder account. If syncing fails, they are stored locally.</p>
             </div>
             <button type="button" className="secondary" onClick={saveAnalysis} disabled={currentAnalysisSaved}>
               {currentAnalysisSaved ? 'Analysis Saved' : 'Save Analysis'}
             </button>
           </div>
           {savedConfirmation ? <p className="resume-save-confirmation">{savedConfirmation}</p> : null}
+          {savedAnalysesError ? <p className="error">{savedAnalysesError}</p> : null}
 
           <div className="resume-score-grid">
             {SUBSCORE_CONFIGS.map((config) => (
@@ -631,9 +741,12 @@ export default function ResumeAnalyzerPage({ onBack }) {
         <div className="section-heading">
           <div>
             <h3 id="saved-analyses-title">Saved Analyses</h3>
-            <p className="muted">Saved analyses are stored on this device for now.</p>
+            <p className="muted">Saved analyses are loaded from your Banker Builder account. Local fallback saves stay on this device.</p>
           </div>
         </div>
+
+        {savedAnalysesLoading ? <p className="resume-loading">Loading saved analyses...</p> : null}
+        {savedAnalysesError ? <p className="error">{savedAnalysesError}</p> : null}
 
         {savedAnalyses.length ? (
           <div className="resume-saved-list">
@@ -641,7 +754,10 @@ export default function ResumeAnalyzerPage({ onBack }) {
               <article className="resume-saved-card" key={item.id}>
                 <div>
                   <strong>{item.fileName}</strong>
-                  <span>{new Date(item.createdAt).toLocaleString()}</span>
+                  <span>
+                    {new Date(item.createdAt).toLocaleString()}
+                    {item.storageProvider === 'local' ? ' · Local' : ''}
+                  </span>
                 </div>
                 <dl>
                   <div>
@@ -661,7 +777,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
                   <button type="button" className="text-button" onClick={() => viewSavedAnalysis(item)}>
                     View
                   </button>
-                  <button type="button" className="text-button danger" onClick={() => deleteSavedAnalysis(item.id)}>
+                  <button type="button" className="text-button danger" onClick={() => deleteSavedAnalysis(item)}>
                     Delete
                   </button>
                 </div>
