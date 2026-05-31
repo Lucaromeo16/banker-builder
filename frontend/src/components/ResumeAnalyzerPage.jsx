@@ -270,7 +270,7 @@ async function postJson(pathname, body) {
 }
 
 export default function ResumeAnalyzerPage({ onBack }) {
-  const { user, supabase } = useAuth();
+  const { user, supabase, isAuthReady } = useAuth();
   const [resumeText, setResumeText] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -301,7 +301,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
   }, [savedAnalyses]);
 
   useEffect(() => {
-    if (!supabase || !user) return undefined;
+    if (!isAuthReady || !supabase || !user) return undefined;
 
     let isMounted = true;
 
@@ -318,7 +318,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
       if (!isMounted) return;
 
       if (loadError) {
-        setSavedAnalysesError('Saved analyses could not be loaded. Local saved analyses are still available.');
+        setSavedAnalysesError('Saved analyses could not be loaded right now.');
         setSavedAnalysesLoading(false);
         return;
       }
@@ -336,7 +336,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
     return () => {
       isMounted = false;
     };
-  }, [supabase, user]);
+  }, [isAuthReady, supabase, user]);
 
   useEffect(() => {
     if (!activeScoreDetailKey) return undefined;

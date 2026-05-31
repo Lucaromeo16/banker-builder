@@ -27,6 +27,15 @@ const navItems = [
   { label: 'Knowledge Base', mode: 'knowledge-base' }
 ];
 
+function getGlobalAuthMessage(authError) {
+  if (!authError) return '';
+
+  const normalized = authError.toLowerCase();
+  if (normalized.includes('confirm your email')) return authError;
+
+  return '';
+}
+
 export default function App() {
   const { user, loading, profileLoading, isAuthReady, authError, signOut } = useAuth();
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
@@ -37,6 +46,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef(null);
   const userEmail = user?.email ?? 'Account';
+  const globalAuthMessage = getGlobalAuthMessage(authError);
 
   const goHome = () => {
     setMode('home');
@@ -137,7 +147,7 @@ export default function App() {
       </nav>
 
       <main className="container">
-        {authError ? <div className="auth-banner error">{authError}</div> : null}
+        {globalAuthMessage ? <div className="auth-banner error">{globalAuthMessage}</div> : null}
 
         {mode !== 'home' ? (
           <header className="header page-header">
