@@ -224,6 +224,31 @@ function mapResumeAnalysisRow(row) {
   };
 }
 
+function logResumeAnalysisSupabaseError(operation, error, details = {}) {
+  if (!error) return;
+
+  console.warn('[resume-analyzer] resume_analyses Supabase error', {
+    operation,
+    code: error.code || null,
+    message: error.message || null,
+    userIdPresent: Boolean(details.userId),
+    payloadKeys: details.payload ? Object.keys(details.payload) : [],
+    selectedColumns: details.selectedColumns || null
+  });
+}
+
+async function getResumePersistenceUserId(supabase, fallbackUser) {
+  if (!supabase) return fallbackUser?.id || null;
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    logResumeAnalysisSupabaseError('get-user', error, { userId: fallbackUser?.id });
+    return fallbackUser?.id || null;
+  }
+
+  return data?.user?.id || fallbackUser?.id || null;
+}
+
 function userMessageForResumeError(payload, fallbackMessage) {
   if (payload?.code === 'NETWORK_ERROR') return 'Backend route unreachable. Please refresh and try again.';
   if (payload?.code === 'MISSING_OPENAI_API_KEY') return 'Resume analysis is not configured yet. Add an OpenAI API key and try again.';
@@ -308,16 +333,27 @@ export default function ResumeAnalyzerPage({ onBack }) {
     const loadSupabaseSavedAnalyses = async () => {
       setSavedAnalysesLoading(true);
       setSavedAnalysesError('');
+      const userId = await getResumePersistenceUserId(supabase, user);
+
+      if (!userId) {
+        if (isMounted) {
+          setSavedAnalysesLoading(false);
+        }
+        return;
+      }
+
+      const selectedColumns = 'id, user_id, file_name, analysis_json, created_at';
 
       const { data, error: loadError } = await supabase
         .from('resume_analyses')
-        .select('id, file_name, analysis_json, created_at')
-        .eq('user_id', user.id)
+        .select(selectedColumns)
+        .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (!isMounted) return;
 
       if (loadError) {
+        logResumeAnalysisSupabaseError('load', loadError, { userId, selectedColumns });
         setSavedAnalysesError('Saved analyses could not be loaded right now.');
         setSavedAnalysesLoading(false);
         return;
@@ -486,16 +522,24 @@ export default function ResumeAnalyzerPage({ onBack }) {
     }
 
     const fileName = uploadedFile?.name || 'Resume.pdf';
+    const userId = await getResumePersistenceUserId(supabase, user);
+
+    if (!userId) {
+      setSavedAnalysesError('Sign in to save resume analyses.');
+      return;
+    }
 
     if (supabase) {
+      const insertPayload = {
+        user_id: userId,
+        file_name: fileName,
+        analysis_json: analysis
+      };
+
       const { data, error: saveError } = await supabase
         .from('resume_analyses')
-        .insert({
-          user_id: user.id,
-          file_name: fileName,
-          analysis_json: analysis
-        })
-        .select('id, file_name, analysis_json, created_at')
+        .insert(insertPayload)
+        .select('id, user_id, file_name, analysis_json, created_at')
         .single();
 
       if (!saveError && data) {
@@ -506,6 +550,7 @@ export default function ResumeAnalyzerPage({ onBack }) {
         return;
       }
 
+      logResumeAnalysisSupabaseError('save', saveError, { userId, payload: insertPayload });
       setSavedAnalysesError('Could not save to your account. Saved locally on this device instead.');
     }
 
@@ -519,9 +564,17 @@ export default function ResumeAnalyzerPage({ onBack }) {
     setSavedAnalysesError('');
 
     if (item.storageProvider === 'supabase' && supabase && user) {
-      const { error: deleteError } = await supabase.from('resume_analyses').delete().eq('id', item.id).eq('user_id', user.id);
+      const userId = await getResumePersistenceUserId(supabase, user);
+
+      if (!userId) {
+        setSavedAnalysesError('Sign in to delete saved analyses.');
+        return;
+      }
+
+      const { error: deleteError } = await supabase.from('resume_analyses').delete().eq('id', item.id).eq('user_id', userId);
 
       if (deleteError) {
+        logResumeAnalysisSupabaseError('delete', deleteError, { userId, payload: { id: item.id, user_id: userId } });
         setSavedAnalysesError('Saved analysis could not be deleted. Please try again.');
         return;
       }
