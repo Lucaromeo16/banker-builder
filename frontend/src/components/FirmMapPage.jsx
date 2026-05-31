@@ -5,6 +5,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
 import ibOffices from '../../../data/ibOffices.json';
 import usCities from '../../../data/usCities.json';
+import { loadFirmMapOfficesFromSupabase } from '../lib/firmMapData';
 
 const BANK_TYPE_OPTIONS = [
   'All',
@@ -409,6 +410,8 @@ function ClusteredOfficeMarkers({ offices, favoriteFirms, onAddContact, onToggle
 export default function FirmMapPage({ onBack, onAddContact }) {
   const [viewMode, setViewMode] = useState('map');
   const [expandedFirm, setExpandedFirm] = useState(null);
+  const [offices, setOffices] = useState(() => ibOffices);
+  const [dataSource, setDataSource] = useState('json');
   const [bankSearch, setBankSearch] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
   const [selectedCity, setSelectedCity] = useState(null);
@@ -425,6 +428,30 @@ export default function FirmMapPage({ onBack, onAddContact }) {
 
   const favoriteFirms = useMemo(() => new Set(favoriteFirmsList), [favoriteFirmsList]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadSupabaseDataset = async () => {
+      const result = await loadFirmMapOfficesFromSupabase();
+      if (!isMounted) return;
+
+      if (result.source === 'supabase' && result.offices.length) {
+        setOffices(result.offices);
+        setDataSource('supabase');
+        return;
+      }
+
+      setOffices(ibOffices);
+      setDataSource(result.error ? 'json-fallback' : 'json');
+    };
+
+    loadSupabaseDataset();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const citySuggestions = useMemo(() => {
     if (!locationSearch.trim()) return [];
     if (selectedCity && locationSearch === selectedCity.displayName) return [];
@@ -438,7 +465,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
   const radiusFilterActive = Boolean(selectedCity);
 
   const filteredOffices = useMemo(() => {
-    return ibOffices
+    return offices
       .filter((office) => officeMatchesBankSearch(office, bankSearch) && officeMatchesFilters(office, filters))
       .filter((office) => !showFavoritesOnly || favoriteFirms.has(office.firm))
       .map((office) => {
@@ -453,7 +480,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
         };
       })
       .filter((office) => !radiusFilterActive || office.distanceMiles <= radiusMiles);
-  }, [bankSearch, favoriteFirms, filters, radiusFilterActive, radiusMiles, selectedCity, showFavoritesOnly]);
+  }, [bankSearch, favoriteFirms, filters, offices, radiusFilterActive, radiusMiles, selectedCity, showFavoritesOnly]);
 
   const firmSummaries = useMemo(() => firmSummariesForOffices(filteredOffices), [filteredOffices]);
 
@@ -545,6 +572,7 @@ export default function FirmMapPage({ onBack, onAddContact }) {
           <div>
             <h2>Investment Bank Firm Map</h2>
             <p className="muted">Explore sample investment banking offices by geography.</p>
+            {dataSource === 'json-fallback' ? <p className="muted">Using offline firm dataset.</p> : null}
           </div>
           <span className="map-result-count">{filteredOffices.length} offices</span>
         </div>

@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '../auth/AuthContext';
 import ibOffices from '../../../data/ibOffices.json';
 
 const CONTACTS_STORAGE_KEY = 'bankerBuilder.networkingContacts';
+const NETWORKING_CONTACT_COLUMNS = 'id, user_id, name, firm, office, group_name, title, email, linkedin_url, status, notes';
 
 const connectionTypes = ['Cold Outreach', 'Alumni', 'Friend/Family', 'Campus Event', 'Recruiter', 'Existing Relationship'];
 const relationshipStrengths = ['Cold', 'Warm', 'Strong', 'Referral Potential', 'Referral'];
@@ -55,6 +57,62 @@ function readContacts() {
   } catch {
     return [];
   }
+}
+
+function logNetworkingSupabaseError(operation, error, details = {}) {
+  if (!error) return;
+
+  console.warn('[networking-hub] Supabase persistence error', {
+    operation,
+    code: error.code || null,
+    message: error.message || null,
+    userIdPresent: Boolean(details.userId),
+    payloadKeys: details.payload ? Object.keys(details.payload) : []
+  });
+}
+
+async function getNetworkingPersistenceUserId(supabase, fallbackUser) {
+  if (!supabase) return fallbackUser?.id || null;
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    logNetworkingSupabaseError('get-user', error, { userId: fallbackUser?.id });
+    return fallbackUser?.id || null;
+  }
+
+  return data?.user?.id || fallbackUser?.id || null;
+}
+
+function mapNetworkingContactRow(row) {
+  return {
+    ...emptyContact,
+    id: row.id,
+    storageProvider: 'supabase',
+    name: row.name || '',
+    firm: row.firm || '',
+    office: row.office || '',
+    group: row.group_name || '',
+    title: row.title || '',
+    email: row.email || '',
+    linkedin: row.linkedin_url || '',
+    status: row.status || 'Not Contacted',
+    notes: row.notes || ''
+  };
+}
+
+function buildNetworkingContactPayload(contact, userId) {
+  return {
+    user_id: userId,
+    name: contact.name || '',
+    firm: contact.firm || '',
+    office: contact.office || '',
+    group_name: contact.group || '',
+    title: contact.title || '',
+    email: contact.email || '',
+    linkedin_url: contact.linkedin || '',
+    status: contact.status || 'Not Contacted',
+    notes: contact.notes || ''
+  };
 }
 
 function officeOptionsForFirm(firm) {
@@ -115,6 +173,7 @@ function createLocalDraft(request) {
 }
 
 export default function NetworkingHubPage({ onBack, prefillContact, onPrefillConsumed }) {
+  const { user, supabase, isAuthReady } = useAuth();
   const firmOptions = useMemo(() => [...new Set(ibOffices.map((office) => office.firm))].sort(), []);
   const [contacts, setContacts] = useState(() => readContacts());
   const [form, setForm] = useState(emptyContact);
@@ -124,10 +183,62 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
   const [draft, setDraft] = useState(null);
   const [draftLoading, setDraftLoading] = useState(false);
   const [draftError, setDraftError] = useState('');
+  const [contactsLoading, setContactsLoading] = useState(false);
+  const [syncMessage, setSyncMessage] = useState('');
+  const [syncError, setSyncError] = useState('');
 
   useEffect(() => {
-    localStorage.setItem(CONTACTS_STORAGE_KEY, JSON.stringify(contacts));
+    const localOnlyContacts = contacts.filter((contact) => contact.storageProvider !== 'supabase');
+    localStorage.setItem(CONTACTS_STORAGE_KEY, JSON.stringify(localOnlyContacts));
   }, [contacts]);
+
+  useEffect(() => {
+    if (!isAuthReady || !supabase || !user) return undefined;
+
+    let isMounted = true;
+
+    const loadSupabaseContacts = async () => {
+      setContactsLoading(true);
+      setSyncError('');
+      const userId = await getNetworkingPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        if (isMounted) setContactsLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('networking_contacts')
+        .select(NETWORKING_CONTACT_COLUMNS)
+        .eq('user_id', userId)
+        .order('name', { ascending: true });
+
+      if (!isMounted) return;
+
+      if (error) {
+        logNetworkingSupabaseError('load', error, { userId });
+        setSyncError('Could not load networking contacts from your account right now. Local contacts are still available.');
+        setContactsLoading(false);
+        return;
+      }
+
+      const supabaseContacts = (data || []).map(mapNetworkingContactRow);
+      setContacts((current) => {
+        const localContacts = current.filter((contact) => contact.storageProvider !== 'supabase');
+        return [
+          ...localContacts,
+          ...supabaseContacts.filter((savedContact) => !localContacts.some((contact) => contact.id === savedContact.id))
+        ];
+      });
+      setContactsLoading(false);
+    };
+
+    loadSupabaseContacts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthReady, supabase, user]);
 
   useEffect(() => {
     if (!prefillContact) return;
@@ -219,14 +330,100 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
     }));
   };
 
-  const saveContact = (event) => {
+  const saveContact = async (event) => {
     event.preventDefault();
     if (!form.name.trim() || !form.firm) return;
+    setSyncMessage('');
+    setSyncError('');
+
+    const normalizedContact = {
+      ...form,
+      name: form.name.trim(),
+      firm: form.firm.trim(),
+      title: form.title.trim(),
+      email: form.email.trim(),
+      linkedin: form.linkedin.trim(),
+      notes: form.notes.trim()
+    };
 
     if (editingId) {
-      setContacts((current) => current.map((contact) => (contact.id === editingId ? { ...form, id: editingId } : contact)));
+      const previousContact = contacts.find((contact) => contact.id === editingId);
+      const updatedContact = {
+        ...previousContact,
+        ...normalizedContact,
+        id: editingId,
+        storageProvider: previousContact?.storageProvider || 'local'
+      };
+
+      setContacts((current) => current.map((contact) => (contact.id === editingId ? updatedContact : contact)));
+
+      if (previousContact?.storageProvider === 'supabase' && supabase && user) {
+        const userId = await getNetworkingPersistenceUserId(supabase, user);
+
+        if (userId) {
+          const payload = buildNetworkingContactPayload(updatedContact, userId);
+          delete payload.user_id;
+          const { error } = await supabase
+            .from('networking_contacts')
+            .update(payload)
+            .eq('id', editingId)
+            .eq('user_id', userId);
+
+          if (error) {
+            logNetworkingSupabaseError('update', error, { userId, payload });
+            setContacts((current) =>
+              current.map((contact) => (contact.id === editingId ? { ...contact, storageProvider: 'local' } : contact))
+            );
+            setSyncError('Could not sync networking contacts to your account. Saved locally on this device instead.');
+          } else {
+            setSyncMessage('Networking contact updated in your Banker Builder account.');
+          }
+        }
+      }
     } else {
-      setContacts((current) => [{ ...form, id: globalThis.crypto?.randomUUID?.() || `${Date.now()}` }, ...current]);
+      const localContact = {
+        ...normalizedContact,
+        id: globalThis.crypto?.randomUUID?.() || `${Date.now()}`,
+        storageProvider: 'local'
+      };
+
+      if (supabase && user) {
+        const userId = await getNetworkingPersistenceUserId(supabase, user);
+
+        if (userId) {
+          const payload = buildNetworkingContactPayload(normalizedContact, userId);
+          const { data, error } = await supabase
+            .from('networking_contacts')
+            .insert(payload)
+            .select(NETWORKING_CONTACT_COLUMNS)
+            .single();
+
+          if (error || !data) {
+            logNetworkingSupabaseError('create', error, { userId, payload });
+            setContacts((current) => [localContact, ...current]);
+            setSyncError('Could not sync networking contacts to your account. Saved locally on this device instead.');
+          } else {
+            setContacts((current) => [
+              {
+                ...mapNetworkingContactRow(data),
+                office: normalizedContact.office,
+                group: normalizedContact.group,
+                connectionType: normalizedContact.connectionType,
+                relationshipStrength: normalizedContact.relationshipStrength,
+                lastInteractionDate: normalizedContact.lastInteractionDate
+              },
+              ...current
+            ]);
+            setSyncMessage('Networking contact saved to your Banker Builder account.');
+          }
+        } else {
+          setContacts((current) => [localContact, ...current]);
+          setSyncMessage('Networking contact saved locally on this device.');
+        }
+      } else {
+        setContacts((current) => [localContact, ...current]);
+        setSyncMessage('Networking contact saved locally on this device.');
+      }
     }
     setForm(emptyContact);
     setEditingId(null);
@@ -237,7 +434,35 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
     setEditingId(contact.id);
   };
 
-  const deleteContact = (contactId) => {
+  const deleteContact = async (contactId) => {
+    setSyncMessage('');
+    setSyncError('');
+    const contact = contacts.find((item) => item.id === contactId);
+
+    if (contact?.storageProvider === 'supabase' && supabase && user) {
+      const userId = await getNetworkingPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        setSyncError('Sign in to delete synced networking contacts.');
+        return;
+      }
+
+      const payload = { id: contactId, user_id: userId };
+      const { error } = await supabase
+        .from('networking_contacts')
+        .delete()
+        .eq('id', contactId)
+        .eq('user_id', userId);
+
+      if (error) {
+        logNetworkingSupabaseError('delete', error, { userId, payload });
+        setSyncError('Networking contact could not be deleted from your account. Please try again.');
+        return;
+      }
+
+      setSyncMessage('Networking contact deleted from your Banker Builder account.');
+    }
+
     setContacts((current) => current.filter((contact) => contact.id !== contactId));
     if (editingId === contactId) {
       setEditingId(null);
@@ -245,8 +470,39 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
     }
   };
 
-  const updateContactStatus = (contactId, status) => {
+  const updateContactStatus = async (contactId, status) => {
+    setSyncMessage('');
+    setSyncError('');
+    const previousContact = contacts.find((contact) => contact.id === contactId);
+
     setContacts((current) => current.map((contact) => (contact.id === contactId ? { ...contact, status } : contact)));
+
+    if (previousContact?.storageProvider !== 'supabase' || !supabase || !user) return;
+
+    const userId = await getNetworkingPersistenceUserId(supabase, user);
+
+    if (!userId) {
+      setContacts((current) =>
+        current.map((contact) => (contact.id === contactId ? { ...contact, storageProvider: 'local' } : contact))
+      );
+      setSyncError('Could not sync networking contacts to your account. Saved locally on this device instead.');
+      return;
+    }
+
+    const payload = { status };
+    const { error } = await supabase
+      .from('networking_contacts')
+      .update(payload)
+      .eq('id', contactId)
+      .eq('user_id', userId);
+
+    if (error) {
+      logNetworkingSupabaseError('status-update', error, { userId, payload });
+      setContacts((current) =>
+        current.map((contact) => (contact.id === contactId ? { ...contact, storageProvider: 'local' } : contact))
+      );
+      setSyncError('Could not sync networking contacts to your account. Saved locally on this device instead.');
+    }
   };
 
   const moveContact = (contact, direction) => {
@@ -345,6 +601,10 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
             <span className="feature-eyebrow">Recruiting CRM</span>
             <h2>Networking Hub</h2>
             <p>Track banker relationships, coffee chats, follow-ups, referrals, and outreach drafts in one workspace.</p>
+            <p className="muted">Contacts sync to your Banker Builder account. If syncing fails, they are stored locally on this device.</p>
+            {contactsLoading ? <p className="muted">Loading saved contacts...</p> : null}
+            {syncMessage ? <p className="muted">{syncMessage}</p> : null}
+            {syncError ? <p className="error">{syncError}</p> : null}
           </div>
         </div>
 

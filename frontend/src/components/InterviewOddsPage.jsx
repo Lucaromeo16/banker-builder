@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '../auth/AuthContext';
 import ScoreBreakdown from './ScoreBreakdown';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
@@ -446,6 +447,7 @@ const certificationOptions = [
   'Other Relevant Certification'
 ];
 const postGradHireTypes = new Set(['Lateral Hire', 'MBA Associate']);
+const SAVED_INTERVIEW_ODDS_KEY = 'bankerBuilder.savedInterviewOddsResults';
 const baseStepDefinitions = [
   { key: 'opportunity', title: 'Bank + Office Selection' },
   { key: 'hireType', title: 'Hire Type' },
@@ -1571,6 +1573,83 @@ function oddsStatus(likelihood) {
   return { label: 'Low', className: 'low' };
 }
 
+function readSavedInterviewOddsResults() {
+  try {
+    return JSON.parse(localStorage.getItem(SAVED_INTERVIEW_ODDS_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function logInterviewOddsSupabaseError(operation, error, details = {}) {
+  if (!error) return;
+
+  console.warn('[interview-odds] Supabase persistence error', {
+    operation,
+    code: error.code || null,
+    message: error.message || null,
+    userIdPresent: Boolean(details.userId),
+    payloadKeys: details.payload ? Object.keys(details.payload) : [],
+    selectedColumns: details.selectedColumns || null
+  });
+}
+
+async function getInterviewOddsPersistenceUserId(supabase, fallbackUser) {
+  if (!supabase) return fallbackUser?.id || null;
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    logInterviewOddsSupabaseError('get-user', error, { userId: fallbackUser?.id });
+    return fallbackUser?.id || null;
+  }
+
+  return data?.user?.id || fallbackUser?.id || null;
+}
+
+function buildInterviewOddsInputs(selection, profile, scoringPayload = null) {
+  return {
+    selection,
+    profile,
+    scoringPayload
+  };
+}
+
+function createSavedInterviewOddsResult({ id, createdAt, inputsJson, resultJson, storageProvider = 'local' }) {
+  return {
+    id,
+    createdAt,
+    storageProvider,
+    inputsJson,
+    resultJson
+  };
+}
+
+function mapInterviewOddsRow(row) {
+  return createSavedInterviewOddsResult({
+    id: row.id,
+    createdAt: row.created_at,
+    inputsJson: row.inputs_json || {},
+    resultJson: row.result_json || {},
+    storageProvider: 'supabase'
+  });
+}
+
+function savedOddsDescriptor(savedResult) {
+  const resultJson = savedResult.resultJson || {};
+  const selection = savedResult.inputsJson?.selection || {};
+  const opportunity = resultJson.opportunity || {};
+  const hireType = resultJson.hireType || selection.hireType || 'Interview Odds';
+  const firm = opportunity.firm || selection.firm || 'Firm not selected';
+  const office = opportunity.office || selection.office || 'Office not selected';
+  const group = opportunity.group || selection.group || 'Group not selected';
+
+  return {
+    title: `${firm} · ${office}`,
+    subtitle: `${hireType} · ${group}`,
+    likelihood: Number.isFinite(Number(resultJson.likelihood)) ? `${resultJson.likelihood}%` : 'N/A'
+  };
+}
+
 function NumberField({ label, value, onChange, step = 1, min = 0, max = 100 }) {
   return (
     <label>
@@ -1588,6 +1667,7 @@ function NumberField({ label, value, onChange, step = 1, min = 0, max = 100 }) {
 }
 
 export default function InterviewOddsPage({ onBack }) {
+  const { user, supabase, isAuthReady } = useAuth();
   const [showIntro, setShowIntro] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [opportunities, setOpportunities] = useState({ firms: [], groups: fallbackGroups });
@@ -1601,8 +1681,13 @@ export default function InterviewOddsPage({ onBack }) {
   });
   const [profile, setProfile] = useState(defaultProfile);
   const [result, setResult] = useState(null);
+  const [resultInputs, setResultInputs] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [savedResults, setSavedResults] = useState(() => readSavedInterviewOddsResults());
+  const [savedResultsLoading, setSavedResultsLoading] = useState(false);
+  const [savedResultsError, setSavedResultsError] = useState('');
+  const [saveMessage, setSaveMessage] = useState('');
 
   useEffect(() => {
     let ignore = false;
@@ -1644,6 +1729,57 @@ export default function InterviewOddsPage({ onBack }) {
       ignore = true;
     };
   }, []);
+
+  useEffect(() => {
+    const localOnlyResults = savedResults.filter((item) => item.storageProvider !== 'supabase');
+    localStorage.setItem(SAVED_INTERVIEW_ODDS_KEY, JSON.stringify(localOnlyResults));
+  }, [savedResults]);
+
+  useEffect(() => {
+    if (!isAuthReady || !supabase || !user) return undefined;
+
+    let isMounted = true;
+
+    const loadSavedResults = async () => {
+      setSavedResultsLoading(true);
+      setSavedResultsError('');
+      const userId = await getInterviewOddsPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        if (isMounted) setSavedResultsLoading(false);
+        return;
+      }
+
+      const selectedColumns = 'id, user_id, inputs_json, result_json, created_at';
+      const { data, error: loadError } = await supabase
+        .from('interview_odds_results')
+        .select(selectedColumns)
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (!isMounted) return;
+
+      if (loadError) {
+        logInterviewOddsSupabaseError('load', loadError, { userId, selectedColumns });
+        setSavedResultsError('Saved interview odds results could not be loaded right now.');
+        setSavedResultsLoading(false);
+        return;
+      }
+
+      const supabaseResults = (data || []).map(mapInterviewOddsRow);
+      setSavedResults((current) => [
+        ...supabaseResults,
+        ...current.filter((item) => item.storageProvider !== 'supabase' && !supabaseResults.some((saved) => saved.id === item.id))
+      ]);
+      setSavedResultsLoading(false);
+    };
+
+    loadSavedResults();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthReady, supabase, user]);
 
   const firmOptions = useMemo(
     () => [...new Set(opportunities.firms.map((opportunity) => opportunity.firm || opportunity.name))].filter(Boolean).sort(),
@@ -1687,6 +1823,10 @@ export default function InterviewOddsPage({ onBack }) {
   const currentStepKey = stepDefinitions[currentStep]?.key || 'review';
   const progressPercent = ((currentStep + 1) / stepDefinitions.length) * 100;
   const status = result ? oddsStatus(result.likelihood) : null;
+  const currentResultSaved = useMemo(
+    () => Boolean(result?.savedResultId && savedResults.some((item) => item.id === result.savedResultId)),
+    [result, savedResults]
+  );
 
   useEffect(() => {
     setCurrentStep((step) => Math.min(step, stepDefinitions.length - 1));
@@ -1703,6 +1843,8 @@ export default function InterviewOddsPage({ onBack }) {
     setIsFirmSelectorOpen(false);
     setError('');
     setResult(null);
+    setResultInputs(null);
+    setSaveMessage('');
   };
 
   const handleOfficeChange = (office) => {
@@ -1712,6 +1854,8 @@ export default function InterviewOddsPage({ onBack }) {
       group: ''
     }));
     setResult(null);
+    setResultInputs(null);
+    setSaveMessage('');
   };
 
   const setNetworkingLevel = (levelKey, metricKey, value) => {
@@ -1790,6 +1934,8 @@ export default function InterviewOddsPage({ onBack }) {
       certifications: postGradHireTypes.has(hireType) ? (prev.certifications || []) : []
     }));
     setResult(null);
+    setResultInputs(null);
+    setSaveMessage('');
   };
 
   const goNext = () => {
@@ -1834,15 +1980,19 @@ export default function InterviewOddsPage({ onBack }) {
       certifications: []
     });
     setResult(null);
+    setResultInputs(null);
     setLoading(false);
     setError('');
+    setSaveMessage('');
     setIsFirmSelectorOpen(false);
   };
 
   const editInputs = () => {
     setResult(null);
+    setResultInputs(null);
     setLoading(false);
     setError('');
+    setSaveMessage('');
     setShowIntro(false);
     setCurrentStep(0);
   };
@@ -1850,6 +2000,8 @@ export default function InterviewOddsPage({ onBack }) {
   const handleFirmSearchChange = (value) => {
     setFirmSearch(value);
     setResult(null);
+    setResultInputs(null);
+    setSaveMessage('');
     setIsFirmSelectorOpen(true);
 
     if (!value.trim() || value !== selection.firm) {
@@ -1866,6 +2018,8 @@ export default function InterviewOddsPage({ onBack }) {
     setLoading(true);
     setError('');
     setResult(null);
+    setResultInputs(null);
+    setSaveMessage('');
 
     const normalizedWorkExperiences = (profile.workExperiences || []).map((experience) => coerceExperienceForHireType(experience, selection.hireType));
     const profilePayload = {
@@ -1881,6 +2035,11 @@ export default function InterviewOddsPage({ onBack }) {
       hireType: selection.hireType,
       profile: profilePayload
     };
+    const inputSnapshot = buildInterviewOddsInputs(
+      { ...selection },
+      JSON.parse(JSON.stringify(profile)),
+      scoringPayload
+    );
 
     try {
       const [response] = await Promise.all([
@@ -1898,6 +2057,7 @@ export default function InterviewOddsPage({ onBack }) {
       }
 
       const data = await response.json();
+      setResultInputs(inputSnapshot);
       setResult({
         ...data,
         movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, data)
@@ -1907,6 +2067,7 @@ export default function InterviewOddsPage({ onBack }) {
 
       try {
         const fallbackResult = scoreInterviewOddsLocally(scoringPayload, opportunities.firms);
+        setResultInputs(inputSnapshot);
         setResult({
           ...fallbackResult,
           movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, fallbackResult)
@@ -1921,6 +2082,158 @@ export default function InterviewOddsPage({ onBack }) {
       setLoading(false);
     }
   };
+
+  const saveCurrentResult = async () => {
+    if (!result) return;
+
+    setSavedResultsError('');
+    setSaveMessage('');
+
+    const inputsJson = resultInputs || buildInterviewOddsInputs({ ...selection }, JSON.parse(JSON.stringify(profile)), null);
+    const resultJson = { ...result };
+    delete resultJson.savedResultId;
+
+    const localSaved = createSavedInterviewOddsResult({
+      id: globalThis.crypto?.randomUUID?.() || `interview-odds-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      inputsJson,
+      resultJson,
+      storageProvider: 'local'
+    });
+
+    const saveLocally = (message = 'Interview odds result saved locally on this device.') => {
+      setSavedResults((current) => [localSaved, ...current]);
+      setResult((current) => (current ? { ...current, savedResultId: localSaved.id } : current));
+      setSaveMessage(message);
+    };
+
+    if (!user || !supabase) {
+      saveLocally();
+      return;
+    }
+
+    const userId = await getInterviewOddsPersistenceUserId(supabase, user);
+
+    if (!userId) {
+      saveLocally();
+      return;
+    }
+
+    const payload = {
+      user_id: userId,
+      inputs_json: inputsJson,
+      result_json: resultJson
+    };
+
+    const selectedColumns = 'id, user_id, inputs_json, result_json, created_at';
+    const { data, error: saveError } = await supabase
+      .from('interview_odds_results')
+      .insert(payload)
+      .select(selectedColumns)
+      .single();
+
+    if (saveError || !data) {
+      logInterviewOddsSupabaseError('save', saveError, { userId, payload, selectedColumns });
+      setSavedResultsError('Could not save to your account. Saved locally on this device instead.');
+      saveLocally('Interview odds result saved locally on this device.');
+      return;
+    }
+
+    const saved = mapInterviewOddsRow(data);
+    setSavedResults((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+    setResult((current) => (current ? { ...current, savedResultId: saved.id } : current));
+    setSaveMessage('Interview odds result saved to your Banker Builder account.');
+  };
+
+  const loadSavedResult = (savedResult) => {
+    const inputsJson = savedResult.inputsJson || {};
+    const savedSelection = inputsJson.selection;
+    const savedProfile = inputsJson.profile;
+
+    if (savedSelection) {
+      setSelection(savedSelection);
+      setFirmSearch(savedSelection.firm || '');
+    }
+
+    if (savedProfile) {
+      setProfile(savedProfile);
+    }
+
+    setResult({ ...(savedResult.resultJson || {}), savedResultId: savedResult.id });
+    setResultInputs(inputsJson);
+    setShowIntro(false);
+    setLoading(false);
+    setError('');
+    setSavedResultsError('');
+    setSaveMessage(`Loaded saved result from ${new Date(savedResult.createdAt).toLocaleString()}.`);
+  };
+
+  const deleteSavedResult = async (savedResult) => {
+    setSavedResultsError('');
+
+    if (savedResult.storageProvider === 'supabase' && supabase && user) {
+      const userId = await getInterviewOddsPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        setSavedResultsError('Sign in to delete saved interview odds results.');
+        return;
+      }
+
+      const payload = { id: savedResult.id, user_id: userId };
+      const { error: deleteError } = await supabase
+        .from('interview_odds_results')
+        .delete()
+        .eq('id', savedResult.id)
+        .eq('user_id', userId);
+
+      if (deleteError) {
+        logInterviewOddsSupabaseError('delete', deleteError, { userId, payload });
+        setSavedResultsError('Saved interview odds result could not be deleted. Please try again.');
+        return;
+      }
+    }
+
+    setSavedResults((current) => current.filter((item) => item.id !== savedResult.id));
+    if (result?.savedResultId === savedResult.id) {
+      setResult((current) => {
+        if (!current) return current;
+        const next = { ...current };
+        delete next.savedResultId;
+        return next;
+      });
+    }
+  };
+
+  const renderSavedResults = () => (
+    <div className="saved-target-lists">
+      <h3>Saved Results</h3>
+      <p className="muted">Saved results sync to your Banker Builder account. If syncing fails, they are stored locally.</p>
+      {savedResultsLoading ? <p className="muted">Loading saved results...</p> : null}
+      {savedResultsError ? <p className="error">{savedResultsError}</p> : null}
+      {savedResults.length ? (
+        savedResults.map((savedResult) => {
+          const descriptor = savedOddsDescriptor(savedResult);
+          return (
+            <article key={savedResult.id}>
+              <div>
+                <strong>{descriptor.title}</strong>
+                <p>
+                  {new Date(savedResult.createdAt).toLocaleString()} · {descriptor.subtitle} · {descriptor.likelihood}
+                  {savedResult.storageProvider === 'local' ? ' · Local' : ''}
+                </p>
+              </div>
+              <div>
+                <button type="button" className="text-button" onClick={() => loadSavedResult(savedResult)}>Load</button>
+                <button type="button" className="text-button" onClick={() => deleteSavedResult(savedResult)}>Delete</button>
+              </div>
+            </article>
+          );
+        })
+      ) : (
+        <p className="muted">No saved interview odds results yet.</p>
+      )}
+    </div>
+  );
 
   const renderStep = () => {
     if (currentStepKey === 'opportunity') {
@@ -2344,6 +2657,7 @@ export default function InterviewOddsPage({ onBack }) {
             </button>
           </div>
         </section>
+        {renderSavedResults()}
       </>
     );
   }
@@ -2387,10 +2701,17 @@ export default function InterviewOddsPage({ onBack }) {
               </p>
               <p>{result.reason}</p>
             </div>
-            <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
-              Edit Inputs
-            </button>
+            <div className="target-results-actions">
+              <button type="button" className="secondary" onClick={saveCurrentResult} disabled={currentResultSaved}>
+                {currentResultSaved ? 'Result Saved' : 'Save Result'}
+              </button>
+              <button type="button" className="secondary edit-inputs-button" onClick={editInputs}>
+                Edit Inputs
+              </button>
+            </div>
           </div>
+          {saveMessage ? <p className="muted">{saveMessage}</p> : null}
+          {savedResultsError ? <p className="error">{savedResultsError}</p> : null}
 
           <ScoreBreakdown scores={result.scoreBreakdown} />
 
@@ -2450,6 +2771,7 @@ export default function InterviewOddsPage({ onBack }) {
             </section>
           ) : null}
         </section>
+        {renderSavedResults()}
       </>
     );
   }
@@ -2494,6 +2816,7 @@ export default function InterviewOddsPage({ onBack }) {
           )}
         </div>
       </section>
+      {renderSavedResults()}
     </>
   );
 }

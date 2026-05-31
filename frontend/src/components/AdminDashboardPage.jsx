@@ -1,5 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ibOffices from '../../../data/ibOffices.json';
+import { loadFirmMapOfficesFromSupabase } from '../lib/firmMapData';
 import {
   ADDRESS_CONFIDENCE_VALUES,
   FIRM_TYPES,
@@ -145,6 +146,7 @@ export default function AdminDashboardPage() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
   const [validation, setValidation] = useState(() => validateFirmMapDataset(ibOffices));
+  const [dataSourceMessage, setDataSourceMessage] = useState('');
   const fileInputRef = useRef(null);
 
   const firms = useMemo(() => groupFirms(offices), [offices]);
@@ -155,6 +157,34 @@ export default function AdminDashboardPage() {
     const matchesType = typeFilter === 'All' || firm.type === typeFilter;
     return matchesSearch && matchesType;
   });
+
+  useEffect(() => {
+    if (!authenticated) return undefined;
+
+    let isMounted = true;
+
+    const loadAdminDataset = async () => {
+      const result = await loadFirmMapOfficesFromSupabase();
+      if (!isMounted) return;
+
+      if (result.source === 'supabase' && result.offices.length) {
+        const normalized = result.offices.map(normalizeOffice);
+        setOffices(normalized);
+        setSelectedFirmName(normalized[0]?.firm || '');
+        setValidation(validateFirmMapDataset(normalized));
+        setDataSourceMessage('Loaded Firm Map data from Supabase. JSON export remains available.');
+        return;
+      }
+
+      setDataSourceMessage('Using offline firm dataset.');
+    };
+
+    loadAdminDataset();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [authenticated]);
 
   const submitPassword = (event) => {
     event.preventDefault();
@@ -320,6 +350,7 @@ export default function AdminDashboardPage() {
           <p className="feature-eyebrow">Hidden Admin</p>
           <h1>Firm Map Data Dashboard</h1>
           <p>Edit the browser copy, validate it, then export a replacement JSON file.</p>
+          {dataSourceMessage ? <p>{dataSourceMessage}</p> : null}
         </div>
         <div className="admin-actions">
           <input ref={fileInputRef} className="admin-file-input" type="file" accept="application/json,.json" onChange={importJson} />

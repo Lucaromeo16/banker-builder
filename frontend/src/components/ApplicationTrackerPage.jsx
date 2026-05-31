@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '../auth/AuthContext';
 
 const STORAGE_KEY = 'bankerBuilderApplications';
+const APPLICATION_COLUMNS = 'id, user_id, firm, role, office, group_name, status, deadline, notes';
 
 const roleTypes = ['Summer Analyst', 'Lateral Hire', 'MBA Associate', 'Off-cycle / Spring', 'Other'];
 const statusOptions = ['Interested', 'Applied', 'Networking', 'First Round', 'Superday', 'Offer', 'Rejected', 'Withdrawn'];
@@ -37,6 +39,61 @@ function loadApplications() {
   }
 }
 
+function logApplicationSupabaseError(operation, error, details = {}) {
+  if (!error) return;
+
+  console.warn('[application-tracker] Supabase persistence error', {
+    operation,
+    code: error.code || null,
+    message: error.message || null,
+    userIdPresent: Boolean(details.userId),
+    payloadKeys: details.payload ? Object.keys(details.payload) : []
+  });
+}
+
+async function getApplicationPersistenceUserId(supabase, fallbackUser) {
+  if (!supabase) return fallbackUser?.id || null;
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    logApplicationSupabaseError('get-user', error, { userId: fallbackUser?.id });
+    return fallbackUser?.id || null;
+  }
+
+  return data?.user?.id || fallbackUser?.id || null;
+}
+
+function mapApplicationRow(row) {
+  return {
+    id: row.id,
+    storageProvider: 'supabase',
+    firm: row.firm || '',
+    office: row.office || '',
+    group: row.group_name || '',
+    roleType: row.role || 'Summer Analyst',
+    status: row.status || 'Interested',
+    applicationDate: '',
+    deadline: row.deadline || '',
+    nextStepDate: '',
+    contactName: '',
+    contactStatus: 'No Contact',
+    notes: row.notes || ''
+  };
+}
+
+function buildApplicationPayload(application, userId) {
+  return {
+    user_id: userId,
+    firm: application.firm || '',
+    role: application.roleType || '',
+    office: application.office || '',
+    group_name: application.group || '',
+    status: application.status || 'Interested',
+    deadline: application.deadline || null,
+    notes: application.notes || ''
+  };
+}
+
 function isUpcoming(dateValue) {
   if (!dateValue) return false;
   const today = new Date();
@@ -53,14 +110,69 @@ function formatDate(dateValue) {
 }
 
 export default function ApplicationTrackerPage({ onBack }) {
+  const { user, supabase, isAuthReady } = useAuth();
   const [applications, setApplications] = useState(loadApplications);
   const [form, setForm] = useState(blankApplication);
   const [editingId, setEditingId] = useState(null);
   const [filters, setFilters] = useState({ status: 'All', firm: 'All', roleType: 'All' });
+  const [syncMessage, setSyncMessage] = useState('');
+  const [syncError, setSyncError] = useState('');
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(applications));
+    const localOnlyApplications = applications.filter((application) => application.storageProvider !== 'supabase');
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(localOnlyApplications));
   }, [applications]);
+
+  useEffect(() => {
+    if (!isAuthReady || !supabase || !user) return undefined;
+
+    let isMounted = true;
+
+    const loadSupabaseApplications = async () => {
+      setApplicationsLoading(true);
+      setSyncError('');
+      const userId = await getApplicationPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        if (isMounted) setApplicationsLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('applications')
+        .select(APPLICATION_COLUMNS)
+        .eq('user_id', userId)
+        .order('deadline', { ascending: true, nullsFirst: false });
+
+      if (!isMounted) return;
+
+      if (error) {
+        logApplicationSupabaseError('load', error, { userId });
+        setSyncError('Could not load applications from your account right now. Local applications are still available.');
+        setApplicationsLoading(false);
+        return;
+      }
+
+      const supabaseApplications = (data || []).map(mapApplicationRow);
+      setApplications((current) => {
+        const localApplications = current.filter((application) => application.storageProvider !== 'supabase');
+        return [
+          ...localApplications,
+          ...supabaseApplications.filter(
+            (savedApplication) => !localApplications.some((application) => application.id === savedApplication.id)
+          )
+        ];
+      });
+      setApplicationsLoading(false);
+    };
+
+    loadSupabaseApplications();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthReady, supabase, user]);
 
   const firmOptions = useMemo(
     () => Array.from(new Set(applications.map((application) => application.firm).filter(Boolean))).sort((a, b) => a.localeCompare(b)),
@@ -110,8 +222,11 @@ export default function ApplicationTrackerPage({ onBack }) {
     setEditingId(null);
   };
 
-  const saveApplication = (event) => {
+  const saveApplication = async (event) => {
     event.preventDefault();
+    setSyncMessage('');
+    setSyncError('');
+
     const normalizedApplication = {
       ...form,
       firm: form.firm.trim(),
@@ -124,11 +239,86 @@ export default function ApplicationTrackerPage({ onBack }) {
     if (!normalizedApplication.firm) return;
 
     if (editingId) {
+      const previousApplication = applications.find((application) => application.id === editingId);
+      const updatedApplication = {
+        ...previousApplication,
+        ...normalizedApplication,
+        id: editingId,
+        storageProvider: previousApplication?.storageProvider || 'local'
+      };
+
       setApplications((current) =>
-        current.map((application) => (application.id === editingId ? { ...normalizedApplication, id: editingId } : application))
+        current.map((application) => (application.id === editingId ? updatedApplication : application))
       );
+
+      if (previousApplication?.storageProvider === 'supabase' && supabase && user) {
+        const userId = await getApplicationPersistenceUserId(supabase, user);
+
+        if (userId) {
+          const payload = buildApplicationPayload(updatedApplication, userId);
+          delete payload.user_id;
+          const { error } = await supabase
+            .from('applications')
+            .update(payload)
+            .eq('id', editingId)
+            .eq('user_id', userId);
+
+          if (error) {
+            logApplicationSupabaseError('update', error, { userId, payload });
+            setApplications((current) =>
+              current.map((application) =>
+                application.id === editingId ? { ...application, storageProvider: 'local' } : application
+              )
+            );
+            setSyncError('Could not sync applications to your account. Saved locally on this device instead.');
+          } else {
+            setSyncMessage('Application updated in your Banker Builder account.');
+          }
+        }
+      }
     } else {
-      setApplications((current) => [{ ...normalizedApplication, id: crypto.randomUUID() }, ...current]);
+      const localApplication = {
+        ...normalizedApplication,
+        id: crypto.randomUUID(),
+        storageProvider: 'local'
+      };
+
+      if (supabase && user) {
+        const userId = await getApplicationPersistenceUserId(supabase, user);
+
+        if (userId) {
+          const payload = buildApplicationPayload(normalizedApplication, userId);
+          const { data, error } = await supabase
+            .from('applications')
+            .insert(payload)
+            .select(APPLICATION_COLUMNS)
+            .single();
+
+          if (error || !data) {
+            logApplicationSupabaseError('create', error, { userId, payload });
+            setApplications((current) => [localApplication, ...current]);
+            setSyncError('Could not sync applications to your account. Saved locally on this device instead.');
+          } else {
+            setApplications((current) => [
+              {
+                ...mapApplicationRow(data),
+                applicationDate: normalizedApplication.applicationDate,
+                nextStepDate: normalizedApplication.nextStepDate,
+                contactName: normalizedApplication.contactName,
+                contactStatus: normalizedApplication.contactStatus
+              },
+              ...current
+            ]);
+            setSyncMessage('Application saved to your Banker Builder account.');
+          }
+        } else {
+          setApplications((current) => [localApplication, ...current]);
+          setSyncMessage('Application saved locally on this device.');
+        }
+      } else {
+        setApplications((current) => [localApplication, ...current]);
+        setSyncMessage('Application saved locally on this device.');
+      }
     }
 
     resetForm();
@@ -151,15 +341,78 @@ export default function ApplicationTrackerPage({ onBack }) {
     setEditingId(application.id);
   };
 
-  const deleteApplication = (applicationId) => {
+  const deleteApplication = async (applicationId) => {
+    setSyncMessage('');
+    setSyncError('');
+    const application = applications.find((item) => item.id === applicationId);
+
+    if (application?.storageProvider === 'supabase' && supabase && user) {
+      const userId = await getApplicationPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        setSyncError('Sign in to delete synced applications.');
+        return;
+      }
+
+      const payload = { id: applicationId, user_id: userId };
+      const { error } = await supabase
+        .from('applications')
+        .delete()
+        .eq('id', applicationId)
+        .eq('user_id', userId);
+
+      if (error) {
+        logApplicationSupabaseError('delete', error, { userId, payload });
+        setSyncError('Application could not be deleted from your account. Please try again.');
+        return;
+      }
+
+      setSyncMessage('Application deleted from your Banker Builder account.');
+    }
+
     setApplications((current) => current.filter((application) => application.id !== applicationId));
     if (editingId === applicationId) resetForm();
   };
 
-  const updateStatus = (applicationId, status) => {
+  const updateStatus = async (applicationId, status) => {
+    setSyncMessage('');
+    setSyncError('');
+    const previousApplication = applications.find((application) => application.id === applicationId);
+
     setApplications((current) =>
       current.map((application) => (application.id === applicationId ? { ...application, status } : application))
     );
+
+    if (previousApplication?.storageProvider !== 'supabase' || !supabase || !user) return;
+
+    const userId = await getApplicationPersistenceUserId(supabase, user);
+
+    if (!userId) {
+      setApplications((current) =>
+        current.map((application) =>
+          application.id === applicationId ? { ...application, storageProvider: 'local' } : application
+        )
+      );
+      setSyncError('Could not sync applications to your account. Saved locally on this device instead.');
+      return;
+    }
+
+    const payload = { status };
+    const { error } = await supabase
+      .from('applications')
+      .update(payload)
+      .eq('id', applicationId)
+      .eq('user_id', userId);
+
+    if (error) {
+      logApplicationSupabaseError('status-update', error, { userId, payload });
+      setApplications((current) =>
+        current.map((application) =>
+          application.id === applicationId ? { ...application, storageProvider: 'local' } : application
+        )
+      );
+      setSyncError('Could not sync applications to your account. Saved locally on this device instead.');
+    }
   };
 
   return (
@@ -172,7 +425,11 @@ export default function ApplicationTrackerPage({ onBack }) {
         <div>
           <span className="feature-eyebrow">Application workflow</span>
           <h2>Application Tracker</h2>
-          <p>Track applications, interview rounds, deadlines, contacts, and recruiting notes in one local workspace.</p>
+          <p>Track applications, interview rounds, deadlines, contacts, and recruiting notes.</p>
+          <p className="muted">Applications sync to your Banker Builder account. If syncing fails, they are stored locally on this device.</p>
+          {applicationsLoading ? <p className="muted">Loading saved applications...</p> : null}
+          {syncMessage ? <p className="muted">{syncMessage}</p> : null}
+          {syncError ? <p className="error">{syncError}</p> : null}
         </div>
       </div>
 
