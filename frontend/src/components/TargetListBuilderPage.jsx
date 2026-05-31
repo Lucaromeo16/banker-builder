@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from '../auth/AuthContext';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
 import usCities from '../../../data/usCities.json';
@@ -998,6 +999,89 @@ function readSavedTargetLists() {
   }
 }
 
+function logTargetListSupabaseError(operation, error, details = {}) {
+  if (!error) return;
+
+  console.warn('[target-list-builder] Supabase persistence error', {
+    operation,
+    code: error.code || null,
+    message: error.message || null,
+    userIdPresent: Boolean(details.userId),
+    payloadKeys: details.payload ? Object.keys(details.payload) : [],
+    itemCount: details.itemCount ?? null,
+    selectedColumns: details.selectedColumns || null
+  });
+}
+
+async function getTargetListPersistenceUserId(supabase, fallbackUser) {
+  if (!supabase) return fallbackUser?.id || null;
+
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    logTargetListSupabaseError('get-user', error, { userId: fallbackUser?.id });
+    return fallbackUser?.id || null;
+  }
+
+  return data?.user?.id || fallbackUser?.id || null;
+}
+
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ''));
+}
+
+function createSavedTargetListPayload({ id, name, createdAt, profile, targetList, storageProvider = 'local' }) {
+  const recommendations = flattenTargetList(targetList);
+
+  return {
+    id,
+    name,
+    createdAt,
+    storageProvider,
+    inputSummary: inputSummaryForProfile(profile),
+    inputsJson: {
+      profile,
+      inputSummary: inputSummaryForProfile(profile),
+      recommendations,
+      buckets: {
+        Reach: targetList?.Reach || [],
+        Target: targetList?.Target || [],
+        Safety: targetList?.Safety || []
+      },
+      maxFirmCount: targetList?.maxFirmCount || profile.maxFirmCount || 25,
+      manualEdits: true
+    },
+    recommendations,
+    buckets: {
+      Reach: targetList?.Reach || [],
+      Target: targetList?.Target || [],
+      Safety: targetList?.Safety || []
+    },
+    manualEdits: true
+  };
+}
+
+function mapTargetListRow(row) {
+  const inputsJson = row.inputs_json || {};
+  const recommendations = Array.isArray(inputsJson.recommendations) ? inputsJson.recommendations : [];
+  const buckets = inputsJson.buckets || withUpdatedTargetList({ maxFirmCount: inputsJson.maxFirmCount || recommendations.length }, recommendations);
+
+  return {
+    id: row.id,
+    name: row.name || 'Saved Target List',
+    createdAt: row.created_at,
+    storageProvider: 'supabase',
+    inputSummary: inputsJson.inputSummary || inputSummaryForProfile(inputsJson.profile || defaultProfile),
+    inputsJson,
+    recommendations: recommendations.length ? recommendations : flattenTargetList(buckets),
+    buckets: {
+      Reach: buckets.Reach || [],
+      Target: buckets.Target || [],
+      Safety: buckets.Safety || []
+    },
+    manualEdits: Boolean(inputsJson.manualEdits)
+  };
+}
+
 function inputSummaryForProfile(profile) {
   return {
     groups: profile.interests,
@@ -1054,6 +1138,7 @@ function TargetOpportunityCard({ opportunity, onEdit, onRemove }) {
 }
 
 export default function TargetListBuilderPage({ onBack }) {
+  const { user, supabase, isAuthReady } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [profile, setProfile] = useState(defaultProfile);
   const [locationSearch, setLocationSearch] = useState('');
@@ -1066,6 +1151,8 @@ export default function TargetListBuilderPage({ onBack }) {
   const [saveListName, setSaveListName] = useState('');
   const [savedLists, setSavedLists] = useState(() => readSavedTargetLists());
   const [saveMessage, setSaveMessage] = useState('');
+  const [savedListsLoading, setSavedListsLoading] = useState(false);
+  const [savedListsError, setSavedListsError] = useState('');
 
   const progressPercent = ((currentStep + 1) / stepTitles.length) * 100;
   const locationOptions = useMemo(
@@ -1089,8 +1176,55 @@ export default function TargetListBuilderPage({ onBack }) {
   }, [locationOptions, locationSearch]);
 
   useEffect(() => {
-    localStorage.setItem(SAVED_TARGET_LISTS_KEY, JSON.stringify(savedLists));
+    const localOnlyLists = savedLists.filter((item) => item.storageProvider !== 'supabase');
+    localStorage.setItem(SAVED_TARGET_LISTS_KEY, JSON.stringify(localOnlyLists));
   }, [savedLists]);
+
+  useEffect(() => {
+    if (!isAuthReady || !supabase || !user) return undefined;
+
+    let isMounted = true;
+
+    const loadSupabaseTargetLists = async () => {
+      setSavedListsLoading(true);
+      setSavedListsError('');
+      const userId = await getTargetListPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        if (isMounted) setSavedListsLoading(false);
+        return;
+      }
+
+      const selectedColumns = 'id, user_id, name, inputs_json, created_at';
+      const { data, error: loadError } = await supabase
+        .from('target_lists')
+        .select(selectedColumns)
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (!isMounted) return;
+
+      if (loadError) {
+        logTargetListSupabaseError('load', loadError, { userId, selectedColumns });
+        setSavedListsError('Saved target lists could not be loaded right now.');
+        setSavedListsLoading(false);
+        return;
+      }
+
+      const supabaseLists = (data || []).map(mapTargetListRow);
+      setSavedLists((current) => [
+        ...supabaseLists,
+        ...current.filter((item) => item.storageProvider !== 'supabase' && !supabaseLists.some((saved) => saved.id === item.id))
+      ]);
+      setSavedListsLoading(false);
+    };
+
+    loadSupabaseTargetLists();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthReady, supabase, user]);
 
   const toggleInterest = (interest) => {
     setProfile((prev) => {
@@ -1359,36 +1493,135 @@ export default function TargetListBuilderPage({ onBack }) {
     setShowAddTargetForm(true);
   };
 
-  const saveCurrentTargetList = () => {
+  const saveCurrentTargetList = async () => {
     if (!targetList) return;
+    setSavedListsError('');
+    setSaveMessage('');
+
     const name = saveListName.trim() || `Target List ${new Date().toLocaleDateString()}`;
-    const saved = {
-      id: globalThis.crypto?.randomUUID?.() || `${Date.now()}`,
+    const createdAt = new Date().toISOString();
+    const localId = globalThis.crypto?.randomUUID?.() || `${Date.now()}`;
+    const localSaved = createSavedTargetListPayload({
+      id: localId,
       name,
-      createdAt: new Date().toISOString(),
-      inputSummary: inputSummaryForProfile(profile),
-      recommendations: flattenTargetList(targetList),
-      buckets: {
-        Reach: targetList.Reach,
-        Target: targetList.Target,
-        Safety: targetList.Safety
-      },
-      manualEdits: true
-    };
-    setSavedLists((current) => [saved, ...current]);
+      createdAt,
+      profile,
+      targetList,
+      storageProvider: 'local'
+    });
+
+    if (!user) {
+      setSavedLists((current) => [localSaved, ...current]);
+      setSaveListName('');
+      setSaveMessage('Target list saved locally on this device.');
+      return;
+    }
+
+    const userId = await getTargetListPersistenceUserId(supabase, user);
+
+    if (!userId) {
+      setSavedLists((current) => [localSaved, ...current]);
+      setSaveListName('');
+      setSaveMessage('Target list saved locally on this device.');
+      return;
+    }
+
+    if (supabase) {
+      const parentPayload = {
+        user_id: userId,
+        name,
+        inputs_json: localSaved.inputsJson
+      };
+
+      const { data: parentRow, error: parentError } = await supabase
+        .from('target_lists')
+        .insert(parentPayload)
+        .select('id, user_id, name, inputs_json, created_at')
+        .single();
+
+      if (!parentError && parentRow) {
+        const recommendations = flattenTargetList(targetList);
+        const itemPayload = recommendations.map((item) => ({
+          target_list_id: parentRow.id,
+          firm_id: isUuid(item.firmId) ? item.firmId : null,
+          office_id: isUuid(item.officeId) ? item.officeId : null,
+          group_name: item.group || item.rawGroup || '',
+          bucket: ['Reach', 'Target', 'Safety'].includes(item.matchCategory) ? item.matchCategory : 'Target',
+          notes: item.notes || ''
+        }));
+
+        if (itemPayload.length) {
+          const { error: itemsError } = await supabase.from('target_list_items').insert(itemPayload);
+
+          if (itemsError) {
+            logTargetListSupabaseError('save-items', itemsError, { userId, payload: itemPayload[0], itemCount: itemPayload.length });
+            await supabase.from('target_lists').delete().eq('id', parentRow.id).eq('user_id', userId);
+            setSavedListsError('Could not save to your account. Saved locally on this device instead.');
+          } else {
+            const saved = mapTargetListRow(parentRow);
+            setSavedLists((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+            setSaveListName('');
+            setSaveMessage('Target list saved to your Banker Builder account.');
+            return;
+          }
+        } else {
+          const saved = mapTargetListRow(parentRow);
+          setSavedLists((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+          setSaveListName('');
+          setSaveMessage('Target list saved to your Banker Builder account.');
+          return;
+        }
+      } else {
+        logTargetListSupabaseError('save-list', parentError, { userId, payload: parentPayload });
+        setSavedListsError('Could not save to your account. Saved locally on this device instead.');
+      }
+    }
+
+    setSavedLists((current) => [localSaved, ...current]);
     setSaveListName('');
-    setSaveMessage('Target list saved on this device.');
+    setSaveMessage('Target list saved locally on this device.');
   };
 
   const loadSavedTargetList = (savedList) => {
-    setTargetList(withUpdatedTargetList(targetList || { maxFirmCount: savedList.recommendations.length }, savedList.recommendations || flattenTargetList(savedList.buckets)));
+    const savedRecommendations = savedList.recommendations || savedList.inputsJson?.recommendations || flattenTargetList(savedList.buckets);
+    const savedProfile = savedList.inputsJson?.profile;
+    if (savedProfile) setProfile(savedProfile);
+    setTargetList(withUpdatedTargetList({ maxFirmCount: savedList.inputsJson?.maxFirmCount || savedRecommendations.length }, savedRecommendations));
     setSaveMessage(`Loaded ${savedList.name}.`);
+    setSavedListsError('');
     setEditingTarget(null);
     setShowAddTargetForm(false);
   };
 
-  const deleteSavedTargetList = (savedListId) => {
-    setSavedLists((current) => current.filter((item) => item.id !== savedListId));
+  const deleteSavedTargetList = async (savedList) => {
+    setSavedListsError('');
+
+    if (savedList.storageProvider === 'supabase' && supabase && user) {
+      const userId = await getTargetListPersistenceUserId(supabase, user);
+
+      if (!userId) {
+        setSavedListsError('Sign in to delete saved target lists.');
+        return;
+      }
+
+      const { error: childDeleteError } = await supabase.from('target_list_items').delete().eq('target_list_id', savedList.id);
+
+      if (childDeleteError) {
+        logTargetListSupabaseError('delete-items', childDeleteError, { userId, payload: { target_list_id: savedList.id } });
+        setSavedListsError('Saved target list could not be deleted. Please try again.');
+        return;
+      }
+
+      const { error: parentDeleteError } = await supabase.from('target_lists').delete().eq('id', savedList.id).eq('user_id', userId);
+
+      if (parentDeleteError) {
+        logTargetListSupabaseError('delete-list', parentDeleteError, { userId, payload: { id: savedList.id, user_id: userId } });
+        setSavedListsError('Saved target list could not be deleted. Please try again.');
+        return;
+      }
+    }
+
+    setSavedLists((current) => current.filter((item) => item.id !== savedList.id));
   };
 
   const exportTargetListCsv = () => {
@@ -1413,6 +1646,37 @@ export default function TargetListBuilderPage({ onBack }) {
     link.click();
     URL.revokeObjectURL(url);
   };
+
+  const renderSavedTargetLists = () => (
+    <div className="saved-target-lists">
+      <h3>Saved Lists</h3>
+      <p className="muted">Saved lists sync to your Banker Builder account. If syncing fails, they are stored locally.</p>
+      {savedListsLoading ? <p className="muted">Loading saved lists...</p> : null}
+      {savedListsError ? <p className="error">{savedListsError}</p> : null}
+      {savedLists.length ? (
+        savedLists.map((savedList) => {
+          const itemCount = savedList.recommendations?.length || flattenTargetList(savedList.buckets).length;
+          return (
+            <article key={savedList.id}>
+              <div>
+                <strong>{savedList.name}</strong>
+                <p>
+                  {new Date(savedList.createdAt).toLocaleString()} · {itemCount} targets
+                  {savedList.storageProvider === 'local' ? ' · Local' : ''}
+                </p>
+              </div>
+              <div>
+                <button type="button" className="text-button" onClick={() => loadSavedTargetList(savedList)}>Load</button>
+                <button type="button" className="text-button" onClick={() => deleteSavedTargetList(savedList)}>Delete</button>
+              </div>
+            </article>
+          );
+        })
+      ) : (
+        <p className="muted">No saved target lists yet.</p>
+      )}
+    </div>
+  );
 
   const renderStep = () => {
     if (currentStep === 0) {
@@ -1798,7 +2062,7 @@ export default function TargetListBuilderPage({ onBack }) {
               <h2>Target List Results</h2>
               <p className="muted">Showing {targetList.totalCount} of up to {targetList.maxFirmCount} firms.</p>
               <p className="beta-note">Beta: This feature is actively improving. Results should be used as guidance, not guarantees.</p>
-              <p className="muted">Saved lists are stored on this device for now.</p>
+              <p className="muted">Saved lists sync to your Banker Builder account. If syncing fails, they are stored locally.</p>
             </div>
             <div className="target-results-actions">
               <button type="button" className="secondary" onClick={startAddTarget}>
@@ -1826,6 +2090,7 @@ export default function TargetListBuilderPage({ onBack }) {
               Save List
             </button>
             {saveMessage ? <p className="muted">{saveMessage}</p> : null}
+            {savedListsError ? <p className="error">{savedListsError}</p> : null}
           </div>
           {editingTarget ? (
             <form className="target-edit-panel" onSubmit={saveTargetEdit}>
@@ -1881,23 +2146,7 @@ export default function TargetListBuilderPage({ onBack }) {
               </div>
             ))}
           </div>
-          {savedLists.length ? (
-            <div className="saved-target-lists">
-              <h3>Saved Lists</h3>
-              {savedLists.map((savedList) => (
-                <article key={savedList.id}>
-                  <div>
-                    <strong>{savedList.name}</strong>
-                    <p>{new Date(savedList.createdAt).toLocaleString()} · {savedList.recommendations?.length || flattenTargetList(savedList.buckets).length} targets</p>
-                  </div>
-                  <div>
-                    <button type="button" className="text-button" onClick={() => loadSavedTargetList(savedList)}>Load</button>
-                    <button type="button" className="text-button" onClick={() => deleteSavedTargetList(savedList.id)}>Delete</button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : null}
+          {renderSavedTargetLists()}
         </section>
       </>
     );
@@ -1954,6 +2203,7 @@ export default function TargetListBuilderPage({ onBack }) {
           )}
         </div>
       </section>
+      {renderSavedTargetLists()}
     </>
   );
 }
