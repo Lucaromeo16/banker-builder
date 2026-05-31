@@ -1,8 +1,47 @@
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
 
+const PASSWORD_MESSAGE = 'Password must be at least 8 characters and include one uppercase letter, one number, and one special character.';
+
+function getPasswordChecks(password) {
+  return [
+    {
+      id: 'length',
+      label: 'At least 8 characters',
+      isMet: password.length >= 8
+    },
+    {
+      id: 'uppercase',
+      label: 'One uppercase letter',
+      isMet: /[A-Z]/.test(password)
+    },
+    {
+      id: 'number',
+      label: 'One number',
+      isMet: /\d/.test(password)
+    },
+    {
+      id: 'special',
+      label: 'One special character',
+      isMet: /[^A-Za-z0-9]/.test(password)
+    }
+  ];
+}
+
+function isPasswordStrong(password) {
+  return getPasswordChecks(password).every((check) => check.isMet);
+}
+
+function isUserEmailConfirmed(user) {
+  return Boolean(user?.email_confirmed_at || user?.confirmed_at);
+}
+
 function getFriendlyAuthMessage(message) {
   const normalized = message?.toLowerCase() ?? '';
+
+  if (normalized.includes('email not confirmed') || normalized.includes('not confirmed') || normalized.includes('confirm')) {
+    return 'Please confirm your email before logging in.';
+  }
 
   if (normalized.includes('invalid login') || normalized.includes('invalid credentials')) {
     return 'Invalid email or password. Please check your credentials and try again.';
@@ -13,7 +52,7 @@ function getFriendlyAuthMessage(message) {
   }
 
   if (normalized.includes('password') && (normalized.includes('weak') || normalized.includes('six') || normalized.includes('6'))) {
-    return 'Please choose a stronger password with at least 6 characters.';
+    return PASSWORD_MESSAGE;
   }
 
   if (normalized.includes('network') || normalized.includes('fetch')) {
@@ -34,6 +73,7 @@ export default function AuthPage() {
   const [success, setSuccess] = useState('');
 
   const isSignup = mode === 'signup';
+  const passwordChecks = getPasswordChecks(password);
 
   const resetMessages = () => {
     setError('');
@@ -51,6 +91,11 @@ export default function AuthPage() {
 
     if (!supabase) {
       setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to enable login.');
+      return;
+    }
+
+    if (isSignup && !isPasswordStrong(password)) {
+      setError(PASSWORD_MESSAGE);
       return;
     }
 
@@ -80,12 +125,24 @@ export default function AuthPage() {
       return;
     }
 
-    if (isSignup && !data?.session) {
-      setSuccess('Account created. Check your email to confirm your account, then log in.');
+    if (isSignup) {
+      if (data?.session || data?.user) {
+        await supabase.auth.signOut();
+      }
+
+      setPassword('');
+      setMode('login');
+      setSuccess('Check your email to confirm your account before logging in.');
       return;
     }
 
-    setSuccess(isSignup ? 'Account created. Loading Banker Builder...' : 'Logged in. Loading Banker Builder...');
+    if (data?.user && !isUserEmailConfirmed(data.user)) {
+      await supabase.auth.signOut();
+      setError('Please confirm your email before logging in.');
+      return;
+    }
+
+    setSuccess('Logged in. Loading Banker Builder...');
   };
 
   if (!isSupabaseConfigured) {
@@ -156,10 +213,21 @@ export default function AuthPage() {
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Enter your password"
               autoComplete={isSignup ? 'new-password' : 'current-password'}
-              minLength={6}
+              minLength={isSignup ? 8 : 6}
               required
             />
           </label>
+
+          {isSignup ? (
+            <ul className="password-checklist" aria-label="Password requirements">
+              {passwordChecks.map((check) => (
+                <li key={check.id} className={check.isMet ? 'met' : ''}>
+                  <span aria-hidden="true">{check.isMet ? 'OK' : '-'}</span>
+                  {check.label}
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
           {error ? <div className="auth-message error">{error}</div> : null}
           {success ? <div className="auth-message success">{success}</div> : null}
@@ -172,4 +240,3 @@ export default function AuthPage() {
     </main>
   );
 }
-

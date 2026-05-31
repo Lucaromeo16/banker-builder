@@ -18,6 +18,10 @@ function getFullNameFromUser(user) {
   return user?.user_metadata?.full_name || user?.user_metadata?.name || null;
 }
 
+function isUserEmailConfirmed(user) {
+  return Boolean(user?.email_confirmed_at || user?.confirmed_at);
+}
+
 async function loadOrCreateProfile(user) {
   if (!supabase || !user) return null;
 
@@ -83,6 +87,22 @@ export function AuthProvider({ children }) {
       if (!isMounted) return;
 
       const nextUser = nextSession?.user ?? null;
+
+      if (nextUser && !isUserEmailConfirmed(nextUser)) {
+        setSession(null);
+        setUser(null);
+        setProfile(null);
+        setProfileLoading(false);
+        setAuthError('Please confirm your email before logging in.');
+        setLoading(false);
+        setIsAuthReady(true);
+        await supabase.auth.signOut();
+        if (isMounted) {
+          setAuthError('Please confirm your email before logging in.');
+        }
+        return;
+      }
+
       setSession(nextSession);
       setUser(nextUser);
       setAuthError(null);
