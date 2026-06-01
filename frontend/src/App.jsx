@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import AuthConfirmedPage from './auth/AuthConfirmedPage';
 import AuthPage from './auth/AuthPage';
 import { useAuth } from './auth/AuthContext';
+import AccountProfilePage from './components/AccountProfilePage';
 import AdminDashboardPage from './components/AdminDashboardPage';
 import ApplicationTrackerPage from './components/ApplicationTrackerPage';
 import FirmMapPage from './components/FirmMapPage';
@@ -37,7 +38,7 @@ function getGlobalAuthMessage(authError) {
 }
 
 export default function App() {
-  const { user, loading, profileLoading, isAuthReady, authError, signOut } = useAuth();
+  const { user, profile, loading, profileLoading, isAuthReady, authError, signOut } = useAuth();
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
   const isAdminRoute = currentPath === '/admin';
   const isAuthConfirmationRoute = currentPath === '/auth/confirmed' || currentPath === '/auth/callback';
@@ -46,6 +47,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef(null);
   const userEmail = user?.email ?? 'Account';
+  const accountLabel = profile?.full_name || userEmail;
   const globalAuthMessage = getGlobalAuthMessage(authError);
 
   const goHome = () => {
@@ -137,7 +139,14 @@ export default function App() {
               </button>
             ))}
             <div className="account-controls">
-              <span title={userEmail}>{userEmail}</span>
+              <button
+                type="button"
+                className={mode === 'account' ? 'account-profile-button active' : 'account-profile-button'}
+                title={userEmail}
+                onClick={() => selectMode('account')}
+              >
+                {accountLabel}
+              </button>
               <button type="button" onClick={signOut}>
                 Log out
               </button>
@@ -149,7 +158,7 @@ export default function App() {
       <main className="container">
         {globalAuthMessage ? <div className="auth-banner error">{globalAuthMessage}</div> : null}
 
-        {mode !== 'home' ? (
+        {mode !== 'home' && mode !== 'account' ? (
           <header className="header page-header">
             <h1>Banker Builder</h1>
             <p>
@@ -160,6 +169,8 @@ export default function App() {
         ) : null}
 
         {mode === 'home' ? <HomePage onSelectMode={selectMode} /> : null}
+
+        {mode === 'account' ? <AccountProfilePage onBack={goHome} /> : null}
 
         {mode === 'interview' ? <InterviewOddsPage onBack={goHome} /> : null}
 

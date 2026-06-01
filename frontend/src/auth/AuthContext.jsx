@@ -11,6 +11,8 @@ const AuthContext = createContext({
   isAuthReady: true,
   isSupabaseConfigured: false,
   supabase: null,
+  refreshProfile: async () => null,
+  updateProfile: () => {},
   signOut: async () => {}
 });
 
@@ -191,6 +193,33 @@ export function AuthProvider({ children }) {
     return { error: null };
   };
 
+  const refreshProfile = async () => {
+    if (!user) return null;
+
+    setProfileLoading(true);
+
+    try {
+      const nextProfile = await loadOrCreateProfile(user);
+      setProfile(nextProfile);
+      return nextProfile;
+    } catch (error) {
+      setAuthError(error.message || 'Unable to refresh your Banker Builder profile.');
+      if (import.meta.env.DEV) {
+        console.warn('Unable to refresh Supabase profile.', error);
+      }
+      return null;
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const updateProfile = (nextProfile) => {
+    setProfile((current) => ({
+      ...(current || {}),
+      ...(nextProfile || {})
+    }));
+  };
+
   const value = useMemo(
     () => ({
       user,
@@ -202,6 +231,8 @@ export function AuthProvider({ children }) {
       isAuthReady,
       isSupabaseConfigured,
       supabase,
+      refreshProfile,
+      updateProfile,
       signOut
     }),
     [authError, isAuthReady, loading, profile, profileLoading, session, user]
