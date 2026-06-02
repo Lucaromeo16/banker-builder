@@ -4,6 +4,7 @@ import ScoreBreakdown from './ScoreBreakdown';
 import SchoolAutocomplete from './SchoolAutocomplete';
 import ibOffices from '../../../data/ibOffices.json';
 import { schoolDisplayName, schoolForPayload, schoolToScore } from '../schoolScoring';
+import { trackEvent } from '../lib/analytics';
 import {
   defaultExperienceFollowUpValues,
   normalizeUndergraduateExperience,
@@ -23,6 +24,15 @@ const fallbackGroups = [
   'Consumer & Retail',
   'Financial Institutions'
 ];
+
+function trackInterviewOddsResultGenerated(result, source, selection) {
+  trackEvent('interview_odds_result_generated', {
+    source,
+    hire_type: selection.hireType,
+    selected_group: selection.group,
+    result_bucket: result.classification
+  });
+}
 
 const activityTypeOptions = [
   'Selective IB club',
@@ -2057,21 +2067,25 @@ export default function InterviewOddsPage({ onBack }) {
       }
 
       const data = await response.json();
-      setResultInputs(inputSnapshot);
-      setResult({
+      const displayedResult = {
         ...data,
         movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, data)
-      });
+      };
+      setResultInputs(inputSnapshot);
+      setResult(displayedResult);
+      trackInterviewOddsResultGenerated(displayedResult, 'api', selection);
     } catch (err) {
       console.error('Backend interview odds calculation failed. Falling back to local scoring.', err);
 
       try {
         const fallbackResult = scoreInterviewOddsLocally(scoringPayload, opportunities.firms);
-        setResultInputs(inputSnapshot);
-        setResult({
+        const displayedFallbackResult = {
           ...fallbackResult,
           movesNeedle: buildNeedleProjection(scoringPayload, opportunities.firms, fallbackResult)
-        });
+        };
+        setResultInputs(inputSnapshot);
+        setResult(displayedFallbackResult);
+        trackInterviewOddsResultGenerated(displayedFallbackResult, 'local_fallback', selection);
         setError('');
       } catch (fallbackErr) {
         console.error('Local interview odds calculation failed.', fallbackErr);

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'bankerBuilderApplications';
 const APPLICATION_COLUMNS = 'id, user_id, firm, role, office, group_name, status, deadline, notes';
@@ -297,6 +298,10 @@ export default function ApplicationTrackerPage({ onBack }) {
           if (error || !data) {
             logApplicationSupabaseError('create', error, { userId, payload });
             setApplications((current) => [localApplication, ...current]);
+            trackEvent('application_added', {
+              status: normalizedApplication.status,
+              storage_provider: 'local'
+            });
             setSyncError('Could not sync applications to your account. Saved locally on this device instead.');
           } else {
             setApplications((current) => [
@@ -309,14 +314,26 @@ export default function ApplicationTrackerPage({ onBack }) {
               },
               ...current
             ]);
+            trackEvent('application_added', {
+              status: normalizedApplication.status,
+              storage_provider: 'supabase'
+            });
             setSyncMessage('Application saved to your Banker Builder account.');
           }
         } else {
           setApplications((current) => [localApplication, ...current]);
+          trackEvent('application_added', {
+            status: normalizedApplication.status,
+            storage_provider: 'local'
+          });
           setSyncMessage('Application saved locally on this device.');
         }
       } else {
         setApplications((current) => [localApplication, ...current]);
+        trackEvent('application_added', {
+          status: normalizedApplication.status,
+          storage_provider: 'local'
+        });
         setSyncMessage('Application saved locally on this device.');
       }
     }

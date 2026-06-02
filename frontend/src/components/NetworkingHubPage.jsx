@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import ibOffices from '../../../data/ibOffices.json';
+import { trackEvent } from '../lib/analytics';
 
 const CONTACTS_STORAGE_KEY = 'bankerBuilder.networkingContacts';
 const NETWORKING_CONTACT_COLUMNS = 'id, user_id, name, firm, office, group_name, title, email, linkedin_url, status, notes';
@@ -401,6 +402,12 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
           if (error || !data) {
             logNetworkingSupabaseError('create', error, { userId, payload });
             setContacts((current) => [localContact, ...current]);
+            trackEvent('networking_item_created', {
+              status: normalizedContact.status,
+              connection_type: normalizedContact.connectionType,
+              relationship_strength: normalizedContact.relationshipStrength,
+              storage_provider: 'local'
+            });
             setSyncError('Could not sync networking contacts to your account. Saved locally on this device instead.');
           } else {
             setContacts((current) => [
@@ -414,14 +421,32 @@ export default function NetworkingHubPage({ onBack, prefillContact, onPrefillCon
               },
               ...current
             ]);
+            trackEvent('networking_item_created', {
+              status: normalizedContact.status,
+              connection_type: normalizedContact.connectionType,
+              relationship_strength: normalizedContact.relationshipStrength,
+              storage_provider: 'supabase'
+            });
             setSyncMessage('Networking contact saved to your Banker Builder account.');
           }
         } else {
           setContacts((current) => [localContact, ...current]);
+          trackEvent('networking_item_created', {
+            status: normalizedContact.status,
+            connection_type: normalizedContact.connectionType,
+            relationship_strength: normalizedContact.relationshipStrength,
+            storage_provider: 'local'
+          });
           setSyncMessage('Networking contact saved locally on this device.');
         }
       } else {
         setContacts((current) => [localContact, ...current]);
+        trackEvent('networking_item_created', {
+          status: normalizedContact.status,
+          connection_type: normalizedContact.connectionType,
+          relationship_strength: normalizedContact.relationshipStrength,
+          storage_provider: 'local'
+        });
         setSyncMessage('Networking contact saved locally on this device.');
       }
     }

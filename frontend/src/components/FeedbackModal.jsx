@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import { trackEvent } from '../lib/analytics';
 
 const VALID_FEATURES = new Set(['general', 'interview_odds', 'target_list_builder', 'interview_prep']);
 const VALID_FEEDBACK_TYPES = new Set([
@@ -121,6 +122,12 @@ export default function FeedbackModal({
 
     setMessage('');
     setFeedbackType(initialFeedbackType(defaultFeedbackType, allowFeedbackTypeSelection));
+    trackEvent('feedback_submitted', {
+      feature,
+      feedback_type: selectedFeedbackType,
+      context_type: contextType || null,
+      has_related_record: Boolean(relatedRecordId)
+    });
     setSuccess('Thanks for your feedback. We’ll use it to improve Banker Builder.');
   };
 

@@ -12,6 +12,7 @@ import {
   undergraduateWorkTypeOptions
 } from '../experienceTaxonomy';
 import { groupMatchForInterests } from '../groupTaxonomy';
+import { trackEvent } from '../lib/analytics';
 
 const stepTitles = [
   'IB Interest',
@@ -991,6 +992,17 @@ function withUpdatedTargetList(targetList, recommendations) {
   };
 }
 
+function trackTargetListGenerated(targetList, profile) {
+  trackEvent('target_list_generated', {
+    selected_group_count: Array.isArray(profile.interests) ? profile.interests.length : 0,
+    max_firm_count: targetList?.maxFirmCount,
+    result_count: targetList?.totalCount || flattenTargetList(targetList).length,
+    reach_count: targetList?.Reach?.length || 0,
+    target_count: targetList?.Target?.length || 0,
+    safety_count: targetList?.Safety?.length || 0
+  });
+}
+
 function readSavedTargetLists() {
   try {
     return JSON.parse(localStorage.getItem(SAVED_TARGET_LISTS_KEY) || '[]');
@@ -1427,13 +1439,17 @@ export default function TargetListBuilderPage({ onBack }) {
       }
 
       const data = await response.json();
-      setTargetList(buildTargetList(data.results, profile));
+      const generatedTargetList = buildTargetList(data.results, profile);
+      setTargetList(generatedTargetList);
+      trackTargetListGenerated(generatedTargetList, profile);
     } catch (err) {
       console.error('Backend target list generation failed. Falling back to local recommendations.', err);
 
       try {
         const fallbackData = scoreProfileLocally(profilePayload);
-        setTargetList(buildTargetList(fallbackData.results, profile));
+        const generatedTargetList = buildTargetList(fallbackData.results, profile);
+        setTargetList(generatedTargetList);
+        trackTargetListGenerated(generatedTargetList, profile);
         setError('');
       } catch (fallbackErr) {
         console.error('Local target list generation failed.', fallbackErr);

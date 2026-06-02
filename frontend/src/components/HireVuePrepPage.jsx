@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ibOffices from '../../../data/ibOffices.json';
+import { scoreToBucket, trackEvent } from '../lib/analytics';
 
 const hireTypes = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const groupOptions = ['M&A', 'Financial Sponsors', 'LevFin', 'Restructuring', 'DCM', 'ECM', 'Healthcare', 'Technology', 'Industrials', 'FIG', 'Energy', 'Generalist'];
@@ -320,7 +321,13 @@ export default function HireVuePrepPage({ onBack }) {
         });
         throw new Error(payload.error || 'We couldn’t analyze the audio. Please retry the recording.');
       }
-      setFeedback(await response.json());
+      const feedbackPayload = await response.json();
+      setFeedback(feedbackPayload);
+      trackEvent('hirevue_prep_feedback_generated', {
+        hire_type: setup.hireType,
+        group: setup.group,
+        score_bucket: scoreToBucket(feedbackPayload.overallScoreOutOf10)
+      });
       setStage('feedback');
     } catch (evaluationError) {
       setError(evaluationError.message || 'We couldn’t analyze the audio. Please retry the recording.');

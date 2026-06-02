@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import { scoreToBucket, trackEvent } from '../lib/analytics';
 
 const MIN_RESUME_TEXT_LENGTH = 200;
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
@@ -503,6 +504,9 @@ export default function ResumeAnalyzerPage({ onBack }) {
     try {
       const payload = await postJson('/api/resume-analyzer', { resumeText: trimmedResume });
       setAnalysis(payload);
+      trackEvent('resume_analysis_generated', {
+        overall_score_bucket: scoreToBucket(getCompositeOverallScore(payload))
+      });
     } catch (requestError) {
       console.error('[resume-analyzer] Analysis request failed', requestError);
       setError(userMessageForResumeError(requestError.payload, 'Resume analysis could not be generated. Please try again.'));

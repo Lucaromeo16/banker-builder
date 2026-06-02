@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
+import { trackEvent } from '../lib/analytics';
 
 const PASSWORD_MESSAGE = 'Password must be at least 8 characters and include one uppercase letter, one number, and one special character.';
 
@@ -126,6 +127,10 @@ export default function AuthPage() {
     }
 
     if (isSignup) {
+      trackEvent('user_signed_up', {
+        email_confirmation_required: true
+      });
+
       if (data?.session || data?.user) {
         await supabase.auth.signOut();
       }
@@ -141,6 +146,10 @@ export default function AuthPage() {
       setError('Please confirm your email before logging in.');
       return;
     }
+
+    trackEvent('user_logged_in', {
+      provider: 'email_password'
+    });
 
     setSuccess('Logged in. Loading Banker Builder...');
   };

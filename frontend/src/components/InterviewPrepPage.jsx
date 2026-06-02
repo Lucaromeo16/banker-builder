@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { scoreToBucket, trackEvent } from '../lib/analytics';
 
 const recruitingGoals = ['Summer Analyst', 'Lateral', 'MBA Associate'];
 const targetGroupOptions = [
@@ -1808,6 +1809,12 @@ export default function InterviewPrepPage({ onBack }) {
         exampleResponse: data.tenOutOfTenExampleResponse,
         followUpQuestion: data.followUpQuestion,
         transcript: answerText
+      });
+      trackEvent('interview_prep_feedback_generated', {
+        practice_category: currentQuestion.categoryId || selectedCategoryId || currentQuestion.categoryTitle,
+        practice_mode: prepProfile?.practiceMode,
+        target_group_count: Array.isArray(prepProfile?.targetGroups) ? prepProfile.targetGroups.length : 0,
+        score_bucket: scoreToBucket(data.scoreOutOf10)
       });
       setLastAnsweredQuestion({
         question: currentQuestion.prompt,

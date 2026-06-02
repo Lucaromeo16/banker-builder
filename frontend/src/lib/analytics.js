@@ -39,3 +39,11 @@ export function resetAnalytics() {
   if (!analyticsInitialized) return;
   posthog.reset();
 }
+
+export function scoreToBucket(score) {
+  const numericScore = Number(score);
+  if (!Number.isFinite(numericScore)) return undefined;
+  if (numericScore >= 8) return 'high';
+  if (numericScore >= 5) return 'medium';
+  return 'low';
+}

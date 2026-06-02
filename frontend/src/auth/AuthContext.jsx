@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { identifyUser, resetAnalytics, trackEvent } from '../lib/analytics';
 
 const AuthContext = createContext({
   user: null,
@@ -75,6 +76,7 @@ export function AuthProvider({ children }) {
   const [profileLoading, setProfileLoading] = useState(false);
   const [authError, setAuthError] = useState(null);
   const [isAuthReady, setIsAuthReady] = useState(!isSupabaseConfigured);
+  const identifiedUserIdRef = useRef(null);
 
   useEffect(() => {
     if (!supabase) {
@@ -109,7 +111,13 @@ export function AuthProvider({ children }) {
       setUser(nextUser);
       setAuthError(null);
 
+      if (nextUser?.id && identifiedUserIdRef.current !== nextUser.id) {
+        identifyUser(nextUser.id);
+        identifiedUserIdRef.current = nextUser.id;
+      }
+
       if (!nextUser) {
+        identifiedUserIdRef.current = null;
         setProfile(null);
         setProfileLoading(false);
         setLoading(false);
@@ -190,6 +198,9 @@ export function AuthProvider({ children }) {
     setProfile(null);
     setProfileLoading(false);
     setLoading(false);
+    trackEvent('user_logged_out');
+    resetAnalytics();
+    identifiedUserIdRef.current = null;
     return { error: null };
   };
 
