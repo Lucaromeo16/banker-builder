@@ -14,6 +14,7 @@ import KnowledgeBasePage from './components/KnowledgeBasePage';
 import NetworkingHubPage from './components/NetworkingHubPage';
 import ResumeAnalyzerPage from './components/ResumeAnalyzerPage';
 import TargetListBuilderPage from './components/TargetListBuilderPage';
+import { trackEvent } from './lib/analytics';
 
 const navItems = [
   { label: 'Home', mode: 'home' },
@@ -27,6 +28,18 @@ const navItems = [
   { label: 'Application Tracker', mode: 'application-tracker' },
   { label: 'Knowledge Base', mode: 'knowledge-base' }
 ];
+
+const analyticsFeatureMap = {
+  interview: { feature: 'interview_odds', is_beta: true },
+  'target-list': { feature: 'target_list_builder', is_beta: true },
+  'interview-prep': { feature: 'interview_prep', is_beta: true },
+  'hirevue-prep': { feature: 'hirevue_prep', is_beta: false },
+  'firm-map': { feature: 'firm_map', is_beta: false },
+  'networking-hub': { feature: 'networking_hub', is_beta: false },
+  'resume-analyzer': { feature: 'resume_analyzer', is_beta: false },
+  'application-tracker': { feature: 'application_tracker', is_beta: false },
+  'knowledge-base': { feature: 'knowledge_base', is_beta: false }
+};
 
 function getGlobalAuthMessage(authError) {
   if (!authError) return '';
@@ -56,6 +69,11 @@ export default function App() {
   };
 
   const selectMode = (nextMode) => {
+    const analyticsFeature = analyticsFeatureMap[nextMode];
+    if (analyticsFeature && nextMode !== mode) {
+      trackEvent('feature_opened', analyticsFeature);
+    }
+
     setMode(nextMode);
     setMobileMenuOpen(false);
   };

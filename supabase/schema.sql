@@ -297,6 +297,8 @@ create policy "Users can insert own feedback"
   on public.user_feedback for insert
   with check (auth.uid() = user_id);
 
+grant insert on table public.user_feedback to authenticated;
+
 create index if not exists profiles_user_id_idx on public.profiles(user_id);
 create index if not exists offices_firm_id_idx on public.offices(firm_id);
 create index if not exists interview_odds_results_user_id_idx on public.interview_odds_results(user_id);
