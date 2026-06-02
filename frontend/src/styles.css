@@ -501,6 +501,33 @@ textarea {
   grid-column: auto;
 }
 
+.account-feedback-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 16px;
+  background: rgba(59, 130, 246, 0.07);
+  padding: 18px;
+}
+
+.account-feedback-card h3 {
+  margin: 0 0 6px;
+  color: #FFFFFF;
+}
+
+.account-feedback-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.account-feedback-card .secondary {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
 .auth-banner {
   margin-bottom: 20px;
 }
@@ -4167,6 +4194,38 @@ li {
   color: #FFFFFF;
 }
 
+.feedback-modal {
+  width: min(640px, 100%);
+}
+
+.feedback-modal .resume-score-modal-header p {
+  margin: 0;
+}
+
+.feedback-modal-form {
+  display: grid;
+  gap: 16px;
+}
+
+.feedback-modal-form textarea {
+  min-height: 170px;
+}
+
+.feedback-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.feedback-modal-actions .primary,
+.feedback-modal-actions .secondary {
+  min-height: 44px;
+}
+
+.feedback-modal-actions .primary {
+  grid-column: auto;
+}
+
 .resume-score-detail-grid ul {
   margin: 0;
   padding-left: 1.15rem;
@@ -4879,6 +4938,14 @@ li {
 
   .resume-score-modal-header {
     grid-template-columns: 1fr;
+  }
+
+  .account-feedback-card {
+    grid-template-columns: 1fr;
+  }
+
+  .account-feedback-card .secondary {
+    width: 100%;
   }
 
   .resume-file-actions {

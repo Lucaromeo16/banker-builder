@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import FeedbackModal from './FeedbackModal';
 
 function friendlyProfileError(error) {
   const message = error?.message || '';
@@ -14,6 +15,7 @@ export default function AccountProfilePage({ onBack }) {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
 
   useEffect(() => {
     setFullName(profile?.full_name || '');
@@ -110,7 +112,31 @@ export default function AccountProfilePage({ onBack }) {
             </button>
           </div>
         </form>
+
+        <section className="account-feedback-card">
+          <div>
+            <h3>Report an Issue or Give Feedback</h3>
+            <p>Share bugs, confusing experiences, or product suggestions to help improve Banker Builder.</p>
+          </div>
+          <button type="button" className="secondary" onClick={() => setFeedbackModalOpen(true)}>
+            Open Feedback Form
+          </button>
+        </section>
       </section>
+
+      <FeedbackModal
+        isOpen={feedbackModalOpen}
+        onClose={() => setFeedbackModalOpen(false)}
+        feature="general"
+        defaultFeedbackType="bug"
+        allowFeedbackTypeSelection
+        contextType="account_profile"
+        relatedTable={null}
+        relatedRecordId={null}
+        metadata={{}}
+        title="Report an Issue or Give Feedback"
+        description="Tell us what happened or how Banker Builder could improve."
+      />
     </>
   );
 }

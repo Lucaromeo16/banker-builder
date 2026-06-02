@@ -101,6 +101,30 @@ create table if not exists public.applications (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.user_feedback (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  feature text not null check (feature in ('general', 'interview_odds', 'target_list_builder', 'interview_prep')),
+  feedback_type text not null check (
+    feedback_type in (
+      'bug',
+      'confusing_experience',
+      'inaccurate_result',
+      'irrelevant_recommendation',
+      'inaccurate_feedback',
+      'suggestion',
+      'other'
+    )
+  ),
+  message text not null check (length(trim(message)) > 0),
+  context_type text,
+  related_table text,
+  related_record_id uuid,
+  metadata jsonb not null default '{}'::jsonb,
+  status text not null default 'new' check (status in ('new', 'reviewed', 'resolved', 'dismissed')),
+  created_at timestamptz not null default now()
+);
+
 alter table public.profiles enable row level security;
 alter table public.firms enable row level security;
 alter table public.offices enable row level security;
@@ -110,6 +134,7 @@ alter table public.target_list_items enable row level security;
 alter table public.resume_analyses enable row level security;
 alter table public.networking_contacts enable row level security;
 alter table public.applications enable row level security;
+alter table public.user_feedback enable row level security;
 
 create policy "Anyone can read firms"
   on public.firms for select
@@ -268,6 +293,10 @@ create policy "Users can delete own applications"
   on public.applications for delete
   using (auth.uid() = user_id);
 
+create policy "Users can insert own feedback"
+  on public.user_feedback for insert
+  with check (auth.uid() = user_id);
+
 create index if not exists profiles_user_id_idx on public.profiles(user_id);
 create index if not exists offices_firm_id_idx on public.offices(firm_id);
 create index if not exists interview_odds_results_user_id_idx on public.interview_odds_results(user_id);
@@ -276,4 +305,7 @@ create index if not exists target_list_items_target_list_id_idx on public.target
 create index if not exists resume_analyses_user_id_idx on public.resume_analyses(user_id);
 create index if not exists networking_contacts_user_id_idx on public.networking_contacts(user_id);
 create index if not exists applications_user_id_idx on public.applications(user_id);
-
+create index if not exists user_feedback_user_id_idx on public.user_feedback(user_id);
+create index if not exists user_feedback_created_at_idx on public.user_feedback(created_at);
+create index if not exists user_feedback_feature_idx on public.user_feedback(feature);
+create index if not exists user_feedback_status_idx on public.user_feedback(status);
